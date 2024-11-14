@@ -1,7 +1,7 @@
 ﻿using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-using WolfDen.Application.Requests.DTOs;
+using WolfDen.Application.Requests.DTOs.Attendence;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.AttendenceLog
 {
@@ -28,15 +28,15 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendenceLog
                         {
                             column.Item().Table(table =>
                             {
-                                
+
                                 table.ColumnsDefinition(columns =>
                                 {
-                                    columns.ConstantColumn(2);  
-                                    columns.RelativeColumn();   
-                                    columns.RelativeColumn();  
+                                    columns.ConstantColumn(2);
+                                    columns.RelativeColumn();
+                                    columns.RelativeColumn();
                                 });
 
-                               
+
                                 table.Header(header =>
                                 {
                                     header.Cell().Text("Time").Bold().FontSize(12);
@@ -44,13 +44,13 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendenceLog
                                     header.Cell().Text("Direction").Bold().FontSize(12);
                                 });
 
-                                
+
                                 foreach (var attendenceLog in AttendenceLogDTOs)
                                 {
-                                   
-                                        table.Cell().Text(attendenceLog.Time.ToString("HH:mm"));
-                                        table.Cell().Text(attendenceLog.DeviceName);
-                                        table.Cell().Text(attendenceLog.Direction); 
+
+                                    table.Cell().Text(attendenceLog.Time.ToString("HH:mm"));
+                                    table.Cell().Text(attendenceLog.DeviceName);
+                                    table.Cell().Text(attendenceLog.Direction);
                                 }
                             });
                         });

@@ -1,4 +1,4 @@
-﻿namespace WolfDen.Application.Requests.DTOs
+﻿namespace WolfDen.Application.Requests.DTOs.Attendence
 {
     public class AttendenceLogDTO
     {
