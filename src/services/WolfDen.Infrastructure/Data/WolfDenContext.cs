@@ -23,7 +23,7 @@ namespace WolfDen.Infrastructure.Data
         public DbSet<LeaveIncrementLog> LeaveIncrementLogs { get; set; }
         public DbSet<LeaveSetting> LeaveSettings { get; set; }
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
-        public DbSet<LeaveType> LeaveTypeConfigurations { get; set; }
+        public DbSet<LeaveType> LeaveType { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,6 +31,10 @@ namespace WolfDen.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
             modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
             modelBuilder.ApplyConfiguration(new DesignationConfiguration());
+            modelBuilder.ApplyConfiguration(new LeaveBalanceConfiguration());
+            modelBuilder.ApplyConfiguration(new LeaveRequestConfiguration());   
+            modelBuilder.ApplyConfiguration(new LeaveSettingConfiguration());
+            modelBuilder.ApplyConfiguration(new LeaveTypeConfiguration());  
         }
     }
 }

@@ -8,5 +8,10 @@
         public LeaveRequest LeaveRequest { get; private set; }
         public DateOnly LeaveDate { get; private set; }
         private LeaveDay() {  }
+        public LeaveDay(int leaveRequestId,DateOnly leaveDate)
+        {
+            LeaveRequestId=leaveRequestId;
+            LeaveDate=leaveDate;
+        }
     }
 }

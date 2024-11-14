@@ -15,11 +15,10 @@ namespace WolfDen.Domain.Entity
         public DateOnly FromDate { get; private set; }
         public DateOnly ToDate { get; private set; }
         public DateOnly ApplyDate { get; private set; }
-        public int LeaveRequestStatusId { get; private set; }
-        public virtual LeaveRequestStatus LeaveRequestStatus { get; private set; }
+        public LeaveRequestStatus LeaveRequestStatus { get; private set; }
         public string Description { get; private set; }
         public int ProcessedBy { get; private set; }
-        public virtual Employee Employee { get; private set; }  //managers who can process the LR
+        public virtual Employee Employee { get; private set; }  
         private LeaveRequest() {  }
     }
 }
