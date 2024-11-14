@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using WolfDen.Domain.Enum;
 
-namespace WolfDen.Application.Requests.Commands.LeaveTypeCommand
+namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypeCommand
 {
     public class LeaveTypeAddCommand : IRequest<int>
     {

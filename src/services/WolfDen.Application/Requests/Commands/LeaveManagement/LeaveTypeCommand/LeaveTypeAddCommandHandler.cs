@@ -2,9 +2,9 @@
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
-namespace WolfDen.Application.Requests.Commands.LeaveTypeCommand
+namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypeCommand
 {
-    public class LeaveTypeAddCommandHandler:IRequestHandler<LeaveTypeAddCommand,int>
+    public class LeaveTypeAddCommandHandler : IRequestHandler<LeaveTypeAddCommand, int>
     {
         private readonly WolfDenContext _context;
 
@@ -19,10 +19,10 @@ namespace WolfDen.Application.Requests.Commands.LeaveTypeCommand
             {
                 LeaveType leaveType = new LeaveType(request.TypeName, request.MaxDays, request.HalfDays, request.IncrementCount,
                     request.IncrementGap, request.CarryForward, request.CarryForwardLimit, request.DaysCheck, request.DaysChekcMore,
-                    request.DaysCheckEqualOrLess, request.DutyDaysRequired, request.Hidden,request.RestrictionType);
-                    
+                    request.DaysCheckEqualOrLess, request.DutyDaysRequired, request.Hidden, request.RestrictionType);
+
                 _context.LeaveType.Add(leaveType);
-               return await _context.SaveChangesAsync(cancellationToken);
+                return await _context.SaveChangesAsync(cancellationToken);
             }
             return -1;
         }

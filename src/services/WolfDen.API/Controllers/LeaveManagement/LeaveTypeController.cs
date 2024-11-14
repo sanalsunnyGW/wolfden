@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WolfDen.Application.Requests.Commands.LeaveTypeCommand;
+using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypeCommand;
 
-namespace WolfDen.API.Controllers
+namespace WolfDen.API.Controllers.Leavemanagement
 {
     [Route("api/LeaveType")]
     [ApiController]
@@ -14,7 +14,7 @@ namespace WolfDen.API.Controllers
         public LeaveTypeController(IMediator mediator)
         {
             _mediator = mediator;
-            
+
         }
         [HttpPost("Add-New-Type")]
         public async Task<string> AddleaveType([FromBody] LeaveTypeAddCommand command)
@@ -22,15 +22,15 @@ namespace WolfDen.API.Controllers
             int result = await _mediator.Send(command);
             if (result == -1)
             {
-                return ("Only Higher User can Add new leave Type");
+                return "Only Higher User can Add new leave Type";
             }
-            else if(result == 1)
+            else if (result == 1)
             {
-                return ("New Leave Added");
+                return "New Leave Added";
             }
             else
             {
-                return ("Error");
+                return "Error";
             }
 
         }
