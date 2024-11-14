@@ -17,21 +17,9 @@ namespace WolfDen.Domain.Entity
         public int DaysCheckEqualOrLess { get; private set; }
         public int DutyDaysRequired { get; private set; }
         public bool Hidden {  get; private set; }
-        private LeaveType() { }
-        public LeaveType(string typeName,int maxDays,bool halfDay,int incrementCount,LeaveIncrementGapMonth incrementGap,bool carryForward,int carryForwardLimit,int daysCheck,int daysCheckMore,int daysCheckEqualOrLess,int dutyDaysRequired,bool hidden )
+        private LeaveType()
         {
-            TypeName = typeName;
-            MaxDays = maxDays;  
-            HalfDay = halfDay;
-            IncrementCount = incrementCount;
-            IncrementGap = incrementGap;    
-            CarryForward = carryForward;
-            CarryForwardLimit = carryForwardLimit;
-            DaysCheck = daysCheck;
-            DaysChekcMore = daysCheckMore;
-            DaysCheckEqualOrLess = daysCheckEqualOrLess;
-            DutyDaysRequired = dutyDaysRequired;
-            Hidden = hidden;
+            
         }
     }
 }

@@ -9,5 +9,13 @@
         public int CurrentBalance { get; private set; }
         public int IncrementValue { get; private set; }
         private LeaveIncrementLog() {  }
+
+        public LeaveIncrementLog(int leaveBalanceId, DateOnly logDate, int currentBalance, int incrementValue)
+        {
+            LeaveBalanceId = leaveBalanceId;
+            LogDate = logDate;
+            CurrentBalance = currentBalance;
+            IncrementValue = incrementValue;
+        }
     }
 }
