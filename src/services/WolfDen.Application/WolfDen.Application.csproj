@@ -18,9 +18,13 @@
 
   <ItemGroup>
     <Folder Include="Methods\" />
-    <Folder Include="Requests\Commands\" />
     <Folder Include="Requests\DTOs\" />
     <Folder Include="Requests\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WolfDen.Domain\WolfDen.Domain.csproj" />
+    <ProjectReference Include="..\WolfDen.Infrastructure\WolfDen.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,7 +8,7 @@ namespace WolfDen.Domain.Enum
 {
     public enum LeaveRequestStatus
     {
-        Pending=1,
+        Open=1,
         Approved,
         Rejected,
         Deleted
