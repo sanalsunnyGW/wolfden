@@ -28,9 +28,9 @@ builder.Services.AddMediatR(x =>
 
 });
 
-builder.Services.AddTransient<AdminUpdateEmployeeValidator>();
-builder.Services.AddTransient<CreateEmployeeValidator>();
-builder.Services.AddTransient<EmployeeUpdateEmployeeValidator>();
+builder.Services.AddScoped<AdminUpdateEmployeeValidator>();
+builder.Services.AddScoped<CreateEmployeeValidator>();
+builder.Services.AddScoped<EmployeeUpdateEmployeeValidator>();
 
 
 
