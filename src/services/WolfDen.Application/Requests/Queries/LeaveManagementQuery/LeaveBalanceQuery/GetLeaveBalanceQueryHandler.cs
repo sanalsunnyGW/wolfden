@@ -27,8 +27,8 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagementQuery.LeaveBalance
             foreach(LeaveBalance leave in LeaveBalanceList)
             {
                LeaveBalanceDto leaveBalanceDto = new LeaveBalanceDto();
-                leaveBalanceDto.Name = "casual";/*leave.LeaveType.TypeName;*/
-                leaveBalanceDto.Balance = 0; /*leave.Balance;*/
+                leaveBalanceDto.Name = leave.LeaveType.TypeName;
+                leaveBalanceDto.Balance = leave.Balance;
                 leaveBalanceDtosList.Add(leaveBalanceDto);  
             }
             return leaveBalanceDtosList;
