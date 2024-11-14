@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WolfDen.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    partial class WolfDenContextModelSnapshot : ModelSnapshot
+    [Migration("20241112104142_first")]
+    partial class first
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,7 +33,7 @@ namespace WolfDen.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
+                    b.Property<string>("DepartmentName")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -48,8 +51,7 @@ namespace WolfDen.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
-
+                    b.Property<string>("DesignationName")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -63,35 +65,32 @@ namespace WolfDen.Infrastructure.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly?>("DateofBirth")
-                        .HasColumnType("date");
-
-                    b.Property<int?>("DepartmentId")
+                    b.Property<int?>("Age")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DesignationId")
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DesignationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("EmployeeCode")
+                    b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<int?>("Gender")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<DateOnly?>("JoiningDate")
                         .HasColumnType("date");
@@ -104,7 +103,6 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
-
                         .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
@@ -121,18 +119,9 @@ namespace WolfDen.Infrastructure.Migrations
                     b.HasIndex("DesignationId");
 
                     b.HasIndex("Email")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
-
-                    b.HasIndex("EmployeeCode")
-
                         .IsUnique();
 
                     b.HasIndex("ManagerId");
-
-                    b.HasIndex("RFId")
-                        .IsUnique();
-
 
                     b.ToTable("Employees");
                 });
@@ -141,12 +130,15 @@ namespace WolfDen.Infrastructure.Migrations
                 {
                     b.HasOne("WolfDen.Domain.Entity.Department", "Department")
                         .WithMany()
-                        .HasForeignKey("DepartmentId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WolfDen.Domain.Entity.Designation", "Designation")
                         .WithMany()
-                        .HasForeignKey("DesignationId");
-
+                        .HasForeignKey("DesignationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WolfDen.Domain.Entity.Employee", "Manager")
                         .WithMany()

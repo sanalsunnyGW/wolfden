@@ -22,4 +22,8 @@
     <ProjectReference Include="..\WolfDen.Infrastructure\WolfDen.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>

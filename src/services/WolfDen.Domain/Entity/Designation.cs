@@ -17,6 +17,7 @@ namespace WolfDen.Domain.Entity
         public Designation(string name)
         {
             Name = name;
+
         }
     }
 }

@@ -15,6 +15,7 @@ namespace WolfDen.Infrastructure.Configuration
         {
             builder.Property(x => x.Name).HasMaxLength(256);
 
+
         }
     }
 }

@@ -18,6 +18,7 @@ namespace WolfDen.Domain.Entity
         public Department(string name)
         {
             Name = name;
+
         }
     }
 }

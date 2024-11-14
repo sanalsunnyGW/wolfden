@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+
 using WolfDen.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,7 @@ builder.Services.AddMediatR(x => {
     x.RegisterServicesFromAssembly(Assembly.Load("WolfDen.Application"));
 
 });
+
 
 var app = builder.Build();
 
