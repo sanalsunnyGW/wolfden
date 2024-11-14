@@ -6,14 +6,11 @@ namespace WolfDen.API.Controllers.Department
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Department : ControllerBase
+    public class Department(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IMediator _mediator=mediator;
 
-        public Department(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        
         [HttpPost]
         public async Task<int> AddDepartment([FromBody] AddDepartmentCommand command,CancellationToken cancellationToken)
         {
