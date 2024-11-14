@@ -11,6 +11,9 @@ using WolfDen.Infrastructure.Extensions;
 
 namespace WolfDen.Infrastructure.Data
 {
+    public interface IDummyEntity
+    {
+    }
     public class WolfDenContext : DbContext
     {
         public WolfDenContext(DbContextOptions<WolfDenContext> options):base(options) { }       
@@ -25,7 +28,31 @@ namespace WolfDen.Infrastructure.Data
         {
             // Calling the AddConventions extension method
             modelBuilder.AddConventions("dbo", Assembly.GetExecutingAssembly());
+
+
+            //History Table
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                entityType.SetTableName(entityType.GetDefaultTableName());
+
+                if (!entityType.ClrType.IsAssignableTo(typeof(IDummyEntity)))
+                {
+                    var historyTableName = $"{entityType.GetDefaultTableName()}_HT"; 
+                    entityType.SetHistoryTableName(historyTableName);
+                    entityType.SetHistoryTableSchema("dbo"); 
+
+                    entityType.SetIsTemporal(true);
+
+                    foreach (var fk in entityType.GetForeignKeys().Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade))
+                    {
+                        fk.DeleteBehavior = DeleteBehavior.Restrict;
+                    }
+                }
+            }
+        
         }
+
     }
    
 }

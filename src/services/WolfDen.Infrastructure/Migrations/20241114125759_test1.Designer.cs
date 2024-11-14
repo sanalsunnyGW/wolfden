@@ -12,7 +12,7 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241113144149_test1")]
+    [Migration("20241114125759_test1")]
     partial class test1
     {
         /// <inheritdoc />
@@ -37,11 +37,32 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("PeriodEnd")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PeriodEnd");
+
+                    b.Property<DateTime>("PeriodStart")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PeriodStart");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("SuperAdmin", "dbo");
+
+                    b.ToTable(tb => tb.IsTemporal(ttb =>
+                            {
+                                ttb.UseHistoryTable("SuperAdmin_HT", "dbo");
+                                ttb
+                                    .HasPeriodStart("PeriodStart")
+                                    .HasColumnName("PeriodStart");
+                                ttb
+                                    .HasPeriodEnd("PeriodEnd")
+                                    .HasColumnName("PeriodEnd");
+                            }));
                 });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.Department", b =>
@@ -57,9 +78,30 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<DateTime>("PeriodEnd")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PeriodEnd");
+
+                    b.Property<DateTime>("PeriodStart")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PeriodStart");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Departments", "dbo");
+                    b.ToTable("Department", "dbo");
+
+                    b.ToTable(tb => tb.IsTemporal(ttb =>
+                            {
+                                ttb.UseHistoryTable("Department_HT", "dbo");
+                                ttb
+                                    .HasPeriodStart("PeriodStart")
+                                    .HasColumnName("PeriodStart");
+                                ttb
+                                    .HasPeriodEnd("PeriodEnd")
+                                    .HasColumnName("PeriodEnd");
+                            }));
                 });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.Designation", b =>
@@ -75,9 +117,30 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<DateTime>("PeriodEnd")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PeriodEnd");
+
+                    b.Property<DateTime>("PeriodStart")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PeriodStart");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Designations", "dbo");
+                    b.ToTable("Designation", "dbo");
+
+                    b.ToTable(tb => tb.IsTemporal(ttb =>
+                            {
+                                ttb.UseHistoryTable("Designation_HT", "dbo");
+                                ttb
+                                    .HasPeriodStart("PeriodStart")
+                                    .HasColumnName("PeriodStart");
+                                ttb
+                                    .HasPeriodEnd("PeriodEnd")
+                                    .HasColumnName("PeriodEnd");
+                            }));
                 });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.Employee", b =>
@@ -121,6 +184,16 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<int?>("ManagerId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("PeriodEnd")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PeriodEnd");
+
+                    b.Property<DateTime>("PeriodStart")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PeriodStart");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(15)
@@ -142,7 +215,18 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasIndex("ManagerId");
 
-                    b.ToTable("Employees", "dbo");
+                    b.ToTable("Employee", "dbo");
+
+                    b.ToTable(tb => tb.IsTemporal(ttb =>
+                            {
+                                ttb.UseHistoryTable("Employee_HT", "dbo");
+                                ttb
+                                    .HasPeriodStart("PeriodStart")
+                                    .HasColumnName("PeriodStart");
+                                ttb
+                                    .HasPeriodEnd("PeriodEnd")
+                                    .HasColumnName("PeriodEnd");
+                            }));
                 });
 
             modelBuilder.Entity("EmployeeManagementDomain.Entity.SuperAdmin", b =>
@@ -150,7 +234,7 @@ namespace WolfDen.Infrastructure.Migrations
                     b.HasOne("WolfDen.Domain.Entity.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Employee");
@@ -161,13 +245,13 @@ namespace WolfDen.Infrastructure.Migrations
                     b.HasOne("WolfDen.Domain.Entity.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("WolfDen.Domain.Entity.Designation", "Designation")
                         .WithMany()
                         .HasForeignKey("DesignationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("WolfDen.Domain.Entity.Employee", "Manager")
