@@ -1,36 +1,41 @@
 <div class=" nav-color mb-4 ">
   <ul class="nav nav-tabs ">
-      <li class="mx-3  nav-item">
-          <a class="nav-link">Apply Leave</a>
-      </li>
-      <li class="nav-item">
-          <a class="nav-link" >Leave History</a>
-      </li>
-      <li *ngIf="id===1 ||id===2" class="nav-item">
-          <a class="nav-link" >Approve/Reject Leave</a>
-      </li>
-      <li *ngIf="id===1" class="nav-item">
-        <a class="nav-link" >Add New Leave Type</a>
+    <li class="mx-3  nav-item">
+      <a class="nav-link">Apply Leave</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link">Leave History</a>
+    </li>
+    <li *ngIf="id===1 ||id===2" class="nav-item">
+      <a class="nav-link">Approve/Reject Leave</a>
+    </li>
+    <li *ngIf="id===1" class="nav-item">
+      <a class="nav-link">Add New Leave Type</a>
     </li>
     <li *ngIf="id==1" class="nav-item">
-    <a class="nav-link">Edit New Leave Type</a>
-  </li>
+      <a class="nav-link">Edit New Leave Type</a>
+    </li>
   </ul>
 </div>
 
 <table class="table table-striped table-dark table-bordered container">
-    <thead class="thead-light">
-      <tr >
-        <th colspan="3"><h1>Leave Balance</h1></th>
+  <thead class="thead-light">
+    <!-- <tr>
+      <th colspan="3">
+        <h1>Leave Balance</h1>
+      </th>
+    </tr> -->
+    <ul>
+    <li *ngFor="let item of leaveList">
+      <tr>
+      <th>{{item.typeName}}</th>
+      <td>{{item.balance}}</td>
     </tr>
-    <tr *ngFor="item in leaveList ">
-      <th>Casual Leave</th>
-    <td>Leave balance</td>
-  </tr>
-  <tr>
-    <th>Priveleged Leave</th>
-    <td>Leave balance priv.</td>
-  </tr>  
-</thead>
-  </table>
-
+  </li>
+    </ul>
+    <!-- <tr>
+      <th>Priveleged Leave</th>
+      <td>Leave balance priv.</td>
+    </tr> -->
+  </thead>
+</table>

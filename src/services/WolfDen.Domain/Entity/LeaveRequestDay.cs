@@ -1,14 +1,14 @@
 ﻿namespace WolfDen.Domain.Entity
 {
-    public class LeaveDay
+    public class LeaveRequestDay
     {
         public int Id { get;private set; }
         public int LeaveRequestId { get;private set; }
 
         public LeaveRequest LeaveRequest { get; private set; }
         public DateOnly LeaveDate { get; private set; }
-        private LeaveDay() {  }
-        public LeaveDay (int leaveRequestId,DateOnly leaveDate)
+        private LeaveRequestDay() {  }
+        public LeaveRequestDay (int leaveRequestId,DateOnly leaveDate)
         {
             LeaveRequestId = leaveRequestId;
             LeaveDate = leaveDate;

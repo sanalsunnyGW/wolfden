@@ -14,6 +14,7 @@ namespace WolfDen.Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<LeaveType> builder)
         {
             builder.Property(x => x.Id).HasColumnName("LeaveTypeId");
+            builder.Property(x => x.TypeName).HasMaxLength(100);
         }
     }
 }

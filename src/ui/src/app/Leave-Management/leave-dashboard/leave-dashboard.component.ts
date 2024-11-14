@@ -1,27 +1,29 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ILeaveBalanceList } from '../../Interface/leave-balance-list-interface';
+import { LeaveManagementService } from '../../Service/leave-management.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-leave-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule],
   templateUrl: './leave-dashboard.component.html',
   styleUrl: './leave-dashboard.component.scss'
 })
 export class LeaveDashboardComponent {
-id:number=6; //1-for hr and 2-higher user 0-for all user
+id:number=1; //1-for hr and 2-higher user any number-for all user
 leaveList:ILeaveBalanceList[]=[];
+
+constructor(private leaveManagementService:LeaveManagementService) {}
 
 ngOnit()
 {
-  this.leaveManagementService.getLeaveBalance(this.userId).subscribe({
+  this.leaveManagementService.getLeaveBalance(this.id).subscribe({
     next: (data) => {
       console.log('initially Fetched expenses:', data); 
-      this.expenseList = data; 
-      this.totalAmount = this.expenseList.reduce((sum, expense) => sum + expense.amount, 0);
-
-    },
+      this.leaveList= data; 
+        },
     error: (error) => {
       console.log(error);
     }

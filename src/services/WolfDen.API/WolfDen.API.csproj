@@ -18,11 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WolfDen.Application\WolfDen.Application.csproj" />
     <ProjectReference Include="..\WolfDen.Infrastructure\WolfDen.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
