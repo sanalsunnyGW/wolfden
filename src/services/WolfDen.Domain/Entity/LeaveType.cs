@@ -21,5 +21,20 @@ namespace WolfDen.Domain.Entity
         {
             
         }
+        public LeaveType(string typeName, int maxDays, bool halfDay, int incrementCount, LeaveIncrementGapMonth incrementGap, bool carryForward, int carryForwardLimit, int daysCheck, int daysChekcMore, int daysCheckEqualOrLess, int dutyDaysRequired, bool hidden)
+        {
+            TypeName = typeName;
+            MaxDays = maxDays;
+            HalfDay = halfDay;
+            IncrementCount = incrementCount;
+            IncrementGap = incrementGap;
+            CarryForward = carryForward;
+            CarryForwardLimit = carryForwardLimit;
+            DaysCheck = daysCheck;
+            DaysChekcMore = daysChekcMore;
+            DaysCheckEqualOrLess = daysCheckEqualOrLess;
+            DutyDaysRequired = dutyDaysRequired;
+            Hidden = hidden;
+        }
     }
 }
