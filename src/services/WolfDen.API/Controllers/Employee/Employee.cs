@@ -10,36 +10,31 @@ namespace WolfDen.API.Controllers.Employee
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Employee : ControllerBase
+    public class Employee(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IMediator _mediator = mediator;
 
-        public Employee(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
 
         [HttpPost]
-        public async Task<int> AddEmployee([FromBody] AddEmployeecommand command)
+        public async Task<int> AddEmployee([FromBody] AddEmployeecommand command, CancellationToken cancellationToken)
         {
-            return await _mediator.Send(command);
+            return await _mediator.Send(command, cancellationToken);
         }
         [HttpPut("EmployeeUpdateEmployee")]
-        public async Task<bool> EmployeeUpdateEmployee([FromBody] EmployeeUpdateEmployeeCommand command)
+        public async Task<bool> EmployeeUpdateEmployee([FromBody] EmployeeUpdateEmployeeCommand command, CancellationToken cancellationToken)
         {
-            return await _mediator.Send(command);
+            return await _mediator.Send(command, cancellationToken);
         }
-        [HttpPut("AdminUpdateEmployee")]
-        public async Task<bool> AdminUpdateEmployee([FromBody] AdminUpdateEmployeeCommand command)
+        [HttpPut("Admin")]
+        public async Task<bool> AdminUpdateEmployee([FromBody] AdminUpdateEmployeeCommand command, CancellationToken cancellationToken)
         {
-            return await _mediator.Send(command);
+            return await _mediator.Send(command, cancellationToken);
         }
-        [HttpGet("Employee Hierarchy")]
-        public async Task<EmployeeHierarchyDto> GetEmployeeHierarchy(int id)
+        [HttpGet("Hierarchy")]
+        public async Task<EmployeeHierarchyDto> GetEmployeeHierarchy([FromQuery] GetEmployeeHierarchyQuery query, CancellationToken cancellationToken)
         {
-            GetEmployeeHierarchyQuery query = new GetEmployeeHierarchyQuery();
-            query.Id = id;
-            return await _mediator.Send(query);
+            
+            return await _mediator.Send(query, cancellationToken);
 
         }
 

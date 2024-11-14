@@ -6,42 +6,42 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WolfDen.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class test1 : Migration
+    public partial class first : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "dbo");
+                name: "wolfden");
 
             migrationBuilder.CreateTable(
                 name: "Department",
-                schema: "dbo",
+                schema: "wolfden",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1")
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Department_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Department")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    DepartmentName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Department_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Department")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
                     PeriodEnd = table.Column<DateTime>(type: "datetime2", nullable: false)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Department_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Department")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
                     PeriodStart = table.Column<DateTime>(type: "datetime2", nullable: false)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Department_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Department")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart")
                 },
@@ -50,39 +50,39 @@ namespace WolfDen.Infrastructure.Migrations
                     table.PrimaryKey("PK_Department", x => x.Id);
                 })
                 .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "Department_HT")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                .Annotation("SqlServer:TemporalHistoryTableName", "Department")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
 
             migrationBuilder.CreateTable(
                 name: "Designation",
-                schema: "dbo",
+                schema: "wolfden",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1")
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Designation_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Designation")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    DesignationName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Designation_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Designation")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
                     PeriodEnd = table.Column<DateTime>(type: "datetime2", nullable: false)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Designation_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Designation")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
                     PeriodStart = table.Column<DateTime>(type: "datetime2", nullable: false)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Designation_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Designation")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart")
                 },
@@ -91,99 +91,111 @@ namespace WolfDen.Infrastructure.Migrations
                     table.PrimaryKey("PK_Designation", x => x.Id);
                 })
                 .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "Designation_HT")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                .Annotation("SqlServer:TemporalHistoryTableName", "Designation")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
 
             migrationBuilder.CreateTable(
                 name: "Employee",
-                schema: "dbo",
+                schema: "wolfden",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1")
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false)
+                    EmployeeCode = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
                     RFId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    FirstName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
+                    FirstName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
                     LastName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    Age = table.Column<int>(type: "int", nullable: true)
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
+                    PhoneNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false)
+                    DateofBirth = table.Column<DateOnly>(type: "date", nullable: true)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
                     JoiningDate = table.Column<DateOnly>(type: "date", nullable: true)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    DesignationId = table.Column<int>(type: "int", nullable: false)
+                    Gender = table.Column<int>(type: "int", nullable: true)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false)
+                    DesignationId = table.Column<int>(type: "int", nullable: true)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    DepartmentId = table.Column<int>(type: "int", nullable: true)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
                     ManagerId = table.Column<int>(type: "int", nullable: true)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
                     PeriodEnd = table.Column<DateTime>(type: "datetime2", nullable: false)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
                     PeriodStart = table.Column<DateTime>(type: "datetime2", nullable: false)
                         .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart")
                 },
@@ -193,146 +205,96 @@ namespace WolfDen.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_Employee_Department_DepartmentId",
                         column: x => x.DepartmentId,
-                        principalSchema: "dbo",
+                        principalSchema: "wolfden",
                         principalTable: "Department",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Employee_Designation_DesignationId",
                         column: x => x.DesignationId,
-                        principalSchema: "dbo",
+                        principalSchema: "wolfden",
                         principalTable: "Designation",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Employee_Employee_ManagerId",
                         column: x => x.ManagerId,
-                        principalSchema: "dbo",
+                        principalSchema: "wolfden",
                         principalTable: "Employee",
                         principalColumn: "Id");
                 })
                 .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "Employee_HT")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
-                .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
-
-            migrationBuilder.CreateTable(
-                name: "SuperAdmin",
-                schema: "dbo",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "SuperAdmin_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "SuperAdmin_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    PeriodEnd = table.Column<DateTime>(type: "datetime2", nullable: false)
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "SuperAdmin_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    PeriodStart = table.Column<DateTime>(type: "datetime2", nullable: false)
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "SuperAdmin_HT")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SuperAdmin", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SuperAdmin_Employee_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalSchema: "dbo",
-                        principalTable: "Employee",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                })
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "SuperAdmin_HT")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employee_DepartmentId",
-                schema: "dbo",
+                schema: "wolfden",
                 table: "Employee",
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employee_DesignationId",
-                schema: "dbo",
+                schema: "wolfden",
                 table: "Employee",
                 column: "DesignationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employee_Email",
-                schema: "dbo",
+                schema: "wolfden",
                 table: "Employee",
                 column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employee_EmployeeCode",
+                schema: "wolfden",
+                table: "Employee",
+                column: "EmployeeCode",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employee_ManagerId",
-                schema: "dbo",
+                schema: "wolfden",
                 table: "Employee",
                 column: "ManagerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SuperAdmin_EmployeeId",
-                schema: "dbo",
-                table: "SuperAdmin",
-                column: "EmployeeId");
+                name: "IX_Employee_RFId",
+                schema: "wolfden",
+                table: "Employee",
+                column: "RFId",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "SuperAdmin",
-                schema: "dbo")
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "SuperAdmin_HT")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
-                .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
-
-            migrationBuilder.DropTable(
                 name: "Employee",
-                schema: "dbo")
+                schema: "wolfden")
                 .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "Employee_HT")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                .Annotation("SqlServer:TemporalHistoryTableName", "Employee")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
 
             migrationBuilder.DropTable(
                 name: "Department",
-                schema: "dbo")
+                schema: "wolfden")
                 .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "Department_HT")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                .Annotation("SqlServer:TemporalHistoryTableName", "Department")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
 
             migrationBuilder.DropTable(
                 name: "Designation",
-                schema: "dbo")
+                schema: "wolfden")
                 .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "Designation_HT")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", "dbo")
+                .Annotation("SqlServer:TemporalHistoryTableName", "Designation")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
         }

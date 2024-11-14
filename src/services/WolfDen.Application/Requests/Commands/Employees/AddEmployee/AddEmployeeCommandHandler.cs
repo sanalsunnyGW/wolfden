@@ -19,7 +19,7 @@ namespace WolfDen.Application.Requests.Commands.Employees.AddEmployee
 
         public async Task<int> Handle(AddEmployeecommand request, CancellationToken cancellationToken)
         {
-            var result = _validator.Validate(request);
+            var result = await _validator.ValidateAsync(request, cancellationToken);
             if (!result.IsValid)
             {
                 var errors = string.Join(", ", result.Errors.Select(e => e.ErrorMessage));
@@ -28,7 +28,7 @@ namespace WolfDen.Application.Requests.Commands.Employees.AddEmployee
 
             Employee Employee = new Employee(request.EmployeeCode, request.RFId, request.FirstName);
             _context.Employees.Add(Employee);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
 
             return Employee.Id;
         }

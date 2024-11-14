@@ -23,45 +23,6 @@ namespace WolfDen.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EmployeeManagementDomain.Entity.SuperAdmin", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PeriodEnd")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("PeriodEnd");
-
-                    b.Property<DateTime>("PeriodStart")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("PeriodStart");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("SuperAdmin", "wolfden");
-
-                    b.ToTable(tb => tb.IsTemporal(ttb =>
-                            {
-                                ttb.UseHistoryTable("SuperAdmin", "wolfdenHT");
-                                ttb
-                                    .HasPeriodStart("PeriodStart")
-                                    .HasColumnName("PeriodStart");
-                                ttb
-                                    .HasPeriodEnd("PeriodEnd")
-                                    .HasColumnName("PeriodEnd");
-                            }));
-                });
-
             modelBuilder.Entity("WolfDen.Domain.Entity.Department", b =>
                 {
                     b.Property<int>("Id")
@@ -218,14 +179,32 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasIndex("ManagerId");
 
+                    b.HasIndex("RFId")
+                        .IsUnique();
 
+                    b.ToTable("Employee", "wolfden");
+
+                    b.ToTable(tb => tb.IsTemporal(ttb =>
+                            {
+                                ttb.UseHistoryTable("Employee", "wolfdenHT");
+                                ttb
+                                    .HasPeriodStart("PeriodStart")
+                                    .HasColumnName("PeriodStart");
+                                ttb
+                                    .HasPeriodEnd("PeriodEnd")
+                                    .HasColumnName("PeriodEnd");
+                            }));
                 });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.Employee", b =>
                 {
                     b.HasOne("WolfDen.Domain.Entity.Department", "Department")
                         .WithMany()
+                        .HasForeignKey("DepartmentId");
 
+                    b.HasOne("WolfDen.Domain.Entity.Designation", "Designation")
+                        .WithMany()
+                        .HasForeignKey("DesignationId");
 
                     b.HasOne("WolfDen.Domain.Entity.Employee", "Manager")
                         .WithMany()

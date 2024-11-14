@@ -17,7 +17,7 @@ namespace WolfDen.Application.Requests.Commands.Designations
         {
             Designation designation = new Designation(request.DesignationName);
             _context.Designations.Add(designation);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return designation.Id;
 
         }

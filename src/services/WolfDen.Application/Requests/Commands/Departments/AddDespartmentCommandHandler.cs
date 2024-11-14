@@ -18,7 +18,7 @@ namespace WolfDen.Application.Requests.Commands.Departments
         {
             Department department = new Department(request.DepartmentName);
             _context.Departments.Add(department);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return department.Id;
         }
     }

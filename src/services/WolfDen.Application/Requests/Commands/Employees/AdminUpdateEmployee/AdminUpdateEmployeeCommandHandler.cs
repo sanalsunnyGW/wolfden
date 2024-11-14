@@ -17,7 +17,7 @@ namespace WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee
 
         public async Task<bool> Handle(AdminUpdateEmployeeCommand request, CancellationToken cancellationToken)
         {
-            var result = _validator.Validate(request);
+            var result = await _validator.ValidateAsync(request, cancellationToken);
 
             if (!result.IsValid)
             {
@@ -25,14 +25,14 @@ namespace WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee
                 throw new ValidationException($"Validation failed: {errors}");
             }
 
-            var employee = await _context.Employees.FindAsync(request.Id);
+            var employee = await _context.Employees.FindAsync(request.Id, cancellationToken);
             if (employee == null)
             {
                 return false;
             }
             employee.AdminUpdateEmployee(request.DesignationId, request.DepartmentId, request.ManagerId, request.IsActive);
             _context.Employees.Update(employee);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return true;
         }
     }
