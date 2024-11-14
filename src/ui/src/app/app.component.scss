@@ -1,0 +1,13 @@
+.side-nav {
+    width: 250px;
+    min-width: 230px;
+    min-height: calc(100vh);
+    background-color: #113c60;
+    position: fixed;
+    color: #fff;
+    box-shadow: 5px 5px 5px #939393;
+    @media only screen and (max-width: 1300px) {
+      width: 100px;
+      min-width: 100px;
+    }
+  }

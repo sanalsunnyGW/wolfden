@@ -12,18 +12,37 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241112104142_first")]
-    partial class first
+    [Migration("20241113144149_test1")]
+    partial class test1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("dbo")
                 .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("EmployeeManagementDomain.Entity.SuperAdmin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("SuperAdmin", "dbo");
+                });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.Department", b =>
                 {
@@ -40,7 +59,7 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Departments", "dbo");
                 });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.Designation", b =>
@@ -58,7 +77,7 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Designations");
+                    b.ToTable("Designations", "dbo");
                 });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.Employee", b =>
@@ -123,7 +142,18 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasIndex("ManagerId");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", "dbo");
+                });
+
+            modelBuilder.Entity("EmployeeManagementDomain.Entity.SuperAdmin", b =>
+                {
+                    b.HasOne("WolfDen.Domain.Entity.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.Employee", b =>
