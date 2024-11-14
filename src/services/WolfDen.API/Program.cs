@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-
+using WolfDen.Application.Validators;
 using WolfDen.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +24,11 @@ builder.Services.AddMediatR(x => {
     x.RegisterServicesFromAssembly(Assembly.Load("WolfDen.Application"));
 
 });
+
+builder.Services.AddTransient<AdminUpdateEmployeeValidator>();
+builder.Services.AddTransient<CreateEmployeeValidator>();
+builder.Services.AddTransient<EmployeeUpdateEmployeeValidator>();
+
 
 
 var app = builder.Build();

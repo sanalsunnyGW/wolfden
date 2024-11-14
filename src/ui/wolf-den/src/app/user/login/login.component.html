@@ -1,0 +1,25 @@
+<div class="mb-4 h2 text-sucess">
+    Login
+</div>
+<form [formGroup]="userForm"(ngSubmit)="onSubmit()">
+
+<div class="mb-3">
+    <input class="form-control bg-body-secondary"
+    placeholder="Email" formControlName="email">
+</div>
+<div class="mb-3">
+    <input type="password" class="form-control bg-body-secondary"
+    placeholder="Password" formControlName="password">
+</div>
+
+<button type="submit" class="btn btn-success w-100 rounded-3">
+    Login
+</button>
+</form>
+<div class="d-flex mt-3 align-items-center">
+    <hr class="flex-grow-1">
+    <span class="px-2">or</span>
+    <hr class="flex-grow-1">
+  </div>
+
+  <button routerLink="/user/signup" class="btn mt-3 btn-success w-100 rounded-3">Sign Up</button>

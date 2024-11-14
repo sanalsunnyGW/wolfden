@@ -1,6 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 
-﻿using EmployeeManagementDomain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
