@@ -16,7 +16,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<WolfDenContext>(x =>
 {
-    x.UseSqlServer(@"Server=localhost,1431;Database=EmployeeManagement;User Id=sa;Password=pass@123;TrustServerCertificate=true");
+    x.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection"));
 
 });
 builder.Services.AddScoped<WolfDenContext>();

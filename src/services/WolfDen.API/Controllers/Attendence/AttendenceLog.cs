@@ -1,8 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using QuestPDF.Fluent;
 using WolfDen.Application.Requests.Queries.Attendence.AttendenceLog;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using WolfDen.Domain.Entity;
 
 
 namespace WolfDen.API.Controllers.Attendence
@@ -12,10 +11,12 @@ namespace WolfDen.API.Controllers.Attendence
     public class AttendenceLog : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly PdfService _pdfService;
 
-        public AttendenceLog(IMediator mediator)
+        public AttendenceLog(IMediator mediator, PdfService pdfService)
         {
             _mediator = mediator;
+            _pdfService = pdfService;
         }
 
         [HttpGet("{employeeId}/{date}")]
