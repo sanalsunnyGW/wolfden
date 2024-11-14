@@ -35,6 +35,8 @@ namespace WolfDen.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new LeaveRequestConfiguration());   
             modelBuilder.ApplyConfiguration(new LeaveSettingConfiguration());
             modelBuilder.ApplyConfiguration(new LeaveTypeConfiguration());  
+            modelBuilder.ApplyConfiguration(new LeaveDayConfiguration());
+            modelBuilder.ApplyConfiguration(new LeaveIncrementLogConfiguration());
         }
     }
 }

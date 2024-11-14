@@ -8,10 +8,11 @@ namespace WolfDen.Infrastructure.Configuration
     {
         public void Configure(EntityTypeBuilder<LeaveRequest> builder)
         {
+            builder.Property(x => x.Id).HasColumnName("LeaveRequestId");
             builder.Property(x => x.Description).HasMaxLength(1000);
             builder.HasOne(x => x.Employee).WithMany().HasForeignKey(x =>x.EmployeeId);
             builder.HasOne(x=>x.LeaveType).WithMany().HasForeignKey(x=>x.TypeId);
-            builder.Property(x=>x.Id).HasColumnName("LeaveRequestId");
+            builder.HasOne(x => x.
         }
     }
 }
