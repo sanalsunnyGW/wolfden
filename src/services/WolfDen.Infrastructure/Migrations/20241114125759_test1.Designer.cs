@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WolfDen.Infrastructure.Data;
 
@@ -11,13 +12,15 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    partial class WolfDenContextModelSnapshot : ModelSnapshot
+    [Migration("20241114125759_test1")]
+    partial class test1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("wolfden")
+                .HasDefaultSchema("dbo")
                 .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -48,11 +51,11 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("SuperAdmin", "wolfden");
+                    b.ToTable("SuperAdmin", "dbo");
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
                             {
-                                ttb.UseHistoryTable("SuperAdmin", "wolfdenHT");
+                                ttb.UseHistoryTable("SuperAdmin_HT", "dbo");
                                 ttb
                                     .HasPeriodStart("PeriodStart")
                                     .HasColumnName("PeriodStart");
@@ -70,7 +73,7 @@ namespace WolfDen.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
+                    b.Property<string>("DepartmentName")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -87,11 +90,11 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Department", "wolfden");
+                    b.ToTable("Department", "dbo");
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
                             {
-                                ttb.UseHistoryTable("Department", "wolfdenHT");
+                                ttb.UseHistoryTable("Department_HT", "dbo");
                                 ttb
                                     .HasPeriodStart("PeriodStart")
                                     .HasColumnName("PeriodStart");
@@ -109,7 +112,7 @@ namespace WolfDen.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
+                    b.Property<string>("DesignationName")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -126,11 +129,11 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Designation", "wolfden");
+                    b.ToTable("Designation", "dbo");
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
                             {
-                                ttb.UseHistoryTable("Designation", "wolfdenHT");
+                                ttb.UseHistoryTable("Designation_HT", "dbo");
                                 ttb
                                     .HasPeriodStart("PeriodStart")
                                     .HasColumnName("PeriodStart");
@@ -144,35 +147,32 @@ namespace WolfDen.Infrastructure.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly?>("DateofBirth")
-                        .HasColumnType("date");
-
-                    b.Property<int?>("DepartmentId")
+                    b.Property<int?>("Age")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DesignationId")
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DesignationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("EmployeeCode")
+                    b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<int?>("Gender")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<DateOnly?>("JoiningDate")
                         .HasColumnType("date");
@@ -195,6 +195,7 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnName("PeriodStart");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
@@ -210,22 +211,48 @@ namespace WolfDen.Infrastructure.Migrations
                     b.HasIndex("DesignationId");
 
                     b.HasIndex("Email")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
-
-                    b.HasIndex("EmployeeCode")
                         .IsUnique();
 
                     b.HasIndex("ManagerId");
 
+                    b.ToTable("Employee", "dbo");
 
+                    b.ToTable(tb => tb.IsTemporal(ttb =>
+                            {
+                                ttb.UseHistoryTable("Employee_HT", "dbo");
+                                ttb
+                                    .HasPeriodStart("PeriodStart")
+                                    .HasColumnName("PeriodStart");
+                                ttb
+                                    .HasPeriodEnd("PeriodEnd")
+                                    .HasColumnName("PeriodEnd");
+                            }));
+                });
+
+            modelBuilder.Entity("EmployeeManagementDomain.Entity.SuperAdmin", b =>
+                {
+                    b.HasOne("WolfDen.Domain.Entity.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.Employee", b =>
                 {
                     b.HasOne("WolfDen.Domain.Entity.Department", "Department")
                         .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
+                    b.HasOne("WolfDen.Domain.Entity.Designation", "Designation")
+                        .WithMany()
+                        .HasForeignKey("DesignationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("WolfDen.Domain.Entity.Employee", "Manager")
                         .WithMany()
