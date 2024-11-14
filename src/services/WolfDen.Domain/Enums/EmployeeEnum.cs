@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WolfDen.Domain.Enums
+﻿namespace WolfDen.Domain.Enums
 {
     public class EmployeeEnum
     {
-        public enum gender
+        public enum Gender
         {
-            male=1,
-            female,
-            other
+            Male = 1,
+            Female,
+            Other
         }
     }
 }

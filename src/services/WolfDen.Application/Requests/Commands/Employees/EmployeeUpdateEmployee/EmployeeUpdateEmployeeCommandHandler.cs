@@ -1,18 +1,10 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolfDen.Application.Validators;
-using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
-namespace WolfDen.Application.Requests.Commands.Employees
+namespace WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee
 {
-    public class EmployeeUpdateEmployeeCommandHandler : IRequestHandler<EmployeeUpdateEmployee, bool>
+    public class EmployeeUpdateEmployeeCommandHandler : IRequestHandler<EmployeeUpdateEmployeeCommand, bool>
     {
         private readonly WolfDenContext _context;
         private readonly EmployeeUpdateEmployeeValidator _validator;
@@ -23,7 +15,7 @@ namespace WolfDen.Application.Requests.Commands.Employees
             _validator = validator;
         }
 
-        public async Task<bool> Handle(EmployeeUpdateEmployee request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(EmployeeUpdateEmployeeCommand request, CancellationToken cancellationToken)
         {
             var result = _validator.Validate(request);
             if (!result.IsValid)
@@ -40,9 +32,6 @@ namespace WolfDen.Application.Requests.Commands.Employees
             _context.Employees.Update(employee);
             await _context.SaveChangesAsync();
             return true;
-
-
-
 
         }
     }

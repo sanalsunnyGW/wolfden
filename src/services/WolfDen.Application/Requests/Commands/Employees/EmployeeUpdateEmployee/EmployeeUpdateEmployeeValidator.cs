@@ -1,14 +1,8 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolfDen.Application.Requests.Commands.Employees;
 
-namespace WolfDen.Application.Validators
+namespace WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee
 {
-    public class EmployeeUpdateEmployeeValidator : AbstractValidator<EmployeeUpdateEmployee>
+    public class EmployeeUpdateEmployeeValidator : AbstractValidator<EmployeeUpdateEmployeeCommand>
     {
         public EmployeeUpdateEmployeeValidator()
         {

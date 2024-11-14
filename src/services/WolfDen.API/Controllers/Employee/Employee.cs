@@ -1,7 +1,10 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WolfDen.Application.Requests.Commands.Employees;
+using WolfDen.Application.DTOs;
+using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
+using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
+using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
+using WolfDen.Application.Requests.Queries.Employee.GetEmployeeHierarchy;
 
 namespace WolfDen.API.Controllers.Employee
 {
@@ -17,20 +20,29 @@ namespace WolfDen.API.Controllers.Employee
         }
 
         [HttpPost]
-        public async Task<int> AddEmployee([FromBody] AddEmployee command)
+        public async Task<int> AddEmployee([FromBody] AddEmployeecommand command)
         {
             return await _mediator.Send(command);
         }
-        [HttpPost("EmployeeUpdateEmployee")]
-        public async Task<bool> EmployeeUpdateEmployee([FromBody] EmployeeUpdateEmployee command)
+        [HttpPut("EmployeeUpdateEmployee")]
+        public async Task<bool> EmployeeUpdateEmployee([FromBody] EmployeeUpdateEmployeeCommand command)
         {
             return await _mediator.Send(command);
         }
-        [HttpPost("AdminUpdateEmployee")]
-        public async Task<bool> AdminUpdateEmployee([FromBody] AdminUpdateEmployee command)
+        [HttpPut("AdminUpdateEmployee")]
+        public async Task<bool> AdminUpdateEmployee([FromBody] AdminUpdateEmployeeCommand command)
         {
             return await _mediator.Send(command);
         }
+        [HttpGet("Employee Hierarchy")]
+        public async Task<EmployeeHierarchyDto> GetEmployeeHierarchy(int id)
+        {
+            GetEmployeeHierarchyQuery query = new GetEmployeeHierarchyQuery();
+            query.Id = id;
+            return await _mediator.Send(query);
+
+        }
+
 
     }
 }

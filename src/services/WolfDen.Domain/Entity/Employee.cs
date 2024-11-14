@@ -1,11 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static WolfDen.Domain.Enums.EmployeeEnum;
+﻿using static WolfDen.Domain.Enums.EmployeeEnum;
 
 
 namespace WolfDen.Domain.Entity
@@ -22,13 +15,13 @@ namespace WolfDen.Domain.Entity
         public DateOnly? DateofBirth { get; private set; }
 
         public DateOnly? JoiningDate { get; private set; }
-        public gender? Gender { get; private set; }
+        public Gender? Gender { get; private set; }
         public int? DesignationId { get; private set; }
         public Designation? Designation { get; private set; }
-        public int? DepartmentId {  get; private set; }
+        public int? DepartmentId { get; private set; }
         public Department? Department { get; private set; }
         public int? ManagerId { get; private set; }
-        public virtual Employee? Manager {  get; private set; }
+        public virtual Employee? Manager { get; private set; }
         public bool? IsActive { get; private set; }
 
 
@@ -43,9 +36,9 @@ namespace WolfDen.Domain.Entity
             RFId = rfId;
             FirstName = firstName;
 
-            
+
         }
-        public void EmployeeUpdateEmployee(string? firstName, string? lastName, DateOnly? dateofBirth, string? email, string? phoneNumber, gender? gender, DateOnly? joiningDate)
+        public void EmployeeUpdateEmployee(string? firstName, string? lastName, DateOnly? dateofBirth, string? email, string? phoneNumber, Gender? gender, DateOnly? joiningDate)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -59,11 +52,11 @@ namespace WolfDen.Domain.Entity
         public void AdminUpdateEmployee(int? designationId, int? departmentId, int? managerId, bool? isActive)
         {
             DepartmentId = departmentId;
-            DesignationId= designationId;
+            DesignationId = designationId;
             ManagerId = managerId;
             IsActive = isActive;
 
         }
-    } 
+    }
 }
 

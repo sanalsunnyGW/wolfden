@@ -1,17 +1,11 @@
 ﻿using FluentValidation;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolfDen.Application.Validators;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
-namespace WolfDen.Application.Requests.Commands.Employees
+namespace WolfDen.Application.Requests.Commands.Employees.AddEmployee
 {
-    public class AddEmployeeCommandHandler : IRequestHandler<AddEmployee, int>
+    public class AddEmployeeCommandHandler : IRequestHandler<AddEmployeecommand, int>
     {
         private readonly WolfDenContext _context;
         private readonly CreateEmployeeValidator _validator;
@@ -23,7 +17,7 @@ namespace WolfDen.Application.Requests.Commands.Employees
             _validator = validator;
         }
 
-        public async Task<int> Handle(AddEmployee request, CancellationToken cancellationToken)
+        public async Task<int> Handle(AddEmployeecommand request, CancellationToken cancellationToken)
         {
             var result = _validator.Validate(request);
             if (!result.IsValid)
@@ -34,7 +28,9 @@ namespace WolfDen.Application.Requests.Commands.Employees
 
             Employee Employee = new Employee(request.EmployeeCode, request.RFId, request.FirstName);
             _context.Employees.Add(Employee);
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+
+            return Employee.Id;
         }
     }
 }

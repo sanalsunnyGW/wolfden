@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using WolfDen.Application.Validators;
+using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
+using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
+using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
 using WolfDen.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +22,8 @@ builder.Services.AddDbContext<WolfDenContext>(x =>
 });
 builder.Services.AddScoped<WolfDenContext>();
 
-builder.Services.AddMediatR(x => {
+builder.Services.AddMediatR(x =>
+{
     x.RegisterServicesFromAssembly(Assembly.Load("WolfDen.Application"));
 
 });

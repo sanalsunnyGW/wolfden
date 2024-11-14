@@ -1,14 +1,9 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static WolfDen.Domain.Enums.EmployeeEnum;
 
-namespace WolfDen.Application.Requests.Commands.Employees
+namespace WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee
 {
-    public class EmployeeUpdateEmployee : IRequest<bool>
+    public class EmployeeUpdateEmployeeCommand : IRequest<bool>
     {
         public int Id { get; set; }
         public string? FirstName { get; set; }
@@ -18,6 +13,6 @@ namespace WolfDen.Application.Requests.Commands.Employees
         public DateOnly? DateofBirth { get; set; }
 
         public DateOnly? JoiningDate { get; set; }
-        public gender? Gender { get; set; }
+        public Gender? Gender { get; set; }
     }
 }

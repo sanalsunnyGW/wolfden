@@ -1,33 +1,23 @@
-﻿using FluentValidation.Results;
-using MediatR;
-using System;
-using System.Collections.Generic;
+﻿using MediatR;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolfDen.Application.Validators;
 using WolfDen.Infrastructure.Data;
 
-namespace WolfDen.Application.Requests.Commands.Employees
+namespace WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee
 {
-    public class AdminUpdateEmployeeCommandHandler : IRequestHandler<AdminUpdateEmployee, bool>
+    public class AdminUpdateEmployeeCommandHandler : IRequestHandler<AdminUpdateEmployeeCommand, bool>
     {
         private readonly WolfDenContext _context;
+
         private readonly AdminUpdateEmployeeValidator _validator;
-
-      
-
         public AdminUpdateEmployeeCommandHandler(WolfDenContext context, AdminUpdateEmployeeValidator validator)
         {
             _context = context;
             _validator = validator;
-
         }
 
-        public async Task<bool> Handle(AdminUpdateEmployee request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(AdminUpdateEmployeeCommand request, CancellationToken cancellationToken)
         {
-            var result=_validator.Validate(request);
+            var result = _validator.Validate(request);
 
             if (!result.IsValid)
             {

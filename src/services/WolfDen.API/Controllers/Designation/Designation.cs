@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WolfDen.Application.Requests.Commands.Designations;
 
@@ -16,7 +15,7 @@ namespace WolfDen.API.Controllers.Designation
             _mediator = mediator;
         }
         [HttpPost]
-        public async Task<int> AddDesignation([FromBody] AddDesignation command)
+        public async Task<int> AddDesignation([FromBody] AddDesignationCommand command)
         {
             return await _mediator.Send(command);
         }
