@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WolfDen.Infrastructure.Data;
 
@@ -11,13 +12,15 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    partial class WolfDenContextModelSnapshot : ModelSnapshot
+    [Migration("20241114125759_test1")]
+    partial class test1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("wolfden")
+                .HasDefaultSchema("dbo")
                 .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -48,11 +51,11 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("SuperAdmin", "wolfden");
+                    b.ToTable("SuperAdmin", "dbo");
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
                             {
-                                ttb.UseHistoryTable("SuperAdmin", "wolfdenHT");
+                                ttb.UseHistoryTable("SuperAdmin_HT", "dbo");
                                 ttb
                                     .HasPeriodStart("PeriodStart")
                                     .HasColumnName("PeriodStart");
@@ -87,11 +90,11 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Department", "wolfden");
+                    b.ToTable("Department", "dbo");
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
                             {
-                                ttb.UseHistoryTable("Department", "wolfdenHT");
+                                ttb.UseHistoryTable("Department_HT", "dbo");
                                 ttb
                                     .HasPeriodStart("PeriodStart")
                                     .HasColumnName("PeriodStart");
@@ -126,11 +129,11 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Designation", "wolfden");
+                    b.ToTable("Designation", "dbo");
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
                             {
-                                ttb.UseHistoryTable("Designation", "wolfdenHT");
+                                ttb.UseHistoryTable("Designation_HT", "dbo");
                                 ttb
                                     .HasPeriodStart("PeriodStart")
                                     .HasColumnName("PeriodStart");
@@ -212,11 +215,11 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasIndex("ManagerId");
 
-                    b.ToTable("Employee", "wolfden");
+                    b.ToTable("Employee", "dbo");
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
                             {
-                                ttb.UseHistoryTable("Employee", "wolfdenHT");
+                                ttb.UseHistoryTable("Employee_HT", "dbo");
                                 ttb
                                     .HasPeriodStart("PeriodStart")
                                     .HasColumnName("PeriodStart");
