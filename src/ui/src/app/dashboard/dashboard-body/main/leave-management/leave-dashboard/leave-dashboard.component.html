@@ -1,0 +1,13 @@
+<table class="table table-striped table-light container">
+  <thead class="thead-light">
+    <tr>
+      <th colspan="3" class="align">
+        <h2>Leave Balance</h2>
+      </th>
+    </tr>
+        <tr *ngFor="let item of leaveList">
+        <th>{{item.name}}</th>
+        <td class="align">{{item.balance}}</td>
+      </tr>
+  </thead>
+</table>
