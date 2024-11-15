@@ -1,4 +1,4 @@
-﻿namespace WolfDen.Application.DTOs
+﻿namespace WolfDen.Application.DTOs.Employees
 {
     public class EmployeeHierarchyDto
     {

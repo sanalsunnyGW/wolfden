@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using WolfDen.Application.DTOs;
+using WolfDen.Application.DTOs.Employees;
 
 namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy
 {

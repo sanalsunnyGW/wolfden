@@ -1,18 +1,13 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using WolfDen.Application.DTOs;
+using WolfDen.Application.DTOs.Employees;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy
 {
-    public class GetEmployeeHierarchyQueryHandler : IRequestHandler<GetEmployeeHierarchyQuery, EmployeeHierarchyDto>
+    public class GetEmployeeHierarchyQueryHandler(WolfDenContext context) : IRequestHandler<GetEmployeeHierarchyQuery, EmployeeHierarchyDto>
     {
-        private readonly WolfDenContext _context;
-
-        public GetEmployeeHierarchyQueryHandler(WolfDenContext context)
-        {
-            _context = context;
-        }
+        private readonly WolfDenContext _context=context;
 
         public async Task<EmployeeHierarchyDto> Handle(GetEmployeeHierarchyQuery request, CancellationToken cancellationToken)
         {
