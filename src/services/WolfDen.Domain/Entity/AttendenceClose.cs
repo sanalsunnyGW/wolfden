@@ -2,11 +2,11 @@
 {
     public class AttendenceClose
     {
-        public int Id { get;private set; }
+        public int Id { get;}
         public int Month { get;private set; }
         public bool IsClosed { get;private set; }
 
-        public AttendenceClose()
+        private AttendenceClose()
         {
             
         }

@@ -11,7 +11,8 @@ namespace WolfDen.Infrastructure.Configuration
         {
             builder.Property(x => x.Id).ValueGeneratedOnAdd().HasColumnName("LogId");
             builder.Property(x => x.Direction).HasMaxLength(3);
-            builder.HasOne(x => x.Employee).WithMany().HasForeignKey(x => x.EmployeeId);
+            builder.HasOne(x => x.DailyAttendence).WithMany().HasForeignKey(x => x.DailyAttendenceId).OnDelete(DeleteBehavior.Restrict); ;
+
         }
     }
 }

@@ -1,29 +1,21 @@
-﻿
-
-namespace WolfDen.Domain.Entity
+﻿namespace WolfDen.Domain.Entity
 {
     public class Status
     {
-        public int Id { get;private set; }
+        public int Id { get; }
         public int EmployeeId { get;private set; }
         public DateOnly Date { get;private set; }
-        public int Duration { get;private set; }
-        public int StatusId { get;private set; }
+        public int StatusTypeId { get;private set; }
         public virtual StatusType StatusType { get; private set; }
-        public virtual Employee Employee { get;private set; }
-        public Status()
+        private Status()
         {
             
         }
-        public Status(int employeeId, DateOnly date, int duration,int statusId, StatusType statusType,Employee employee)
+        public Status(int employeeId, DateOnly date,int statusId)
         {
             EmployeeId= employeeId;
             Date= date;
-            Duration = duration;
-            StatusId = statusId;
-            StatusType= statusType;
-            Employee = employee;
-
+            StatusTypeId = statusId;
         }
     }
 }

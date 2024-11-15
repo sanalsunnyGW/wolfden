@@ -9,7 +9,7 @@ namespace WolfDen.Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<LOP> builder)
         {
             builder.Property(x => x.Id).ValueGeneratedOnAdd().HasColumnName("LOPId");
-            builder.HasOne(x => x.Employee).WithMany().HasForeignKey(x => x.EmployeeId);  
+           
         }
     }
 }

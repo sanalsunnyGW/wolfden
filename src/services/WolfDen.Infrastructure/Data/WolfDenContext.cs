@@ -40,7 +40,7 @@ namespace WolfDen.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new HolidayConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationConfiguration());
             modelBuilder.ApplyConfiguration(new StatusConfiguration());
-
+            modelBuilder.ApplyConfiguration(new StatusTypeConfiguration());
         }
     }
 }

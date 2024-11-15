@@ -2,10 +2,10 @@
 {
     public class Holiday
     {
-        public int Id { get;private set; }
+        public int Id { get; }
         public DateOnly Date { get;private set; }
         public string Type { get;private set; }
-        public Holiday()
+        private Holiday()
         {
             
         }

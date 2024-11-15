@@ -26,6 +26,25 @@ namespace WolfDen.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DailyAttendence",
+                columns: table => new
+                {
+                    DailyAttendenceId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateOnly>(type: "date", nullable: false),
+                    ArrivalTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DepartureTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    InsideDuration = table.Column<int>(type: "int", nullable: false),
+                    OutsideDuration = table.Column<int>(type: "int", nullable: false),
+                    MissedPunch = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DailyAttendence", x => x.DailyAttendenceId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Departments",
                 columns: table => new
                 {
@@ -142,46 +161,43 @@ namespace WolfDen.Infrastructure.Migrations
                     Date = table.Column<DateOnly>(type: "date", nullable: false),
                     Time = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeviceId = table.Column<int>(type: "int", nullable: false),
-                    Direction = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false)
+                    Direction = table.Column<int>(type: "int", maxLength: 3, nullable: false),
+                    DailyAttendenceId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AttendenceLog", x => x.LogId);
+                    table.ForeignKey(
+                        name: "FK_AttendenceLog_DailyAttendence_DailyAttendenceId",
+                        column: x => x.DailyAttendenceId,
+                        principalTable: "DailyAttendence",
+                        principalColumn: "DailyAttendenceId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AttendenceLog_Device_DeviceId",
                         column: x => x.DeviceId,
                         principalTable: "Device",
                         principalColumn: "DeviceId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AttendenceLog_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "DailyAttendence",
+                name: "Status",
                 columns: table => new
                 {
-                    DailyAttendenceId = table.Column<int>(type: "int", nullable: false)
+                    StatusId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateOnly>(type: "date", nullable: false),
-                    ArrivalTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DepartureTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    InsideDuration = table.Column<int>(type: "int", nullable: false),
-                    OutsideDuration = table.Column<int>(type: "int", nullable: false),
-                    MissedPunch = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    StatusTypeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DailyAttendence", x => x.DailyAttendenceId);
+                    table.PrimaryKey("PK_Status", x => x.StatusId);
                     table.ForeignKey(
-                        name: "FK_DailyAttendence_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
+                        name: "FK_Status_StatusType_StatusTypeId",
+                        column: x => x.StatusTypeId,
+                        principalTable: "StatusType",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -208,48 +224,15 @@ namespace WolfDen.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Status",
-                columns: table => new
-                {
-                    StatusId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateOnly>(type: "date", nullable: false),
-                    Duration = table.Column<int>(type: "int", nullable: false),
-                    StatusId1 = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Status", x => x.StatusId);
-                    table.ForeignKey(
-                        name: "FK_Status_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Status_StatusType_StatusId1",
-                        column: x => x.StatusId1,
-                        principalTable: "StatusType",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_AttendenceLog_DailyAttendenceId",
+                table: "AttendenceLog",
+                column: "DailyAttendenceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AttendenceLog_DeviceId",
                 table: "AttendenceLog",
                 column: "DeviceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AttendenceLog_EmployeeId",
-                table: "AttendenceLog",
-                column: "EmployeeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DailyAttendence_EmployeeId",
-                table: "DailyAttendence",
-                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_DepartmentId",
@@ -278,14 +261,9 @@ namespace WolfDen.Infrastructure.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Status_EmployeeId",
+                name: "IX_Status_StatusTypeId",
                 table: "Status",
-                column: "EmployeeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Status_StatusId1",
-                table: "Status",
-                column: "StatusId1");
+                column: "StatusTypeId");
         }
 
         /// <inheritdoc />
@@ -298,9 +276,6 @@ namespace WolfDen.Infrastructure.Migrations
                 name: "AttendenceLog");
 
             migrationBuilder.DropTable(
-                name: "DailyAttendence");
-
-            migrationBuilder.DropTable(
                 name: "Holiday");
 
             migrationBuilder.DropTable(
@@ -308,6 +283,9 @@ namespace WolfDen.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Status");
+
+            migrationBuilder.DropTable(
+                name: "DailyAttendence");
 
             migrationBuilder.DropTable(
                 name: "Device");

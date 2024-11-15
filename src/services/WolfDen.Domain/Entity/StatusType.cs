@@ -1,10 +1,15 @@
-﻿namespace WolfDen.Domain.Entity
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WolfDen.Domain.Entity
 {
     public class StatusType
     {
-        public int Id { get;private set; }
+        [Key]
+        public int Id { get; }
+      
+        
         public string StatusName { get;private set; }
-        public StatusType()
+        private StatusType()
         {
             
         }

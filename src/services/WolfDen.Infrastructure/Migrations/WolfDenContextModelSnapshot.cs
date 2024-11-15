@@ -51,16 +51,18 @@ namespace WolfDen.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("DailyAttendenceId")
+                        .HasColumnType("int");
+
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
                     b.Property<int>("DeviceId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Direction")
-                        .IsRequired()
+                    b.Property<int>("Direction")
                         .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
+                        .HasColumnType("int");
 
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
@@ -70,9 +72,9 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeviceId");
+                    b.HasIndex("DailyAttendenceId");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("DeviceId");
 
                     b.ToTable("AttendenceLog");
                 });
@@ -108,8 +110,6 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
 
                     b.ToTable("DailyAttendence");
                 });
@@ -305,26 +305,17 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
-                    b.Property<int>("Duration")
-                        .HasColumnType("int");
-
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StatusId")
+                    b.Property<int>("StatusTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("StatusTypeId");
 
-                    b.HasIndex("StatusId");
-
-                    b.ToTable("Status", t =>
-                        {
-                            t.Property("StatusId")
-                                .HasColumnName("StatusId1");
-                        });
+                    b.ToTable("Status");
                 });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.StatusType", b =>
@@ -346,32 +337,21 @@ namespace WolfDen.Infrastructure.Migrations
 
             modelBuilder.Entity("WolfDen.Domain.Entity.AttendenceLog", b =>
                 {
+                    b.HasOne("WolfDen.Domain.Entity.DailyAttendence", "DailyAttendence")
+                        .WithMany()
+                        .HasForeignKey("DailyAttendenceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("WolfDen.Domain.Entity.Device", "Device")
                         .WithMany()
                         .HasForeignKey("DeviceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WolfDen.Domain.Entity.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("DailyAttendence");
 
                     b.Navigation("Device");
-
-                    b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("WolfDen.Domain.Entity.DailyAttendence", b =>
-                {
-                    b.HasOne("WolfDen.Domain.Entity.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.Employee", b =>
@@ -412,19 +392,11 @@ namespace WolfDen.Infrastructure.Migrations
 
             modelBuilder.Entity("WolfDen.Domain.Entity.Status", b =>
                 {
-                    b.HasOne("WolfDen.Domain.Entity.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("WolfDen.Domain.Entity.StatusType", "StatusType")
                         .WithMany()
-                        .HasForeignKey("StatusId")
+                        .HasForeignKey("StatusTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Employee");
 
                     b.Navigation("StatusType");
                 });

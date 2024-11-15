@@ -2,13 +2,13 @@
 {
     public class Notification
     {
-        public int Id { get;private set; }
+        public int Id { get; }
         public int  EmployeeId { get;private set; }
         public string Message { get;private set; }
         public DateTime CreatedAt { get;private set; }
         public bool IsAcknowledged { get;private set; }
         public virtual Employee Employee { get;private set; }
-        public Notification()
+        private Notification()
         {
             
         }
