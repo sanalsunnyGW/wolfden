@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enum;
 
-namespace WolfDen.Application.Requests.DTOs.LeaveManagement
+namespace WolfDen.Application.DTOs.LeaveManagement
 {
     public class LeaveRequestDto
     {

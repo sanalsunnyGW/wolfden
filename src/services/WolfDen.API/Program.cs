@@ -34,19 +34,14 @@ builder.Services.AddDbContext<WolfDenContext>(x =>
 });
 builder.Services.AddScoped<WolfDenContext>();
 
-<<<<<<< HEAD
+
 builder.Services.AddMediatR(x => {
     x.RegisterServicesFromAssembly(Assembly.Load("WolfDen.Application"));
 
 
 });
 
-=======
-builder.Services.AddMediatR(x =>
-{
-    x.RegisterServicesFromAssembly(Assembly.Load("WolfDen.Application"));
 
-});
 
 builder.Services.AddScoped<AdminUpdateEmployeeValidator>();
 builder.Services.AddScoped<CreateEmployeeValidator>();
@@ -54,7 +49,7 @@ builder.Services.AddScoped<EmployeeUpdateEmployeeValidator>();
 
 
 
->>>>>>> upstream/main
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

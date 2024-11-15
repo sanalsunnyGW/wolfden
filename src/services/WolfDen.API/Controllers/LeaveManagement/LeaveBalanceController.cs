@@ -18,7 +18,7 @@ namespace WolfDen.API.Controllers.LeaveManagement
         }
 
         [HttpGet]
-        public async Task<List<LeaveBalanceDto>> GetLeaveBalances(int RequestId)
+        public async Task<List<object>> GetLeaveBalances(int RequestId)
         {
             GetLeaveBalanceQuery query= new GetLeaveBalanceQuery();
             query.RequestId = RequestId;    

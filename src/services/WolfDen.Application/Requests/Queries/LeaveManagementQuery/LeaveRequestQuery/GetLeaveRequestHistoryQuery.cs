@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WolfDen.Application.Requests.DTOs.LeaveManagement;
+using WolfDen.Application.DTOs.LeaveManagement;
 using WolfDen.Domain.Entity;
 
 namespace WolfDen.Application.Requests.Queries.LeaveManagementQuery.LeaveRequestQuery

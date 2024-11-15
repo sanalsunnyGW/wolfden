@@ -8,7 +8,7 @@ using WolfDen.Application.Requests.DTOs.LeaveManagement;
 
 namespace WolfDen.Application.Requests.Queries.LeaveManagementQuery.LeaveBalanceQuery
 {
-    public class GetLeaveBalanceQuery:IRequest<List<LeaveBalanceDto>>
+    public class GetLeaveBalanceQuery:IRequest<List<object>>
     {
         public int RequestId {  get; set; } 
     }
