@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WolfDen.Application.Requests.Commands.Departments;
 
+
 namespace WolfDen.API.Controllers.Department
 {
     [Route("api/[controller]")]

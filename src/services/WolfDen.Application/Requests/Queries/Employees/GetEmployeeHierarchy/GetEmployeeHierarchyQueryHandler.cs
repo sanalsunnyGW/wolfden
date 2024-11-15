@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs;
 using WolfDen.Infrastructure.Data;
 
-namespace WolfDen.Application.Requests.Queries.Employee.GetEmployeeHierarchy
+namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy
 {
     public class GetEmployeeHierarchyQueryHandler : IRequestHandler<GetEmployeeHierarchyQuery, EmployeeHierarchyDto>
     {
