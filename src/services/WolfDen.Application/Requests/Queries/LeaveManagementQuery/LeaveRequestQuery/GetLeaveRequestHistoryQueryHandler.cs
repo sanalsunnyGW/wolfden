@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WolfDen.Application.Requests.Queries.LeaveManagementQuery.LeaveRequestQuery
 {
-    internal class GetLeaveRequestHistoryQueryHandler
+    public class GetLeaveRequestHistoryQueryHandler
     {
     }
 }

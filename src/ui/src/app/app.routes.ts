@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { LeaveDashboardComponent } from './Leave-Management/leave-dashboard/leave-dashboard.component';
+import { LeaveDashboardComponent } from './dashboard/dashboard-body/main/leave-management/leave-dashboard/leave-dashboard.component';
 
 export const routes: Routes =
  [

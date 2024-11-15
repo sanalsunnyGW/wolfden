@@ -12,7 +12,7 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagementQuery.LeaveRequest
     public class GetLeaveRequestHistoryQuery:IRequest<List<LeaveRequestDto>>
     {
         public int RequestId    { get; set; }
-        public int TypeId { get; set; } 
-        public bool HalfDay { get; set; }
+        public int TypeId { get; set; } //............
+        public bool HalfDay { get; set; } //............
     }
 }
