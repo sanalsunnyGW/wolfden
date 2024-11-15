@@ -27,8 +27,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                 throw new ArgumentException("invalid year and month");
             }
 
-            var monthStart = new DateOnly(request.Year, request.Month, 1);
-            var monthEnd = monthStart.AddMonths(1).AddDays(-1);
+            DateOnly monthStart = new DateOnly(request.Year, request.Month, 1);
+            DateOnly monthEnd = monthStart.AddMonths(1).AddDays(-1);
 
             var attendanceData = await _context.Status
                 .Where(s => s.EmployeeId == request.EmployeeId && s.Date >= monthStart && s.Date <= monthEnd)
