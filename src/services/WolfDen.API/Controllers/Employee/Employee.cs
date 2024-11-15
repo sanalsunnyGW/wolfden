@@ -108,6 +108,11 @@ namespace WolfDen.API.Controllers.Employee
             return await _mediator.Send(query, cancellationToken);
 
         }
+        [HttpGet("Sign Up")]
+        public async Task<EmployeeSignUpDto> GetEmployeeSignUp([FromQuery]GetEmployeeIDSignUpQuery query, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(query,cancellationToken);
+        }
 
     }
 }
