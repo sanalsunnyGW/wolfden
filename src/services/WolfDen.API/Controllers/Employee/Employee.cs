@@ -89,13 +89,13 @@ namespace WolfDen.API.Controllers.Employee
             return await _mediator.Send(query, cancellationToken);
 
         }
-        [HttpGet("Sign Up")]
+        [HttpGet("Sign-Up")]
         public async Task<EmployeeSignUpDto> GetEmployeeSignUp([FromQuery] GetEmployeeIDSignUpQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
         }
         [HttpGet("Team")]
-        public async Task<List<EmployeeHierarchyDto>> GetMyTeam([FromQuery]GetEmployeeTeamQuery query,CancellationToken cancellationToken)
+        public async Task<List<EmployeeHierarchyDto>> GetMyTeam([FromQuery] GetEmployeeTeamQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
         }

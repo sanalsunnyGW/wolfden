@@ -18,19 +18,19 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeIDSignUp
             {
 
                 result.Id = 0;
-                result.Message = string.Format("Employee Does not Exists!");
+                result.status = false;
                 return result;
             }
             if (employee.Email != null)
             {
 
-                result.Id = 0;
-                result.Message = string.Format("Employee Already Exists!");
+                result.Id = employee.Id;
+                result.status=false;
                 return result;
             }
 
             result.Id = employee.Id;
-            result.Message = string.Format($"HI {employee.FirstName} {employee.LastName} Welcome To GeekyWolf");
+            result.status=true;
             return result;
 
         }

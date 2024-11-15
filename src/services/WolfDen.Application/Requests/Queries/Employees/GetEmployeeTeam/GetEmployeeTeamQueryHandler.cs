@@ -13,11 +13,29 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam
         {
             EmployeeHierarchyService service = new(_context);
             List<EmployeeHierarchyDto> teamList = new();
+            EmployeeHierarchyDto result = new();
             var employee = await _context.Employees.FindAsync(request.Id, cancellationToken);
-            var myTeam = await _context.Employees.Where(x => x.ManagerId == request.Id).ToListAsync();
+            if (employee.IsActive == false)
+            {
+                result.Id = employee.Id;
+                result.EmployeeCode = employee.EmployeeCode;
+                result.FirstName = employee.FirstName;
+                result.LastName = employee.LastName;
+                result.Email = employee.Email;
+                result.DateofBirth = employee.DateofBirth;
+                result.DepartmentId = employee.DepartmentId;
+                result.DesignationId = employee.DesignationId;
+                result.ManagerId = employee.ManagerId;
+                result.PhoneNumber = employee.PhoneNumber;
+                result.IsActive = employee.IsActive;
+                result.Subordinates = await service.GetSubordinates(employee.Id);
+                teamList.Add(result);
+                return teamList;
+            }
+            var myTeam = await _context.Employees.Where(x => x.ManagerId == request.Id && x.IsActive == true).ToListAsync();
             if (myTeam.Count == 0)
             {
-                var teamMates = _context.Employees.Where(x => x.ManagerId == employee.ManagerId);
+                var teamMates = _context.Employees.Where(x => x.ManagerId == employee.ManagerId && x.IsActive == true);
 
                 foreach (var teamMate in teamMates)
                 {
@@ -33,27 +51,26 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam
                         DepartmentId = teamMate.DepartmentId,
                         DesignationId = teamMate.DesignationId,
                         ManagerId = teamMate.ManagerId,
+                        IsActive = teamMate.IsActive,
+
                     };
                     teamList.Add(employeeDto);
                 }
                 return teamList;
             }
 
-            EmployeeHierarchyDto result = new()
-            {
-
-                Id = employee.Id,
-                EmployeeCode = employee.EmployeeCode,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Email = employee.Email,
-                DateofBirth = employee.DateofBirth,
-                DepartmentId = employee.DepartmentId,
-                DesignationId = employee.DesignationId,
-                ManagerId = employee.ManagerId,
-                PhoneNumber = employee.PhoneNumber,
-                Subordinates = await service.GetSubordinates(employee.Id),
-            };
+            result.Id = employee.Id;
+            result.EmployeeCode = employee.EmployeeCode;
+            result.FirstName = employee.FirstName;
+            result.LastName = employee.LastName;
+            result.Email = employee.Email;
+            result.DateofBirth = employee.DateofBirth;
+            result.DepartmentId = employee.DepartmentId;
+            result.DesignationId = employee.DesignationId;
+            result.ManagerId = employee.ManagerId;
+            result.PhoneNumber = employee.PhoneNumber;
+            result.IsActive = employee.IsActive;
+            result.Subordinates = await service.GetSubordinates(employee.Id);
             teamList.Add(result);
             return teamList;
         }
