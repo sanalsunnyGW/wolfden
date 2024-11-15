@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WolfDen.Domain.Entity
+﻿namespace WolfDen.Domain.Entity
 {
     public class Department
     {
         public int Id { get; private set; }
-        public string DepartmentName { get; private set; }
+        public string Name { get; private set; }
 
-        public Department()
+        private Department()
         {
-            
+
         }
-        public Department(string departmentName)
+        public Department(string name)
         {
-            DepartmentName = departmentName;
+            Name = name;
+
         }
     }
 }

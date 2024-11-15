@@ -1,5 +1,9 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
+using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
+using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
 using WolfDen.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +14,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddCors(options =>
 {
@@ -24,17 +29,32 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDbContext<WolfDenContext>(x =>
 {
-    x.UseSqlServer(@"Server=localhost,1431;Database=EmployeeManagement;User Id=sa;Password=pass@123;TrustServerCertificate=true");
+    x.UseSqlServer(connectionString);
 
 });
 builder.Services.AddScoped<WolfDenContext>();
 
+<<<<<<< HEAD
 builder.Services.AddMediatR(x => {
     x.RegisterServicesFromAssembly(Assembly.Load("WolfDen.Application"));
 
 
 });
 
+=======
+builder.Services.AddMediatR(x =>
+{
+    x.RegisterServicesFromAssembly(Assembly.Load("WolfDen.Application"));
+
+});
+
+builder.Services.AddScoped<AdminUpdateEmployeeValidator>();
+builder.Services.AddScoped<CreateEmployeeValidator>();
+builder.Services.AddScoped<EmployeeUpdateEmployeeValidator>();
+
+
+
+>>>>>>> upstream/main
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
