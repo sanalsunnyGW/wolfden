@@ -15,5 +15,7 @@
 
         public bool? IsActive { get; set; }
         public List<EmployeeHierarchyDto> Subordinates { get; set; }
+
+
     }
 }
