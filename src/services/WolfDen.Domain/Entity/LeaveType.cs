@@ -1,4 +1,4 @@
-﻿using WolfDen.Domain.Enum;
+﻿using WolfDen.Domain.Enums;
 
 namespace WolfDen.Domain.Entity
 {

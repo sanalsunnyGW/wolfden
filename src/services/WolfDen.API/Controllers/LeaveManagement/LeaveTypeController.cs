@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WolfDen.Application.Requests.Commands.LeaveTypeCommand;
+using WolfDen.Application.Requests.Commands.LeaveTypes;
 
 namespace WolfDen.API.Controllers.LeaveManagement
 {

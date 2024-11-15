@@ -1,5 +1,5 @@
 export interface ILeaveBalanceList
 {
-    typeName:string;
+    name:string;
     balance:number;
 }

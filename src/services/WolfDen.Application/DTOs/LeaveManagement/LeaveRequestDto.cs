@@ -4,20 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WolfDen.Domain.Entity;
-using WolfDen.Domain.Enum;
+using WolfDen.Domain.Enums;
 
 namespace WolfDen.Application.DTOs.LeaveManagement
 {
     public class LeaveRequestDto
     {
-        //public int EmployeeId { get; private set; }
-        //public int TypeId { get; private set; }
-        public bool HalfDay { get; private set; }
-        public DateOnly FromDate { get; private set; }
-        public DateOnly ToDate { get; private set; }
-        public DateOnly ApplyDate { get; private set; }
-        public LeaveRequestStatus LeaveRequestStatus { get; private set; }
-        public string Description { get; private set; }
-        public int ProcessedBy { get; private set; }
+       
+        public string TypeName { get; set; }  //to get leave type name from table LeaveType
+        public bool HalfDay { get; set; }
+        public DateOnly FromDate { get; set; }
+        public DateOnly ToDate { get; set; }
+        public DateOnly ApplyDate { get;set; }
+        public LeaveRequestStatus LeaveRequestStatus { get; set; }
+        public string Description { get; set; }
+        public string ProcessedBy { get; set; }
     }
 }

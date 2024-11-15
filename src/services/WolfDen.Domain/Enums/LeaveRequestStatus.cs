@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolfDen.Domain.Enum
+namespace WolfDen.Domain.Enums
 {
     public enum LeaveRequestStatus
     {
-        Open=1,
+        Open = 1,
         Approved,
         Rejected,
         Deleted

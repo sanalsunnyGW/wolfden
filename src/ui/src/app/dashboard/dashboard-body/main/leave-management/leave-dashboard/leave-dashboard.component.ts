@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ILeaveBalanceList } from '../../../../../Interface/leave-balance-list-interface';
-import { LeaveManagementService } from '../../../../../Service/leave-management.service';
+import { ILeaveBalanceList } from '../../../../../interface/leave-balance-list-interface';
+import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -17,11 +17,11 @@ leaveList:ILeaveBalanceList[]=[];
 
 constructor(private leaveManagementService:LeaveManagementService) {}
 
-ngOnit()
+ngOnInit()
 {
   this.leaveManagementService.getLeaveBalance(this.id).subscribe({
     next: (data) => {
-      console.log('initially Fetched expenses:', data); 
+      console.log('initially Fetched Leave Balance list:', data); 
       this.leaveList= data; 
         },
     error: (error) => {

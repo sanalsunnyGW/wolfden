@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -8,11 +8,19 @@ import { Observable } from 'rxjs';
 
   export class LeaveManagementService {
   
-     constructor(private http:HttpClient) {}
-   
+   constructor() {}
+   http=inject(HttpClient);
      getLeaveBalance(id:number):Observable<any>
      {
         const params=new HttpParams().set('RequestId',id);
-        return this.http.get('https://localhost:7015/api/LeaveBalance',{params});
+        console.log(id);
+        return this.http.get('https://localhost:7015/api/leave-balance',{params});
+     }
+
+     getLeaveRequestHistory(id:number):Observable<any>
+     {
+      const params=new HttpParams().set('requestId',id);
+      console.log('LeaveRequest History',id);
+      return this.http.get('https://localhost:7015/api/leave-request',{params});
      }
   }

@@ -1,4 +1,4 @@
-﻿namespace WolfDen.Domain.Enum
+﻿namespace WolfDen.Domain.Enums
 {
     public enum RestrictedLeaveType
     {

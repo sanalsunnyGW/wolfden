@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WolfDen.Application.Requests.DTOs.LeaveManagement;
-using WolfDen.Application.Requests.Queries.LeaveManagementQuery.LeaveBalanceQuery;
+using WolfDen.Application.DTOs.LeaveManagement;
+using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveBalances.GetLeaveBalance;
 
 namespace WolfDen.API.Controllers.LeaveManagement
 {
-    [Route("api/[controller]")]
+    [Route("api/leave-balance")]
     [ApiController]
     public class LeaveBalanceController : ControllerBase
     {
@@ -18,7 +18,7 @@ namespace WolfDen.API.Controllers.LeaveManagement
         }
 
         [HttpGet]
-        public async Task<List<object>> GetLeaveBalances(int RequestId)
+        public async Task<List<LeaveBalanceDto>> GetLeaveBalances(int RequestId)
         {
             GetLeaveBalanceQuery query= new GetLeaveBalanceQuery();
             query.RequestId = RequestId;    

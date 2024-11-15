@@ -1,4 +1,4 @@
-﻿using WolfDen.Domain.Enum;
+﻿using WolfDen.Domain.Enums;
 
 namespace WolfDen.Domain.Entity
 {
@@ -35,6 +35,9 @@ namespace WolfDen.Domain.Entity
 
         }
 
+        public void GetLeaveRequestHistory()
+        {
 
+        }
     }
 }
