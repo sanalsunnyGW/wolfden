@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
 using System.Reflection;
 using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
 using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
+using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
 using WolfDen.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +23,8 @@ builder.Services.AddDbContext<WolfDenContext>(x =>
 
 });
 builder.Services.AddScoped<WolfDenContext>();
+builder.Services.AddSingleton<PdfService>();
+QuestPDF.Settings.License = LicenseType.Community;
 
 builder.Services.AddMediatR(x =>
 {
@@ -42,7 +46,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors(options => options.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowAnyMethod());
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
