@@ -5,6 +5,7 @@ using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
 using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
 using WolfDen.Infrastructure.Data;
+using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLeaveType;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,19 +35,16 @@ builder.Services.AddDbContext<WolfDenContext>(x =>
 });
 builder.Services.AddScoped<WolfDenContext>();
 
-
-builder.Services.AddMediatR(x => {
+builder.Services.AddMediatR(x =>
+{
     x.RegisterServicesFromAssembly(Assembly.Load("WolfDen.Application"));
 
-
 });
-
-
 
 builder.Services.AddScoped<AdminUpdateEmployeeValidator>();
 builder.Services.AddScoped<CreateEmployeeValidator>();
 builder.Services.AddScoped<EmployeeUpdateEmployeeValidator>();
-
+builder.Services.AddScoped<AddLeaveTypeValidator>();
 
 
 

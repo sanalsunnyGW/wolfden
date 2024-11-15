@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WolfDen.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    partial class WolfDenContextModelSnapshot : ModelSnapshot
+    [Migration("20241115092139_SecondMigrationLeave")]
+    partial class SecondMigrationLeave
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -461,23 +464,36 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<int?>("CarryForwardLimit")
+                    b.Property<int>("CarryForwardLimit")
                         .HasColumnType("int");
 
                     b.Property<int?>("DaysCheck")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DaysCheckEqualOrLess")
-                        .HasColumnType("int");
+                    b.Property<int>("DaysCheckEqualOrLess")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
-                    b.Property<int?>("DaysChekcMore")
-                        .HasColumnType("int");
+                    b.Property<int>("DaysChekcMore")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
-                    b.Property<int?>("DutyDaysRequired")
-                        .HasColumnType("int");
+                    b.Property<int>("DutyDaysRequired")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
-                    b.Property<int?>("IncrementCount")
-                        .HasColumnType("int");
+                    b.Property<bool?>("Hidden")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("IncrementCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<int?>("IncrementGap")
                         .HasColumnType("int");

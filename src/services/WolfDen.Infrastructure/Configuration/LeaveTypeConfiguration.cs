@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WolfDen.Domain.Entity;
+using WolfDen.Domain.Enums;
 
 namespace WolfDen.Infrastructure.Configuration
 {
@@ -15,6 +11,11 @@ namespace WolfDen.Infrastructure.Configuration
         {
             builder.Property(x => x.Id).HasColumnName("LeaveTypeId");
             builder.Property(x => x.TypeName).HasMaxLength(100);
+            builder.Property(x => x.IsHalfDayAllowed).HasDefaultValue(false);
+            builder.Property(x => x.CarryForward).HasDefaultValue(false);
+            builder.Property(x => x.RestrictionType).HasDefaultValue(RestrictedLeaveType.Normal);
+            builder.Property(x => x.Sandwich).HasDefaultValue(false);
+
         }
     }
 }

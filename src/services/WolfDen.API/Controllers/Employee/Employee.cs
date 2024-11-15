@@ -6,6 +6,7 @@ using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy;
 
+
 namespace WolfDen.API.Controllers.Employee
 {
     [Route("api/[controller]")]

@@ -3,5 +3,5 @@ export interface ILeaveApplication{
     halfDay:boolean;
     fromDate:Date;
     toDate:Date;
-    Description:string;
+    description:string;
 }

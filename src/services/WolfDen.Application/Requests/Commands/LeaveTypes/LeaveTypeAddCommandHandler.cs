@@ -28,3 +28,4 @@ namespace WolfDen.Application.Requests.Commands.LeaveTypes
         }
     }
 }
+
