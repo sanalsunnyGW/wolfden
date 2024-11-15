@@ -12,7 +12,7 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241114150046_first")]
+    [Migration("20241115051246_first")]
     partial class first
     {
         /// <inheritdoc />

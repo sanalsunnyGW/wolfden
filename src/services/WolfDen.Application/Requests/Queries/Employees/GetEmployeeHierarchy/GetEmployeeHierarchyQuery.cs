@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using WolfDen.Application.DTOs;
+using WolfDen.Application.DTOs.Employees;
 
-namespace WolfDen.Application.Requests.Queries.Employee.GetEmployeeHierarchy
+namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy
 {
     public class GetEmployeeHierarchyQuery : IRequest<EmployeeHierarchyDto>
     {
