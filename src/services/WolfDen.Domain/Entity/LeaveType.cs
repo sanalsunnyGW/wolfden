@@ -1,4 +1,4 @@
-﻿using WolfDen.Domain.Enum;
+﻿using WolfDen.Domain.Enums;
 
 namespace WolfDen.Domain.Entity
 {
@@ -7,7 +7,7 @@ namespace WolfDen.Domain.Entity
         public int Id {  get; private set; }
         public string TypeName { get;private set; }
         public int? MaxDays { get;private set; }
-        public bool HalfDay { get; private set; }
+        public bool IsHalfDayAllowed { get; private set; }
         public int IncrementCount { get;private set; }
         public LeaveIncrementGapMonth? IncrementGap { get; private set; }
         public bool CarryForward { get;private set; }
@@ -23,11 +23,11 @@ namespace WolfDen.Domain.Entity
         {
             
         }
-        public LeaveType(string typeName, int maxDays, bool halfDay, int incrementCount, LeaveIncrementGapMonth incrementGap, bool carryForward, int carryForwardLimit, int daysCheck, int daysChekcMore, int daysCheckEqualOrLess, int dutyDaysRequired, bool hidden, RestrictedLeaveType restrictionType, bool sandwich)
+        public LeaveType(string typeName, int maxDays, bool isHalfDayAllowed, int incrementCount, LeaveIncrementGapMonth incrementGap, bool carryForward, int carryForwardLimit, int daysCheck, int daysChekcMore, int daysCheckEqualOrLess, int dutyDaysRequired, bool hidden, RestrictedLeaveType restrictionType, bool sandwich)
         {
             TypeName = typeName;
             MaxDays = maxDays;
-            HalfDay = halfDay;
+            IsHalfDayAllowed = isHalfDayAllowed;
             IncrementCount = incrementCount;
             IncrementGap = incrementGap;
             CarryForward = carryForward;
