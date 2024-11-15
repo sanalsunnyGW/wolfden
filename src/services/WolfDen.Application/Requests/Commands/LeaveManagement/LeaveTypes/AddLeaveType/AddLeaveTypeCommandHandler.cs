@@ -29,7 +29,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLe
 
             LeaveType leaveType = new LeaveType(request.TypeName, request.MaxDays, request.IsHalfDayAllowed, request.IncrementCount,
                     request.IncrementGap, request.CarryForward, request.CarryForwardLimit, request.DaysCheck, request.DaysChekcMore,
-                    request.DaysCheckEqualOrLess, request.DutyDaysRequired, request.Hidden, request.RestrictionType, request.Sandwich);
+                    request.DaysCheckEqualOrLess, request.DutyDaysRequired, request.RestrictionType, request.Sandwich);
 
             _context.LeaveType.Add(leaveType);
             int saveResult = await _context.SaveChangesAsync(cancellationToken);

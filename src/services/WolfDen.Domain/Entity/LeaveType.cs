@@ -16,14 +16,13 @@ namespace WolfDen.Domain.Entity
         public int? DaysChekcMore { get; private set; }
         public int? DaysCheckEqualOrLess { get; private set; }
         public int? DutyDaysRequired { get; private set; }
-        public bool? Hidden {  get; private set; }
         public RestrictedLeaveType? RestrictionType { get; private set; }
         public bool? Sandwich { get; private set; }
         private LeaveType()
         {
             
         }
-        public LeaveType(string typeName, int? maxDays, bool? isHalfDayAllowed, int? incrementCount, LeaveIncrementGapMonth? incrementGap, bool? carryForward, int? carryForwardLimit, int? daysCheck, int? daysChekcMore, int? daysCheckEqualOrLess, int? dutyDaysRequired, bool? hidden, RestrictedLeaveType? restrictionType, bool? sandwich)
+        public LeaveType(string typeName, int? maxDays, bool? isHalfDayAllowed, int? incrementCount, LeaveIncrementGapMonth? incrementGap, bool? carryForward, int? carryForwardLimit, int? daysCheck, int? daysChekcMore, int? daysCheckEqualOrLess, int? dutyDaysRequired, RestrictedLeaveType? restrictionType, bool? sandwich)
         {
             TypeName = typeName;
             MaxDays = maxDays;
@@ -36,7 +35,6 @@ namespace WolfDen.Domain.Entity
             DaysChekcMore = daysChekcMore;
             DaysCheckEqualOrLess = daysCheckEqualOrLess;
             DutyDaysRequired = dutyDaysRequired;
-            Hidden = hidden;
             RestrictionType = restrictionType;
             Sandwich = sandwich;
         }
