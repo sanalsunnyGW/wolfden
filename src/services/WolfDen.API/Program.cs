@@ -4,6 +4,8 @@ using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
 using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
 using WolfDen.Infrastructure.Data;
+using FluentValidation;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,10 +29,7 @@ builder.Services.AddMediatR(x =>
     x.RegisterServicesFromAssembly(Assembly.Load("WolfDen.Application"));
 
 });
-
-builder.Services.AddScoped<AdminUpdateEmployeeValidator>();
-builder.Services.AddScoped<CreateEmployeeValidator>();
-builder.Services.AddScoped<EmployeeUpdateEmployeeValidator>();
+builder.Services.AddValidatorsFromAssembly(Assembly.Load("WolfDen.Application"));
 
 
 

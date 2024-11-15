@@ -1,10 +1,13 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WolfDen.Application.DTOs;
 using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
 using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
 using WolfDen.Application.Requests.Queries.Employee.GetEmployeeHierarchy;
+using WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory;
+using WolfDen.Application.Requests.Queries.Employees.ViewEmployee;
 
 namespace WolfDen.API.Controllers.Employee
 {
@@ -20,6 +23,53 @@ namespace WolfDen.API.Controllers.Employee
         {
             return await _mediator.Send(command, cancellationToken);
         }
+        /* public async Task<IActionResult> AddEmployee([FromBody] AddEmployeecommand command, CancellationToken cancellationToken)
+         {
+             try
+             {
+                 int employeeId = await _mediator.Send(command, cancellationToken);
+
+                 return CreatedAtAction(nameof(AddEmployee), new { id = employeeId }, employeeId);
+             }
+             catch (ValidationException ex)
+             {
+                 var validationErrors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+
+                 var result = new ObjectResult(new
+                 {
+                     Message = "Validation failed",
+                     Errors = validationErrors
+                 })
+                 {
+                     StatusCode = StatusCodes.Status422UnprocessableEntity 
+                 };
+                 return result;
+    }
+        }*/
+
+
+
+        /*     public async Task<IActionResult> AddEmployee([FromBody] AddEmployeecommand command, CancellationToken cancellationToken)
+             {
+                 try
+                 {
+                     int employeeId = await _mediator.Send(command, cancellationToken);
+
+                     return CreatedAtAction(nameof(AddEmployee), new { id = employeeId }, employeeId);
+                 }
+                 catch (ValidationException ex)
+                 {
+                     var validationErrors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
+                     return UnprocessableEntity(new
+                     {
+                         Message = "Validation failed",
+                         Errors = validationErrors
+                     });
+                 }
+             }*/
+
+
+
         [HttpPut("EmployeeUpdateEmployee")]
         public async Task<bool> EmployeeUpdateEmployee([FromBody] EmployeeUpdateEmployeeCommand command, CancellationToken cancellationToken)
         {
@@ -33,11 +83,34 @@ namespace WolfDen.API.Controllers.Employee
         [HttpGet("Hierarchy")]
         public async Task<EmployeeHierarchyDto> GetEmployeeHierarchy([FromQuery] GetEmployeeHierarchyQuery query, CancellationToken cancellationToken)
         {
-            
+
             return await _mediator.Send(query, cancellationToken);
 
         }
 
+        [HttpGet("{employeeId}")]
+        public async Task<ActionResult<EmployeeDTO>> Get(int employeeId)
+        {
+            var result = await _mediator.Send(new GetEmployeeQuery(employeeId));
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+        [HttpGet("all-employee-with-filter")]
+        public async Task<ActionResult<List<EmployeeDTO>>> GetAllEmployees([FromQuery] int? departmentId, [FromQuery] string? employeeName)
+        {
+            var query = new GetAllEmployeeQuery(departmentId, employeeName);
+            var employees = await _mediator.Send(query);
+
+            if (employees == null || employees.Count == 0)
+            {
+                return NotFound(new { Message = "No employees found matching the criteria." });
+            }
+
+            return Ok(employees);
+        }
 
     }
 }
