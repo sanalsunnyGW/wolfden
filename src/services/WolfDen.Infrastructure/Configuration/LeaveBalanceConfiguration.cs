@@ -11,6 +11,7 @@ namespace WolfDen.Infrastructure.Configuration
             builder.HasOne(x => x.Employee).WithMany().HasForeignKey(x => x.EmployeeId);
             builder.HasOne(X=>X.LeaveType).WithMany().HasForeignKey(x=>x.TypeId);
             builder.Property(x => x.Id).HasColumnName("LeaveBalanceId");
+            builder.Property(x => x.Balance).HasColumnType("decimal(3, 1)");
         }
     }
 }

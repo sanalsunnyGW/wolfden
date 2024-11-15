@@ -15,7 +15,7 @@ namespace WolfDen.Infrastructure.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<Designation> Designations { get; set; }
         public DbSet<LeaveBalance> LeaveBalances { get; set; }
-        public DbSet<LeaveDay> LeaveDays { get; set; }
+        public DbSet<LeaveRequestDay> LeaveDays { get; set; }
         public DbSet<LeaveIncrementLog> LeaveIncrementLogs { get; set; }
         public DbSet<LeaveSetting> LeaveSettings { get; set; }
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
