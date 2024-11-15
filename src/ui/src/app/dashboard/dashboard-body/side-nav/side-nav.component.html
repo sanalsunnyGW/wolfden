@@ -14,8 +14,18 @@
     <div class="nav-item">
       <span>Calendar</span>
     </div>
-    <div class="nav-item">
-      <span>Attendance</span>
+
+    <div class="nav-item dropdown">
+      <span class="dropdown-toggle" id="attendanceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        Attendance
+      </span>
+      <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
+        <li><a class="dropdown-item" [routerLink]="'/attendance/summary'">Attendance Dashboard</a></li>
+        <li><a class="dropdown-item" [routerLink]="'/attendance/details'">Attendance Summary</a></li>
+        <li><a class="dropdown-item" [routerLink]="'/attendance/reports'">Attendance Reports</a></li>
+        <li><a class="dropdown-item" [routerLink]="'/attendance/details'">Team Attendance </a></li>
+      </ul>
     </div>
+  
   
   </div>
