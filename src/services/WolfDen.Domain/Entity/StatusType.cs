@@ -1,13 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace WolfDen.Domain.Entity
+﻿namespace WolfDen.Domain.Entity
 {
     public class StatusType
     {
-        
         public int Id { get; }
-      
-        
         public string StatusName { get;private set; }
         private StatusType()
         {
@@ -15,7 +10,7 @@ namespace WolfDen.Domain.Entity
         }
         public StatusType(string statusName)
         {
-            statusName=StatusName;
+            StatusName = statusName;
         }
     }
 }

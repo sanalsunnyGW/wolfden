@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using WolfDen.Application.Requests.DTOs.Attendence;
 
 namespace WolfDen.Application.Requests.Commands.Attendence.StatusUpdation
 {
@@ -7,6 +6,5 @@ namespace WolfDen.Application.Requests.Commands.Attendence.StatusUpdation
     {
         public int EmployeeId { get; set; }
         public DateOnly Date { get; set; }
-
     }
 }

@@ -26,8 +26,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                         .PaddingVertical(1, Unit.Centimetre)
                         .Column(column =>
                         {
-                          
-                           
+                         
                            column.Item().Text($"Arrival Time: {dailyStatusDTO.ArrivalTime}")
                                 .SemiBold().FontSize(16).FontColor(Colors.Black);
                             column.Item().Text($"Departure Time: {dailyStatusDTO.DepartureTime}")
@@ -41,11 +40,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                             column.Item().Text($"Missed Punch: {dailyStatusDTO.MissedPunch}")
                                .SemiBold().FontSize(16).FontColor(Colors.Black);
                             
-                            
-
                             column.Item().Table(table =>
                             {
-
                                 table.ColumnsDefinition(columns =>
                                 {
                                     columns.ConstantColumn(70);
@@ -53,16 +49,12 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                                     columns.RelativeColumn();
                                 });
 
-
-
-
                                 table.Header(header =>
                                 {
                                     header.Cell().Text("Time").Bold().FontSize(12);
                                     header.Cell().Text("DeviceName").Bold().FontSize(12);
                                     header.Cell().Text("Direction").Bold().FontSize(12);
                                 });
-
 
                                 foreach (var attendenceLog in dailyStatusDTO.DailyLog)
                                 {

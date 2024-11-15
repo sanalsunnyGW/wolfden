@@ -10,22 +10,22 @@ namespace WolfDen.Application.Requests.Commands.Attendence.StatusUpdation
     public class StatusUpdateCommandHandler:IRequestHandler<StatusUpdateCommand,int>
     {
         private readonly WolfDenContext _context;
-        private readonly string SenderEmail;
-        private readonly string SenderName;
+        private readonly string senderEmail;
+        private readonly string senderName;
         public StatusUpdateCommandHandler(WolfDenContext context, IConfiguration configuration)
         {
             _context = context;
-            SenderEmail = configuration["BrevoApi:SenderEmail"];
-            SenderName = configuration["BrevoApi:SenderName"];
+            senderEmail = configuration["BrevoApi:SenderEmail"];
+            senderName = configuration["BrevoApi:SenderName"];
 
         }
         public async Task<int> Handle(StatusUpdateCommand request, CancellationToken cancellationToken)
         {
             int statusId = 0;
-            var day = await _context.DailyAttendence.Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date).FirstOrDefaultAsync(cancellationToken);
-            if (day == null)
+            DailyAttendence day = await _context.DailyAttendence.Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date).FirstOrDefaultAsync(cancellationToken);
+            if (day is null)
             {
-                var holiday = await _context.Holiday.Where(x => x.Date == request.Date).FirstOrDefaultAsync();
+                Holiday holiday = await _context.Holiday.Where(x => x.Date == request.Date).FirstOrDefaultAsync();
               
                     if (holiday.Type == "Normal")
                     {
@@ -33,7 +33,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.StatusUpdation
                     }
                     else
                     {
-                        //var leave = await _context.LeaveRequest.Where(x => x.EmpId == request.EmployeeId && x.FromDate == request.Date && x.status == 2).FirstOrDefaultAsync(cancellationToken);
+                        //LeaveRequest leave = await _context.LeaveRequest.Where(x => x.EmpId == request.EmployeeId && x.FromDate == request.Date && x.status == 2).FirstOrDefaultAsync(cancellationToken);
                         //if (leave != null)
                         //{
                         //    if (leave.TypeName == "WFH")
@@ -46,8 +46,6 @@ namespace WolfDen.Application.Requests.Commands.Attendence.StatusUpdation
                         //    }
                         //}
                     }
-
-                
             }
             else
             {
@@ -95,7 +93,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.StatusUpdation
 
                 string subject = "Attendence Low Warning";
                 string message = $"{recieverName}'s working hour is less than required";
-                SendEmailCommand.SendMail(SenderEmail, SenderName, recieverEmail, recieverName, subject, message, cCManagerEmail.ToArray(), cCManagerName.ToArray());
+                SendEmailCommand.SendMail(senderEmail, senderName, recieverEmail, recieverName, subject, message, cCManagerEmail.ToArray(), cCManagerName.ToArray());
 
             }
 

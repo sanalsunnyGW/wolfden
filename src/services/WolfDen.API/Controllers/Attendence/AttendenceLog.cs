@@ -7,36 +7,31 @@ using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
 
 namespace WolfDen.API.Controllers.Attendence
 {
-    [Route("api/[controller]")]
+    [Route("api/attendance")]
     [ApiController]
     public class AttendenceLog : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly PdfService _pdfService;
-       
-
+      
         public AttendenceLog(IMediator mediator,PdfService pdfService)
         {
             _mediator = mediator;
-            _pdfService = pdfService;
-
-          
+            _pdfService = pdfService;  
         }
 
-        [HttpPost("{employeeId}/update-status")]
-        public async Task<int> UpdateStatus(int employeeId,[FromQuery] DateOnly date)
+        [HttpPost("{employeeId}/status")]
+        public async Task<int> UpdateStatus(int employeeId,[FromQuery] DateOnly date,StatusUpdateCommand statusUpdateCommand)
         {
-            StatusUpdateCommand statusUpdateCommand = new StatusUpdateCommand();
             statusUpdateCommand.EmployeeId = employeeId;
             statusUpdateCommand.Date = date;
             return await _mediator.Send(statusUpdateCommand);
             
         }
 
-        [HttpGet("{employeeId}/attendence-log")]
+        [HttpGet("{employeeId}")]
         public async Task<IActionResult> GetAttendenceLog(int employeeId,[FromQuery] DateOnly date)
         {
-
             DailyDetails status = new DailyDetails();
             status.EmployeeId = employeeId;
             status.Date = date;
@@ -46,12 +41,9 @@ namespace WolfDen.API.Controllers.Attendence
             return Ok(statusRecord);
         }
 
-
-
         [HttpGet("{employeeId}/downloadPdf")]
         public async Task<IResult> GeneratePdf(int employeeId,[FromQuery] DateOnly date)
         {
-
             DailyDetails status = new DailyDetails();
             status.EmployeeId = employeeId;
             status.Date = date;
