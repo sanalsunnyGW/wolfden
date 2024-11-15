@@ -1,19 +1,16 @@
-// .fc{
-//     border-radius: 8px; 
-//     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-//     padding: 20px;
-// }
-
 
 ::ng-deep .fc {
-  //background: linear-gradient(to bottom, #ffffff, #bcc2c7); /* Soft gradient */
+  background: #ffffff; 
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   padding: 20px;
 }
 
+::ng-deep .fc .fc-media-screen .fc-direction-ltr .fc-theme-standard{
+border-radius: 4px;
+}
 .c-style{
-  width: 15rem;
+  width: 18rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
   border: none;
 }
@@ -39,37 +36,42 @@
     text-transform: uppercase;
   }
 
-  /* Style the weekend (Saturday and Sunday) days */
+
   ::ng-deep.fc .weekend-day {
-    background-color: #cce5ff !important;  /* Light blue background for weekends */
-    color: #004085;  /* Dark blue text for contrast */
+    background-color: #c6c8c9 !important;  
+    color: #000000;  
     
   }
+
   
-  /* Optionally, add hover effect on weekends */
+::ng-deep.fc .present {
+  background-color: #4caf50; 
+  color: white;
+}
+
+::ng-deep.fc .absent {
+  background-color: #f44336; 
+  color: white;
+}
+
+::ng-deep.fc .late {
+  background-color: #284bbe; 
+  color: white;
+}
+
+::ng-deep.fc .wfh {
+  background-color:#ff9800; 
+  color: black;
+}
+
+
   ::ng-deep.fc .weekend-day:hover {
-    background-color: #99c2ff !important;  /* Slightly darker blue on hover */
-    cursor: pointer;  /* Pointer cursor on hover */
+    background-color: #90949b !important;  
+    cursor: pointer;  
   }
-  
-  /* Style the weekday header in FullCalendar */
-// ::ng-deep .fc .fc-day-header {
-//   font-size: 1.2rem;  /* Adjust font size */
-//   font-weight: bold;  /* Optional: make the weekday names bold */
-//   text-align: center;  /* Optional: Center the weekday names */
-//   padding: 8px 8px;  /* Adjust padding for more space around the weekday names */
-//   background-color: #f8f9fa;  /* Optional: Background color */
-//   color: #333;  /* Optional: Text color */
-// }
 
-// /* Optional: Style the entire header row (for spacing) */
-// ::ng-deep .fc .fc-header-toolbar {
-//   padding-bottom: 10px;  /* Adjust the bottom padding to control spacing below the weekday header */
-// }
-
-/* Optional: Adjust the height of the weekday header */
 ::ng-deep .fc .fc-col-header-cell {
-  height: 50px;  /* Adjust the height of the weekday header cells */
+  height: 50px;  
 }
 
 ::ng-deep .fc .fc-col-header-cell-cushion {

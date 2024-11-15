@@ -44,12 +44,12 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
                 .ToListAsync();
 
 
-            var summaryDto = new AttendanceSummaryDTO
+            AttendanceSummaryDTO summaryDto = new AttendanceSummaryDTO
             {
                 Present = attendanceData.FirstOrDefault(x => x.Status == "Present")?.Count ?? 0,
                 Absent = attendanceData.FirstOrDefault(x=>x.Status == "Absent")?.Count ?? 0,
-                Late = attendanceData.FirstOrDefault(x => x.Status == "Late")?.Count ?? 0,
-                WFH = attendanceData.FirstOrDefault(x => x.Status == "WFH")?.Count ?? 0
+                Late = attendanceData.FirstOrDefault(x => x.Status == "late")?.Count ?? 0,
+                WFH = attendanceData.FirstOrDefault(x => x.Status == "wfh")?.Count ?? 0
 
             };
 

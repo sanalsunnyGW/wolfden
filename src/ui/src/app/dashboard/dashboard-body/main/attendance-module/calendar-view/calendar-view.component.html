@@ -1,51 +1,61 @@
-<div class="container mt-5">
-    <!-- Bootstrap Row for Cards -->
-     <h2>Attendance</h2>
-    <div class="row">
-      <!-- Card 1 -->
-      <div class="col-md-3 mb-3 ">
-        <div class="card c-style" >
-          <div class="card-body">
-            <h5 class="card-title" style="color: green; font-size: 1.5rem;">Present</h5>
-            <p class="card-text" style=" font-weight: bold;">20</p>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Card 2 -->
-      <div class="col-md-3 mb-3">
-        <div class="card c-style">
-          <div class="card-body">
-            <h5 class="card-title"style="color: red; font-size: 1.5rem;">Absent</h5>
-            <p class="card-text" style=" font-weight: bold;">3</p>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Card 3 -->
-      <div class="col-md-3 mb-3">
-        <div class="card c-style">
-          <div class="card-body">
-            <h5 class="card-title" style="color: blue; font-size: 1.5rem;">Late</h5>
-            <p class="card-text" style=" font-weight: bold;">2</p>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Card 4 -->
-      <div class="col-md-3 mb-3">
-        <div class="card c-style">
-          <div class="card-body">
-            <h5 class="card-title" style="color: orange; font-size: 1.5rem;">Work From Home</h5>
-            <p class="card-text" style=" font-weight: bold;">5</p>
-          </div>
+<div class="container mt-3">
+  <h1 class="mb-5" style="color: #333; font-size: 2rem;">Employee Attendance Dashboard</h1>
+
+  <!-- Bootstrap Row for Cards -->
+  <div class="row">
+    <!-- Card 1 (Present) -->
+    <div class="col-md-3 mb-3">
+      <div class="card c-style">
+        <div class="card-body">
+          <h5 class="card-title" style="color: green; ">
+            <i class="fas fa-check-circle" style="color: green;"></i> Present
+          </h5>
+          <p class="card-text" style="font-weight: bold; font-size: 1.5rem;">{{present}}</p>
         </div>
       </div>
     </div>
-  
-    <!-- FullCalendar -->
-    <div class="container text-center mt-4">
-      <full-calendar [options]="calendarOptions"></full-calendar>
+
+    <!-- Card 2 (Absent) -->
+    <div class="col-md-3 mb-3">
+      <div class="card c-style">
+        <div class="card-body">
+          <h5 class="card-title" style="color: red; ">
+            <i class="fas fa-times-circle" style="color: red;"></i> Absent
+          </h5>
+          <p class="card-text" style="font-weight: bold; font-size: 1.5rem;">{{absent}}</p>
+        </div>
+      </div>
     </div>
+
+    <!-- Card 3 (Late) -->
+    <div class="col-md-3 mb-3">
+      <div class="card c-style">
+        <div class="card-body">
+          <h5 class="card-title" style="color: blue; ;">
+            <i class="fas fa-clock" style="color: blue;"></i> Late
+          </h5>
+          <p class="card-text" style="font-weight: bold; font-size: 1.5rem;">{{late}}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 (Work From Home) -->
+    <div class="col-md-3 mb-3">
+      <div class="card c-style">
+        <div class="card-body">
+          <h5 class="card-title" style="color: orange; ">
+            <i class="fas fa-home" style="color: orange;"></i> Work From Home
+          </h5>
+          <p class="card-text" style="font-weight: bold; font-size: 1.5rem;">{{wfh}}</p>
+        </div>
+      </div>
+    </div>
+
+    
   </div>
-  
+
+  <!-- FullCalendar -->
+  <div class="container text-center mt-4">
+    <full-calendar [options]="calendarOptions"></full-calendar>
+  </div>
+</div>

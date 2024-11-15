@@ -4,6 +4,7 @@ using QuestPDF.Fluent;
 using WolfDen.Application.Requests.DTOs.Attendence;
 using WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary;
 using WolfDen.Application.Requests.Queries.Attendence.AttendenceLog;
+using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
 
 
 namespace WolfDen.API.Controllers.Attendence
@@ -13,12 +14,12 @@ namespace WolfDen.API.Controllers.Attendence
     public class AttendenceLog : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly PdfService _pdfService;
+       // private readonly PdfService _pdfService;
 
-        public AttendenceLog(IMediator mediator, PdfService pdfService)
+        public AttendenceLog(IMediator mediator)
         {
             _mediator = mediator;
-            _pdfService = pdfService;
+           // _pdfService = pdfService;
         }
 
         [HttpGet("employee/{employeeId}/monthly")]
@@ -26,6 +27,17 @@ namespace WolfDen.API.Controllers.Attendence
         {
 
             AttendanceSummaryQuery query = new AttendanceSummaryQuery();
+            query.EmployeeId = employeeId;
+            query.Year = year;
+            query.Month = month;
+            return await _mediator.Send(query);
+        }
+
+        [HttpGet("employee/{employeeId}/dailystatus")]
+        public async Task<List<DailyStatusDTO>> GetDailyStatus(int employeeId, [FromQuery] int year, [FromQuery] int month)
+        {
+
+            DailyStatusQuery query = new DailyStatusQuery();
             query.EmployeeId = employeeId;
             query.Year = year;
             query.Month = month;
