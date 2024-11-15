@@ -14,6 +14,16 @@ namespace WolfDen.Infrastructure.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Designation> Designations { get; set; }
+        public DbSet<AttendenceClose> AttendenceClose { get; set; }
+        public DbSet<AttendenceLog> AttendenceLog { get; set; }
+        public DbSet<DailyAttendence> DailyAttendence { get; set; }
+        public DbSet<Device> Device { get; set; }
+        public DbSet<Holiday> Holiday { get; set; }
+        public DbSet<Notification> Notification { get; set; }
+        public DbSet<Status> Status { get; set; }
+        public DbSet<StatusType> StatusType { get; set; }
+
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

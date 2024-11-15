@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WolfDen.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    partial class WolfDenContextModelSnapshot : ModelSnapshot
+    [Migration("20241115053424_new")]
+    partial class @new
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,6 +76,12 @@ namespace WolfDen.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("DailyAttendenceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
                     b.Property<int>("DeviceId")
                         .HasColumnType("int");
 
@@ -93,13 +102,12 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("PeriodStart");
 
-                    b.Property<DateOnly>("PunchDate")
-                        .HasColumnType("date");
-
-                    b.Property<DateTime>("PunchTime")
+                    b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DailyAttendenceId");
 
                     b.HasIndex("DeviceId");
 
@@ -265,8 +273,8 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime>("PeriodEnd")
                         .ValueGeneratedOnAddOrUpdate()
@@ -417,8 +425,8 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -617,11 +625,19 @@ namespace WolfDen.Infrastructure.Migrations
 
             modelBuilder.Entity("WolfDen.Domain.Entity.AttendenceLog", b =>
                 {
+                    b.HasOne("WolfDen.Domain.Entity.DailyAttendence", "DailyAttendence")
+                        .WithMany("attendenceLogs")
+                        .HasForeignKey("DailyAttendenceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("WolfDen.Domain.Entity.Device", "Device")
                         .WithMany()
                         .HasForeignKey("DeviceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("DailyAttendence");
 
                     b.Navigation("Device");
                 });
@@ -667,6 +683,11 @@ namespace WolfDen.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("StatusType");
+                });
+
+            modelBuilder.Entity("WolfDen.Domain.Entity.DailyAttendence", b =>
+                {
+                    b.Navigation("attendenceLogs");
                 });
 #pragma warning restore 612, 618
         }
