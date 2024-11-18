@@ -91,25 +91,14 @@ namespace WolfDen.API.Controllers.Employee
         [HttpGet("{employeeId}")]
         public async Task<ActionResult<EmployeeDTO>> Get(int employeeId)
         {
-            var result = await _mediator.Send(new GetEmployeeQuery(employeeId));
-            if (result == null)
-            {
-                return NotFound();
-            }
-            return Ok(result);
+            return await _mediator.Send(new GetEmployeeQuery(employeeId));
+          
         }
-        [HttpGet("all-employee-with-filter")]
-        public async Task<ActionResult<List<EmployeeDTO>>> GetAllEmployees([FromQuery] int? departmentId, [FromQuery] string? employeeName)
+        [HttpGet("all")]
+        public async Task<ActionResult<List<EmployeeDirectoryDTO>>> GetAllEmployees([FromQuery] int? departmentId, [FromQuery] string? employeeName)
         {
-            var query = new GetAllEmployeeQuery(departmentId, employeeName);
-            var employees = await _mediator.Send(query);
+            return await _mediator.Send(new GetAllEmployeeQuery(departmentId, employeeName));
 
-            if (employees == null || employees.Count == 0)
-            {
-                return NotFound(new { Message = "No employees found matching the criteria." });
-            }
-
-            return Ok(employees);
         }
 
     }

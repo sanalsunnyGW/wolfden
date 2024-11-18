@@ -1,13 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WolfDen.Application.DTOs;
-using WolfDen.Application.Requests.Queries.Employee.GetEmployeeHierarchy;
-using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
@@ -52,7 +45,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
                    JoiningDate = e.JoiningDate,
                    Gender = e.Gender,
                    DesignationId = e.DesignationId,
-                   Designation = e.Designation != null ? e.Designation : null,
+                   DesignationName = e.Designation != null ? e.Designation.Name : null,
                    DepartmentId = e.DepartmentId,
                    DepartmentName = e.Department != null ? e.Department.Name : null,
                    ManagerId = e.ManagerId,

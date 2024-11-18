@@ -44,7 +44,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.ViewEmployee
                 JoiningDate = employee.JoiningDate,
                 Gender = employee.Gender,
                 DesignationId = employee.DesignationId,
-                Designation = employee.Designation != null ? employee.Designation : null,
+                DesignationName= employee.Designation != null ? employee.Designation.Name : null,
                 DepartmentId = employee.DepartmentId,
                 DepartmentName = employee.Department != null ? employee.Department.Name : null,
                 ManagerId = employee.ManagerId,

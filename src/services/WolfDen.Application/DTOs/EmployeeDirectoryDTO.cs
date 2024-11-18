@@ -21,7 +21,7 @@ namespace WolfDen.Application.DTOs
         public DateOnly? JoiningDate { get; set; }
         public Gender? Gender { get; set; }
         public int? DesignationId { get; set; }
-        public Designation? Designation { get; set; }
+        public string? DesignationName { get; set; }
         public int? DepartmentId { get; set; }
         public string? DepartmentName { get; set; }
         public int? ManagerId { get; set; }
