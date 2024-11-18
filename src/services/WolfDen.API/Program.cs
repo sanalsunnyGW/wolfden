@@ -2,6 +2,9 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using sib_api_v3_sdk.Client;
+using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
+using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
+using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
 using WolfDen.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,16 +16,29 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<WolfDenContext>(x =>
 {
-    x.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection"));
+    x.UseSqlServer(connectionString);
 
 });
 builder.Services.AddScoped<WolfDenContext>();
 builder.Services.AddMediatR(x => {
     x.RegisterServicesFromAssembly(Assembly.Load("WolfDen.Application"));
 });
+
+
+
+builder.Services.AddMediatR(x =>
+{
+    x.RegisterServicesFromAssembly(Assembly.Load("WolfDen.Application"));
+
+});
+
+builder.Services.AddScoped<AdminUpdateEmployeeValidator>();
+builder.Services.AddScoped<CreateEmployeeValidator>();
+builder.Services.AddScoped<EmployeeUpdateEmployeeValidator>();
 
 
 
