@@ -1,9 +1,12 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
 using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
 using WolfDen.Infrastructure.Data;
+using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLeaveType;
+using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveSettings.UpdateLeaveSetting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "_myAllowSpecificOrigins",
+                      builder =>
+                      {
+                          builder.AllowAnyOrigin()
+                                  .AllowAnyMethod()
+                                  .AllowAnyHeader();
+                      });
+});
 
 builder.Services.AddDbContext<WolfDenContext>(x =>
 {
@@ -31,6 +45,8 @@ builder.Services.AddMediatR(x =>
 builder.Services.AddScoped<AdminUpdateEmployeeValidator>();
 builder.Services.AddScoped<CreateEmployeeValidator>();
 builder.Services.AddScoped<EmployeeUpdateEmployeeValidator>();
+builder.Services.AddScoped<AddLeaveTypeValidator>();
+builder.Services.AddScoped<UpdateLeaveSettingValidator>();
 
 
 
@@ -42,6 +58,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseAuthorization();
+
+app.UseCors("_myAllowSpecificOrigins");
 
 app.UseHttpsRedirection();
 
