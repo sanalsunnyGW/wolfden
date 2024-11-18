@@ -41,7 +41,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
                     Status = g.Key,
                     Count = g.Count()
                 })
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
 
             AttendanceSummaryDTO summaryDto = new AttendanceSummaryDTO

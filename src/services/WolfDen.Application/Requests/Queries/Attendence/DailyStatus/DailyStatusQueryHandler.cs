@@ -38,7 +38,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                     Date=s.Date,
                     Status=s.StatusType.StatusName
                 })
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             return attendanceData;
         }
