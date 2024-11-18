@@ -3,4 +3,22 @@
     padding: 10px; /* Optional: adds some space inside the border */
     border-radius: 5px; /* Optional: rounds the corners */
   }
+  .profile-container {
+    align-items: center;
+  }
+  .profile-img {
+    width: 200px; 
+    height: 200px; 
+  }
+  .profile-info {
+    margin-left: 15px; 
+  }
+  .custom-btn{
+    background-color: #1e507f;
+    border:none;
+  }
+  .custom-btn:hover{
+    background-color: darken(#1e507f, 13%);
+    border:none;
+  }
   
