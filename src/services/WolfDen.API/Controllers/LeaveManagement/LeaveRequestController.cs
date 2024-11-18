@@ -17,11 +17,11 @@ namespace WolfDen.API.Controllers.LeaveManagement
             _mediator=mediator;
         }
 
-        [HttpGet]
-        public async Task<List<LeaveRequestDto>> GetLeaveRequestHistory(int requestId, CancellationToken cancellationToken)
+        [HttpGet("{id}")]
+        public async Task<List<LeaveRequestDto>> GetLeaveRequestHistory(int id, CancellationToken cancellationToken)
         {
             GetLeaveRequestHistoryQuery query= new GetLeaveRequestHistoryQuery();
-            query.RequestId=requestId;
+            query.RequestId=id;
             return await _mediator.Send(query, cancellationToken); 
         }
     }

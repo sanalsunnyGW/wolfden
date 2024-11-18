@@ -21,7 +21,6 @@ ngOnInit()
 {
   this.leaveManagementService.getLeaveBalance(this.id).subscribe({
     next: (data) => {
-      console.log('initially Fetched Leave Balance list:', data); 
       this.leaveList= data; 
         },
     error: (error) => {

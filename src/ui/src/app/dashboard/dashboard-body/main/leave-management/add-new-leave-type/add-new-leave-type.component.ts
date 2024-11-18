@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, NgSelectOption, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IAddNewLeaveType } from '../../../../../interface/Add-New-Leave-Type-Interface';
+import { IAddNewLeaveType } from '../../../../../interface/add-new-leave-type-interface';
 import { CommonModule } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
@@ -51,13 +51,11 @@ export class AddNewLeaveTypeComponent {
         if(this.addNewLeaveType.valid)
         {
           this.leaveManagement.addNewLeaveType(this.addNewLeaveType).subscribe({
-            next:(Response : boolean)=>{
-              console.log(Response)
-              if(Response)
+            next:(response : boolean)=>{
+              if(response)
               {
                 alert("New Leave Type Added")
               }
-              console.log(Response)
             },
               error:(error) =>{
                 console.log(error)

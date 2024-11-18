@@ -19,7 +19,7 @@ namespace WolfDen.API.Controllers.LeaveManagement
         }
 
         [HttpPut]
-        public async Task<bool> UpdateLevaesetting([FromBody] UpdateLeaveSettingCommand command, CancellationToken cancellationToken)
+        public async Task<bool> UpdateLeaveSetting([FromBody] UpdateLeaveSettingCommand command, CancellationToken cancellationToken)
         {
             return  await _mediatr.Send(command, cancellationToken);
            

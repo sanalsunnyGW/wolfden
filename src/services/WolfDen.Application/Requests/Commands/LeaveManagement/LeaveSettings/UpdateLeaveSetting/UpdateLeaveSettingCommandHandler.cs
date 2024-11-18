@@ -29,6 +29,10 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveSettings.Up
             }
 
             LeaveSetting leaveSetting = await _context.LeaveSettings.FirstOrDefaultAsync(cancellationToken);
+            if (leaveSetting == null)
+            {
+                throw new KeyNotFoundException("LeaveSetting record not found.");
+            }
             leaveSetting.UpdateLeaveSetting(request.MinDaysForLeaveCreditJoining, request.MaxNegativeBalanceLimit);
             _context.LeaveSettings.Update(leaveSetting);
            int Saveresult =  await _context.SaveChangesAsync(cancellationToken);
