@@ -5,7 +5,7 @@
 namespace WolfDen.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class one : Migration
+    public partial class data : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

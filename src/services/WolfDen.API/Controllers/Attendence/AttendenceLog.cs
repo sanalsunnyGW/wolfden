@@ -5,6 +5,8 @@ using WolfDen.Application.Requests.DTOs.Attendence;
 using WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary;
 using WolfDen.Application.Requests.Queries.Attendence.AttendenceLog;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
+using WolfDen.Application.Requests.Queries.Attendence.WeeklyAttendence;
+using WolfDen.Application.Requests.Queries.Attendence.WeeklySummary;
 
 
 namespace WolfDen.API.Controllers.Attendence
@@ -44,28 +46,19 @@ namespace WolfDen.API.Controllers.Attendence
             return await _mediator.Send(query);
         }
 
-        //    try
-        //    {
-        //        // Create the query object
-        //        var query = new AttendanceSummaryQuery(employeeId, year, month);
+        [HttpGet("employee/{employeeId}/weekly")]
+        public async Task<List<WeeklySummaryDTO>> GetWeeklySummary(int employeeId, [FromQuery] DateOnly weekstart, [FromQuery] DateOnly weekend)
+        {
 
-        //        // Use the query handler to get the summary
-        //        var summary = await AttendanceSummaryQueryHandler.Handle(query);
+            WeeklySummaryQuery query = new WeeklySummaryQuery();
+            query.EmployeeId = employeeId;
+            query.WeekStart = weekstart;
+            query.WeekEnd = weekend;
+            return await _mediator.Send(query);
+        }
 
-        //        // Return the DTO as a response
-        //        return Ok(summary);
-        //    }
-        //    catch (ArgumentException ex)
-        //    {
-        //        // Handle invalid year or month
-        //        return BadRequest(ex.Message);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Handle general server error
-        //        return StatusCode(500, "Internal server error");
-        //    }
-        //}
+
+
 
         //[HttpGet("{employeeId}/{date}")]
         //public async Task<IActionResult> GetAttendenceLog(int employeeId, DateOnly date)
