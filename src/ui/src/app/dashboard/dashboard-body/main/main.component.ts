@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
+import { WeeklyAttendanceComponent } from "./attendence-module/weekly-attendance/weekly-attendance.component";
+import { DailyAttendenceComponent } from "./attendence-module/daily-attendence/daily-attendence.component";
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [],
+  imports: [DailyAttendenceComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })

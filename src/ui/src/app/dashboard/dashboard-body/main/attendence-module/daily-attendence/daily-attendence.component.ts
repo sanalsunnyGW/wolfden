@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { AttendanceService } from '../../../../../service/attendance.service';
-import { DailyAttendance } from '../../../../../interface/idaily-attendance';
+
 import { CommonModule, formatDate } from '@angular/common';
+import { DailyAttendance } from '../../../../../Interfaces/idaily-attendance';
+import { AttendanceService } from '../../../../../Service/attendance.service';
 
 
 @Component({
@@ -59,13 +60,18 @@ minutess:string='';
     return `${hours}:${minutes}`; 
   }
   
-  // downloadDailyReport()
-  // {
-  //   //const employeeId=localStorage.getItem('employeeId');
-  //   const employeeId=1;
-  //   const selectedDate=new Date('2024-11-11')
-  //   const selected=formatDate(selectedDate, 'yyyy-MM-dd', 'en-US');
-  //   this.service.downloadDailyReport(employeeId,selected)
-  // }
+  downloadDailyReport()
+  {
+    //const employeeId=localStorage.getItem('employeeId');
+    const employeeId=1;
+    const selectedDate=new Date('2024-11-11')
+    const selected=formatDate(selectedDate, 'yyyy-MM-dd', 'en-US');
+    this.service.downloadDailyReport(employeeId,selected).subscribe(
+      (response: any) =>{
+        let blob:Blob=response.body as Blob;
+        let url=window.URL.createObjectURL(blob);
+        window.open(url);      
+  });   
+  }
   
 }

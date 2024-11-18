@@ -21,7 +21,7 @@ namespace WolfDen.Infrastructure.Data
         public DbSet<Holiday> Holiday { get; set; }
         public DbSet<Notification> Notification { get; set; }
         public DbSet<Status> Status { get; set; }
-        public DbSet<StatusType> StatusType { get; set; }
+        public DbSet<AttendanceStatus> AttendanceStatus { get; set; }
 
 
 

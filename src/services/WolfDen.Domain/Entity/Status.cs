@@ -6,7 +6,7 @@
         public int EmployeeId { get;private set; }
         public DateOnly Date { get;private set; }
         public int StatusTypeId { get;private set; }
-        public virtual StatusType StatusType { get; private set; }
+        public virtual AttendanceStatus AttendanceStatus { get; private set; }
         private Status()
         {
             

@@ -11,7 +11,7 @@
         public int OutsideDuration { get;private set; }
         public int PantryDuration { get;private set; }
         public string MissedPunch {  get;private set; }
-        public virtual StatusType StatusType { get; set; }
+        public virtual AttendanceStatus AttendanceStatus { get; set; }
         public Status Status { get; private set; }
       
         private DailyAttendence()

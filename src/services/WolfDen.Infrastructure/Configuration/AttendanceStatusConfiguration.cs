@@ -4,10 +4,10 @@ using WolfDen.Domain.Entity;
 
 namespace WolfDen.Infrastructure.Configuration
 {
-    public class StatusTypeConfiguration: IEntityTypeConfiguration<StatusType>
+    public class AttendanceStatusConfiguration: IEntityTypeConfiguration<AttendanceStatus>
     {
       
-            public void Configure(EntityTypeBuilder<StatusType> builder)
+            public void Configure(EntityTypeBuilder<AttendanceStatus> builder)
             {
                 builder.HasKey(x => x.Id);
             }

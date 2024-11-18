@@ -33,7 +33,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
 
             }).FirstOrDefaultAsync(cancellationToken);
 
-            var status = await _context.Status.Include(x => x.StatusType).Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date).Select(x => x.StatusType.StatusName).FirstOrDefaultAsync(cancellationToken);
+            var status = await _context.Status.Include(x => x.AttendanceStatus).Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date).Select(x => x.AttendanceStatus.StatusName).FirstOrDefaultAsync(cancellationToken);
             attendence.Status = status;
             attendence.DailyLog = attendenceRecords;
             return attendence;

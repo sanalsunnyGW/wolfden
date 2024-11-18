@@ -35,7 +35,7 @@ namespace WolfDen.API.Controllers.Attendence
             status.EmployeeId = employeeId;
             status.Date = date;
             var statusRecord = await _mediator.Send(status);
-            if (statusRecord == null)
+            if (statusRecord is null)
                 return NotFound("No Attendence Log found");
             return Ok(statusRecord);
         }

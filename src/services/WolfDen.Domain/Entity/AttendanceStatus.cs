@@ -1,14 +1,14 @@
 ﻿namespace WolfDen.Domain.Entity
 {
-    public class StatusType
+    public class AttendanceStatus
     {
         public int Id { get; }
         public string StatusName { get;private set; }
-        private StatusType()
+        private AttendanceStatus()
         {
             
         }
-        public StatusType(string statusName)
+        public AttendanceStatus(string statusName)
         {
             StatusName = statusName;
         }

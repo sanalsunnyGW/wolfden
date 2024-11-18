@@ -3,18 +3,16 @@
     public class LOP
     {
         public int Id { get;  }
-        public int Month { get;private set; }
-        public int Year { get; private set; }
+        public DateOnly AttendanceClosedDate { get;private set; }
         public int EmployeeId { get; private set; }
         public int LOPDays { get; private set; }
         private LOP()
         {
             
         }
-        public LOP(int month,int year,int lOPdays, int employeeId)
+        public LOP(DateOnly attendanceClosedDate, int lOPdays, int employeeId)
         {
-            Month = month;
-            Year = year;
+            AttendanceClosedDate=attendanceClosedDate;
             LOPDays = lOPdays;
             EmployeeId = employeeId;   
         }
