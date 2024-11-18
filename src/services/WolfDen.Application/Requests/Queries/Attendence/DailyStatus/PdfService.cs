@@ -7,7 +7,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
 {
     public class PdfService
     {
-        public IDocument CreateDocument(DailyStatusDTO dailyStatusDTO)
+        public IDocument CreateDocument(DailyAttendanceDTO dailyStatusDTO)
         {
             return Document.Create(container =>
             {

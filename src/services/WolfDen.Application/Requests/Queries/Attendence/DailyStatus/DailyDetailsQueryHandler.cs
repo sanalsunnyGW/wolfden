@@ -5,14 +5,14 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
 {
-    public class DailyDetailsQueryHandler :IRequestHandler<DailyDetails,DailyStatusDTO>
+    public class DailyDetailsQueryHandler :IRequestHandler<DailyDetails,DailyAttendanceDTO>
     {
         private readonly WolfDenContext _context;
         public DailyDetailsQueryHandler(WolfDenContext context)
         {
             _context = context;
         }
-        public async Task<DailyStatusDTO> Handle(DailyDetails request, CancellationToken cancellationToken)
+        public async Task<DailyAttendanceDTO> Handle(DailyDetails request, CancellationToken cancellationToken)
         {
 
             var attendenceRecords = await _context.AttendenceLog.Where(x => x.EmployeeId == request.EmployeeId && x.PunchDate == request.Date).Include(x => x.Device)
@@ -23,7 +23,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                   Direction = x.Direction
               }).ToListAsync(cancellationToken);
 
-            var attendence = await _context.DailyAttendence.Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date).Select(x => new DailyStatusDTO
+            var attendence = await _context.DailyAttendence.Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date).Select(x => new DailyAttendanceDTO
             {
                 ArrivalTime = x.ArrivalTime,
                 DepartureTime = x.DepartureTime,
