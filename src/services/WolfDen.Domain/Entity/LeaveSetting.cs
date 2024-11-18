@@ -11,5 +11,11 @@
             MinDaysForLeaveCreditJoining = minDaysForLeaveCreditJoining;
             MaxNegativeBalanceLimit = maxNegativeBalanceLimit;  
         }
+
+        public void UpdateLeaveSetting(int minDaysForLeaveCreditJoining, int maxNegativeBalanceLimit)
+        {
+            MinDaysForLeaveCreditJoining = minDaysForLeaveCreditJoining;
+            MaxNegativeBalanceLimit = maxNegativeBalanceLimit;
+        }
     }
 }

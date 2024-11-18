@@ -1,9 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using FluentValidation;
-using MediatR;
+﻿using MediatR;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLeaveType
 {

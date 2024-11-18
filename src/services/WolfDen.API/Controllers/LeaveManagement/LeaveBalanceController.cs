@@ -18,11 +18,11 @@ namespace WolfDen.API.Controllers.LeaveManagement
         }
 
         [HttpGet]
-        public async Task<List<LeaveBalanceDto>> GetLeaveBalances(int RequestId)
+        public async Task<List<LeaveBalanceDto>> GetLeaveBalances(int RequestId, CancellationToken cancellationToken)
         {
             GetLeaveBalanceQuery query= new GetLeaveBalanceQuery();
             query.RequestId = RequestId;    
-            return await _mediator.Send(query);
+            return await _mediator.Send(query, cancellationToken);
         }
     }
 }

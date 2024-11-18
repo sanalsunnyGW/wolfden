@@ -6,6 +6,7 @@ using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
 using WolfDen.Infrastructure.Data;
 using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLeaveType;
+using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveSettings.UpdateLeaveSetting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,7 @@ builder.Services.AddScoped<AdminUpdateEmployeeValidator>();
 builder.Services.AddScoped<CreateEmployeeValidator>();
 builder.Services.AddScoped<EmployeeUpdateEmployeeValidator>();
 builder.Services.AddScoped<AddLeaveTypeValidator>();
+builder.Services.AddScoped<UpdateLeaveSettingValidator>();
 
 
 
