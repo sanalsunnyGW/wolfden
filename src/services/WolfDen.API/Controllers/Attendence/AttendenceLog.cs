@@ -7,58 +7,50 @@ using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
 
 namespace WolfDen.API.Controllers.Attendence
 {
-    [Route("api/[controller]")]
+    [Route("api/attendance")]
     [ApiController]
     public class AttendenceLog : ControllerBase
     {
         private readonly IMediator _mediator;
-       
-
-        public AttendenceLog(IMediator mediator)
+        private readonly PdfService _pdfService;
+      
+        public AttendenceLog(IMediator mediator,PdfService pdfService)
         {
             _mediator = mediator;
-          
+            _pdfService = pdfService;  
         }
 
-        [HttpPost("{employeeId}/{date}")]
-        public async Task<IActionResult> UpdateStatus(int employeeId, DateOnly date)
+        [HttpPost("{employeeId}/status")]
+        public async Task<int> UpdateStatus(int employeeId,[FromQuery] DateOnly date,StatusUpdateCommand statusUpdateCommand)
         {
-            StatusUpdateCommand StatusUpdateCommand = new StatusUpdateCommand();
-            StatusUpdateCommand.EmployeeId = employeeId;
-            StatusUpdateCommand.Date = date;
-            var Status = await _mediator.Send(StatusUpdateCommand);
-            return Ok(Status);
+            statusUpdateCommand.EmployeeId = employeeId;
+            statusUpdateCommand.Date = date;
+            return await _mediator.Send(statusUpdateCommand); 
         }
 
-        [HttpGet("{employeeId}/{date}/attendence-log")]
-        public async Task<IActionResult> GetAttendenceLog(int employeeId, DateOnly date)
+        [HttpGet("{employeeId}")]
+        public async Task<IActionResult> GetAttendenceLog(int employeeId,[FromQuery] DateOnly date)
         {
-
-            DailyDetails Status = new DailyDetails();
-            Status.EmployeeId = employeeId;
-            Status.Date = date;
-            var StatusRecord = await _mediator.Send(Status);
-            if (StatusRecord == null)
+            DailyDetails status = new DailyDetails();
+            status.EmployeeId = employeeId;
+            status.Date = date;
+            var statusRecord = await _mediator.Send(status);
+            if (statusRecord == null)
                 return NotFound("No Attendence Log found");
-            return Ok(StatusRecord);
+            return Ok(statusRecord);
         }
 
-
-
-        //[HttpGet("{employeeId}/{date}/downloadPdf")]
-        //public async Task<IResult> GeneratePdf(int employeeId, DateOnly date)
-        //{
-
-        //    DailyDetails Status = new DailyDetails();
-        //    Status.EmployeeId = employeeId;
-        //    Status.Date = date;
-        //    var AttendenceList = await _mediator.Send(Status);
-        //    var document = _pdfService.CreateDocument(AttendenceList);
-
-
-        //    var pdf = document.GeneratePdf();
-        //    return Results.File(pdf, "application/pdf", "customer-report.pdf");
-        //}
+        [HttpGet("{employeeId}/downloadPdf")]
+        public async Task<IResult> GeneratePdf(int employeeId,[FromQuery] DateOnly date)
+        {
+            DailyDetails status = new DailyDetails();
+            status.EmployeeId = employeeId;
+            status.Date = date;
+            var attendenceList = await _mediator.Send(status);
+            var document = _pdfService.CreateDocument(attendenceList);
+            var pdf = document.GeneratePdf();
+            return Results.File(pdf, "application/pdf", "DailyReport.pdf");
+        }
 
 
 

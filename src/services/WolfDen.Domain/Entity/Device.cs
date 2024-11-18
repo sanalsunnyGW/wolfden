@@ -2,10 +2,10 @@
 {
     public class Device
     {
-        public int Id { get;private set; }
+        public int Id { get; }
         public int DeviceId { get;private set; }
         public string Name { get;private set; }
-        public Device()
+        private Device()
         {
             
         }

@@ -9,9 +9,10 @@
         public DateTime DepartureTime { get; private set; }
         public int InsideDuration { get;private set; }
         public int OutsideDuration { get;private set; }
+        public int PantryDuration { get;private set; }
         public string MissedPunch {  get;private set; }
-
-        List<AttendenceLog> attendenceLogs = new List<AttendenceLog>();
+        public virtual StatusType StatusType { get; set; }
+        public Status Status { get; private set; }
       
         private DailyAttendence()
         {

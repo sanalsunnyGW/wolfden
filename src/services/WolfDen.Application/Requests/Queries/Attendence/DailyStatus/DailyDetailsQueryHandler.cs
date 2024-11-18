@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.Requests.DTOs.Attendence;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
 {
-    public class DailyDetailsQueryHandler
+    public class DailyDetailsQueryHandler :IRequestHandler<DailyDetails,DailyStatusDTO>
     {
         private readonly WolfDenContext _context;
         public DailyDetailsQueryHandler(WolfDenContext context)
@@ -14,15 +15,15 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
         public async Task<DailyStatusDTO> Handle(DailyDetails request, CancellationToken cancellationToken)
         {
 
-            var attendenceRecords = await _context.AttendenceLog.Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date).Include(x => x.Device)
+            var attendenceRecords = await _context.AttendenceLog.Where(x => x.EmployeeId == request.EmployeeId && x.PunchDate == request.Date).Include(x => x.Device)
               .Select(x => new AttendenceLogDTO
               {
-                  Time = x.Time,
+                  Time = x.PunchTime,
                   DeviceName = x.Device.Name,
-                  Direction = x.Direction,
+                  Direction = x.Direction
               }).ToListAsync(cancellationToken);
 
-            var attendence = await _context.DailyAttendence.Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date). Select(x => new DailyStatusDTO
+            var attendence = await _context.DailyAttendence.Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date).Select(x => new DailyStatusDTO
             {
                 ArrivalTime = x.ArrivalTime,
                 DepartureTime = x.DepartureTime,
@@ -30,9 +31,9 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                 OutsideHours = x.OutsideDuration,
                 MissedPunch = x.MissedPunch
 
-            }).FirstOrDefaultAsync();
+            }).FirstOrDefaultAsync(cancellationToken);
 
-            var status = await _context.Status.Include(x => x.StatusType).Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date).Select(x => x.StatusType.StatusName).FirstOrDefaultAsync();
+            var status = await _context.Status.Include(x => x.StatusType).Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date).Select(x => x.StatusType.StatusName).FirstOrDefaultAsync(cancellationToken);
             attendence.Status = status;
             attendence.DailyLog = attendenceRecords;
             return attendence;

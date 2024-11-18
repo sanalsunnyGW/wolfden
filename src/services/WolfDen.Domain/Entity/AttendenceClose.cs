@@ -4,16 +4,19 @@
     {
         public int Id { get;}
         public int Month { get;private set; }
+        public int Year { get;private set; }
+
         public bool IsClosed { get;private set; }
 
         private AttendenceClose()
         {
             
         }
-        public AttendenceClose(int month,bool isClosed)
+        public AttendenceClose(int month,int year,bool isClosed)
         {
-            month=Month;
-            isClosed=IsClosed;
+            Month = month;
+            Year = year;
+            IsClosed = isClosed;
         }
     }
 }

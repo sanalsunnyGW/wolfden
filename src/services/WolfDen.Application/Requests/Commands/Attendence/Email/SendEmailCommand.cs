@@ -5,25 +5,40 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
 {
     public class SendEmailCommand
     {
-        public static void SendMail(string senderEmail, string senderName, string recieverEmail, string recieverName,string message, string subject, string[] ccEmails=null, string[] ccNames=null)
+        public static void SendMail(string senderEmail,string senderName,
+            string[] recieverEmail,
+            string message,
+            string subject,
+            string[] ccEmails=null)
+           
         {
-            var apiInstance = new TransactionalEmailsApi();
-            SendSmtpEmailSender sender = new SendSmtpEmailSender(senderName, senderEmail);
-            SendSmtpEmailTo reciever = new SendSmtpEmailTo(recieverEmail, recieverName);
-            List<SendSmtpEmailTo> To = new List<SendSmtpEmailTo>();
-            To.Add(reciever);
+            TransactionalEmailsApi apiInstance = new TransactionalEmailsApi();
 
-            List<SendSmtpEmailCc> Cc = new List<SendSmtpEmailCc>();
+            SendSmtpEmailSender sender = new SendSmtpEmailSender
+            {
+                Email = senderEmail,
+                Name = senderName
+            };
+
+            List<SendSmtpEmailTo> to = new List<SendSmtpEmailTo>();
+            if (recieverEmail != null)
+                for (int i = 0; i < recieverEmail.Length; i++)
+                {
+                    to.Add(new SendSmtpEmailTo(recieverEmail[i]));
+                }
+         
+
+            List<SendSmtpEmailCc> cc = new List<SendSmtpEmailCc>();
             if(ccEmails != null)
             for (int i = 0; i < ccEmails.Length; i++)
             {
-                Cc.Add(new SendSmtpEmailCc(ccEmails[i], ccNames[i]));
+                cc.Add(new SendSmtpEmailCc(ccEmails[i]));
             }
             string HtmlContent = null;
             string TextContent = message;
             try
             {
-                var sendSmtpEmail = new SendSmtpEmail(sender, To, null, Cc, HtmlContent, TextContent, subject);
+                SendSmtpEmail sendSmtpEmail = new SendSmtpEmail(sender, to, null, cc, HtmlContent, TextContent, subject);
                 CreateSmtpEmail result = apiInstance.SendTransacEmail(sendSmtpEmail);
                 Console.WriteLine("Response" + result.ToJson());
             }

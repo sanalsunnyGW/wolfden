@@ -9,7 +9,7 @@ namespace WolfDen.Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<Holiday> builder)
         {
             builder.Property(x => x.Id).ValueGeneratedOnAdd().HasColumnName("HolidayId");
-            builder.Property(x => x.Type).HasMaxLength(20);
+            builder.Property(x => x.Type).HasMaxLength(255);
         }
     }
 }

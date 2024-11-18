@@ -1,0 +1,8 @@
+<p>weekly-attendance works!</p>
+<label for="week">Select a week:</label>
+<input type="week" id="week" name="week" [(ngModel)]="selectedWeek" (change)="getStartOfWeek()">
+<button type="button" class="btn btn-light " (click)="getStartOfWeek()">Click Here</button> 
+<div style="display: block; width: 400px">
+    <canvas id="canvas" height="320">{{ barChart }}</canvas>
+  </div>
+  
