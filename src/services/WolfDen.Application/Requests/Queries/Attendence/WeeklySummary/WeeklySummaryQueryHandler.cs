@@ -32,9 +32,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
                 OutsideDuration = s.OutsideDuration,
                 MissedPunch = s.MissedPunch
             })
-            .ToListAsync(cancellationToken); // Use ToListAsync for multiple records
+            .ToListAsync(cancellationToken); 
 
-            // Fetching the status for each day's attendance
             foreach (var entry in weeklyData)
             {
                 var status = await _context.Status
@@ -43,38 +42,12 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
                     .Select(x => x.StatusType.StatusName)
                     .FirstOrDefaultAsync(cancellationToken);
 
-                entry.Status = status; // Assign status for the current day's attendance
+                entry.Status = status; 
             }
 
             return weeklyData; 
 
-            //var weeklyData = await _context.DailyAttendence
-            //    .Where(s => s.EmployeeId == request.EmployeeId && s.Date >= request.WeekStart && s.Date <= request.WeekEnd)
-            //    .Select(s => new WeeklySummaryDTO
-            //    {
-            //        Date = s.Date,
-            //        ArrivalTime = s.ArrivalTime,
-            //        DepartureTime = s.DepartureTime,
-            //        InsideDuration = s.InsideDuration,
-            //        OutsideDuration = s.OutsideDuration,
-            //        MissedPunch = s.MissedPunch
-
-
-            //    })
-            //    .FirstOrDefaultAsync();
-
-            //var status = await _context.Status
-            //    .Include(x => x.StatusType)
-            //    .Where(x => x.EmployeeId == request.EmployeeId && x.Date >= request.WeekStart && x.Date <= request.WeekEnd)
-            //    .Select(x => x.StatusType.StatusName)
-            //    .FirstOrDefaultAsync();
-
-            //  weeklyData.Status = status;
-
-
-
-
-            //return weeklyData;
+            
         }
     }
 }
