@@ -72,29 +72,29 @@ namespace WolfDen.API.Controllers.Employee
 
 
 
-        [HttpPut("EmployeeUpdateEmployee")]
+        [HttpPut("employee-update-employee")]
         public async Task<bool> EmployeeUpdateEmployee([FromBody] EmployeeUpdateEmployeeCommand command, CancellationToken cancellationToken)
         {
             return await _mediator.Send(command, cancellationToken);
         }
-        [HttpPut("Admin")]
+        [HttpPut("admin")]
         public async Task<bool> AdminUpdateEmployee([FromBody] AdminUpdateEmployeeCommand command, CancellationToken cancellationToken)
         {
             return await _mediator.Send(command, cancellationToken);
         }
-        [HttpGet("Hierarchy")]
+        [HttpGet("hierarchy")]
         public async Task<EmployeeHierarchyDto> GetEmployeeHierarchy([FromQuery] GetEmployeeHierarchyQuery query, CancellationToken cancellationToken)
         {
 
             return await _mediator.Send(query, cancellationToken);
 
         }
-        [HttpGet("Sign-Up")]
+        [HttpGet("sign-up")]
         public async Task<EmployeeSignUpDto> GetEmployeeSignUp([FromQuery] GetEmployeeIDSignUpQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
         }
-        [HttpGet("Team")]
+        [HttpGet("team")]
         public async Task<List<EmployeeHierarchyDto>> GetMyTeam([FromQuery] GetEmployeeTeamQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
