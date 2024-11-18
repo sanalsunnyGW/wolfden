@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { WeeklyAttendanceComponent } from "./attendence-module/weekly-attendance/weekly-attendance.component";
 import { DailyAttendenceComponent } from "./attendence-module/daily-attendence/daily-attendence.component";
 
 @Component({
