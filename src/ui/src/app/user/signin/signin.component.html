@@ -1,1 +1,67 @@
-<p>signin works!</p>
+<div class="mb-4 h2 text-sucess text-start">
+    Sign up
+</div>
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+        <input class="form-control bg-body-secondary" placeholder="First Name" formControlName="firstName">
+
+        @if (hasDisplayableError('firstName') && userForm.controls['firstName'].hasError('required')) {
+        <div class="error-feedback">
+            Please enter your full name
+        </div>
+        }
+
+
+    </div>
+    
+
+
+   
+    <div class="mb-3">
+        <input type="password" class="form-control bg-body-secondary" placeholder="Password" formControlName="password">
+
+        @if (hasDisplayableError('password')) {
+        <div class="error-feedback">
+
+            @if (userForm.controls['password'].hasError('required')) {
+            <div>
+                Please enter your password.
+            </div>
+            }
+
+            @if (userForm.controls['password'].hasError('minlength')) {
+            <div>
+                Atleast 6 characters required.
+            </div>
+            }
+
+            @if (userForm.controls['password'].hasError('pattern')) {
+            <div>
+                One or more special character(s).
+            </div>
+            }
+
+        </div>
+        }   
+
+
+        
+
+    </div>
+    <div class="mb-3">
+        <input type="password" class="form-control bg-body-secondary" placeholder="Confirm Password"
+            formControlName="confirmPassword">
+
+        @if (hasDisplayableError('confirmPassword') && userForm.controls['confirmPassword'].hasError('passwordMismatch')) {
+        <div class="error-feedback">
+            Password doesn't match
+        </div>
+        }
+
+    </div>
+    <button type="submit" class="btn w-100 rounded-3">
+        Register
+    </button>
+    <p class="mt-3 text-center">Already have an account? <a routerLink="/user/login">Login</a></p>
+
+</form>
