@@ -6,14 +6,16 @@ using WolfDen.Infrastructure.Extensions;
 
 namespace WolfDen.Infrastructure.Data
 {
-    public class WolfDenContext : DbContext
+    public class WolfDenContext:DbContext
     {
-        public WolfDenContext(DbContextOptions<WolfDenContext> options) : base(options) { }
-
-
+        public WolfDenContext(DbContextOptions<WolfDenContext> options):base(options) { }
+        
+            
+        
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Designation> Designations { get; set; }
+<<<<<<< HEAD
        public DbSet<AttendenceClose> AttendenceClose { get; set; }
         public DbSet<AttendenceLog> AttendenceLog { get; set; }
        public DbSet<DailyAttendence> DailyAttendence { get; set; }
@@ -23,6 +25,14 @@ namespace WolfDen.Infrastructure.Data
        public DbSet<Status> Status { get; set; }
         public DbSet<StatusType> StatusType { get; set; }
 
+=======
+        public DbSet<LeaveBalance> LeaveBalances { get; set; }
+        public DbSet<LeaveRequestDay> LeaveDays { get; set; }
+        public DbSet<LeaveIncrementLog> LeaveIncrementLogs { get; set; }
+        public DbSet<LeaveSetting> LeaveSettings { get; set; }
+        public DbSet<LeaveRequest> LeaveRequests { get; set; }
+        public DbSet<LeaveType> LeaveType { get; set; }
+>>>>>>> upstream/main
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,7 +60,5 @@ namespace WolfDen.Infrastructure.Data
             }
 
         }
-
     }
-
 }

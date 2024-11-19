@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { LoginComponent } from "./user/login/login.component";
 import { UserComponent } from "./user/user.component";
 import { CalendarViewComponent } from './dashboard/dashboard-body/main/attendance-module/calendar-view/calendar-view.component';
+import { LeaveDashboardComponent } from './dashboard/dashboard-body/main/leave-management/leave-dashboard/leave-dashboard.component';
 import { DashboardComponent } from "./dashboard/dashboard.component";
 
 
