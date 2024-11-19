@@ -3,8 +3,8 @@ import { FormBuilder, FormControl, FormControlName, FormGroup, ReactiveFormsModu
 import { ILeaveApplication } from '../../../../../interface/Leave-Application-Interface';
 import { CommonModule } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
+import { LeaveManagementService } from '../../../../../services/leave-management.service';
 
 @Component({
   selector: 'app-leave-application',

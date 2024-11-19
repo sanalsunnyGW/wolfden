@@ -1,6 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { ILeaveUpdate, IUpdateLeaveSetting } from '../interface/update-leave-setting';
 import { IAddNewLeaveType } from '../interface/add-new-leave-type-interface';
