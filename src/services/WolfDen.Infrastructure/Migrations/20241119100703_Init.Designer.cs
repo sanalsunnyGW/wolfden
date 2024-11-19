@@ -12,7 +12,7 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241118121239_Init")]
+    [Migration("20241119100703_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -507,15 +507,15 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("PeriodStart");
 
-                    b.Property<int?>("RestrictionType")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
-
                     b.Property<bool?>("Sandwich")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
+
+                    b.Property<int?>("Type")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(7);
 
                     b.Property<string>("TypeName")
                         .IsRequired()

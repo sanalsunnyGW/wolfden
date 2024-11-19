@@ -221,13 +221,13 @@ namespace WolfDen.Infrastructure.Migrations
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    RestrictionType = table.Column<int>(type: "int", nullable: true, defaultValue: 1)
+                    Sandwich = table.Column<bool>(type: "bit", nullable: true, defaultValue: false)
                         .Annotation("SqlServer:IsTemporal", true)
                         .Annotation("SqlServer:TemporalHistoryTableName", "LeaveType")
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    Sandwich = table.Column<bool>(type: "bit", nullable: true, defaultValue: false)
+                    Type = table.Column<int>(type: "int", nullable: true, defaultValue: 7)
                         .Annotation("SqlServer:IsTemporal", true)
                         .Annotation("SqlServer:TemporalHistoryTableName", "LeaveType")
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
