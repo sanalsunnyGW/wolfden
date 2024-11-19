@@ -15,7 +15,6 @@ namespace WolfDen.Infrastructure.Configuration
             builder.Property(x => x.CarryForward).HasDefaultValue(false);
             builder.Property(x => x.Type).HasDefaultValue(LeaveTypeEnum.Custom);
             builder.Property(x => x.Sandwich).HasDefaultValue(false);
-
         }
     }
 }
