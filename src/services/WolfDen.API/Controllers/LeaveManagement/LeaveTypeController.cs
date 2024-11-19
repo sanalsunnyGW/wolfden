@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WolfDen.Application.DTOs.LeaveManagement;
 using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLeaveType;
+using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveTypes;
 
 namespace WolfDen.API.Controllers.LeaveManagement
 {
@@ -19,6 +21,14 @@ namespace WolfDen.API.Controllers.LeaveManagement
         public async Task<bool> AddLeaveType([FromBody] AddLeaveTypeCommand command, CancellationToken cancellationToken)
         {
             return await _mediator.Send(command, cancellationToken);
+        }
+
+        [HttpGet]
+
+        public async Task<List<LeaveTypeDto>> GetLeaveTypeIdAndName(CancellationToken cancellationToken)
+        {
+            GetAllLeaveTypeIdAndNameQuery getAllLeaveTypeIdAndNameQuery = new GetAllLeaveTypeIdAndNameQuery();
+            return await _mediator.Send(getAllLeaveTypeIdAndNameQuery, cancellationToken);  
         }
     }
 }

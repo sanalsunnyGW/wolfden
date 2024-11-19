@@ -16,7 +16,7 @@ namespace WolfDen.Infrastructure.Configuration
             builder.Property(x => x.FirstName).HasMaxLength(256);
             builder.Property(x => x.LastName).HasMaxLength(256);
             builder.Property(x => x.PhoneNumber).HasMaxLength(15);
-            builder.Property(x => x.RFId).HasMaxLength(100).IsRequired(false);
+            builder.Property(x => x.RFId).HasMaxLength(100);
             builder.HasOne(x => x.Designation).WithMany().HasForeignKey(x => x.DesignationId);
             builder.HasOne(x => x.Department).WithMany().HasForeignKey(x => x.DepartmentId);
             builder.HasOne(x => x.Manager).WithMany().HasForeignKey(x => x.ManagerId);

@@ -8,8 +8,12 @@ namespace WolfDen.Infrastructure.Configuration
     {
         public void Configure(EntityTypeBuilder<DailyAttendence> builder)
         {
-            builder.Property(x => x.Id).ValueGeneratedOnAdd().HasColumnName("DailyAttendenceId");
+            builder.Property(x => x.Id).ValueGeneratedOnAdd().HasColumnName("DailyId");
+          
             builder.Property(x=>x.MissedPunch).IsRequired(false);
+            builder.Property(x => x.AttendanceStatusId).IsRequired(false);
+
+
         }
     }
 }

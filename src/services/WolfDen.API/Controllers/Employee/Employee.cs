@@ -1,14 +1,21 @@
-﻿using FluentValidation;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WolfDen.Application.DTOs;
+using WolfDen.Application.DTOs.Employees;
 using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
 using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
+<<<<<<< HEAD
 
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy;
+=======
+>>>>>>> upstream/main
 using WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory;
+using WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy;
 using WolfDen.Application.Requests.Queries.Employees.ViewEmployee;
+using WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy;
+using WolfDen.Application.Requests.Queries.Employees.GetEmployeeIdSignUp;
+using WolfDen.Application.DTOs;
+using WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam;
 
 namespace WolfDen.API.Controllers.Employee
 {
@@ -71,22 +78,32 @@ namespace WolfDen.API.Controllers.Employee
 
 
 
-        [HttpPut("EmployeeUpdateEmployee")]
+        [HttpPut("employee-update-employee")]
         public async Task<bool> EmployeeUpdateEmployee([FromBody] EmployeeUpdateEmployeeCommand command, CancellationToken cancellationToken)
         {
             return await _mediator.Send(command, cancellationToken);
         }
-        [HttpPut("Admin")]
+        [HttpPut("admin")]
         public async Task<bool> AdminUpdateEmployee([FromBody] AdminUpdateEmployeeCommand command, CancellationToken cancellationToken)
         {
             return await _mediator.Send(command, cancellationToken);
         }
-        [HttpGet("Hierarchy")]
+        [HttpGet("hierarchy")]
         public async Task<EmployeeHierarchyDto> GetEmployeeHierarchy([FromQuery] GetEmployeeHierarchyQuery query, CancellationToken cancellationToken)
         {
 
             return await _mediator.Send(query, cancellationToken);
 
+        }
+        [HttpGet("sign-up")]
+        public async Task<EmployeeSignUpDto> GetEmployeeSignUp([FromQuery] GetEmployeeIDSignUpQuery query, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(query, cancellationToken);
+        }
+        [HttpGet("team")]
+        public async Task<List<EmployeeHierarchyDto>> GetMyTeam([FromQuery] GetEmployeeTeamQuery query, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(query, cancellationToken);
         }
 
         [HttpGet("by-Id")]

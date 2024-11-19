@@ -1,13 +1,12 @@
-﻿
-
-namespace WolfDen.Domain.Enums
+﻿namespace WolfDen.Domain.Enums
 {
     public enum AttendanceStatus
     {
         Present=1,
         Absent,
         IncompleteShift,
-        Holiday,
+        RestrictedHoliday,
+        NormalHoliday,
         WFH,
         Leave
     }

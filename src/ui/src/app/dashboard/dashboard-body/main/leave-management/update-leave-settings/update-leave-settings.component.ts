@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { ILeaveUpdate, IUpdateLeaveSetting } from '../../../../../interface/update-leave-setting';
 import { CommonModule } from '@angular/common';
+import { LeaveManagementService } from '../../../../../services/leave-management.service';
 
 @Component({
   selector: 'app-update-leave-settings',
@@ -37,10 +37,8 @@ export class UpdateLeaveSettingsComponent {
             maxNegativeBalanceLimit : this.leaveSettings.maxNegativeBalanceLimit
           });
         }
-        console.log(response)
       },
         error:(error) =>{
-          console.log(error)
           alert(error)
           }
      });
@@ -57,7 +55,6 @@ export class UpdateLeaveSettingsComponent {
             }
           },
             error:(error) =>{
-              console.log(error)
               alert(error)
               }
          }

@@ -1,11 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { ILeaveUpdate, IUpdateLeaveSetting } from '../interface/update-leave-setting';
 import { IAddNewLeaveType } from '../interface/Add-New-Leave-Type-Interface';
 import { ILeaveBalanceList } from '../interface/leave-balance-list-interface';
 import { ILeaveRequestHistory } from '../interface/leave-request-history';
+import { IGetLeaveTypeIdAndname } from '../interface/get-leave-type-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -37,5 +37,9 @@ export class LeaveManagementService {
 
     updateLeaveSettings(updateLeaveSettings : FormGroup<IUpdateLeaveSetting> ){
       return this.http.put<boolean>("https://localhost:7015/api/leave-setting",updateLeaveSettings.value)
+    }
+
+    getLeaveTypeIdAndName(){
+      return this.http.get<Array<IGetLeaveTypeIdAndname>>("https://localhost:7015/api/leave-type")
     }
 }

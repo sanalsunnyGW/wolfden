@@ -1,25 +1,28 @@
-﻿namespace WolfDen.Domain.Entity
+﻿using WolfDen.Domain.Enums;
+
+namespace WolfDen.Domain.Entity
 {
     public class AttendenceLog
     {
-        public int Id { get;private set; }
+        public int Id { get;}
         public int EmployeeId { get;private set; }
-        public DateOnly Date { get; private set; }
-        public DateTime Time { get;private set; }
-        public int DeviceId { get;private set; }
-        public string Direction { get;private set; }
-        public virtual Employee Employee { get;private set; }
-        public virtual Device Device { get;private set; }
+        public DateOnly PunchDate { get; private set; }
+        public DateTime PunchTime { get;private set; }
+        public int DeviceId { get; set; }
+        public DirectionType Direction { get;set; }
+        public virtual Device Device { get;set; }
+        public virtual DailyAttendence DailyAttendence { get; set; }
+       
 
         private AttendenceLog() { }
-        public AttendenceLog(int employeeId,DateOnly date,DateTime time,int deviceId,string direction,Employee employee)
+        public AttendenceLog(int employeeId,DateOnly date,DateTime time,int deviceId,DirectionType direction)
         {
             EmployeeId = employeeId;
-            Date=date;
-            Time=time;
+            PunchDate=date;
+            PunchTime=time;
             DeviceId=deviceId;
             Direction=direction;    
-            Employee = employee;
+           
         }
 
     }

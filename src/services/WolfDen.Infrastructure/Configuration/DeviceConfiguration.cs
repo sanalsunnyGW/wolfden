@@ -9,7 +9,7 @@ namespace WolfDen.Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<Device> builder)
         {
             builder.Property(x => x.Id).ValueGeneratedOnAdd().HasColumnName("DeviceId");
-            builder.Property(x => x.Name).HasMaxLength(20);
+            builder.Property(x => x.Name).HasMaxLength(255);
         }
     }
 }
