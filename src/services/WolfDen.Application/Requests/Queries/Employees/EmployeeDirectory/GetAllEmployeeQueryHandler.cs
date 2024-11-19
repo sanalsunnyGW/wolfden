@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs;
+using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
@@ -19,19 +20,13 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
                .Include(e => e.Designation)
                .Include(e => e.Department)
                .AsQueryable();
-
-
-
-            if(request.DepartmentID.HasValue)
+            if (request.DepartmentID.HasValue)
             {
-                baseQuery=baseQuery.Where(e=>e.DepartmentId==request.DepartmentID);
+                baseQuery = baseQuery.Where(e => e.DepartmentId == request.DepartmentID);
             }
-
-
             if (!string.IsNullOrWhiteSpace(request.EmployeeName))
             {
-                baseQuery = baseQuery.Where(e =>
-                    (e.FirstName + " " + e.LastName).Contains(request.EmployeeName));
+                baseQuery = baseQuery.Where(e =>(e.FirstName + " " + e.LastName).Contains(request.EmployeeName));
             }
             var employees = await baseQuery
                .Select(e => new EmployeeDirectoryDTO
@@ -49,10 +44,12 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
                    DepartmentId = e.DepartmentId,
                    DepartmentName = e.Department != null ? e.Department.Name : null,
                    ManagerId = e.ManagerId,
-                   ManagerName = e.Manager != null ? e.Manager.FirstName + " " + e.Manager.LastName : null,
+                   ManagerName = e.Manager != null
+                   ? $"{e.Manager.FirstName}{(string.IsNullOrWhiteSpace(e.Manager.LastName) ? "" : " " + e.Manager.LastName)}"
+                   : null,
                    IsActive = e.IsActive
                })
-               .ToListAsync(cancellationToken);
+            .ToListAsync(cancellationToken);
 
             return employees;
         }

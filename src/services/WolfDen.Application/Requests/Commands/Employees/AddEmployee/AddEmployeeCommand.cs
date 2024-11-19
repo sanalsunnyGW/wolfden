@@ -10,8 +10,5 @@ namespace WolfDen.Application.Requests.Commands.Employees.AddEmployee
 
 
     }
-  /*  public class Errors
-    {
-        public string[] _ { get; set; }
-    }*/
 }
+  

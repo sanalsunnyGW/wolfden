@@ -26,10 +26,9 @@ namespace WolfDen.Application.Requests.Queries.Employees.ViewEmployee
                 .Include(e => e.Manager)
                 .FirstOrDefaultAsync(e => e.Id == request.EmployeeId, cancellationToken);
 
-
             if (employee == null)
             {
-                return null; 
+                throw new KeyNotFoundException();
             }
             EmployeeDTO employeeDTO = new()
             {
@@ -48,11 +47,11 @@ namespace WolfDen.Application.Requests.Queries.Employees.ViewEmployee
                 DepartmentId = employee.DepartmentId,
                 DepartmentName = employee.Department != null ? employee.Department.Name : null,
                 ManagerId = employee.ManagerId,
-                ManagerName = employee.Manager != null ? $"{employee.Manager.FirstName} {employee.Manager.LastName}" : null,
+                ManagerName = employee.Manager != null
+                              ? $"{employee.Manager.FirstName}{(string.IsNullOrWhiteSpace(employee.Manager.LastName) ? "" : " " + employee.Manager.LastName)}"
+                              : null,
                 IsActive = employee.IsActive
-
             };
-
 
             return employeeDTO;
         }

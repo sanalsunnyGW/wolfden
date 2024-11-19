@@ -88,16 +88,18 @@ namespace WolfDen.API.Controllers.Employee
 
         }
 
-        [HttpGet("{employeeId}")]
-        public async Task<ActionResult<EmployeeDTO>> Get(int employeeId)
+        [HttpGet("by-Id")]
+        public async Task<EmployeeDTO> GetEmployee([FromQuery] GetEmployeeQuery query, CancellationToken cancellationToken)
         {
-            return await _mediator.Send(new GetEmployeeQuery(employeeId));
-          
+
+            return await _mediator.Send(query, cancellationToken);
+
         }
+       
         [HttpGet("all")]
-        public async Task<ActionResult<List<EmployeeDirectoryDTO>>> GetAllEmployees([FromQuery] int? departmentId, [FromQuery] string? employeeName)
+        public async Task<ActionResult<List<EmployeeDirectoryDTO>>> GetAllEmployees([FromQuery] GetAllEmployeeQuery query, CancellationToken cancellationToken)
         {
-            return await _mediator.Send(new GetAllEmployeeQuery(departmentId, employeeName));
+            return await _mediator.Send(query, cancellationToken);
 
         }
 

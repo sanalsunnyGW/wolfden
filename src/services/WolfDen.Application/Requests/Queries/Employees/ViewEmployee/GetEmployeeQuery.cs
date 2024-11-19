@@ -12,9 +12,8 @@ namespace WolfDen.Application.Requests.Queries.Employees.ViewEmployee
     {
         public int EmployeeId { get; set; }
 
-        public GetEmployeeQuery(int employeeId)
+        public GetEmployeeQuery()
         {
-            EmployeeId = employeeId;
         }
     }
 

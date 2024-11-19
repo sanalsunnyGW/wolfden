@@ -11,8 +11,7 @@ export class WolfDenService {
   private baseUrl=environment.apiUrl;
   public userId : number=1;
 
-  constructor() { }
-  http=inject(HttpClient)
+  constructor(private http:HttpClient) { }
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({ 'Content-Type': 'application/json' });

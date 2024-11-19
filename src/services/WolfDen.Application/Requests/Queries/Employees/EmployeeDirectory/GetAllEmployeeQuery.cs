@@ -12,12 +12,10 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
     {
         public int? DepartmentID { get; set; }
         public string? EmployeeName {  get; set; }
-        public GetAllEmployeeQuery(int? departmentID=null, string? employeeName=null)
+        public GetAllEmployeeQuery()
         {
-            DepartmentID = departmentID;
-
-            EmployeeName = employeeName;
-
+            
         }
+
     }
 }
