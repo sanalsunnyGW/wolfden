@@ -3,6 +3,7 @@ import { LeaveDashboardComponent } from './dashboard/dashboard-body/main/leave-m
 import { LeaveHistoryComponent } from './dashboard/dashboard-body/main/leave-management/leave-history/leave-history.component';
 import { ProfileComponent } from './profile/profile.component';
 import { EmployeeHierarchyComponent } from './employee-hierarchy/employee-hierarchy.component';
+import { TestComponent } from './test/test.component';
 
 export const routes: Routes = [
     {
@@ -20,5 +21,9 @@ export const routes: Routes = [
     {
         path:'employee-hierarchy',
         component:EmployeeHierarchyComponent
+    },
+    {
+        path:'test',
+        component:TestComponent
     }
 ];

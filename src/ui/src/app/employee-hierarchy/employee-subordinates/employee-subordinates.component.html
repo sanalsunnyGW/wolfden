@@ -1,0 +1,18 @@
+<div *ngIf="employee">
+    <div class="employee">
+      <p><strong>{{ employee.firstName }} {{ employee.lastName }}</strong></p>
+      <p>Email: {{ employee.email }}</p>
+      <p>Phone: {{ employee.phoneNumber }}</p>
+      <p>Department: {{ employee.departmentId }}</p>
+  
+      <div *ngIf="employee.subordinates && employee.subordinates.length > 0">
+        <h4>Subordinates:</h4>
+        <ul>
+          <li *ngFor="let subordinate of employee.subordinates">
+            <app-employee-subordinates [employee]="subordinate"></app-employee-subordinates>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  

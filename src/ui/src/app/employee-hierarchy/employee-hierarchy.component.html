@@ -1,1 +1,4 @@
-<p>employee-hierarchy works!</p>
+<div *ngIf="employeeHierarchy">
+    <app-employee-subordinates [employee]="employeeHierarchy"></app-employee-subordinates>
+  </div>
+  
