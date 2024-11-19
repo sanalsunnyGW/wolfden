@@ -24,37 +24,22 @@ namespace WolfDen.API.Controllers.Attendence
            // _pdfService = pdfService;
         }
 
-        [HttpGet("employee/{employeeId}/monthly")]
-        public async Task<AttendanceSummaryDTO> GetMonthlyAttendance(int employeeId, [FromQuery] int year, [FromQuery] int month)
-        {
-
-            AttendanceSummaryQuery query = new AttendanceSummaryQuery();
-            query.EmployeeId = employeeId;
-            query.Year = year;
-            query.Month = month;
-            return await _mediator.Send(query);
+        [HttpGet("employee/monthly")]
+        public async Task<AttendanceSummaryDTO> GetMonthlyAttendance([FromQuery] AttendanceSummaryQuery query,CancellationToken cancellationToken)
+        { 
+            return await _mediator.Send(query,cancellationToken);
         }
 
-        [HttpGet("employee/{employeeId}/dailystatus")]
-        public async Task<List<DailyStatusDTO>> GetDailyStatus(int employeeId, [FromQuery] int year, [FromQuery] int month)
-        {
-
-            DailyStatusQuery query = new DailyStatusQuery();
-            query.EmployeeId = employeeId;
-            query.Year = year;
-            query.Month = month;
-            return await _mediator.Send(query);
+        [HttpGet("employee/daily-status")]
+        public async Task<List<DailyStatusDTO>> GetDailyStatus([FromQuery] DailyStatusQuery query,CancellationToken cancellationToken)
+        { 
+            return await _mediator.Send(query,cancellationToken);
         }
 
-        [HttpGet("employee/{employeeId}/weekly")]
-        public async Task<List<WeeklySummaryDTO>> GetWeeklySummary(int employeeId, [FromQuery] DateOnly weekstart, [FromQuery] DateOnly weekend)
+        [HttpGet("employee/weekly")]
+        public async Task<List<WeeklySummaryDTO>> GetWeeklySummary([FromQuery] WeeklySummaryQuery query,CancellationToken cancellationToken)
         {
-
-            WeeklySummaryQuery query = new WeeklySummaryQuery();
-            query.EmployeeId = employeeId;
-            query.WeekStart = weekstart;
-            query.WeekEnd = weekend;
-            return await _mediator.Send(query);
+            return await _mediator.Send(query,cancellationToken);
         }
 
 

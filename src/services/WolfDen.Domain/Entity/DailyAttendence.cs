@@ -10,12 +10,13 @@
         public int InsideDuration { get;private set; }
         public int OutsideDuration { get;private set; }
         public string MissedPunch {  get;private set; }
-        public virtual Employee Employee { get;private set; }
+        public int AttendanceStatusId { get; set; }
+        
         private DailyAttendence()
         {
             
         }
-        public DailyAttendence(int employeeId, DateOnly date, DateTime arrivalTime, DateTime departureTime, int insideDuration, int outsideDuration, string missedPunch, Employee employee)
+        public DailyAttendence(int employeeId, DateOnly date, DateTime arrivalTime, DateTime departureTime, int insideDuration, int outsideDuration, string missedPunch, int attendanceStatusId )
         {
             EmployeeId = employeeId;
             Date = date;
@@ -24,7 +25,7 @@
             InsideDuration = insideDuration;
             OutsideDuration = outsideDuration;
             MissedPunch = missedPunch;
-            Employee = employee;
+            AttendanceStatusId = attendanceStatusId;
             
         }
 
