@@ -160,6 +160,7 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("nvarchar(15)");
 
                     b.Property<string>("RFId")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -179,8 +180,7 @@ namespace WolfDen.Infrastructure.Migrations
                     b.HasIndex("ManagerId");
 
                     b.HasIndex("RFId")
-                        .IsUnique()
-                        .HasFilter("[RFId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Employee", "wolfden");
 
@@ -504,15 +504,15 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("PeriodStart");
 
-                    b.Property<int?>("RestrictionType")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
-
                     b.Property<bool?>("Sandwich")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
+
+                    b.Property<int?>("Type")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(7);
 
                     b.Property<string>("TypeName")
                         .IsRequired()
