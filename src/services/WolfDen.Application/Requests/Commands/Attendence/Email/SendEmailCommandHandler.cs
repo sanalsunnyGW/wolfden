@@ -78,14 +78,14 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
 
             List<string> cCManagerEmail = new List<string>();
 
-            List<string> ManagerEmail = new List<string>();
+            List<string> managerEmail = new List<string>();
             if (managerId != null)
             {
-                ManagerEmail = await FindManager(managerId, cCManagerEmail, cancellationToken);
+                managerEmail = await FindManager(managerId, cCManagerEmail, cancellationToken);
             }
             string subject = "Attendence Low Warning";
             string message = $"{recName}'s working hour is less than required";
-            SendMail(_senderEmail, _senderName, recieverEmail, message, subject, ManagerEmail.ToArray());
+            SendMail(_senderEmail, _senderName, recieverEmail, message, subject, managerEmail.ToArray());
             return "success";
         }
         private async Task<List<string>> FindManager(int? managerId, List<string> cCManagerEmail, CancellationToken cancellationToken)

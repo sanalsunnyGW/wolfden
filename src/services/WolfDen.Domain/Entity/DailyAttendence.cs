@@ -5,18 +5,18 @@
         public int Id { get; }
         public int EmployeeId { get; private set; }
         public DateOnly Date {  get;private set; }
-        public DateTime ArrivalTime { get; private set; }
-        public DateTime DepartureTime { get; private set; }
+        public DateTimeOffset ArrivalTime { get; private set; }
+        public DateTimeOffset DepartureTime { get; private set; }
         public int InsideDuration { get;private set; }
         public int OutsideDuration { get;private set; }
         public int PantryDuration { get;private set; }
         public string MissedPunch {  get;private set; }
-        public int AttendanceStatusId { get; private set; }
+        public int? AttendanceStatusId { get; private set; }
         private DailyAttendence()
         {
             
         }
-        public DailyAttendence(int employeeId, DateOnly date, DateTime arrivalTime, DateTime departureTime, int insideDuration, int outsideDuration, string missedPunch,int attendanceStatusId)
+        public DailyAttendence(int employeeId, DateOnly date, DateTimeOffset arrivalTime, DateTimeOffset departureTime, int insideDuration, int outsideDuration, string missedPunch,int attendanceStatusId)
         {
             EmployeeId = employeeId;
             Date = date;

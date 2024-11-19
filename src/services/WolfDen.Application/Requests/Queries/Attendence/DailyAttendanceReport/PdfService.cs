@@ -2,8 +2,9 @@
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using WolfDen.Application.Requests.DTOs.Attendence;
+using WolfDen.Domain.Enums;
 
-namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
+namespace WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport
 {
     public class PdfService
     {
@@ -26,20 +27,44 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                         .PaddingVertical(1, Unit.Centimetre)
                         .Column(column =>
                         {
-                         
-                           column.Item().Text($"Arrival Time: {dailyStatusDTO.ArrivalTime}")
-                                .SemiBold().FontSize(16).FontColor(Colors.Black);
+                            column.Item().Text($"Arrival Time: {dailyStatusDTO.ArrivalTime}")
+                                 .SemiBold().FontSize(16).FontColor(Colors.Black);
                             column.Item().Text($"Departure Time: {dailyStatusDTO.DepartureTime}")
                                 .SemiBold().FontSize(16).FontColor(Colors.Black);
                             column.Item().Text($"Inside Hours: {dailyStatusDTO.InsideHours}")
                                 .SemiBold().FontSize(16).FontColor(Colors.Black);
-                            column.Item().Text($"Status: {dailyStatusDTO.Status}")
+                            string status = "";
+                            switch (dailyStatusDTO.AttendanceStatusId)
+                            {
+                                case AttendanceStatus.Present:
+                                    status = "Present";
+                                    break;
+                                case AttendanceStatus.Absent:
+                                    status = "Absent";
+                                    break;
+                                case AttendanceStatus.IncompleteShift:
+                                    status = "Incomplete Shift";
+                                    break;
+                                case AttendanceStatus.RestrictedHoliday:
+                                    status = "Restricted Holiday";
+                                    break;
+                                case AttendanceStatus.NormalHoliday:
+                                    status = "Normal Holiday";
+                                    break;
+                                case AttendanceStatus.WFH:
+                                    status = "Work FRom Home";
+                                    break;
+                                default:
+                                    status = "leave";
+                                    break;
+                            }
+                            column.Item().Text($"Status: {status}")
                                 .SemiBold().FontSize(16).FontColor(Colors.Black);
                             column.Item().Text($"Outside Hours: {dailyStatusDTO.OutsideHours}")
                                 .SemiBold().FontSize(16).FontColor(Colors.Black);
                             column.Item().Text($"Missed Punch: {dailyStatusDTO.MissedPunch}")
                                .SemiBold().FontSize(16).FontColor(Colors.Black);
-                            
+
                             column.Item().Table(table =>
                             {
                                 table.ColumnsDefinition(columns =>
@@ -61,12 +86,12 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                                     string direction = "in";
                                     table.Cell().Text(attendenceLog.Time.ToString("HH:mm"));
                                     table.Cell().Text(attendenceLog.DeviceName);
-                                    if(attendenceLog.Direction==0)
+                                    if (attendenceLog.Direction == 0)
                                     {
                                         direction = "out";
                                     }
                                     table.Cell().Text(direction);
-                                   
+
                                 }
                             });
                         });

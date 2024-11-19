@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using QuestPDF.Fluent;
+using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
 
 namespace WolfDen.API.Controllers.Attendence
@@ -17,21 +18,19 @@ namespace WolfDen.API.Controllers.Attendence
             _pdfService = pdfService;  
         }
         
-        [HttpGet("{employeeId}")]
-        public async Task<IActionResult> GetAttendenceLog(int employeeId, DailyDetails status)
+        [HttpGet("daily-attendance")]
+        public async Task<IActionResult> GetAttendenceLog([FromQuery]DailyDetails attendanceRecord,CancellationToken cancellationToken)
         {
-            status.EmployeeId = employeeId;
-            var statusRecord = await _mediator.Send(status);
-            if (statusRecord is null)
+            var attendance = await _mediator.Send(attendanceRecord, cancellationToken);
+            if (attendance is null)
                 return NotFound("No Attendence Log found");
-            return Ok(statusRecord);
+            return Ok(attendance);
         }
 
-        [HttpGet("{employeeId}/downloadPdf")]
-        public async Task<IResult> GeneratePdf(int employeeId, DailyDetails status)
+        [HttpGet("daily-attendance-pdf")]
+        public async Task<IResult> GeneratePdf([FromQuery]DailyDetailsPdf DailyDetailspdf, CancellationToken cancellationToken)
         {
-            status.EmployeeId = employeeId;
-            var attendenceList = await _mediator.Send(status);
+            var attendenceList = await _mediator.Send(DailyDetailspdf, cancellationToken);
             var document = _pdfService.CreateDocument(attendenceList);
             var pdf = document.GeneratePdf();
             return Results.File(pdf, "application/pdf", "DailyReport.pdf");

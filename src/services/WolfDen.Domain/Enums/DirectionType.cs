@@ -2,7 +2,7 @@
 {
     public enum DirectionType
     {
-        inside,
-        outside
+        Inside=1,
+        Outside
     }
 }

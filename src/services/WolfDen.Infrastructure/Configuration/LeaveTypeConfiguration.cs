@@ -13,9 +13,7 @@ namespace WolfDen.Infrastructure.Configuration
             builder.Property(x => x.TypeName).HasMaxLength(100);
             builder.Property(x => x.IsHalfDayAllowed).HasDefaultValue(false);
             builder.Property(x => x.CarryForward).HasDefaultValue(false);
-            builder.Property(x => x.RestrictionType).HasDefaultValue(RestrictedLeaveType.Normal);
             builder.Property(x => x.Sandwich).HasDefaultValue(false);
-
         }
     }
 }

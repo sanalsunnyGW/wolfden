@@ -11,8 +11,9 @@ namespace WolfDen.Infrastructure.Configuration
             builder.Property(x => x.Id).ValueGeneratedOnAdd().HasColumnName("DailyId");
           
             builder.Property(x=>x.MissedPunch).IsRequired(false);
-          
-            
+            builder.Property(x => x.AttendanceStatusId).IsRequired(false);
+
+
         }
     }
 }

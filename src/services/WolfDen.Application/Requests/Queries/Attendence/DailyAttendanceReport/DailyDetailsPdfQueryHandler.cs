@@ -5,16 +5,16 @@ using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
 
-namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
+namespace WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport
 {
-    public class DailyDetailsQueryHandler :IRequestHandler<DailyDetails,DailyAttendanceDTO>
+    public class DailyDetailsPdfQueryHandler : IRequestHandler<DailyDetailsPdf, DailyAttendanceDTO>
     {
         private readonly WolfDenContext _context;
-        public DailyDetailsQueryHandler(WolfDenContext context)
+        public DailyDetailsPdfQueryHandler(WolfDenContext context)
         {
             _context = context;
         }
-        public async Task<DailyAttendanceDTO> Handle(DailyDetails request, CancellationToken cancellationToken)
+        public async Task<DailyAttendanceDTO> Handle(DailyDetailsPdf request, CancellationToken cancellationToken)
         {
             var attendence = await _context.DailyAttendence.Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date).Select(x => new DailyAttendanceDTO
             {
@@ -36,12 +36,12 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                 }
                 else
                 {
-                    LeaveRequest leave = await _context.LeaveRequests.Where(x => x.EmployeeId == request.EmployeeId && x.FromDate == request.Date && x.LeaveRequestStatus == LeaveRequestStatus.Approved).Include(x=>x.LeaveType).FirstOrDefaultAsync(cancellationToken);
+                    LeaveRequest leave = await _context.LeaveRequests.Where(x => x.EmployeeId == request.EmployeeId && x.FromDate == request.Date && x.LeaveRequestStatus == LeaveRequestStatus.Approved).Include(x => x.LeaveType).FirstOrDefaultAsync(cancellationToken);
                     if (leave is null)
                     {
                         AttendanceStatus attendanceStatusId = AttendanceStatus.Absent;
                         attendence.AttendanceStatusId = attendanceStatusId;
-                    }   
+                    }
                     else
                     {
                         if (leave.LeaveType.Type == LeaveTypeEnum.WorkFromHome)
@@ -59,7 +59,6 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
             }
             else
             {
-                await _context.AddAsync(attendence.AttendanceStatusId);
                 if (attendence.InsideHours >= 360)
                 {
                     AttendanceStatus attendanceStatusId = AttendanceStatus.Present;
@@ -79,7 +78,6 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                  Direction = x.Direction
              }).ToListAsync(cancellationToken);
             attendence.DailyLog = attendenceRecords;
-            await _context.SaveChangesAsync(cancellationToken);
             return attendence;
         }
     }
