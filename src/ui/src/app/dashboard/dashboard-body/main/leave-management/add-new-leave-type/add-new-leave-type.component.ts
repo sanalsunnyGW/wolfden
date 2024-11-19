@@ -30,7 +30,7 @@ export class AddNewLeaveTypeComponent {
         daysCheckMore: new FormControl(null),
         daysCheckEqualOrLess: new FormControl(null),
         dutyDaysRequired: new FormControl(null),
-        restrictionType: new FormControl(null),
+        type: new FormControl(null),
         sandwich : new FormControl(null)
       });
   }
@@ -41,10 +41,9 @@ export class AddNewLeaveTypeComponent {
     { type: 3, viewValue: 'Half-Yearly Increment' },
     ];
 
-    Restrictions = [
-      { type: 1, viewValue: 'Normal Leave' },
-      { type: 2, viewValue: 'Restricted Leave' },
-      ];
+
+
+      
 
       onSubmit()
       {

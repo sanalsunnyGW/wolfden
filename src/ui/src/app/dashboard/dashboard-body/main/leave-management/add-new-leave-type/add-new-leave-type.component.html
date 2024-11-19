@@ -87,16 +87,8 @@
       </pre>
 
       <div class="form-group">
-        <label for="dutyDaysRequired">Enter daysCheckMore Count</label>
+        <label for="dutyDaysRequired">Enter Duty Days  Required</label>
         <input type="number" class="form-control" id="dutyDaysRequired" placeholder="Enter dutyDaysRequired Count" formControlName="dutyDaysRequired">
-      </div>
-
-      <div>
-        <label>Select Restriction Type if there is Restriction  </label>
-        <ng-select [items]="Restrictions" class="option"
-        bindLabel="viewValue"
-        bindValue="type" placeholder="select Restriction Type" formControlName="restrictionType">
-        </ng-select>
       </div>
 
 
@@ -106,10 +98,6 @@
           <div>
             <input class="form-check-input" type="radio" id="true3" value="true" formControlName="sandwich">
             <label class="form-check-label" for="true3">Sandwich Applicable</label>
-          </div>
-          <div>
-            <input class="form-check-input" type="radio" id="false3" value="false" formControlName="sandwich">
-            <label class="form-check-label" for="true3">Sandwich Not Possible</label>
           </div>
         </div>
       </div>
