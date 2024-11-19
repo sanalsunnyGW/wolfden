@@ -13,6 +13,6 @@ export interface IAddNewLeaveType
     daysCheckMore : FormControl<number|null>;
     daysCheckEqualOrLess : FormControl<number|null>;
     dutyDaysRequired : FormControl<number|null>;
-    restrictionType : FormControl<number|null>;
+    type : FormControl<number|null>;
     sandwich : FormControl<boolean|null>;
 }

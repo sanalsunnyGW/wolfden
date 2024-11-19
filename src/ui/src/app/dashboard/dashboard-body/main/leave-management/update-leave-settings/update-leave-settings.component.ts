@@ -37,10 +37,8 @@ export class UpdateLeaveSettingsComponent {
             maxNegativeBalanceLimit : this.leaveSettings.maxNegativeBalanceLimit
           });
         }
-        console.log(response)
       },
         error:(error) =>{
-          console.log(error)
           alert(error)
           }
      });
@@ -57,7 +55,6 @@ export class UpdateLeaveSettingsComponent {
             }
           },
             error:(error) =>{
-              console.log(error)
               alert(error)
               }
          }
