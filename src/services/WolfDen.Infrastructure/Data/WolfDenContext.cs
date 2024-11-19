@@ -29,6 +29,7 @@ namespace WolfDen.Infrastructure.Data
             modelBuilder.AddConventions("wolfden", Assembly.GetExecutingAssembly());
 
 
+
             //History Table
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())

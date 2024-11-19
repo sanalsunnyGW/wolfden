@@ -14,5 +14,7 @@ namespace WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee
 
         public DateOnly? JoiningDate { get; set; }
         public Gender? Gender { get; set; }
+
+         
     }
 }

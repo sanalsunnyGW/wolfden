@@ -5,8 +5,12 @@ using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
 using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
 using WolfDen.Infrastructure.Data;
+
+using FluentValidation;
+
 using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLeaveType;
 using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveSettings.UpdateLeaveSetting;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,12 +45,7 @@ builder.Services.AddMediatR(x =>
     x.RegisterServicesFromAssembly(Assembly.Load("WolfDen.Application"));
 
 });
-
-builder.Services.AddScoped<AdminUpdateEmployeeValidator>();
-builder.Services.AddScoped<CreateEmployeeValidator>();
-builder.Services.AddScoped<EmployeeUpdateEmployeeValidator>();
-builder.Services.AddScoped<AddLeaveTypeValidator>();
-builder.Services.AddScoped<UpdateLeaveSettingValidator>();
+builder.Services.AddValidatorsFromAssembly(Assembly.Load("WolfDen.Application"));
 
 
 
@@ -58,6 +57,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors(origin => origin.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.UseAuthorization();
 
