@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { IProfileForm } from './iprofile-from';
+import { IProfileForm } from '../Interface/iprofile-from';
 
 @Component({
   selector: 'app-profile',

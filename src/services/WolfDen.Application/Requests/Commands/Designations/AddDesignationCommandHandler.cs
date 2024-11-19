@@ -4,14 +4,9 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Commands.Designations
 {
-    public class AddDesignationCommandHandler : IRequestHandler<AddDesignationCommand, int>
+    public class AddDesignationCommandHandler(WolfDenContext context) : IRequestHandler<AddDesignationCommand, int>
     {
-        private readonly WolfDenContext _context;
-
-        public AddDesignationCommandHandler(WolfDenContext context)
-        {
-            _context = context;
-        }
+        private readonly WolfDenContext _context = context;
 
         public async Task<int> Handle(AddDesignationCommand request, CancellationToken cancellationToken)
         {

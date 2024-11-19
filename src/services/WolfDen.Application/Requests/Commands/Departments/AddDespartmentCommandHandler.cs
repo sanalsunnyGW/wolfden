@@ -5,14 +5,9 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Application.Requests.Commands.Departments
 
 {
-    public class AddDespartmentCommandHandler : IRequestHandler<AddDepartmentCommand, int>
+    public class AddDespartmentCommandHandler(WolfDenContext context) : IRequestHandler<AddDepartmentCommand, int>
     {
-        private readonly WolfDenContext _context;
-
-        public AddDespartmentCommandHandler(WolfDenContext context)
-        {
-            _context = context;
-        }
+        private readonly WolfDenContext _context=context;
 
         public async Task<int> Handle(AddDepartmentCommand request, CancellationToken cancellationToken)
         {

@@ -16,7 +16,6 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLe
         public int? DaysChekcMore { get; set; }
         public int? DaysCheckEqualOrLess { get; set; }
         public int? DutyDaysRequired { get; set; }
-        public RestrictedLeaveType? RestrictionType { get; set; }
         public bool? Sandwich { get; set; }
 
     }

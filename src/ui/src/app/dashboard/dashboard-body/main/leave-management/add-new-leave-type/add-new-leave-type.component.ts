@@ -3,7 +3,8 @@ import { FormBuilder, FormControl, FormGroup, FormsModule, NgSelectOption, React
 import { IAddNewLeaveType } from '../../../../../interface/add-new-leave-type-interface';
 import { CommonModule } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { LeaveManagementService } from '../../../../../service/leave-management.service';
+import { LeaveManagementService } from '../../../../../services/leave-management.service';
+
 
 @Component({
   selector: 'app-add-new-leave-type',
@@ -30,7 +31,7 @@ export class AddNewLeaveTypeComponent {
         daysCheckMore: new FormControl(null),
         daysCheckEqualOrLess: new FormControl(null),
         dutyDaysRequired: new FormControl(null),
-        restrictionType: new FormControl(null),
+        type: new FormControl(null),
         sandwich : new FormControl(null)
       });
   }
@@ -41,10 +42,9 @@ export class AddNewLeaveTypeComponent {
     { type: 3, viewValue: 'Half-Yearly Increment' },
     ];
 
-    Restrictions = [
-      { type: 1, viewValue: 'Normal Leave' },
-      { type: 2, viewValue: 'Restricted Leave' },
-      ];
+
+
+      
 
       onSubmit()
       {
