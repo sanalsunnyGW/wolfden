@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
 using System.Reflection;
@@ -6,6 +7,12 @@ using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
 using WolfDen.Infrastructure.Data;
+
+using FluentValidation;
+
+using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLeaveType;
+using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveSettings.UpdateLeaveSetting;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +23,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "_myAllowSpecificOrigins",
+                      builder =>
+                      {
+                          builder.AllowAnyOrigin()
+                                  .AllowAnyMethod()
+                                  .AllowAnyHeader();
+                      });
+});
 
 builder.Services.AddDbContext<WolfDenContext>(x =>
 {
@@ -31,10 +49,7 @@ builder.Services.AddMediatR(x =>
     x.RegisterServicesFromAssembly(Assembly.Load("WolfDen.Application"));
 
 });
-
-builder.Services.AddScoped<AdminUpdateEmployeeValidator>();
-builder.Services.AddScoped<CreateEmployeeValidator>();
-builder.Services.AddScoped<EmployeeUpdateEmployeeValidator>();
+builder.Services.AddValidatorsFromAssembly(Assembly.Load("WolfDen.Application"));
 
 
 

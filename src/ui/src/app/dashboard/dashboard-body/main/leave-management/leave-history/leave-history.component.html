@@ -1,0 +1,28 @@
+<table class="table container">
+  <thead>
+    <tr>
+      <th scope="col">S.no.</th>
+      <th scope="col">Applied Date</th>
+      <th scope="col">Leave Type</th>
+      <th scope="col">From Date</th>
+      <th scope="col">To Date</th>
+      <th scope="col">Is HalfDay</th>
+      <th scope="col">Description</th>
+      <th scope="col">Status</th>
+      <th scope="col">Processed By</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+    <tr *ngFor="let leaveRequest of leaveRequestList;index as i">
+      <th scope="row">{{i+1}}</th>
+      <td>{{leaveRequest.applyDate}}</td>
+      <td>{{leaveRequest.typeName}}</td>
+      <td>{{leaveRequest.fromDate}}</td>
+      <td>{{leaveRequest.toDate}}</td>
+      <td>{{leaveRequest.halfDay}}</td>
+      <td>{{leaveRequest.description}}</td>
+      <td>{{RequestStatus(leaveRequest)}}</td>
+      <td>{{leaveRequest.processedBy}}</td>
+    </tr>
+  </tbody>
+</table>

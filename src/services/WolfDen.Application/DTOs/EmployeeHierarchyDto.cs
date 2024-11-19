@@ -13,6 +13,7 @@
         public int? DepartmentId { get; set; }
         public int? ManagerId { get; set; }
 
+        public bool? IsActive { get; set; }
         public List<EmployeeHierarchyDto> Subordinates { get; set; }
     }
 }
