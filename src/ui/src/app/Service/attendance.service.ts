@@ -15,11 +15,11 @@ export class AttendanceService {
   http=inject(HttpClient);
 
   getAttendanceSummary(employeeId: number, year: number, month: number) {
-    return this.http.get(`https://localhost:7015/api/AttendenceLog/employee/${1}/monthly?year=${year}&month=${month}`);
+    return this.http.get(`https://localhost:7015/api/AttendenceLog/employee/monthly?EmployeeId=${1}&Year=${year}&Month=${month}`);
   }
 
   getDailyStatus(employeeId: number, year: number, month: number){
-    return this.http.get(`https://localhost:7015/api/AttendenceLog/employee/${1}/dailystatus?year=${year}&month=${month}`);
+    return this.http.get(`https://localhost:7015/api/AttendenceLog/employee/daily-status?EmployeeId=${1}&Year=${year}&Month=${month}`);
   }
 
   private apiURL="https://localhost:7015/api/attendance"
