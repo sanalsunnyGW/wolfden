@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { ILeaveUpdate, IUpdateLeaveSetting } from '../interface/update-leave-setting';
-import { IAddNewLeaveType } from '../interface/add-new-leave-type-interface';
+import { IAddNewLeaveType } from '../interface/Add-New-Leave-Type-Interface';
 import { ILeaveBalanceList } from '../interface/leave-balance-list-interface';
 import { ILeaveRequestHistory } from '../interface/leave-request-history';
 
