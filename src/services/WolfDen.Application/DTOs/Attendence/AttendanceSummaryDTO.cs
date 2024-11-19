@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WolfDen.Application.Requests.DTOs.Attendence
+namespace WolfDen.Application.DTOs.Attendence
 {
     public class AttendanceSummaryDTO
     {

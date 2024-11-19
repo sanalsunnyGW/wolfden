@@ -1,6 +1,5 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-<<<<<<< HEAD
 
 using Microsoft.Extensions.Configuration;
 using sib_api_v3_sdk.Client;
@@ -8,9 +7,7 @@ using sib_api_v3_sdk.Client;
 using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
 using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
-=======
 using QuestPDF.Infrastructure;
->>>>>>> upstream/main
 using WolfDen.Infrastructure.Data;
 
 using FluentValidation;
@@ -45,16 +42,8 @@ builder.Services.AddDbContext<WolfDenContext>(x =>
 
 });
 builder.Services.AddScoped<WolfDenContext>();
-<<<<<<< HEAD
-builder.Services.AddMediatR(x => {
-    x.RegisterServicesFromAssembly(Assembly.Load("WolfDen.Application"));
-});
-
-
-=======
 builder.Services.AddSingleton<PdfService>();
 QuestPDF.Settings.License = LicenseType.Community;
->>>>>>> upstream/main
 
 builder.Services.AddMediatR(x =>
 {

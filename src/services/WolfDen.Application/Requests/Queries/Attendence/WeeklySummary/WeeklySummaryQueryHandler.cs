@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using WolfDen.Application.Requests.DTOs.Attendence;
+using WolfDen.Application.DTOs.Attendence;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary

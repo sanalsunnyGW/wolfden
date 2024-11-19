@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
-using WolfDen.Application.Requests.DTOs.Attendence;
+using WolfDen.Application.DTOs.Attendence;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
 {
