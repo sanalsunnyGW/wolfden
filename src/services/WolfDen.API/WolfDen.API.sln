@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolfDen.API", "WolfDen.API.csproj", "{8B434D5F-CCF5-4E43-9A06-6A8B33AB7D61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolfDen.API", "WolfDen.API.csproj", "{8B434D5F-CCF5-4E43-9A06-6A8B33AB7D61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolfDen.Application", "..\WolfDen.Application\WolfDen.Application.csproj", "{FBDA7C0F-C9FC-4703-8D84-93FFCD2B1F4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolfDen.Application", "..\WolfDen.Application\WolfDen.Application.csproj", "{FBDA7C0F-C9FC-4703-8D84-93FFCD2B1F4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolfDen.Domain", "..\WolfDen.Domain\WolfDen.Domain.csproj", "{19AE1095-1186-4F0C-8D4B-7EB010ED2BE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolfDen.Domain", "..\WolfDen.Domain\WolfDen.Domain.csproj", "{19AE1095-1186-4F0C-8D4B-7EB010ED2BE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolfDen.Infrastructure", "..\WolfDen.Infrastructure\WolfDen.Infrastructure.csproj", "{AD24C2B9-9ABA-46C1-B21F-EDDCC22C311A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolfDen.Infrastructure", "..\WolfDen.Infrastructure\WolfDen.Infrastructure.csproj", "{AD24C2B9-9ABA-46C1-B21F-EDDCC22C311A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

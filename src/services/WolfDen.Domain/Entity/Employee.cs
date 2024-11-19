@@ -8,7 +8,7 @@ namespace WolfDen.Domain.Entity
         public int Id { get; private set; }
         public int EmployeeCode { get; private set; }
 
-        public string RFId { get; private set; }
+        public string? RFId { get; private set; }
         public string? FirstName { get; private set; }
         public string? LastName { get; private set; }
         public string? Email { get; private set; }
