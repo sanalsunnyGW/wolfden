@@ -21,7 +21,6 @@ namespace WolfDen.Infrastructure.Data
         public DbSet<Device> Device { get; set; }
         public DbSet<Holiday> Holiday { get; set; }
         public DbSet<Notification> Notification { get; set; }
-        public DbSet<Designation> Designations { get; set; }
         public DbSet<LeaveBalance> LeaveBalances { get; set; }
         public DbSet<LeaveRequestDay> LeaveDays { get; set; }
         public DbSet<LeaveIncrementLog> LeaveIncrementLogs { get; set; }

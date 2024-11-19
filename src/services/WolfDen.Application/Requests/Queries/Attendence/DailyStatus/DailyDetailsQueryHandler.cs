@@ -36,7 +36,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                 }
                 else
                 {
-                    LeaveRequest leave = await _context.LeaveRequest.Where(x => x.EmpId == request.EmployeeId && x.FromDate == request.Date && x.status == LeaveRequestStatus.Approved).Include(x=>x.LeaveTypeConfiguration).FirstOrDefaultAsync(cancellationToken);
+                    LeaveRequest leave = await _context.LeaveRequests.Where(x => x.EmployeeId == request.EmployeeId && x.FromDate == request.Date && x.LeaveRequestStatus == LeaveRequestStatus.Approved).Include(x=>x.LeaveType).FirstOrDefaultAsync(cancellationToken);
                     if (leave is null)
                     {
                         AttendanceStatus attendanceStatusId = AttendanceStatus.Absent;
@@ -44,7 +44,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                     }   
                     else
                     {
-                        if (leave.TypeName == "WFH")
+                        if (leave.LeaveType.TypeName == "WFH")
                         {
                             AttendanceStatus attendanceStatusId = AttendanceStatus.WFH;
                             attendence.AttendanceStatusId = attendanceStatusId;

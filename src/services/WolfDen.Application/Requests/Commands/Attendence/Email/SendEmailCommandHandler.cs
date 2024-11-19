@@ -4,9 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using sib_api_v3_sdk.Api;
 using sib_api_v3_sdk.Model;
-using WolfDen.Application.Requests.DTOs.Attendence;
-using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
-using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Commands.Attendence.Email

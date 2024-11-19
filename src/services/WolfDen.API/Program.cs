@@ -1,17 +1,10 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
-using System.Reflection;
-using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
-using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
-using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
 using WolfDen.Infrastructure.Data;
 
 using FluentValidation;
-
-using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLeaveType;
-using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveSettings.UpdateLeaveSetting;
 
 
 var builder = WebApplication.CreateBuilder(args);
