@@ -4,7 +4,11 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { Router, RouterLink } from '@angular/router';
 
 import { Observable } from 'rxjs';
+<<<<<<< HEAD
 import { WolfDenService } from '../../service/wolf-den.service';
+=======
+import { ILoginForm } from './ilogin-form';
+>>>>>>> upstream/main
 
 @Component({
   selector: 'app-login',
@@ -17,7 +21,7 @@ export class LoginComponent {
   userForm: FormGroup;
 
   constructor(private fb: FormBuilder, private router: Router, private userService: WolfDenService) {
-    this.userForm = this.fb.group<IuseForm>({
+    this.userForm = this.fb.group<ILoginForm>({
       email: new FormControl(
         '',
         [Validators.required, ]
@@ -31,7 +35,3 @@ export class LoginComponent {
   }
 
 
-interface IuseForm {
-  email: FormControl<string | null>;
-  password: FormControl<string | null>;
-}
