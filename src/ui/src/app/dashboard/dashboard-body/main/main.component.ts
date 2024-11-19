@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { DailyAttendenceComponent } from "./attendence-module/daily-attendence/daily-attendence.component";
+
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [DailyAttendenceComponent],
+  imports: [],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })

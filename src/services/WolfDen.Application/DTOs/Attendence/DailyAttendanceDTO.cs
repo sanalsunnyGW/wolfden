@@ -1,13 +1,16 @@
-﻿namespace WolfDen.Application.Requests.DTOs.Attendence
+﻿using WolfDen.Domain.Enums;
+
+namespace WolfDen.Application.Requests.DTOs.Attendence
 {
     public class DailyAttendanceDTO
     {
-        public DateTime ArrivalTime { get; set; }
-        public DateTime DepartureTime { get; set; }
+        public DateTimeOffset ArrivalTime { get; set; }
+        public DateTimeOffset DepartureTime { get; set; }
         public int InsideHours { get; set; }
         public string Status { get; set; }
         public int OutsideHours { get;set; }
         public string MissedPunch { get; set; }
-        public List<AttendenceLogDTO> DailyLog { get; set; }
+        public AttendanceStatus AttendanceStatusId { get; set; }
+        public List<AttendenceLogDTO> DailyLog { get; set; } = [];
     }
 }

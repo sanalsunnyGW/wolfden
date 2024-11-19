@@ -20,10 +20,6 @@ namespace WolfDen.Infrastructure.Data
         public DbSet<Device> Device { get; set; }
         public DbSet<Holiday> Holiday { get; set; }
         public DbSet<Notification> Notification { get; set; }
-        public DbSet<Status> Status { get; set; }
-        public DbSet<AttendanceStatus> AttendanceStatus { get; set; }
-
-
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
