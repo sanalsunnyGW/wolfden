@@ -18,11 +18,12 @@ namespace WolfDen.Domain.Entity
         public int? DutyDaysRequired { get; private set; }
         public bool? Sandwich { get; private set; }
         public LeaveTypeEnum? Type { get; private set; }
+
         private LeaveType()
         {
             
         }
-        public LeaveType(string typeName, int? maxDays, bool? isHalfDayAllowed, int? incrementCount, LeaveIncrementGapMonth? incrementGap, bool? carryForward, int? carryForwardLimit, int? daysCheck, int? daysChekcMore, int? daysCheckEqualOrLess, int? dutyDaysRequired, bool? sandwich,LeaveTypeEnum leaveType)
+        public LeaveType(string typeName, int? maxDays, bool? isHalfDayAllowed, int? incrementCount, LeaveIncrementGapMonth? incrementGap, bool? carryForward, int? carryForwardLimit, int? daysCheck, int? daysChekcMore, int? daysCheckEqualOrLess, int? dutyDaysRequired, bool? sandwich)
         {
             TypeName = typeName;
             MaxDays = maxDays;
@@ -35,7 +36,6 @@ namespace WolfDen.Domain.Entity
             DaysChekcMore = daysChekcMore;
             DaysCheckEqualOrLess = daysCheckEqualOrLess;
             DutyDaysRequired = dutyDaysRequired;
-            Type = leaveType;
             Sandwich = sandwich;
         }
     }
