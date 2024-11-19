@@ -16,7 +16,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
         }
         public async Task<DailyAttendanceDTO> Handle(DailyDetails request, CancellationToken cancellationToken)
         {
-            var attendence = await _context.DailyAttendence.Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date).Select(x => new DailyAttendanceDTO
+            var attendence = await _context.DailyAttendence.Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date)
+                .Select(x => new DailyAttendanceDTO
             {
                 ArrivalTime = x.ArrivalTime,
                 DepartureTime = x.DepartureTime,
@@ -28,38 +29,40 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
             if (attendence is null)
             {
                 Holiday holiday = await _context.Holiday.Where(x => x.Date == request.Date).FirstOrDefaultAsync(cancellationToken);
-
-                if (holiday.Type == AttendanceStatus.NormalHoliday)
+                if(holiday is not null)
                 {
-                    AttendanceStatus attendanceStatusId = AttendanceStatus.NormalHoliday;
-                    attendence.AttendanceStatusId = attendanceStatusId;
-                }
-                else
-                {
-                    LeaveRequest leave = await _context.LeaveRequests.Where(x => x.EmployeeId == request.EmployeeId && x.FromDate == request.Date && x.LeaveRequestStatus == LeaveRequestStatus.Approved).Include(x=>x.LeaveType).FirstOrDefaultAsync(cancellationToken);
-                    if (leave is null)
+                    if (holiday.Type == AttendanceStatus.NormalHoliday)
                     {
-                        AttendanceStatus attendanceStatusId = AttendanceStatus.Absent;
+                        AttendanceStatus attendanceStatusId = AttendanceStatus.NormalHoliday;
                         attendence.AttendanceStatusId = attendanceStatusId;
-                    }   
+                    }
                     else
                     {
-                        if (leave.LeaveType.Type == LeaveTypeEnum.WorkFromHome)
+                        LeaveRequest leave = await _context.LeaveRequests.Where(x => x.EmployeeId == request.EmployeeId && x.FromDate == request.Date && x.LeaveRequestStatus == LeaveRequestStatus.Approved).Include(x => x.LeaveType).FirstOrDefaultAsync(cancellationToken);
+                        if (leave is null)
                         {
-                            AttendanceStatus attendanceStatusId = AttendanceStatus.WFH;
+                            AttendanceStatus attendanceStatusId = AttendanceStatus.Absent;
                             attendence.AttendanceStatusId = attendanceStatusId;
                         }
                         else
                         {
-                            AttendanceStatus attendanceStatusId = AttendanceStatus.RestrictedHoliday;
-                            attendence.AttendanceStatusId = attendanceStatusId;
+                            if (leave.LeaveType.Type == LeaveTypeEnum.WorkFromHome)
+                            {
+                                AttendanceStatus attendanceStatusId = AttendanceStatus.WFH;
+                                attendence.AttendanceStatusId = attendanceStatusId;
+                            }
+                            else
+                            {
+                                AttendanceStatus attendanceStatusId = AttendanceStatus.RestrictedHoliday;
+                                attendence.AttendanceStatusId = attendanceStatusId;
+                            }
                         }
                     }
-                }
+                }    
             }
             else
             {
-                await _context.AddAsync(attendence.AttendanceStatusId);
+                //await _context.AddAsync(attendence.AttendanceStatusId);
                 if (attendence.InsideHours >= 360)
                 {
                     AttendanceStatus attendanceStatusId = AttendanceStatus.Present;
@@ -78,8 +81,10 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                  DeviceName = x.Device.Name,
                  Direction = x.Direction
              }).ToListAsync(cancellationToken);
-            attendence.DailyLog = attendenceRecords;
-            await _context.SaveChangesAsync(cancellationToken);
+            if(attendence is not null)
+            {
+                attendence.DailyLog = attendenceRecords;
+            }
             return attendence;
         }
     }
