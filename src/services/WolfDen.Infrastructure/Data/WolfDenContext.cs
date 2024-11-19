@@ -15,24 +15,20 @@ namespace WolfDen.Infrastructure.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Designation> Designations { get; set; }
-<<<<<<< HEAD
        public DbSet<AttendenceClose> AttendenceClose { get; set; }
         public DbSet<AttendenceLog> AttendenceLog { get; set; }
        public DbSet<DailyAttendence> DailyAttendence { get; set; }
        public DbSet<Device> Device { get; set; }
        public DbSet<Holiday> Holiday { get; set; }
        public DbSet<Notification> Notification { get; set; }   
-       public DbSet<Status> Status { get; set; }
-        public DbSet<StatusType> StatusType { get; set; }
+       
 
-=======
         public DbSet<LeaveBalance> LeaveBalances { get; set; }
         public DbSet<LeaveRequestDay> LeaveDays { get; set; }
         public DbSet<LeaveIncrementLog> LeaveIncrementLogs { get; set; }
         public DbSet<LeaveSetting> LeaveSettings { get; set; }
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
         public DbSet<LeaveType> LeaveType { get; set; }
->>>>>>> upstream/main
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

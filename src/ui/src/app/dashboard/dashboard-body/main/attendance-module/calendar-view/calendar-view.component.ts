@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions } from '@fullcalendar/core/index.js';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -12,7 +12,7 @@ import { AttendanceService } from '../../../../../service/attendance.service';
   templateUrl: './calendar-view.component.html',
   styleUrl: './calendar-view.component.scss'
 })
-export class CalendarViewComponent {
+export class CalendarViewComponent implements OnInit{
 
   service = inject(AttendanceService);
 
@@ -124,6 +124,8 @@ export class CalendarViewComponent {
     console.log("im i working")
     this.fetchAttendanceData(year, month);
     this.getStatusData(year, month);
+
+    // arg.view.calendar.gotoDate(new Date(year, month - 1, 1));  // Ensure it renders the correct month
 
     setTimeout(() => {
 

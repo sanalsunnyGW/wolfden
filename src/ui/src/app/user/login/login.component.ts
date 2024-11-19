@@ -4,11 +4,11 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { Router, RouterLink } from '@angular/router';
 
 import { Observable } from 'rxjs';
-<<<<<<< HEAD
+
 import { WolfDenService } from '../../service/wolf-den.service';
-=======
+
 import { ILoginForm } from './ilogin-form';
->>>>>>> upstream/main
+
 
 @Component({
   selector: 'app-login',

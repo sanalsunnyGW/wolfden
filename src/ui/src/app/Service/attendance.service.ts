@@ -18,5 +18,7 @@ export class AttendanceService {
   getDailyStatus(employeeId: number, year: number, month: number){
     return this.http.get(`https://localhost:7015/api/AttendenceLog/employee/${1}/dailystatus?year=${year}&month=${month}`);
   }
+
+  
   
 }

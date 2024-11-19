@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 
-import { SigninComponent } from "./user/signin/signin.component";
 import { UserComponent } from "./user/user.component";
 import { CalendarViewComponent } from './dashboard/dashboard-body/main/attendance-module/calendar-view/calendar-view.component';
 

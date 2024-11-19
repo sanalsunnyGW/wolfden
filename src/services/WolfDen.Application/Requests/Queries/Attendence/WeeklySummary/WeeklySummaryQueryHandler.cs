@@ -30,24 +30,26 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
                 DepartureTime = s.DepartureTime,
                 InsideDuration = s.InsideDuration,
                 OutsideDuration = s.OutsideDuration,
-                MissedPunch = s.MissedPunch
+                MissedPunch = s.MissedPunch,
+                AttendanceStatusId=s.AttendanceStatusId
+                
             })
-            .ToListAsync(cancellationToken); 
+            .ToListAsync(cancellationToken);
 
-            foreach (var entry in weeklyData)
-            {
-                var status = await _context.Status
-                    .Include(x => x.StatusType)
-                    .Where(x => x.EmployeeId == request.EmployeeId && x.Date == entry.Date)
-                    .Select(x => x.StatusType.StatusName)
-                    .FirstOrDefaultAsync(cancellationToken);
+            //foreach (var entry in weeklyData)
+            //{
+            //    var status = await _context.Status
+            //        .Include(x => x.StatusType)
+            //        .Where(x => x.EmployeeId == request.EmployeeId && x.Date == entry.Date)
+            //        .Select(x => x.StatusType.StatusName)
+            //        .FirstOrDefaultAsync(cancellationToken);
 
-                entry.Status = status; 
-            }
+            //    entry.Status = status;
+            //}
 
-            return weeklyData; 
+            return weeklyData;
 
-            
+
         }
     }
 }
