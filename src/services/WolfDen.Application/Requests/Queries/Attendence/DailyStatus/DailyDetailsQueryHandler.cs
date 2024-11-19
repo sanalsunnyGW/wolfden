@@ -28,36 +28,36 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
             if (attendence is null)
             {
                 Holiday holiday = await _context.Holiday.Where(x => x.Date == request.Date).FirstOrDefaultAsync(cancellationToken);
-                if(holiday is not null)
+                if (holiday is not null)
                 {
                     if (holiday.Type == AttendanceStatus.NormalHoliday)
-                {
-                    AttendanceStatus attendanceStatusId = AttendanceStatus.NormalHoliday;
-                    attendence.AttendanceStatusId = attendanceStatusId;
-                }
-                else
-                {
-                    LeaveRequest leave = await _context.LeaveRequests.Where(x => x.EmployeeId == request.EmployeeId && x.FromDate == request.Date && x.LeaveRequestStatusId == LeaveRequestStatus.Approved).Include(x=>x.LeaveType).FirstOrDefaultAsync(cancellationToken);
-                    if (leave is null)
                     {
-                        AttendanceStatus attendanceStatusId = AttendanceStatus.Absent;
+                        AttendanceStatus attendanceStatusId = AttendanceStatus.NormalHoliday;
                         attendence.AttendanceStatusId = attendanceStatusId;
-                    }   
+                    }
                     else
                     {
-                        LeaveType leaveType = await _context.LeaveType.FirstOrDefaultAsync(x => x.Id == leave.TypeId);
-                        if (leaveType.LeaveCategoryId == LeaveCategory.WorkFromHome)
+                        LeaveRequest leave = await _context.LeaveRequests.Where(x => x.EmployeeId == request.EmployeeId && x.FromDate == request.Date && x.LeaveRequestStatusId == LeaveRequestStatus.Approved).Include(x => x.LeaveType).FirstOrDefaultAsync(cancellationToken);
+                        if (leave is null)
                         {
-                            AttendanceStatus attendanceStatusId = AttendanceStatus.WFH;
+                            AttendanceStatus attendanceStatusId = AttendanceStatus.Absent;
                             attendence.AttendanceStatusId = attendanceStatusId;
                         }
                         else
                         {
-                            AttendanceStatus attendanceStatusId = AttendanceStatus.RestrictedHoliday;
-                            attendence.AttendanceStatusId = attendanceStatusId;
+                            LeaveType leaveType = await _context.LeaveType.FirstOrDefaultAsync(x => x.Id == leave.TypeId);
+                            if (leaveType.LeaveCategoryId == LeaveCategory.WorkFromHome)
+                            {
+                                AttendanceStatus attendanceStatusId = AttendanceStatus.WFH;
+                                attendence.AttendanceStatusId = attendanceStatusId;
+                            }
+                            else
+                            {
+                                AttendanceStatus attendanceStatusId = AttendanceStatus.RestrictedHoliday;
+                                attendence.AttendanceStatusId = attendanceStatusId;
+                            }
                         }
                     }
-                }
                 }
             }
             else
