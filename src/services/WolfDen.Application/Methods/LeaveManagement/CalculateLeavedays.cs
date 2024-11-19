@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace WolfDen.Application.Methods.LeaveManagement
 {
-    internal class CalculateLeavedays
+    public class CalculateLeavedays
     {
     }
 }

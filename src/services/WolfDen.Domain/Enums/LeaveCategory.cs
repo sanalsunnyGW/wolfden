@@ -1,6 +1,6 @@
 ﻿namespace WolfDen.Domain.Enums
 {
-    public enum LeaveTypeEnum
+    public enum LeaveCategory
     {
         CasualLeave =1,
         PrivilegeLeave,
