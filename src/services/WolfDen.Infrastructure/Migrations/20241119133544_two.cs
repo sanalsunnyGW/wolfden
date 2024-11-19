@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WolfDen.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class @new : Migration
+    public partial class two : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -121,7 +121,7 @@ namespace WolfDen.Infrastructure.Migrations
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    AttendanceStatusId = table.Column<int>(type: "int", nullable: false)
+                    AttendanceStatusId = table.Column<int>(type: "int", nullable: true)
                         .Annotation("SqlServer:IsTemporal", true)
                         .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
@@ -409,7 +409,7 @@ namespace WolfDen.Infrastructure.Migrations
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    IncrementGap = table.Column<int>(type: "int", nullable: true)
+                    IncrementGapId = table.Column<int>(type: "int", nullable: true)
                         .Annotation("SqlServer:IsTemporal", true)
                         .Annotation("SqlServer:TemporalHistoryTableName", "LeaveType")
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
@@ -457,7 +457,7 @@ namespace WolfDen.Infrastructure.Migrations
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    Type = table.Column<int>(type: "int", nullable: true)
+                    LeaveCategoryId = table.Column<int>(type: "int", nullable: true, defaultValue: 7)
                         .Annotation("SqlServer:IsTemporal", true)
                         .Annotation("SqlServer:TemporalHistoryTableName", "LeaveType")
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
@@ -870,7 +870,7 @@ namespace WolfDen.Infrastructure.Migrations
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    LeaveRequestStatus = table.Column<int>(type: "int", nullable: false)
+                    LeaveRequestStatusId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:IsTemporal", true)
                         .Annotation("SqlServer:TemporalHistoryTableName", "LeaveRequest")
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")

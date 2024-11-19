@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using QuestPDF.Fluent;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
-using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
+using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
 
 namespace WolfDen.API.Controllers.Attendence
 {

@@ -617,7 +617,7 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<int>("LeaveRequestStatus")
+                    b.Property<int>("LeaveRequestStatusId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PeriodEnd")
@@ -777,13 +777,18 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<int?>("IncrementCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IncrementGap")
+                    b.Property<int?>("IncrementGapId")
                         .HasColumnType("int");
 
                     b.Property<bool?>("IsHalfDayAllowed")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
+
+                    b.Property<int?>("LeaveCategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(7);
 
                     b.Property<int?>("MaxDays")
                         .HasColumnType("int");
@@ -802,9 +807,6 @@ namespace WolfDen.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
-
-                    b.Property<int?>("Type")
-                        .HasColumnType("int");
 
                     b.Property<string>("TypeName")
                         .IsRequired()

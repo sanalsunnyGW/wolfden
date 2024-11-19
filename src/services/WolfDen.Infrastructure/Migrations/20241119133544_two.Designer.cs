@@ -12,8 +12,8 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241119092417_new")]
-    partial class @new
+    [Migration("20241119133544_two")]
+    partial class two
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -137,7 +137,7 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("ArrivalTime")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("AttendanceStatusId")
+                    b.Property<int?>("AttendanceStatusId")
                         .HasColumnType("int");
 
                     b.Property<DateOnly>("Date")
@@ -620,7 +620,7 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<int>("LeaveRequestStatus")
+                    b.Property<int>("LeaveRequestStatusId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PeriodEnd")
@@ -780,13 +780,18 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<int?>("IncrementCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IncrementGap")
+                    b.Property<int?>("IncrementGapId")
                         .HasColumnType("int");
 
                     b.Property<bool?>("IsHalfDayAllowed")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
+
+                    b.Property<int?>("LeaveCategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(7);
 
                     b.Property<int?>("MaxDays")
                         .HasColumnType("int");
@@ -805,9 +810,6 @@ namespace WolfDen.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
-
-                    b.Property<int?>("Type")
-                        .HasColumnType("int");
 
                     b.Property<string>("TypeName")
                         .IsRequired()

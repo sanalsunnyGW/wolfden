@@ -36,16 +36,6 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
             })
             .ToListAsync(cancellationToken);
 
-            //foreach (var entry in weeklyData)
-            //{
-            //    var status = await _context.Status
-            //        .Include(x => x.StatusType)
-            //        .Where(x => x.EmployeeId == request.EmployeeId && x.Date == entry.Date)
-            //        .Select(x => x.StatusType.StatusName)
-            //        .FirstOrDefaultAsync(cancellationToken);
-
-            //    entry.Status = status;
-            //}
 
             return weeklyData;
 

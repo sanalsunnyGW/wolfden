@@ -30,9 +30,9 @@ export class CalendarViewComponent implements OnInit{
 
   present: number = 0;
   absent: number = 0;
-  late: number = 0;
+  incompleteShift: number = 0;
   wfh: number = 0;
-
+  
   employeeId: number = 123;
   currentYear: number = new Date().getFullYear();
   currentMonth: number = new Date().getMonth() + 1;
@@ -56,11 +56,11 @@ export class CalendarViewComponent implements OnInit{
     console.log("attendance count")
     this.service.getAttendanceSummary(this.employeeId, year, month).subscribe((data: any) => {
 
-      console.log(data);
+     // console.log(data);
 
       this.present = data.present;
       this.absent = data.absent;
-      this.late = data.late;
+      this.incompleteShift = data.incompleteShift;
       this.wfh = data.wfh;
     });
     console.log("count fetched after")
@@ -76,7 +76,7 @@ export class CalendarViewComponent implements OnInit{
       data.forEach((item: { date: string, status: string }) => {
         this.attendanceData[item.date] = item.status;
       });
-      console.log("attendance data", this.attendanceData);
+     // console.log("attendance data", this.attendanceData);
     });
     console.log("date fetched after")
   }
@@ -92,8 +92,8 @@ export class CalendarViewComponent implements OnInit{
     const dateStr = date.toISOString().split('T')[0];
     const status = this.attendanceData[dateStr];
 
-    console.log("date", dateStr);
-    console.log("status", status);
+   // console.log("date", dateStr);
+    //console.log("status", status);
 
     if (arg.date.getDay() === 6 || arg.date.getDay() === 0) {
       return ['weekend-day'];
@@ -104,7 +104,7 @@ export class CalendarViewComponent implements OnInit{
       return ['present'];
     } else if (status === 'Absent') {
       return ['absent'];
-    } else if (status === 'Late') {
+    } else if (status === 'IncompleteShift') {
       return ['late'];
     } else if (status === 'Work From Home') {
       return ['wfh'];

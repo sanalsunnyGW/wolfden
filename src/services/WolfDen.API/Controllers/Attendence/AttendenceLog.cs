@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using QuestPDF.Fluent;
+using WolfDen.Application.DTOs.Attendence;
 using WolfDen.Application.Requests.DTOs.Attendence;
 using WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary;
 using WolfDen.Application.Requests.Queries.Attendence.AttendenceLog;
