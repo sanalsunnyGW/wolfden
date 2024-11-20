@@ -44,10 +44,9 @@ export class DailyAttendenceComponent {
     this.service.getDailyAttendence(employeeId,date).subscribe(
       (response: DailyAttendance) =>{
         if(response){
-          console.log(response)
           this.dailyData=response;  
       }
-        else {console.error('Error fetching attendance:') }     
+        else {alert("no attendance found") };
    });   
   }
   minutess:string='';

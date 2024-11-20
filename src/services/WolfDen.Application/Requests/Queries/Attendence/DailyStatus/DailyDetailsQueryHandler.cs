@@ -27,13 +27,14 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
 
             if (attendence is null)
             {
+                var notPresentDay = new DailyAttendanceDTO();
                 Holiday holiday = await _context.Holiday.Where(x => x.Date == request.Date).FirstOrDefaultAsync(cancellationToken);
                 if (holiday is not null)
                 {
                     if (holiday.Type == AttendanceStatus.NormalHoliday)
                     {
                         AttendanceStatus attendanceStatusId = AttendanceStatus.NormalHoliday;
-                        attendence.AttendanceStatusId = attendanceStatusId;
+                        notPresentDay.AttendanceStatusId = attendanceStatusId;
                     }
                     else
                     {
@@ -41,7 +42,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                         if (leave is null)
                         {
                             AttendanceStatus attendanceStatusId = AttendanceStatus.Absent;
-                            attendence.AttendanceStatusId = attendanceStatusId;
+                            notPresentDay.AttendanceStatusId = attendanceStatusId;
                         }
                         else
                         {
@@ -49,16 +50,22 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                             if (leaveType.LeaveCategoryId == LeaveCategory.WorkFromHome)
                             {
                                 AttendanceStatus attendanceStatusId = AttendanceStatus.WFH;
-                                attendence.AttendanceStatusId = attendanceStatusId;
+                                notPresentDay.AttendanceStatusId = attendanceStatusId;
                             }
                             else
                             {
                                 AttendanceStatus attendanceStatusId = AttendanceStatus.RestrictedHoliday;
-                                attendence.AttendanceStatusId = attendanceStatusId;
+                                notPresentDay.AttendanceStatusId = attendanceStatusId;
                             }
                         }
                     }
                 }
+                else
+                {
+                    AttendanceStatus attendanceStatusId = AttendanceStatus.Absent;
+                    notPresentDay.AttendanceStatusId = attendanceStatusId;
+                }
+                return notPresentDay;
             }
             else
             {
@@ -72,6 +79,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                     AttendanceStatus attendanceStatusId = AttendanceStatus.IncompleteShift;
                     attendence.AttendanceStatusId = attendanceStatusId;
                 }
+                await _context.AddAsync(attendence.AttendanceStatusId);
             }
             var attendenceRecords = await _context.AttendenceLog.Where(x => x.EmployeeId == request.EmployeeId && x.PunchDate == request.Date).Include(x => x.Device)
              .Select(x => new AttendenceLogDTO

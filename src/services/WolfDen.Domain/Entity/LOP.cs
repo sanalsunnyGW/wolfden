@@ -5,16 +5,18 @@
         public int Id { get;  }
         public DateOnly AttendanceClosedDate { get;private set; }
         public int EmployeeId { get; private set; }
-        public int LOPDays { get; private set; }
+        public int LOPDaysCount { get; private set; }
+        public string LOPDays { get; private set; }
         private LOP()
         {
             
         }
-        public LOP(DateOnly attendanceClosedDate, int lOPdays, int employeeId)
+        public LOP(DateOnly attendanceClosedDate, int lOPdaysCount, int employeeId,string lopDays)
         {
             AttendanceClosedDate=attendanceClosedDate;
-            LOPDays = lOPdays;
-            EmployeeId = employeeId;   
+            LOPDaysCount = lOPdaysCount;
+            EmployeeId = employeeId;
+            LOPDays = lopDays;
         }
     }
 }
