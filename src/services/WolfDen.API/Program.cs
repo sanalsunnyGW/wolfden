@@ -1,10 +1,7 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
-using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
-using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
 using WolfDen.Infrastructure.Data;
-using FluentValidation;
 
 
 var builder = WebApplication.CreateBuilder(args);

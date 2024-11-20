@@ -19,6 +19,6 @@ export class WolfDenService {
   }
 
   signIn(data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/api/Employee/EmployeeUpdateEmployee`, data, { headers: this.getHeaders() });
+    return this.http.put(`${this.baseUrl}/api/Employee/EmployeeUpdateEmployee`, data, { headers: this.getHeaders() });
   }
 }

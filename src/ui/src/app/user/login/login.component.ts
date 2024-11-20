@@ -9,7 +9,7 @@ import { ILoginForm } from './ilogin-form';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [ ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
@@ -26,8 +26,17 @@ export class LoginComponent {
     });
   }
 
+  isSubmitted :boolean= false;
+
   onSubmit() {
+    this.isSubmitted = true;
+    //api logic
+    this.router.navigate(['/dashboard']);
     }
+    hasDisplayableError(controlName: string ):Boolean {
+      const control = this.userForm.get(controlName);
+      return Boolean(control?.invalid) && (this.isSubmitted || Boolean(control?.touched) || Boolean(control?.dirty))
+  }
   }
 
 

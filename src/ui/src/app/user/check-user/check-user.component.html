@@ -1,0 +1,30 @@
+<div class="mb-4 h2 text-sucess">
+    Create Account
+</div>
+<form [formGroup]="userForm"(ngSubmit)="onSubmit()">
+
+<div class="mb-3">
+    <input class="form-control bg-body-secondary"
+    placeholder="RFID" formControlName="rfid">
+    @if (hasDisplayableError('rfid') && userForm.controls['rfid'].hasError('required')) {
+        <div class="error-feedback">
+            Please enter your RFID
+        </div>
+        }
+</div>
+<div class="mb-3">
+    <input  class="form-control bg-body-secondary"
+    placeholder="User Code" formControlName="employeeCode">
+    @if (hasDisplayableError('employeeCode') && userForm.controls['employeeCode'].hasError('required')) {
+        <div class="error-feedback">
+            Please enter your employee code!
+        </div>
+        }
+</div>
+
+<button type="submit" class="btn btn-success w-100 rounded-3">
+    Next 
+</button>
+</form>
+
+
