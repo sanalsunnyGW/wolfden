@@ -8,8 +8,17 @@
     <div class="nav-item">
       <span>Company Hierarchy</span>
     </div>
-    <div class="nav-item">
-      <span>Leaves</span>
+    <div class="nav-item dropdown">
+      <span class="dropdown-toggle" id="attendanceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        Leave
+      </span>
+      <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
+        <li><a class="dropdown-item" [routerLink]="'/leave-dashboard'">Leave Dashboard</a></li>
+        <li><a class="dropdown-item" [routerLink]="'/leave-request-history'">Leave Request History</a></li>
+        <li><a class="dropdown-item" [routerLink]="'/leave-request-approval'">Approve/Reject Leave</a></li>
+        <li><a class="dropdown-item" [routerLink]="'/add-new-leave-type'">Add New Leave Type </a></li>
+        <li><a class="dropdown-item" [routerLink]="'/edit-leave-type'">Edit Existing Leave Type </a></li>
+      </ul>
     </div>
     <div class="nav-item">
       <span>Calendar</span>
@@ -18,4 +27,6 @@
       <span>Attendance</span>
     </div>
   
-  </div>
+
+
+

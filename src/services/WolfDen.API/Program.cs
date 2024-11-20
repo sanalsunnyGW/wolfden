@@ -1,7 +1,10 @@
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
 using WolfDen.Infrastructure.Data;
+using FluentValidation;
+using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +15,18 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "_myAllowSpecificOrigins",
+                      builder =>
+                      {
+                          builder.AllowAnyOrigin()
+                                  .AllowAnyMethod()
+                                  .AllowAnyHeader();
+                      });
+});
 
 builder.Services.AddDbContext<WolfDenContext>(x =>
 {
@@ -20,6 +34,8 @@ builder.Services.AddDbContext<WolfDenContext>(x =>
 
 });
 builder.Services.AddScoped<WolfDenContext>();
+builder.Services.AddSingleton<PdfService>();
+QuestPDF.Settings.License = LicenseType.Community;
 
 builder.Services.AddMediatR(x =>
 {
@@ -38,8 +54,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors(origin => origin.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-
+app.UseCors(options => options.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowAnyMethod());
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

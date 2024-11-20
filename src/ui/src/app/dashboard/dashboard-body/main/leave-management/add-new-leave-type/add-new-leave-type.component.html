@@ -1,0 +1,108 @@
+<div class="patientForm">
+    <form [formGroup]="addNewLeaveType" class="pForm" (ngSubmit)="onSubmit()">
+  
+      <div class="form-group">
+        <label for="typeName">Enter New Leave Type Name</label>
+        <input type="text" class="form-control" id="typeName" placeholder="Enter Name" formControlName="typeName">
+        <div class="error"*ngIf="addNewLeaveType.get('typeName')?.invalid && addNewLeaveType.get('typeName')?.touched">
+         Type Name is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="maxDays">Enter Max Days</label>
+        <input type="number" class="form-control" id="maxDays" placeholder="Enter Max Days" formControlName="maxDays">
+      </div>
+      <pre><b>Hint :</b>Enter max days to which a leave can sum up to
+        Eg: 12 for casual Leave in a year
+            2 for Emergency Leave in a year
+     </pre>
+
+      <div class="form-group">
+        <label>Select if Half Day Allowed </label>
+        <div class="isHalfDayAllowed">
+          <div>
+            <input class="form-check-input" type="radio" id="true1" value="true" formControlName="isHalfDayAllowed">
+            <label class="form-check-label" for="true1">Half Day Possible</label>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label>Select increment Type if there is increment  </label>
+        <ng-select [items]="increments" class="option"
+        bindLabel="viewValue"
+        bindValue="type" placeholder="select Increment Type" formControlName="incrementGap">
+        </ng-select>
+      </div>
+  
+      <div class="form-group">
+        <label for="incrementCount">Enter Increment Count</label>
+        <input type="number" class="form-control" id="incrementCount" placeholder="Enter Increment Count" formControlName="incrementCount">
+      </div>
+
+      <div class="form-group">
+        <label>Select if CarryForward Possible </label>
+        <div class="carryForward">
+          <div>
+            <input class="form-check-input" type="radio" id="true2" value="true" formControlName="carryForward">
+            <label class="form-check-label" for="true2">CarryForward Possible</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="carryForwardLimit">Enter Carry Forward Count</label>
+        <input type="number" class="form-control" id="carryForwardLimit" placeholder="Enter Carry Forward Count" formControlName="carryForwardLimit">
+      </div>
+
+
+      <div class="form-group">
+        <label for="daysCheck">Enter Days Check Count</label>
+        <input type="number" class="form-control" id="daysCheck" placeholder="Enter Days Check Count" formControlName="daysCheck">
+      </div>
+      <pre>
+        <b>Hint:</b>
+        Days Check
+      </pre>
+
+
+      <div class="form-group">
+        <label for="daysCheckEqualOrLess">Enter daysCheckEqualOrLess Count</label>
+        <input type="number" class="form-control" id="daysCheckEqualOrLess" placeholder="Enter daysCheckEqualOrLess Count" formControlName="daysCheckEqualOrLess">
+      </div>
+      <pre>
+        <b>Hint:</b>
+        Enter Days Check Count
+      </pre>
+
+
+      <div class="form-group">
+        <label for="daysCheckMore">Enter daysCheckMore Count</label>
+        <input type="number" class="form-control" id="daysCheckMore" placeholder="Enter daysCheckMore Count" formControlName="daysCheckMore">
+      </div>
+      <pre>
+        <b>Hint:</b>
+        DaysCheckMore
+      </pre>
+
+      <div class="form-group">
+        <label for="dutyDaysRequired">Enter Duty Days  Required</label>
+        <input type="number" class="form-control" id="dutyDaysRequired" placeholder="Enter dutyDaysRequired Count" formControlName="dutyDaysRequired">
+      </div>
+
+
+      <div class="form-group">
+        <label>Select if Sandwich Policy Applicable  </label>
+        <div class="sandwich">
+          <div>
+            <input class="form-check-input" type="radio" id="true3" value="true" formControlName="sandwich">
+            <label class="form-check-label" for="true3">Sandwich Applicable</label>
+          </div>
+        </div>
+      </div>
+  
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+  

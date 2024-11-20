@@ -5,17 +5,10 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Commands.Employees.AddEmployee
 {
-    public class AddEmployeeCommandHandler : IRequestHandler<AddEmployeecommand, int>
+    public class AddEmployeeCommandHandler(WolfDenContext context, CreateEmployeeValidator validator) : IRequestHandler<AddEmployeecommand, int>
     {
-        private readonly WolfDenContext _context;
-        private readonly CreateEmployeeValidator _validator;
-
-
-        public AddEmployeeCommandHandler(WolfDenContext context, CreateEmployeeValidator validator)
-        {
-            _context = context;
-            _validator = validator;
-        }
+        private readonly WolfDenContext _context = context;
+        private readonly CreateEmployeeValidator _validator = validator;
 
         public async Task<int> Handle(AddEmployeecommand request, CancellationToken cancellationToken)
         {
