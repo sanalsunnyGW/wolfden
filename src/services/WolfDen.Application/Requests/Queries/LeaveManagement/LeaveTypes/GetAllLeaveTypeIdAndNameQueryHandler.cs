@@ -1,13 +1,12 @@
-﻿ using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.LeaveManagement;
-using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveTypes.WolfDen.Application.Requests.Queries.LeaveManagement.LeaveTypes;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveTypes
-    {
-        public class GetAllLeaveTypeIdAndNameQueryHandler(WolfDenContext context) : IRequestHandler<GetAllLeaveTypeIdAndNameQuery, List<LeaveTypeDto>>
+{
+    public class GetAllLeaveTypeIdAndNameQueryHandler(WolfDenContext context) : IRequestHandler<GetAllLeaveTypeIdAndNameQuery, List<LeaveTypeDto>>
         {
             private readonly WolfDenContext _context = context;
 

@@ -1,10 +1,9 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WolfDen.Application.DTOs.LeaveManagement;
 using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLeaveType;
 using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.UpdateLeaveType;
-using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveTypes.WolfDen.Application.Requests.Queries.LeaveManagement.LeaveTypes;
+using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveTypes;
 
 namespace WolfDen.API.Controllers.LeaveManagement
 {
