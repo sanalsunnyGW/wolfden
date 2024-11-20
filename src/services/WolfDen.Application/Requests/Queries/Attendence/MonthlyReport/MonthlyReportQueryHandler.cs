@@ -72,22 +72,22 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                 }
                 else
                 {
-                    var holiday = holidays.FirstOrDefault(x => x.Date == currentDate);
+                    Holiday holiday = holidays.FirstOrDefault(x => x.Date == currentDate);
                     if (holiday is not null)
                     {
-                        if (holiday.Type == AttendanceStatus.NormalHoliday)
+                        if (holiday.Type is AttendanceStatus.NormalHoliday)
                         {
                             summaryDto.Holiday++;
                             summaryDto.NormalHolidays.Add(currentDate);
 
                         }
-                        else if (holiday.Type == AttendanceStatus.RestrictedHoliday)
+                        else if (holiday.Type is AttendanceStatus.RestrictedHoliday)
                         {
                             LeaveRequest leaveRequestForHoliday = leaveRequests.FirstOrDefault(x => x.FromDate <= currentDate && x.ToDate >= currentDate);
 
                             if (leaveRequestForHoliday is not null)
                             {
-                                var leaveType = leaveTypes.FirstOrDefault(x => x.Id == leaveRequestForHoliday.TypeId);
+                                LeaveType leaveType = leaveTypes.FirstOrDefault(x => x.Id == leaveRequestForHoliday.TypeId);
 
                                 if (leaveType is not null && leaveType.LeaveCategoryId is LeaveCategory.RestrictedHoliday)
                                 {
