@@ -10,6 +10,7 @@ namespace WolfDen.Infrastructure.Configuration
         {
             Builder.Property(x => x.Id).HasColumnName("LeaveIncrementLogId");
             Builder.HasOne(x => x.LeaveBalance).WithMany().HasForeignKey(x => x.LeaveBalanceId);
+            Builder.Property(x => x.CurrentBalance).HasPrecision(6, 2);
         }
 
 

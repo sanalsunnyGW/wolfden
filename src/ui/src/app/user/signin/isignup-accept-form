@@ -1,0 +1,9 @@
+import { FormControl, } from '@angular/forms';
+
+export interface ISignupAcceptForm {
+    email: string|null;
+    firstName: string|null;
+
+
+
+}

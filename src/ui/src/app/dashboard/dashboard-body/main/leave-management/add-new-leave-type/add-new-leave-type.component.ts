@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 
+
 @Component({
   selector: 'app-add-new-leave-type',
   standalone: true,
@@ -30,7 +31,7 @@ export class AddNewLeaveTypeComponent {
         daysCheckMore: new FormControl(null),
         daysCheckEqualOrLess: new FormControl(null),
         dutyDaysRequired: new FormControl(null),
-        restrictionType: new FormControl(null),
+        type: new FormControl(null),
         sandwich : new FormControl(null)
       });
   }
@@ -41,21 +42,23 @@ export class AddNewLeaveTypeComponent {
     { type: 3, viewValue: 'Half-Yearly Increment' },
     ];
 
+
+
+      
+
       onSubmit()
       {
         if(this.addNewLeaveType.valid)
         {
           this.leaveManagement.addNewLeaveType(this.addNewLeaveType).subscribe({
-            next:(Response : boolean)=>{
-              console.log(Response)
-              if(Response)
+            next:(response : boolean)=>{
+              if(response)
               {
                 alert("New Leave Type Added")
               }
-              console.log(Response)
             },
               error:(error) =>{
-                console.log(error)
+
                 alert(error)
                 }
            }

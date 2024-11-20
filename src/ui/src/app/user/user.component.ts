@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { LoginComponent } from "./login/login.component";
+import { SigninComponent } from "./signin/signin.component";
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [LoginComponent],
+  imports: [SigninComponent],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })

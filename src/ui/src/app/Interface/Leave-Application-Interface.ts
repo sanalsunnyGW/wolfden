@@ -1,7 +1,9 @@
+import { FormControl } from "@angular/forms";
+
 export interface ILeaveApplication{
-    typeId:number;
-    halfDay:boolean;
-    fromDate:Date;
-    toDate:Date;
-    description:string;
+    typeId: FormControl<number|null>;
+    halfDay: FormControl<boolean|null>;
+    fromDate: FormControl<Date|null>
+    toDate: FormControl<Date|null>;
+    description: FormControl<string|null>;
 }

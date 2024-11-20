@@ -1,5 +1,4 @@
 export interface ILeaveRequestHistory {
-
         typeName: string,
         halfDay: boolean,
         fromDate: Date,
