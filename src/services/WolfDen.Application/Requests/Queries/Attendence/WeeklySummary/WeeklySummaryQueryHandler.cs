@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.Attendence;
+using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
@@ -21,23 +22,75 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
 
         public async Task<List<WeeklySummaryDTO>> Handle(WeeklySummaryQuery request, CancellationToken cancellationToken)
         {
-            var weeklyData = await _context.DailyAttendence
-            .Where(s => s.EmployeeId == request.EmployeeId && s.Date >= request.WeekStart && s.Date <= request.WeekEnd)
-            .Select(s => new WeeklySummaryDTO
+
+            List<WeeklySummaryDTO> weeklySummary = new List<WeeklySummaryDTO>();
+
+            DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+
+            for (var currentDate = request.WeekStart; currentDate <= request.WeekEnd; currentDate = currentDate.AddDays(1))
             {
-                Date = s.Date,
-                ArrivalTime = s.ArrivalTime,
-                DepartureTime = s.DepartureTime,
-                InsideDuration = s.InsideDuration,
-                OutsideDuration = s.OutsideDuration,
-                MissedPunch = s.MissedPunch,
-                AttendanceStatusId=s.AttendanceStatusId
+                if(currentDate>today)
+                {
+                    continue;
+                }
                 
-            })
-            .ToListAsync(cancellationToken);
+                AttendanceStatus statusId = AttendanceStatus.Absent;
 
 
-            return weeklyData;
+                var attendanceRecord = await _context.DailyAttendence
+                    .Where(x => x.EmployeeId == request.EmployeeId && x.Date == currentDate)
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                if (attendanceRecord != null)
+                {
+                    
+                    if (attendanceRecord.InsideDuration >= 360)
+                    {
+                        
+                        statusId = AttendanceStatus.Present;
+                    }
+                    else
+                    {
+                        
+                        statusId = AttendanceStatus.IncompleteShift; 
+                    }
+                }
+                else
+                {
+
+                    var holiday = await _context.Holiday
+                        .Where(x => x.Date == currentDate)
+                        .FirstOrDefaultAsync(cancellationToken);
+
+                    if (holiday != null)
+                    {
+                        
+                        statusId = holiday.Type == AttendanceStatus.NormalHoliday
+                            ?AttendanceStatus.NormalHoliday
+                            : AttendanceStatus.RestrictedHoliday;
+                    }
+                    else
+                    {
+                        
+                        statusId = AttendanceStatus.Absent;
+                    }
+                }
+
+                
+                weeklySummary.Add(new WeeklySummaryDTO
+                {
+                    Date = currentDate,
+                    ArrivalTime=attendanceRecord?.ArrivalTime,
+                    DepartureTime=attendanceRecord?.DepartureTime,
+                    InsideDuration=attendanceRecord?.InsideDuration,
+                    OutsideDuration=attendanceRecord?.OutsideDuration,
+                    MissedPunch=attendanceRecord?.MissedPunch,
+                    AttendanceStatusId = statusId
+                });
+            }
+
+            return weeklySummary;
+
 
 
         }

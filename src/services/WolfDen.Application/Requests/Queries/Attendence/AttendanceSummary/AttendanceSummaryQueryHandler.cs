@@ -44,9 +44,16 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
                 Leave = 0
             };
 
+            DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+
             for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
-                
+
+                if (currentDate > today)
+                {
+                    continue;
+                }
+
                 var attendanceRecord = await _context.DailyAttendence
                     .Where(x => x.EmployeeId == request.EmployeeId && x.Date == currentDate)
                     .FirstOrDefaultAsync(cancellationToken);
