@@ -1,9 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { environment } from '../enviornments/environment';
+import { environment } from '../../enviornments/environment';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import {  IEmployeeDirectoryDto } from './dashboard/dashboard-body/main/employee-directory/employee-directory-dto';
-
+import { IEmployeeDirectoryDto } from '../dashboard/dashboard-body/main/employee-directory/employee-directory-dto';
 @Injectable({
   providedIn: 'root'
 })
@@ -20,23 +19,34 @@ export class WolfDenService {
 
   }
 
-  signIn(data: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/api/Employee/EmployeeUpdateEmployee`, data, { headers: this.getHeaders() });
-  }
+      getEmployeeSignUp(employeeCode: number, rfId: string): Observable<{ id: number, status: boolean }> {
+        let params = new HttpParams()
+          .set('EmployeeCode', employeeCode.toString())
+          .set('RFId', rfId);
 
-  getAllEmployees(departmentId?: number, employeeName?: string): Observable<IEmployeeDirectoryDto[]> {
-    let params = new HttpParams();
-    
-    if (departmentId) {
-      params = params.append('DepartmentID', departmentId.toString());
-    }
-    if (employeeName) {
-      params = params.append('EmployeeName', employeeName);
-    }
+        return this.http.get<{ id: number, status: boolean }>(
+          `${this.baseUrl}/api/Employee/sign-up`,
+          { headers: this.getHeaders(), params }
+        );
+      }
 
-    return this.http.get<IEmployeeDirectoryDto[]>(
-      `${this.baseUrl}/api/Employee/all`,
-      { headers: this.getHeaders(), params }
-    );
-  }
+      signIn(data: any): Observable<any> {
+        return this.http.put(`${this.baseUrl}/api/Employee/EmployeeUpdateEmployee`, data, { headers: this.getHeaders() });
+      }
+
+      getAllEmployees(departmentId?: number, employeeName?: string): Observable<IEmployeeDirectoryDto[]> {
+        let params = new HttpParams();
+        
+        if (departmentId) {
+          params = params.append('DepartmentID', departmentId.toString());
+        }
+        if (employeeName) {
+          params = params.append('EmployeeName', employeeName);
+        }
+
+        return this.http.get<IEmployeeDirectoryDto[]>(
+          `${this.baseUrl}/api/Employee/all`,
+          { headers: this.getHeaders(), params }
+        );
+      }
 }

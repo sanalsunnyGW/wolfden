@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ISignupForm } from './iSignup-form';
-import { WolfDenService } from '../../wolf-den.service';
 import { Router, RouterLink } from '@angular/router';
 import { MatNativeDateModule } from '@angular/material/core'; // For native date adapter
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -10,6 +9,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select'; // Import MatSelectModule
 import { formatDate } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { WolfDenService } from '../../Service/wolf-den.service'
+
 
 
 @Component({
@@ -54,6 +55,7 @@ export class SigninComponent {
     const formattedDate = dateOfBirth ? formatDate(dateOfBirth, 'yyyy-MM-dd', 'en-US') : '';
     if (this.userForm.valid) {
        const userData = {
+      
         id: this.userService.userId ?? '',
         firstName: this.userForm.value.firstName ?? '',
         lastName:this.userForm.value.lastName ??'',
@@ -66,17 +68,6 @@ export class SigninComponent {
 
       }
 
-      // "id": 0,
-      // "firstName": "string",
-      // "lastName": "string",
-      // "email": "string",
-      // "phoneNumber": "string",
-      // "dateofBirth": "2024-11-19",
-      // "joiningDate": "2024-11-19",
-      // "gender": 1
-
-
-      // Call addUser method from the UserService
       this.userService.signIn(userData).subscribe({
         next: (response: any) => {
           // console.log('User registered successfully:', response);

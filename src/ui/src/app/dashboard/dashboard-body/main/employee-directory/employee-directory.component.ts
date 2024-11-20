@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
-import { WolfDenService } from '../../../../wolf-den.service';
 import { IEmployeeDirectoryDto } from './employee-directory-dto';
+import { WolfDenService } from '../../../../Service/wolf-den.service';
 
 
 @Component({
