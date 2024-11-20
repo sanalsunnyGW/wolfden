@@ -1,1 +1,80 @@
-<p>employee-directory works!</p>
+<div class="container mx-4 my-4">
+    <div class="flex flex-col gap-4">
+      <!-- Header -->
+      <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Employee Directory</h1>
+      </div>
+  
+      <!-- Search and Filter -->
+      <div class="flex gap-4 mb-4">
+        <div class="flex-1">
+          <input
+            type="text"
+            [ngModel]="searchTerm"
+            (ngModelChange)="onSearch($event)"
+            placeholder="Search employees..."
+            class="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <select
+            [ngModel]="selectedDepartment"
+            (change)="onDepartmentChange($event)"
+            class="p-2 border rounded"
+          >
+            <option [value]="null">All Departments</option>
+            <option *ngFor="let dept of departments" [value]="dept.id">
+              {{dept.name}}
+            </option>
+          </select>
+        </div>
+      </div>
+  
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="text-center py-4">
+        Loading...
+      </div>
+  
+      <!-- Employee List -->
+      <div *ngIf="!isLoading" class="grid gap-4">
+        <div *ngFor="let employee of employees" class="border rounded p-4 hover:bg-gray-50">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="text-lg font-semibold">
+                {{employee.firstName}} {{employee.lastName}}
+              </h3>
+              <p class="text-gray-600">{{employee.designationName}}</p>
+              <p class="text-sm text-gray-500">{{employee.departmentName}}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-sm">
+                <span class="text-gray-500">Employee Code:</span> 
+                {{employee.employeeCode}}
+              </p>
+              <p class="text-sm">
+                <a href="mailto:{{employee.email}}" class="text-blue-600 hover:underline">
+                  {{employee.email}}
+                </a>
+              </p>
+              <p class="text-sm">{{employee.phoneNumber}}</p>
+            </div>
+          </div>
+          <div class="mt-2 text-sm text-gray-600">
+            <p>
+              <span class="font-medium">Manager:</span> 
+              {{employee.managerName || 'Not Assigned'}}
+            </p>
+            <p>
+              <span class="font-medium">Joined:</span> 
+              {{employee.joiningDate | date:'mediumDate'}}
+            </p>
+          </div>
+        </div>
+  
+        <!-- Empty State -->
+        <div *ngIf="employees.length === 0" class="text-center py-8 text-gray-500">
+          No employees found matching your criteria
+        </div>
+      </div>
+    </div>
+  </div>

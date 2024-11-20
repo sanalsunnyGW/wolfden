@@ -7,7 +7,7 @@ import { DashboardBodyComponent } from "./dashboard-body/dashboard-body.componen
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [HeaderComponent, SideNavComponent, DashboardBodyComponent],
+  imports: [  DashboardBodyComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })

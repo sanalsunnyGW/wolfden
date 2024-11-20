@@ -1,0 +1,16 @@
+:host {
+    display: block;
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    input, select {
+      &:focus {
+        outline: none;
+        border-color: #4a90e2;
+        box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+      }
+    }
+  }
