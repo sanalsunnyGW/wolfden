@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Reflection;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using WolfDen.Domain.Entity;
-using WolfDen.Infrastructure.Configuration;
 using WolfDen.Infrastructure.Extensions;
 
 namespace WolfDen.Infrastructure.Data

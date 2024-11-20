@@ -1,16 +1,15 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WolfDen.Application.DTOs.Employees;
 using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
 using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
 using WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy;
 using WolfDen.Application.Requests.Queries.Employees.ViewEmployee;
-using WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeIdSignUp;
 using WolfDen.Application.DTOs;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam;
+using WolfDen.Application.DTOs.Employees;
 
 namespace WolfDen.API.Controllers.Employee
 {
