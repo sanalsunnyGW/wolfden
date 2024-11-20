@@ -8,21 +8,16 @@ namespace WolfDen.API.Controllers.LeaveManagement
 {
     [Route("api/leave-request")]
     [ApiController]
-    public class LeaveRequestController : ControllerBase
+    public class LeaveRequestController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IMediator _mediator = mediator;
 
-        public LeaveRequestController(IMediator mediator)
-        {
-            _mediator=mediator;
-        }
-
-        [HttpGet]
-        public async Task<List<LeaveRequestDto>> GetLeaveRequestHistory(int requestId)
+        [HttpGet("{id}")]
+        public async Task<List<LeaveRequestDto>> GetLeaveRequestHistory(int id,CancellationToken cancellationToken)
         {
             GetLeaveRequestHistoryQuery query= new GetLeaveRequestHistoryQuery();
-            query.RequestId=requestId;
-            return await _mediator.Send(query); 
+            query.RequestId=id;
+            return await _mediator.Send(query,cancellationToken); 
         }
     }
 }

@@ -5,9 +5,12 @@
         <h2>Leave Balance</h2>
       </th>
     </tr>
-        <tr *ngFor="let item of leaveList">
+        <tr>
+           @for(item of leaveList;track item)
+           { 
         <th>{{item.name}}</th>
         <td class="align">{{item.balance}}</td>
+           }
       </tr>
   </thead>
 </table>

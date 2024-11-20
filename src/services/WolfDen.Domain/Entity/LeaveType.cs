@@ -9,34 +9,56 @@ namespace WolfDen.Domain.Entity
         public int? MaxDays { get;private set; }
         public bool? IsHalfDayAllowed { get; private set; }
         public int? IncrementCount { get;private set; }
-        public LeaveIncrementGapMonth? IncrementGap { get; private set; }
+        public LeaveIncrementGapMonth? IncrementGapId { get; private set; }
         public bool? CarryForward { get;private set; }
         public int? CarryForwardLimit { get; private set; }
         public int? DaysCheck { get; private set; }
-        public int? DaysChekcMore { get; private set; }
+        public int? DaysCheckMore { get; private set; }
         public int? DaysCheckEqualOrLess { get; private set; }
         public int? DutyDaysRequired { get; private set; }
-        public RestrictedLeaveType? RestrictionType { get; private set; }
         public bool? Sandwich { get; private set; }
+        public LeaveCategory? LeaveCategoryId { get; private set; }
         private LeaveType()
         {
             
         }
-        public LeaveType(string typeName, int? maxDays, bool? isHalfDayAllowed, int? incrementCount, LeaveIncrementGapMonth? incrementGap, bool? carryForward, int? carryForwardLimit, int? daysCheck, int? daysChekcMore, int? daysCheckEqualOrLess, int? dutyDaysRequired, RestrictedLeaveType? restrictionType, bool? sandwich)
+        public LeaveType(string typeName, int? maxDays, bool? isHalfDayAllowed, int? incrementCount, LeaveIncrementGapMonth? incrementGapId, bool? carryForward, int? carryForwardLimit, int? daysCheck, int? daysCheckMore, int? daysCheckEqualOrLess, int? dutyDaysRequired,  bool? sandwich)
         {
             TypeName = typeName;
             MaxDays = maxDays;
             IsHalfDayAllowed = isHalfDayAllowed;
             IncrementCount = incrementCount;
-            IncrementGap = incrementGap;
+            IncrementGapId = incrementGapId;
             CarryForward = carryForward;
             CarryForwardLimit = carryForwardLimit;
             DaysCheck = daysCheck;
-            DaysChekcMore = daysChekcMore;
+            DaysCheckMore = daysCheckMore;
             DaysCheckEqualOrLess = daysCheckEqualOrLess;
             DutyDaysRequired = dutyDaysRequired;
-            RestrictionType = restrictionType;
             Sandwich = sandwich;
+        }
+
+        public bool updateLeaveType(int id, int? maxDays, bool? isHalfDayAllowed, int? incrementCount, LeaveIncrementGapMonth? incrementGapId, bool? carryForward, int? carryForwardLimit, int? daysCheck, int? daysCheckMore, int? daysCheckEqualOrLess, int? dutyDaysRequired, bool? sandwich)
+        {
+            if (Id == id)
+            {
+            MaxDays = maxDays;
+            IsHalfDayAllowed = isHalfDayAllowed;
+            IncrementCount = incrementCount;
+            IncrementGapId = incrementGapId;
+            CarryForward = carryForward;
+            CarryForwardLimit = carryForwardLimit;
+            DaysCheck = daysCheck;
+            DaysCheckMore = daysCheckMore;
+            DaysCheckEqualOrLess = daysCheckEqualOrLess;
+            DutyDaysRequired = dutyDaysRequired;
+            Sandwich = sandwich;
+                return true;
+            }
+            else
+            {
+                return false;   
+            }
         }
     }
 }

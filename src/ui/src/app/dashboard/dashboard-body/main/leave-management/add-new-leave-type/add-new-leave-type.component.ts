@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, NgSelectOption, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IAddNewLeaveType } from '../../../../../interface/Add-New-Leave-Type-Interface';
+import { IAddNewLeaveType } from '../../../../../interface/add-new-leave-type-interface';
 import { CommonModule } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
@@ -40,11 +40,6 @@ export class AddNewLeaveTypeComponent {
     { type: 2, viewValue: 'Quarterly Increment' },
     { type: 3, viewValue: 'Half-Yearly Increment' },
     ];
-
-    Restrictions = [
-      { type: 1, viewValue: 'Normal Leave' },
-      { type: 2, viewValue: 'Restricted Leave' },
-      ];
 
       onSubmit()
       {

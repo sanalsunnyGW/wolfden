@@ -1,59 +1,48 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { ILeaveRequestHistory } from '../../../../../interface/leave-request-history';
+import { LeaveRequestStatus } from '../../../../../enum/leave-request-status-enum';
 
 @Component({
   selector: 'app-leave-history',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './leave-history.component.html',
   styleUrl: './leave-history.component.scss'
 })
-export class LeaveHistoryComponent {
+export class LeaveHistoryComponent implements OnInit {
 
-id:number=1;
-leaveRequestList:ILeaveRequestHistory[]=[];
+  id: number = 1;
+  leaveRequestList: ILeaveRequestHistory[] = [];
+  leaveManagementService = inject(LeaveManagementService);
 
-/**
- *
- */
-constructor() {}  
+  constructor() { }
 
-leaveManagementService=inject(LeaveManagementService);
-ngOnInit(): void {
-  //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-  //Add 'implements OnInit' to the class.
-  this.leaveManagementService.getLeaveRequestHistory(this.id).subscribe({
-    next: (data) => {
-      console.log('initially Fetched Leave Request list:', data); 
-      this.leaveRequestList= data; 
-        },
-    error: (error) => {
-      console.log(error);
+
+  ngOnInit(): void {
+    this.leaveManagementService.getLeaveRequestHistory(this.id).subscribe({
+      next: (data) => {
+        this.leaveRequestList = data;
+      },
+      error: (error) => {
+        alert(error);
+      }
+    })
+  }
+
+  requestStatus(leaveRequest: ILeaveRequestHistory):string {
+
+    switch (leaveRequest.leaveRequestStatus) {
+      case LeaveRequestStatus.Open:
+        return 'Open';
+      case LeaveRequestStatus.Approved:
+        return 'Approved';
+      case LeaveRequestStatus.Rejected:
+        return 'Rejected';
+      case LeaveRequestStatus.Deleted:
+        return 'Deleted';
+      default:
+        return 'Unknown Status';
     }
-  })
-}
-
-RequestStatus(leaveRequest:ILeaveRequestHistory) {
- let requestStatus:String='';
-
-  if(leaveRequest.leaveRequestStatus==1)
-{
-   requestStatus='Open';
   }
-  else if(leaveRequest.leaveRequestStatus==2)
-  {
-   requestStatus='Approved'; 
-  }
-  else if(leaveRequest.leaveRequestStatus==3)
-  {
-    requestStatus='Rejected';
-  }
-  else if(leaveRequest.leaveRequestStatus==4)
-  {
-    requestStatus='Deleted';
-  }
-  return requestStatus;
-}
 }

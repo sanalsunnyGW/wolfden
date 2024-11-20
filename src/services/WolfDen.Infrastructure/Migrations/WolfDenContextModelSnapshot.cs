@@ -253,8 +253,8 @@ namespace WolfDen.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CurrentBalance")
-                        .HasColumnType("int");
+                    b.Property<decimal>("CurrentBalance")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("IncrementValue")
                         .HasColumnType("int");
@@ -316,10 +316,10 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<DateOnly>("FromDate")
                         .HasColumnType("date");
 
-                    b.Property<bool>("HalfDay")
+                    b.Property<bool?>("HalfDay")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LeaveRequestStatus")
+                    b.Property<int>("LeaveRequestStatusId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PeriodEnd")
@@ -470,7 +470,7 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<int?>("DaysCheckEqualOrLess")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DaysChekcMore")
+                    b.Property<int?>("DaysCheckMore")
                         .HasColumnType("int");
 
                     b.Property<int?>("DutyDaysRequired")
@@ -479,13 +479,16 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<int?>("IncrementCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IncrementGap")
+                    b.Property<int?>("IncrementGapId")
                         .HasColumnType("int");
 
                     b.Property<bool?>("IsHalfDayAllowed")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
+
+                    b.Property<int?>("LeaveCategoryId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("MaxDays")
                         .HasColumnType("int");
@@ -499,11 +502,6 @@ namespace WolfDen.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
                         .HasColumnName("PeriodStart");
-
-                    b.Property<int?>("RestrictionType")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
 
                     b.Property<bool?>("Sandwich")
                         .ValueGeneratedOnAdd()

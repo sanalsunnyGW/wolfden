@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddNewLeaveTypeComponent } from './add-new-leave-type.component';
+import { EditLeaveTypeComponent } from './edit-leave-type.component';
 
-describe('AddNewLeaveTypeComponent', () => {
-  let component: AddNewLeaveTypeComponent;
-  let fixture: ComponentFixture<AddNewLeaveTypeComponent>;
+describe('EditLeaveTypeComponent', () => {
+  let component: EditLeaveTypeComponent;
+  let fixture: ComponentFixture<EditLeaveTypeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddNewLeaveTypeComponent]
+      imports: [EditLeaveTypeComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AddNewLeaveTypeComponent);
+    fixture = TestBed.createComponent(EditLeaveTypeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

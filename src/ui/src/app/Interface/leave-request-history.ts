@@ -5,8 +5,8 @@ export interface ILeaveRequestHistory {
         fromDate: Date,
         toDate: Date,
         applyDate: Date,
-        leaveRequestStatus:number, //takes an enum value to get the request status
+        leaveRequestStatus:number, 
         description:string,
-        processedBy:string   //takes the employee(manager) name who procesed it
+        processedBy:string  
     
 }

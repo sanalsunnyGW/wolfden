@@ -13,7 +13,9 @@
     </tr>
   </thead>
   <tbody class="table-group-divider">
-    <tr *ngFor="let leaveRequest of leaveRequestList;index as i">
+    <tr>
+      @for(leaveRequest of leaveRequestList;track leaveRequest;let i = $index)
+      {
       <th scope="row">{{i+1}}</th>
       <td>{{leaveRequest.applyDate}}</td>
       <td>{{leaveRequest.typeName}}</td>
@@ -21,8 +23,9 @@
       <td>{{leaveRequest.toDate}}</td>
       <td>{{leaveRequest.halfDay}}</td>
       <td>{{leaveRequest.description}}</td>
-      <td>{{RequestStatus(leaveRequest)}}</td>
+      <td>{{requestStatus(leaveRequest)}}</td>
       <td>{{leaveRequest.processedBy}}</td>
+      }
     </tr>
   </tbody>
 </table>
