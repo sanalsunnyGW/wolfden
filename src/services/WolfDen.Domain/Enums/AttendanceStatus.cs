@@ -7,7 +7,6 @@
         IncompleteShift,
         RestrictedHoliday,
         NormalHoliday,
-        WFH,
-        Leave
+        WFH  
     }
 }

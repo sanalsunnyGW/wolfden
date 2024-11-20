@@ -9,7 +9,6 @@ export interface DailyAttendance {
     insideHours:number
     outsideHours:number
     missedPunch:string
-    status:string
+    attendanceStatusId:number
     dailyLog:DailyLogEntry[];
-
 }

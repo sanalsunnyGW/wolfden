@@ -73,9 +73,6 @@ namespace WolfDen.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DailyAttendenceId")
-                        .HasColumnType("int");
-
                     b.Property<int>("DeviceId")
                         .HasColumnType("int");
 
@@ -103,8 +100,6 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DailyAttendenceId");
 
                     b.HasIndex("DeviceId");
 
@@ -617,7 +612,7 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<int>("LeaveRequestStatusId")
+                    b.Property<int>("LeaveRequestStatus")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PeriodEnd")
@@ -777,18 +772,13 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<int?>("IncrementCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IncrementGapId")
+                    b.Property<int?>("IncrementGap")
                         .HasColumnType("int");
 
                     b.Property<bool?>("IsHalfDayAllowed")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
-
-                    b.Property<int?>("LeaveCategoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(7);
 
                     b.Property<int?>("MaxDays")
                         .HasColumnType("int");
@@ -807,6 +797,11 @@ namespace WolfDen.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
+
+                    b.Property<int?>("Type")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(7);
 
                     b.Property<string>("TypeName")
                         .IsRequired()
@@ -882,19 +877,11 @@ namespace WolfDen.Infrastructure.Migrations
 
             modelBuilder.Entity("WolfDen.Domain.Entity.AttendenceLog", b =>
                 {
-                    b.HasOne("WolfDen.Domain.Entity.DailyAttendence", "DailyAttendence")
-                        .WithMany()
-                        .HasForeignKey("DailyAttendenceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("WolfDen.Domain.Entity.Device", "Device")
                         .WithMany()
                         .HasForeignKey("DeviceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("DailyAttendence");
 
                     b.Navigation("Device");
                 });

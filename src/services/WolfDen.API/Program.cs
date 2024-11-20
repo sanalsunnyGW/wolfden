@@ -9,7 +9,6 @@ using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
 using QuestPDF.Infrastructure;
 using WolfDen.Infrastructure.Data;
-
 using FluentValidation;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 

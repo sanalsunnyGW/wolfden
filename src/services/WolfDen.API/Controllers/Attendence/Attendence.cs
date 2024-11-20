@@ -19,9 +19,9 @@ namespace WolfDen.API.Controllers.Attendence
         }
         
         [HttpGet("daily-attendance")]
-        public async Task<IActionResult> GetAttendenceLog([FromQuery]DailyDetails attendanceRecord,CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAttendenceLog([FromQuery]DailyDetails DailyDetails, CancellationToken cancellationToken)
         {
-            var attendance = await _mediator.Send(attendanceRecord, cancellationToken);
+            var attendance = await _mediator.Send(DailyDetails, cancellationToken);
             if (attendance is null)
                 return NotFound("No Attendence Log found");
             return Ok(attendance);
