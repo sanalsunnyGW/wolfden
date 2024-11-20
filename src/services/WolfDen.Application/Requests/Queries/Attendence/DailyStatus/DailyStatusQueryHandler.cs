@@ -52,10 +52,10 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                     continue;
                 }
 
-                
+
 
                 DailyAttendence attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
-                if (attendanceRecord != null)
+                if (attendanceRecord is not null)
                 {
 
                     if (attendanceRecord.InsideDuration >= minWorkDuration)
@@ -70,7 +70,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                 else
                 {
                     Holiday holiday = holidays.FirstOrDefault(x => x.Date == currentDate);
-                    if (holiday != null)
+                    if (holiday is not null)
                     {
 
                         if (holiday.Type is AttendanceStatus.NormalHoliday)
@@ -82,11 +82,11 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                         {
                             LeaveRequest leaveRequestForHoliday = leaveRequests.FirstOrDefault(x => x.FromDate <= currentDate && x.ToDate >= currentDate);
 
-                            if (leaveRequestForHoliday != null)
+                            if (leaveRequestForHoliday is not null)
                             {
                                 LeaveType leaveType = leaveTypes.FirstOrDefault(x => x.Id == leaveRequestForHoliday.TypeId);
 
-                                if (leaveType != null && leaveType.LeaveCategoryId is LeaveCategory.RestrictedHoliday)
+                                if (leaveType is not null && leaveType.LeaveCategoryId is LeaveCategory.RestrictedHoliday)
                                 {
                                     statusId = AttendanceStatus.RestrictedHoliday;
                                 }
@@ -97,10 +97,10 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                     else
                     {
                         LeaveRequest leaveRequest = leaveRequests.FirstOrDefault(x => x.FromDate <= currentDate && x.ToDate >= currentDate);
-                        if (leaveRequest != null)
+                        if (leaveRequest is not null)
                         {
                             LeaveType leaveType = leaveTypes.FirstOrDefault(x => x.Id == leaveRequest.TypeId);
-                            if (leaveType != null && leaveType.LeaveCategoryId is LeaveCategory.WorkFromHome)
+                            if (leaveType is not null && leaveType.LeaveCategoryId is LeaveCategory.WorkFromHome)
                             {
                                 statusId = AttendanceStatus.WFH;
                             }
@@ -115,7 +115,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                         }
                     }
 
-                    
+
                 }
                 dailyStatuses.Add(new DailyStatusDTO
                 {

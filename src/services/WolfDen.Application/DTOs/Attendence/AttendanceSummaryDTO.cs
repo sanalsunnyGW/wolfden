@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WolfDen.Application.DTOs.Attendence
+﻿namespace WolfDen.Application.DTOs.Attendence
 {
     public class AttendanceSummaryDTO
     {
@@ -15,8 +9,6 @@ namespace WolfDen.Application.DTOs.Attendence
         public int NormalHoliday { get; set; }
         public int WFH { get; set; }
         public int Leave { get; set; }
-
-        
     }
 
 }
