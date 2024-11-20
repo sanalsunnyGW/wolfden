@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using QuestPDF.Fluent;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
+using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
+//using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
 
 namespace WolfDen.API.Controllers.Attendence
 {
@@ -35,5 +37,15 @@ namespace WolfDen.API.Controllers.Attendence
             var pdf = document.GeneratePdf();
             return Results.File(pdf, "application/pdf", "DailyReport.pdf");
         }
+
+        [HttpGet("monthly-report")]
+        public async Task<IActionResult> GenerateMonthlyReport([FromQuery]MonthlyReportQuery MonthlyReportQuery, CancellationToken cancellationToken)
+        {
+            var monthlyReport= await _mediator.Send(MonthlyReportQuery, cancellationToken);
+            if (monthlyReport is null)
+                return NotFound("No report found");
+            return Ok(monthlyReport);
+        }
+
     }
 }

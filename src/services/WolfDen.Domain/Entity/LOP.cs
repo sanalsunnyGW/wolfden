@@ -7,16 +7,18 @@
         public int EmployeeId { get; private set; }
         public int LOPDaysCount { get; private set; }
         public string LOPDays { get; private set; }
+        public string IncompleteShiftDays { get; private set; }
         private LOP()
         {
             
         }
-        public LOP(DateOnly attendanceClosedDate, int lOPdaysCount, int employeeId,string lopDays)
+        public LOP(DateOnly attendanceClosedDate, int lOPdaysCount, int employeeId,string lopDays, string incompleteShiftDays)
         {
-            AttendanceClosedDate=attendanceClosedDate;
+            AttendanceClosedDate = attendanceClosedDate;
             LOPDaysCount = lOPdaysCount;
             EmployeeId = employeeId;
             LOPDays = lopDays;
+            IncompleteShiftDays = incompleteShiftDays;
         }
     }
 }

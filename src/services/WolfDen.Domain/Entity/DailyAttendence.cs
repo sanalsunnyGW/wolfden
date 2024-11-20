@@ -27,7 +27,5 @@
             MissedPunch = missedPunch;
             AttendanceStatusId = attendanceStatusId;
         }
-
-
     }
 }
