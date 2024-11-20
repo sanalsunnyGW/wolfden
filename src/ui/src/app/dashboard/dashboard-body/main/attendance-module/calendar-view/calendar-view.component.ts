@@ -3,7 +3,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions, DatesSetArg, DayCellContentArg } from '@fullcalendar/core/index.js';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-import { AttendanceService } from '../../../../../service/attendance.service';
+import { AttendanceService } from '../../../../../Service/attendance.service';
 
 @Component({
   selector: 'app-calendar-view',
@@ -12,7 +12,7 @@ import { AttendanceService } from '../../../../../service/attendance.service';
   templateUrl: './calendar-view.component.html',
   styleUrl: './calendar-view.component.scss'
 })
-export class CalendarViewComponent implements OnInit{
+export class CalendarViewComponent implements OnInit {
 
   service = inject(AttendanceService);
 
@@ -24,7 +24,7 @@ export class CalendarViewComponent implements OnInit{
     dateClick: (arg) => this.handleDateClick(arg),
     datesSet: (arg) => this.onCalendarMonthChange(arg),
     dayCellClassNames: (arg) => this.getDayCellClassNames(arg)
-    
+
 
   };
 
@@ -33,7 +33,7 @@ export class CalendarViewComponent implements OnInit{
   absent: number = 0;
   incompleteShift: number = 0;
   wfh: number = 0;
-  
+
   employeeId: number = 123;
   currentYear: number = new Date().getFullYear();
   currentMonth: number = new Date().getMonth() + 1;
@@ -71,13 +71,13 @@ export class CalendarViewComponent implements OnInit{
 
       data.forEach((item: { date: string, attendanceStatusId: number }) => {
         console.log(item)
-       this.attendanceData[item.date] = item.attendanceStatusId;
-      console.log(this.attendanceData)
+        this.attendanceData[item.date] = item.attendanceStatusId;
+        console.log(this.attendanceData)
       });
-    
-      
+
+
     });
-   
+
   }
 
   handleDateClick(arg: DateClickArg) {
@@ -86,32 +86,32 @@ export class CalendarViewComponent implements OnInit{
 
 
   getDayCellClassNames(arg: DayCellContentArg): string[] {
-    
+
     const date = new Date(arg.date);
-    date.setDate(date.getDate() + 1); 
-    const dateStr = date.toISOString().split('T')[0]; 
-  
+    date.setDate(date.getDate() + 1);
+    const dateStr = date.toISOString().split('T')[0];
+
     const status = this.attendanceData[dateStr];
-  
+
     if (arg.date.getDay() === 6 || arg.date.getDay() === 0) {
       return ['weekend-day'];
     }
-  
-    
-    if (status === 1) { 
+
+
+    if (status === 1) {
       return ['present'];
-    } else if (status === 2) {  
+    } else if (status === 2) {
       return ['absent'];
-    } else if (status === 3) {  
+    } else if (status === 3) {
       return ['incompleteShift'];
-    } else if (status === 4) {  
+    } else if (status === 4) {
       return ['wfh'];
     }
-  
-    
+
+
     return [];
   }
-  
+
 
 
   onCalendarMonthChange(arg: DatesSetArg): void {

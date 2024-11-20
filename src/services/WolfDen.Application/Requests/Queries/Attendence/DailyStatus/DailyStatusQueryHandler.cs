@@ -1,40 +1,36 @@
-﻿using MediatR;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.Attendence;
+using WolfDen.Application.Requests.DTOs.Attendence;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
 
-namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
+namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
 {
-    public class AttendanceSummaryQueryHandler : IRequestHandler<AttendanceSummaryQuery, AttendanceSummaryDTO>
+    public class DailyStatusQueryHandler : IRequestHandler<DailyStatusQuery, List<DailyStatusDTO>>
     {
-
-
         private readonly WolfDenContext _context;
 
-        public AttendanceSummaryQueryHandler(WolfDenContext context)
+        public DailyStatusQueryHandler(WolfDenContext context)
         {
             _context = context;
         }
 
-        public async Task<AttendanceSummaryDTO> Handle(AttendanceSummaryQuery request, CancellationToken cancellationToken)
+
+        public async Task<List<DailyStatusDTO>> Handle(DailyStatusQuery request, CancellationToken cancellationToken)
         {
             int minWorkDuration = 360;
 
             DateOnly monthStart = new DateOnly(request.Year, request.Month, 1);
             DateOnly monthEnd = monthStart.AddMonths(1).AddDays(-1);
 
-            AttendanceSummaryDTO summaryDto = new AttendanceSummaryDTO
-            {
-                Present = 0,
-                Absent = 0,
-                IncompleteShift = 0,
-                RestrictedHoliday = 0,
-                NormalHoliday = 0,
-                WFH = 0,
-                Leave = 0
-            };
+            List<DailyStatusDTO> dailyStatuses = new List<DailyStatusDTO>();
 
             DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
@@ -54,7 +50,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
 
             List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
 
-
+            AttendanceStatus statusId = AttendanceStatus.Absent;
             for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
                 if (currentDate > today)
@@ -62,17 +58,19 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
                     continue;
                 }
 
+                
+
                 DailyAttendence attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (attendanceRecord != null)
                 {
 
                     if (attendanceRecord.InsideDuration >= minWorkDuration)
                     {
-                        summaryDto.Present++;
+                        statusId = AttendanceStatus.Present;
                     }
                     else
                     {
-                        summaryDto.IncompleteShift++;
+                        statusId = AttendanceStatus.IncompleteShift;
                     }
                 }
                 else
@@ -83,7 +81,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
 
                         if (holiday.Type is AttendanceStatus.NormalHoliday)
                         {
-                            summaryDto.NormalHoliday++;
+                            statusId = AttendanceStatus.NormalHoliday;
                         }
 
                         else if (holiday.Type is AttendanceStatus.RestrictedHoliday)
@@ -92,11 +90,11 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
 
                             if (leaveRequestForHoliday != null)
                             {
-                                var leaveType = leaveTypes.FirstOrDefault(x => x.Id == leaveRequestForHoliday.TypeId);
+                                LeaveType leaveType = leaveTypes.FirstOrDefault(x => x.Id == leaveRequestForHoliday.TypeId);
 
                                 if (leaveType != null && leaveType.LeaveCategoryId is LeaveCategory.RestrictedHoliday)
                                 {
-                                    summaryDto.RestrictedHoliday++;
+                                    statusId = AttendanceStatus.RestrictedHoliday;
                                 }
                             }
                         }
@@ -107,25 +105,35 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
                         LeaveRequest leaveRequest = leaveRequests.FirstOrDefault(x => x.FromDate <= currentDate && x.ToDate >= currentDate);
                         if (leaveRequest != null)
                         {
-                            var leaveType = leaveTypes.FirstOrDefault(x => x.Id == leaveRequest.TypeId);
+                            LeaveType leaveType = leaveTypes.FirstOrDefault(x => x.Id == leaveRequest.TypeId);
                             if (leaveType != null && leaveType.LeaveCategoryId is LeaveCategory.WorkFromHome)
                             {
-                                summaryDto.WFH++;
+                                statusId = AttendanceStatus.WFH;
                             }
                             else
                             {
-                                summaryDto.Leave++;
+                                statusId = AttendanceStatus.Leave;
                             }
                         }
                         else
                         {
-                            summaryDto.Absent++;
+                            statusId = AttendanceStatus.Absent;
                         }
                     }
+
+                    
                 }
+                dailyStatuses.Add(new DailyStatusDTO
+                {
+                    Date = currentDate,
+                    AttendanceStatusId = statusId
+                });
+
+
             }
 
-            return summaryDto;
+            return dailyStatuses;
+
         }
     }
 }

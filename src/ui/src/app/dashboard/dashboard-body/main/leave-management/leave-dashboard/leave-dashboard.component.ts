@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ILeaveBalanceList } from '../../../../../interface/leave-balance-list-interface';
+
 import { FormsModule } from '@angular/forms';
-import { LeaveManagementService } from '../../../../../service/leave-management.service';
+import { LeaveManagementService } from '../../../../../Service/leave-management.service';
+import { ILeaveBalanceList } from '../../../../../Interface/leave-balance-list-interface';
+
 
 @Component({
   selector: 'app-leave-dashboard',

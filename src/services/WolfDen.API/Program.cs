@@ -1,16 +1,10 @@
 using System.Reflection;
-using Microsoft.EntityFrameworkCore;
-
-using Microsoft.Extensions.Configuration;
-using sib_api_v3_sdk.Client;
-
-using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
-using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
-using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
-using QuestPDF.Infrastructure;
-using WolfDen.Infrastructure.Data;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
+using sib_api_v3_sdk.Client;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
+using WolfDen.Infrastructure.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
