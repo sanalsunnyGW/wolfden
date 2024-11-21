@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using QuestPDF.Fluent;
 using WolfDen.Application.DTOs.Attendence;
+using WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary;
+using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
+using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
+using WolfDen.Application.Requests.Queries.Attendence.WeeklySummary;
 using WolfDen.Application.Requests.Commands.Attendence.CloseAttendance;
-using WolfDen.Application.Requests.DTOs.Attendence;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
@@ -38,6 +41,23 @@ namespace WolfDen.API.Controllers.Attendence
             return Results.File(pdf, "application/pdf", "DailyReport.pdf");
         }
 
+
+        [HttpGet("employee/monthly")]
+        public async Task<AttendanceSummaryDTO> GetMonthlyAttendance([FromQuery] AttendanceSummaryQuery query, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(query, cancellationToken);
+        }
+
+        [HttpGet("employee/daily")]
+        public async Task<List<DailyStatusDTO>> GetDailyStatus([FromQuery] DailyStatusQuery query, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(query, cancellationToken);
+        }
+
+        [HttpGet("employee/weekly")]
+        public async Task<List<WeeklySummaryDTO>> GetWeeklySummary([FromQuery] WeeklySummaryQuery query, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(query, cancellationToken);
         [HttpGet("monthly-report")]
         public async Task<IActionResult> GenerateMonthlyReport([FromQuery]MonthlyReportQuery MonthlyReportQuery, CancellationToken cancellationToken)
         {
@@ -52,4 +72,6 @@ namespace WolfDen.API.Controllers.Attendence
         }
 
     }
+ }
+    
 }

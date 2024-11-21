@@ -26,8 +26,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WolfDen.Domain\WolfDen.Domain.csproj" />
+    <Folder Include="Methods\" />
+    <Folder Include="Requests\Commands\" />
+  </ItemGroup>
+
+  <ItemGroup>
+
+    <Folder Include="Methods\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    
+
     <ProjectReference Include="..\WolfDen.Infrastructure\WolfDen.Infrastructure.csproj" />
+    <ProjectReference Include="..\WolfDen.Domain\WolfDen.Domain.csproj" />
+   
   </ItemGroup>
 
 </Project>
