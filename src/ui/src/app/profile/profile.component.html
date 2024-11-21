@@ -3,8 +3,8 @@
         <img src="{{employeeData.photo}}" class="img-thumbnail profile-img" alt="Profile Image">
 
         <i class="fa-solid fa-pen-to-square position-absolute text-white "
-            style="top: 10px; right: 10px; z-index: 10; cursor: pointer;" data-bs-toggle="modal"
-            data-bs-target="#photo">
+            style="top: 10px; right: 10px; z-index: 10; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#photo"
+            data-toggle="tooltip" data-placement="top" title="Click to Update Profile Photo">
         </i>
     </div>
 
@@ -26,7 +26,8 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <span>Personal Details</span>
                             <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal"
-                                data-bs-target="#personal">
+                                data-bs-target="#personal" data-toggle="tooltip" data-placement="top"
+                                title="Click to Update Personal Details" (click)="loadForm(employeeData)">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
                         </div>
@@ -67,7 +68,8 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <span>Contact Details</span>
                             <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal"
-                                data-bs-target="#contact">
+                                data-bs-target="#contact" data-toggle="tooltip" data-placement="top"
+                                title="Click to Update Contact Details" (click)="loadForm(employeeData)">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
                         </div>
@@ -148,8 +150,7 @@
                     <div class="mb-3">
                         <label for="firstName" class="form-label">First Name</label>
                         <input type="text" class="form-control" id="firstName" formControlName="firstName">
-                        @if(userForm.get('firstName')?.invalid && (userForm.get('firstName')?.touched ||
-                        userForm.get('firstName')?.dirty)) {
+                        @if(userForm.get('firstName')?.invalid) {
                         <div class="text-danger">
                             First Name is required.
                         </div>
@@ -171,8 +172,7 @@
                                 <option value=3>Other</option>
                             </select>
                         </div>
-                        @if(userForm.get('gender')?.invalid && (userForm.get('gender')?.touched ||
-                        userForm.get('gender')?.dirty)) {
+                        @if(userForm.get('gender')?.invalid ) {
                         <div class="text-danger">
                             Gender is required.
                         </div>
@@ -182,8 +182,7 @@
                     <div class="mb-3">
                         <label for="dateofBirth" class="form-label">Date of Birth</label>
                         <input type="date" class="form-control" id="dateofBirth" formControlName="dateofBirth">
-                        @if(userForm.get('dateofBirth')?.invalid && (userForm.get('dateofBirth')?.touched ||
-                        userForm.get('dateofBirth')?.dirty)) {
+                        @if(userForm.get('dateofBirth')?.invalid ) {
                         <div class="text-danger">
                             Date of Birth is required.
                         </div>
@@ -216,8 +215,7 @@
                         <label for="phoneNumber" class="form-label">Phone Number</label>
                         <input type="text" class="form-control" id="phoneNumber" formControlName="phoneNumber">
 
-                        @if(userForm.get('phoneNumber')?.invalid && (userForm.get('phoneNumber')?.touched ||
-                        userForm.get('phoneNumber')?.dirty)) {
+                        @if(userForm.get('phoneNumber')?.invalid) {
                         <div class="text-danger">
                             Valid Phone Number is required.
                         </div>
@@ -229,8 +227,7 @@
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="email" formControlName="email"
                             placeholder="name@example.com">
-                        @if(userForm.get('email')?.invalid && (userForm.get('email')?.touched ||
-                        userForm.get('email')?.dirty)) {
+                        @if(userForm.get('email')?.invalid) {
                         <div class="text-danger">
                             Valid Email is required.
                         </div>
@@ -240,8 +237,7 @@
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
                         <textarea class="form-control" id="address" formControlName="address"></textarea>
-                        @if(userForm.get('address')?.invalid && (userForm.get('address')?.touched ||
-                        userForm.get('address')?.dirty)) {
+                        @if(userForm.get('address')?.invalid) {
                         <div class="text-danger">
                             Address is required.
                         </div>
@@ -252,8 +248,7 @@
                     <div class="mb-3">
                         <label for="country" class="form-label">Country</label>
                         <input type="text-box" class="form-control" id="country" formControlName="country">
-                        @if(userForm.get('country')?.invalid && (userForm.get('country')?.touched ||
-                        userForm.get('country')?.dirty)) {
+                        @if(userForm.get('country')?.invalid) {
                         <div class="text-danger">
                             Country is required.
                         </div>
@@ -263,8 +258,7 @@
                     <div class="mb-3">
                         <label for="state" class="form-label">State</label>
                         <input type="text" class="form-control" id="state" formControlName="state">
-                        @if(userForm.get('state')?.invalid && (userForm.get('state')?.touched ||
-                        userForm.get('state')?.dirty)) {
+                        @if(userForm.get('state')?.invalid) {
                         <div class="text-danger">
                             State is required.
                         </div>

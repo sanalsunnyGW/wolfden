@@ -133,7 +133,7 @@ export class MyTeamComponent {
   ngOnInit(): void {
     (window as any).onA = (nodeName: string) => {
       console.log('Node clicked:', nodeName);
-      this.router.navigate(['/emp-dis']);
+      this.router.navigate(['/employee-display']);
     };
     mermaid.initialize({
       securityLevel: 'loose',

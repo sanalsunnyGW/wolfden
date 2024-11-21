@@ -9,5 +9,8 @@ import { Component } from '@angular/core';
 })
 export class HeaderComponent {
 
+openProfile(){
+// route link-------------------------------------
+}
 
 }

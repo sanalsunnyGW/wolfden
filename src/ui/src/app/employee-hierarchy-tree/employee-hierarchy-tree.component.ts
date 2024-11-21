@@ -22,7 +22,7 @@ export class EmployeeHierarchyTreeComponent implements OnInit {
     this.loadEmployeeHierarchy();
     (window as any).onA = (nodeName: string) => {
       console.log('Node clicked:', nodeName);
-      this.router.navigate(['/emp-dis']);
+      this.router.navigate(['/employee-display']);
     };
 
     mermaid.initialize({

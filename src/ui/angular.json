@@ -33,10 +33,9 @@
             ],
             "styles": [
               "src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/mermaid/dist/mermaid.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
-            "scripts": [ "./node_modules/mermaid/dist/mermaid.core.js"]
+            "scripts": [ ]
           },
           "configurations": {
             "production": {
