@@ -29,7 +29,5 @@ namespace WolfDen.Domain.Entity
             MissedPunch = missedPunch;
             AttendanceStatusId = attendanceStatusId;
         }
-
-
     }
 }
