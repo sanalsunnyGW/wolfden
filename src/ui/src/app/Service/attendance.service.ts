@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { WeeklyAttendance } from '../interface/iweekly-attendance';
-import { DailyAttendance } from '../interface/idaily-attendance';
+import { WeeklyAttendance } from '../Interface/iweekly-attendance';
+import { DailyAttendance } from '../Interface/idaily-attendance';
 
 
 @Injectable({
