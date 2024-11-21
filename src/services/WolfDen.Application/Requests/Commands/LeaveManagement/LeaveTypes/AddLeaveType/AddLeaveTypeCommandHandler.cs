@@ -25,7 +25,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLe
             }
 
             LeaveType leaveType = new LeaveType(request.TypeName, request.MaxDays, request.IsHalfDayAllowed, request.IncrementCount,
-                    request.IncrementGap, request.CarryForward, request.CarryForwardLimit, request.DaysCheck, request.DaysChekcMore,
+                    request.IncrementGapId, request.CarryForward, request.CarryForwardLimit, request.DaysCheck, request.DaysCheckMore,
                     request.DaysCheckEqualOrLess, request.DutyDaysRequired, request.Sandwich);
 
             _context.LeaveType.Add(leaveType);

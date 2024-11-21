@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ILeaveRequestHistory } from '../../../../../interface/leave-request-history';
 import { LeaveRequestStatus } from '../../../../../enum/leave-request-status-enum';
-import { LeaveManagementService } from '../../../../../services/leave-management.service';
+import { LeaveManagementService } from '../../../../../Service/leave-management.service';
 
 @Component({
   selector: 'app-leave-history',

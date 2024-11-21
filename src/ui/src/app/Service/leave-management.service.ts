@@ -42,4 +42,6 @@ export class LeaveManagementService {
     getLeaveTypeIdAndName(){
       return this.http.get<Array<IGetLeaveTypeIdAndname>>("https://localhost:7015/api/leave-type")
     }
+
+    
 }

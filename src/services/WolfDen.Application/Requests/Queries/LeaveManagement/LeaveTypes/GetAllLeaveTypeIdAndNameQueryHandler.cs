@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.LeaveManagement;
 using WolfDen.Domain.Entity;
+using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveTypes
@@ -23,10 +24,14 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveTypes
 
             foreach (LeaveType leaveType in leaveTypesList)
             {
-                LeaveTypeDto leaveTypeDto = new LeaveTypeDto();
-                leaveTypeDto.Id = leaveType.Id;
-                leaveTypeDto.Name = leaveType.TypeName;
-                leaveTypeDtoList.Add(leaveTypeDto);
+                if(leaveType.LeaveCategoryId != LeaveCategory.EmergencyLeave)
+                {
+                    LeaveTypeDto leaveTypeDto = new LeaveTypeDto();
+                    leaveTypeDto.Id = leaveType.Id;
+                    leaveTypeDto.Name = leaveType.TypeName;
+                    leaveTypeDtoList.Add(leaveTypeDto);
+                }
+                
             }
 
             return leaveTypeDtoList;

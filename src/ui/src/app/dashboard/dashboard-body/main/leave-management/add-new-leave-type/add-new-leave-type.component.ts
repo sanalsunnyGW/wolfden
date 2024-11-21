@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, FormsModule, NgSelectOption, React
 import { IAddNewLeaveType } from '../../../../../interface/add-new-leave-type-interface';
 import { CommonModule } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { LeaveManagementService } from '../../../../../services/leave-management.service';
+import { LeaveManagementService } from '../../../../../Service/leave-management.service';
 
 
 @Component({
@@ -24,14 +24,13 @@ export class AddNewLeaveTypeComponent {
         maxDays: new FormControl(null),
         isHalfDayAllowed: new FormControl(null),
         incrementCount: new FormControl(null),
-        incrementGap: new FormControl(null),
+        incrementGapId: new FormControl(null),
         carryForward: new FormControl(null),
         carryForwardLimit: new FormControl(null),
         daysCheck: new FormControl(null),
         daysCheckMore: new FormControl(null),
         daysCheckEqualOrLess: new FormControl(null),
         dutyDaysRequired: new FormControl(null),
-        type: new FormControl(null),
         sandwich : new FormControl(null)
       });
   }
@@ -50,6 +49,7 @@ export class AddNewLeaveTypeComponent {
       {
         if(this.addNewLeaveType.valid)
         {
+          console.log(this.addNewLeaveType.value)
           this.leaveManagement.addNewLeaveType(this.addNewLeaveType).subscribe({
             next:(response : boolean)=>{
               if(response)

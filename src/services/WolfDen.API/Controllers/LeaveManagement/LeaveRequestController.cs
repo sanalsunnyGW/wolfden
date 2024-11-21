@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WolfDen.Application.DTOs.LeaveManagement;
+using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.AddLeaveRequest;
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetLeaveRequestHistory;
 
 namespace WolfDen.API.Controllers.LeaveManagement
@@ -23,6 +24,13 @@ namespace WolfDen.API.Controllers.LeaveManagement
             GetLeaveRequestHistoryQuery query= new GetLeaveRequestHistoryQuery();
             query.RequestId=id;
             return await _mediator.Send(query, cancellationToken); 
+        }
+
+        [HttpPost("{id}")]
+        public async Task<bool> ApplyLeaveRequest(int id, [FromBody] AddLeaveRequestCommand command,CancellationToken cancellationToken)
+        {
+            command.EmpId =id;
+            return await _mediator.Send(command, cancellationToken);
         }
     }
 }

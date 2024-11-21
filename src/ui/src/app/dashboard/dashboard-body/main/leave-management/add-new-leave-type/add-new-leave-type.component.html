@@ -4,7 +4,7 @@
       <div class="form-group">
         <label for="typeName">Enter New Leave Type Name</label>
         <input type="text" class="form-control" id="typeName" placeholder="Enter Name" formControlName="typeName">
-        <div class="error"*ngIf="addNewLeaveType.get('typeName')?.invalid && addNewLeaveType.get('typeName')?.touched">
+        <div class="error"*ngIf="addNewLeaveType.get('typeName')?.invalid && addNewLeaveType.get('typeName')?.touched ">
          Type Name is required
         </div>
       </div>
@@ -22,7 +22,7 @@
         <label>Select if Half Day Allowed </label>
         <div class="isHalfDayAllowed">
           <div>
-            <input class="form-check-input" type="radio" id="true1" value="true" formControlName="isHalfDayAllowed">
+            <input class="form-check-input" type="radio" id="true1" [value]="true" formControlName="isHalfDayAllowed">
             <label class="form-check-label" for="true1">Half Day Possible</label>
           </div>
         </div>
@@ -32,7 +32,7 @@
         <label>Select increment Type if there is increment  </label>
         <ng-select [items]="increments" class="option"
         bindLabel="viewValue"
-        bindValue="type" placeholder="select Increment Type" formControlName="incrementGap">
+        bindValue="type" placeholder="select Increment Type" formControlName="incrementGapId">
         </ng-select>
       </div>
   
@@ -45,7 +45,7 @@
         <label>Select if CarryForward Possible </label>
         <div class="carryForward">
           <div>
-            <input class="form-check-input" type="radio" id="true2" value="true" formControlName="carryForward">
+            <input class="form-check-input" type="radio" id="true2" [value]="true" formControlName="carryForward">
             <label class="form-check-label" for="true2">CarryForward Possible</label>
           </div>
         </div>
@@ -96,7 +96,7 @@
         <label>Select if Sandwich Policy Applicable  </label>
         <div class="sandwich">
           <div>
-            <input class="form-check-input" type="radio" id="true3" value="true" formControlName="sandwich">
+            <input class="form-check-input" type="radio" id="true3" [value]="true" formControlName="sandwich">
             <label class="form-check-label" for="true3">Sandwich Applicable</label>
           </div>
         </div>

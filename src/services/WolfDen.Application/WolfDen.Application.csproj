@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Methods\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\WolfDen.Domain\WolfDen.Domain.csproj" />
     <ProjectReference Include="..\WolfDen.Infrastructure\WolfDen.Infrastructure.csproj" />
   </ItemGroup>
