@@ -73,9 +73,6 @@ namespace WolfDen.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DailyAttendenceId")
-                        .HasColumnType("int");
-
                     b.Property<int>("DeviceId")
                         .HasColumnType("int");
 
@@ -103,8 +100,6 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DailyAttendenceId");
 
                     b.HasIndex("DeviceId");
 
@@ -814,6 +809,14 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
+<<<<<<< HEAD
+=======
+                    b.Property<int?>("Type")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(7);
+
+>>>>>>> upstream/main
                     b.Property<string>("TypeName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -888,19 +891,11 @@ namespace WolfDen.Infrastructure.Migrations
 
             modelBuilder.Entity("WolfDen.Domain.Entity.AttendenceLog", b =>
                 {
-                    b.HasOne("WolfDen.Domain.Entity.DailyAttendence", "DailyAttendence")
-                        .WithMany()
-                        .HasForeignKey("DailyAttendenceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("WolfDen.Domain.Entity.Device", "Device")
                         .WithMany()
                         .HasForeignKey("DeviceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("DailyAttendence");
 
                     b.Navigation("Device");
                 });

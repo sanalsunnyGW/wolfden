@@ -6,7 +6,7 @@ import { LeaveApplicationComponent } from "./leave-management/leave-application/
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [ LeaveApplicationComponent],
+  imports: [],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })

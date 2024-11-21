@@ -12,8 +12,8 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241119092934_neww")]
-    partial class neww
+    [Migration("20241119135356_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,9 +76,6 @@ namespace WolfDen.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DailyAttendenceId")
-                        .HasColumnType("int");
-
                     b.Property<int>("DeviceId")
                         .HasColumnType("int");
 
@@ -106,8 +103,6 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DailyAttendenceId");
 
                     b.HasIndex("DeviceId");
 
@@ -807,7 +802,9 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<int?>("Type")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(7);
 
                     b.Property<string>("TypeName")
                         .IsRequired()
@@ -883,19 +880,11 @@ namespace WolfDen.Infrastructure.Migrations
 
             modelBuilder.Entity("WolfDen.Domain.Entity.AttendenceLog", b =>
                 {
-                    b.HasOne("WolfDen.Domain.Entity.DailyAttendence", "DailyAttendence")
-                        .WithMany()
-                        .HasForeignKey("DailyAttendenceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("WolfDen.Domain.Entity.Device", "Device")
                         .WithMany()
                         .HasForeignKey("DeviceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("DailyAttendence");
 
                     b.Navigation("Device");
                 });

@@ -2,7 +2,6 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
 using WolfDen.Infrastructure.Data;
-
 using FluentValidation;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 

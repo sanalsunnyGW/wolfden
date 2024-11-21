@@ -11,9 +11,7 @@ namespace WolfDen.Domain.Entity
         public int DeviceId { get; set; }
         public DirectionType Direction { get;set; }
         public virtual Device Device { get;set; }
-        public virtual DailyAttendence DailyAttendence { get; set; }
        
-
         private AttendenceLog() { }
         public AttendenceLog(int employeeId,DateOnly date,DateTime time,int deviceId,DirectionType direction)
         {
@@ -21,8 +19,7 @@ namespace WolfDen.Domain.Entity
             PunchDate=date;
             PunchTime=time;
             DeviceId=deviceId;
-            Direction=direction;    
-           
+            Direction=direction;     
         }
 
     }
