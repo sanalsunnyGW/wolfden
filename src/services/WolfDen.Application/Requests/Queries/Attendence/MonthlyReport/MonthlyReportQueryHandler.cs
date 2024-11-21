@@ -29,12 +29,12 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                 Holiday = 0,
                 WFH = 0,
                 Leave = 0,
-                IncompleteShiftDays = new List<DateOnly>(),
-                RestrictedHolidays= new List<DateOnly>(),
-                NormalHolidays= new List<DateOnly>(),
-                WFHDays= new List<DateOnly>(),
-                LeaveDays= new List<DateOnly>(),
-                AbsentDays= new List<DateOnly>()
+                IncompleteShiftDays = "",
+                RestrictedHolidays = "",
+                NormalHolidays ="",
+                WFHDays = "",
+                LeaveDays = "",
+                AbsentDays = ""
             };
 
             DateOnly today = DateOnly.FromDateTime(DateTime.Now);
@@ -53,6 +53,12 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                             x.LeaveRequestStatusId == LeaveRequestStatus.Approved)
                 .ToListAsync(cancellationToken);
 
+            LOP lop =await _context.LOP.Where(x=>x.EmployeeId==request.EmployeeId && x.AttendanceClosedDate.Month==request.Month).FirstOrDefaultAsync(cancellationToken);
+            summaryDto.IncompleteShiftDays = lop.IncompleteShiftDays;
+            summaryDto.IncompleteShift = lop.NoOfIncompleteShiftDays;
+            summaryDto.Absent = lop.LOPDaysCount;
+            summaryDto.AbsentDays = lop.LOPDays;
+
             List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
 
             for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
@@ -64,11 +70,6 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                     {
                         summaryDto.Present++;
                     }
-                    else
-                    {
-                        summaryDto.IncompleteShift++;
-                        summaryDto.IncompleteShiftDays.Add(currentDate);
-                    }
                 }
                 else
                 {
@@ -78,7 +79,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                         if (holiday.Type is AttendanceStatus.NormalHoliday)
                         {
                             summaryDto.Holiday++;
-                            summaryDto.NormalHolidays.Add(currentDate);
+                            summaryDto.NormalHolidays += currentDate.ToString("yyyyMMdd") + ",";
 
                         }
                         else if (holiday.Type is AttendanceStatus.RestrictedHoliday)
@@ -92,7 +93,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                                 if (leaveType is not null && leaveType.LeaveCategoryId is LeaveCategory.RestrictedHoliday)
                                 {
                                     summaryDto.Holiday++;
-                                    summaryDto.RestrictedHolidays.Add(currentDate);
+                                    summaryDto.RestrictedHolidays += currentDate.ToString("yyyyMMdd") + ",";
                                 }
                             }
                         }
@@ -106,19 +107,15 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                             if (leaveType is not null && leaveType.LeaveCategoryId is LeaveCategory.WorkFromHome)
                             {
                                 summaryDto.WFH++;
-                                summaryDto.WFHDays.Add(currentDate);
+                               summaryDto.WFHDays += currentDate.ToString("yyyyMMdd") + ",";
                             }
                             else
                             {
                                 summaryDto.Leave++;
-                                summaryDto.LeaveDays.Add(currentDate);
+                                summaryDto.LeaveDays += currentDate.ToString("yyyyMMdd") + ",";
                             }
                         }
-                        else
-                        {
-                            summaryDto.Absent++;
-                            summaryDto.AbsentDays.Add(currentDate);
-                        }
+                        
                     }
                 }
             }
