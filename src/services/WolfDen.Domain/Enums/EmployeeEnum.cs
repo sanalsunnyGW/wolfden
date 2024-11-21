@@ -8,5 +8,10 @@
             Female,
             Other
         }
+        public enum EmploymentType
+        {
+            Contract=1,
+            Permanent
+        }
     }
 }

@@ -50,8 +50,14 @@ namespace WolfDen.Application.Requests.Queries.Employees.ViewEmployee
                 ManagerName = employee.Manager != null
                               ? $"{employee.Manager.FirstName}{(string.IsNullOrWhiteSpace(employee.Manager.LastName) ? "" : " " + employee.Manager.LastName)}"
                               : null,
-                IsActive = employee.IsActive
+                IsActive = employee.IsActive,
+                Address = employee.Address,
+                State = employee.State,
+                Country = employee.Country,
+                EmploymentType = employee.EmploymentType,
+                Photo = employee.Photo,
             };
+
 
             return employeeDTO;
         }

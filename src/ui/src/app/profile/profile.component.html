@@ -1,12 +1,18 @@
 <div class="container d-flex  profile-container mb-5">
-    <div>
-        <img src="profileimg.jpg" class="img-thumbnail profile-img" alt="Profile Image">
+    <div class="position-relative d-inline-block">
+        <img src="{{employeeData.photo}}" class="img-thumbnail profile-img" alt="Profile Image">
+
+        <i class="fa-solid fa-pen-to-square position-absolute text-white "
+            style="top: 10px; right: 10px; z-index: 10; cursor: pointer;" data-bs-toggle="modal"
+            data-bs-target="#photo">
+        </i>
     </div>
+
     <div class="profile-info">
-        <h2>Abhishek</h2>
-        <h6>Intern</h6>
-        <h6>Email</h6>
-        <h6>7356137656</h6>
+        <h2>{{employeeData.firstName}} {{employeeData.lastName}}</h2>
+        <h6>{{employeeData.designationName}}</h6>
+        <h6>{{employeeData.email}}</h6>
+        <h6>{{employeeData.phoneNumber}}</h6>
     </div>
 
 </div>
@@ -30,24 +36,24 @@
             <tbody class="table-group-divider">
                 <tr>
                     <th scope="row">First Name</th>
-                    <td>Abhishek</td>
+                    <td>{{employeeData.firstName}}</td>
                 </tr>
                 <tr>
                     <th scope="row">Last Name</th>
-                    <td>Abhishek</td>
+                    <td>{{employeeData.lastName}}</td>
                 </tr>
 
                 <tr>
                     <th scope="row">Gender</th>
-                    <td>Male</td>
+                    <td>{{getGenderDisplay(employeeData.gender)}}</td>
                 </tr>
                 <tr>
-                    <th scope="row">BirthDay</th>
-                    <td>7/12/2002</td>
+                    <th scope="row">Date of Birth</th>
+                    <td>{{employeeData.dateofBirth}}</td>
                 </tr>
                 <tr>
                     <th scope="row">Joining Date</th>
-                    <td>23/08/2024</td>
+                    <td>{{employeeData.joiningDate}}</td>
                 </tr>
             </tbody>
         </table>
@@ -71,23 +77,23 @@
             <tbody class="table-group-divider">
                 <tr>
                     <th scope="row">Phone Number</th>
-                    <td>7356137656</td>
+                    <td>{{employeeData.phoneNumber}}</td>
                 </tr>
                 <tr>
                     <th scope="row">Email</th>
-                    <td>Abhishekgmail.com</td>
+                    <td>{{employeeData.email}}</td>
                 </tr>
                 <tr>
                     <th scope="row">Address</th>
-                    <td>Mark</td>
+                    <td>{{employeeData.address}}</td>
                 </tr>
                 <tr>
                     <th scope="row">Country</th>
-                    <td>India</td>
+                    <td>{{employeeData.country}}</td>
                 </tr>
                 <tr>
                     <th scope="row">State</th>
-                    <td>Kerala</td>
+                    <td>{{employeeData.state}}</td>
                 </tr>
             </tbody>
         </table>
@@ -105,24 +111,24 @@
         <tbody class="table-group-divider">
             <tr>
                 <th scope="row">Employee ID</th>
-                <td>005</td>
+                <td>{{employeeData.employeeCode}}</td>
             </tr>
             <tr>
                 <th scope="row">Designation </th>
-                <td>Intern</td>
+                <td>{{employeeData.designationName}}</td>
             </tr>
             <tr>
                 <th scope="row">Reporting Manager</th>
-                <td>Hari</td>
+                <td>{{employeeData.managerName}}</td>
             </tr>
             <tr>
                 <th scope="row"> Department</th>
-                <td>Development</td>
+                <td>{{employeeData.departmentName}}</td>
             </tr>
 
             <tr>
                 <th scope="row">Employment Type</th>
-                <td>Contract</td>
+                <td>{{getEmploymentType(employeeData.employmentType)}}</td>
             </tr>
 
         </tbody>
@@ -157,7 +163,14 @@
 
                     <div class="mb-3">
                         <label for="gender" class="form-label">Gender</label>
-                        <input type="text" class="form-control" id="gender" formControlName="gender">
+                        <div>
+                            <select id="gender" formControlName="gender">
+                                <option value="" disabled selected>Select Gender</option>
+                                <option value=1>Male</option>
+                                <option value=2>Female</option>
+                                <option value=3>Other</option>
+                            </select>
+                        </div>
                         @if(userForm.get('gender')?.invalid && (userForm.get('gender')?.touched ||
                         userForm.get('gender')?.dirty)) {
                         <div class="text-danger">
@@ -176,21 +189,10 @@
                         </div>
                         }
                     </div>
-
-                    <div class="mb-3">
-                        <label for="joiningDate" class="form-label">Joining Date</label>
-                        <input type="date" class="form-control" id="joiningDate" formControlName="joiningDate">
-                        @if(userForm.get('joiningDate')?.invalid && (userForm.get('joiningDate')?.touched ||
-                        userForm.get('joiningDate')?.dirty)) {
-                        <div class="text-danger">
-                            Joining Date is required.
-                        </div>
-                        }
-                    </div>
-
                     <div class="d-flex justify-content-end gap-2">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary custom-btn" data-bs-dismiss="modal" [disabled]="!userForm.valid" >Save
+                        <button type="submit" class="btn btn-primary custom-btn" data-bs-dismiss="modal"
+                            [disabled]="!userForm.valid">Save
                             Changes</button>
                     </div>
                 </form>
@@ -225,7 +227,8 @@
 
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="text" class="form-control" id="email" formControlName="email">
+                        <input type="email" class="form-control" id="email" formControlName="email"
+                            placeholder="name@example.com">
                         @if(userForm.get('email')?.invalid && (userForm.get('email')?.touched ||
                         userForm.get('email')?.dirty)) {
                         <div class="text-danger">
@@ -236,7 +239,7 @@
 
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="address" formControlName="address">
+                        <textarea class="form-control" id="address" formControlName="address"></textarea>
                         @if(userForm.get('address')?.invalid && (userForm.get('address')?.touched ||
                         userForm.get('address')?.dirty)) {
                         <div class="text-danger">
@@ -244,6 +247,7 @@
                         </div>
                         }
                     </div>
+
 
                     <div class="mb-3">
                         <label for="country" class="form-label">Country</label>
@@ -266,10 +270,38 @@
                         </div>
                         }
                     </div>
-
                     <div class="d-flex justify-content-end gap-2">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary custom-btn" data-bs-dismiss="modal" [disabled]="!userForm.valid" >Save
+                        <button type="submit" class="btn btn-primary custom-btn" data-bs-dismiss="modal"
+                            [disabled]="!userForm.valid">Save
+                            Changes</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="photo" tabindex="-1" aria-labelledby="photo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="contactdetails">Upload Photo</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label">Upload Photo</label>
+                        <input class="form-control" type="file" id="formFile" (change)="onImageUpload($event)">
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary custom-btn" data-bs-dismiss="modal"
+                            [disabled]="!userForm.valid">Save
                             Changes</button>
                     </div>
 

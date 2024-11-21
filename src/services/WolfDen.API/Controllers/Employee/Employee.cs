@@ -83,10 +83,10 @@ namespace WolfDen.API.Controllers.Employee
             return await _mediator.Send(command, cancellationToken);
         }
         [HttpGet("hierarchy")]
-        public async Task<EmployeeHierarchyDto> GetEmployeeHierarchy([FromQuery] GetEmployeeHierarchyQuery query, CancellationToken cancellationToken)
+        public async Task<EmployeeHierarchyDto> GetEmployeeHierarchy()
         {
-
-            return await _mediator.Send(query, cancellationToken);
+            GetEmployeeHierarchyQuery query = new GetEmployeeHierarchyQuery();  
+            return await _mediator.Send(query);
 
         }
         [HttpGet("sign-up")]

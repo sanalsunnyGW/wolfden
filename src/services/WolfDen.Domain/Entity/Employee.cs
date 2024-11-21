@@ -24,8 +24,11 @@ namespace WolfDen.Domain.Entity
         public int? ManagerId { get; private set; }
         public virtual Employee? Manager { get; private set; }
         public bool? IsActive { get; private set; }
-
-
+        public string? Address { get; private set; }
+        public string? Country { get; private set; }
+        public string? State { get; private set; }
+        public EmploymentType? EmploymentType { get; private set; }
+        public string? Photo { get; private set; }
         private Employee()
         {
 
@@ -39,7 +42,7 @@ namespace WolfDen.Domain.Entity
 
 
         }
-        public void EmployeeUpdateEmployee(string? firstName, string? lastName, DateOnly? dateofBirth, string? email, string? phoneNumber, Gender? gender, DateOnly? joiningDate)
+        public void EmployeeUpdateEmployee(string? firstName, string? lastName, DateOnly? dateofBirth, string? email, string? phoneNumber, Gender? gender, string? address, string? country, string? state, string? photo)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -47,15 +50,21 @@ namespace WolfDen.Domain.Entity
             Email = email;
             PhoneNumber = phoneNumber;
             Gender = gender;
-            JoiningDate = joiningDate;
+            Address = address;
+            Country = country;
+            State = state;
+            Photo = photo;
+
 
         }
-        public void AdminUpdateEmployee(int? designationId, int? departmentId, int? managerId, bool? isActive)
+        public void AdminUpdateEmployee(int? designationId, int? departmentId, int? managerId, bool? isActive, DateOnly? joiningDate, EmploymentType? employmentType)
         {
             DepartmentId = departmentId;
             DesignationId = designationId;
             ManagerId = managerId;
             IsActive = isActive;
+            JoiningDate = joiningDate;
+            EmploymentType = employmentType;
 
         }
     }

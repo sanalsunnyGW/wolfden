@@ -27,5 +27,11 @@ namespace WolfDen.Application.DTOs
         public int? ManagerId { get; set; }
         public string ManagerName { get; set; }
         public bool? IsActive { get; set; }
+        public string? Address {  get; set; }
+        public string? Country { get; set; }
+        public string? State { get; set; }
+        public string? Photo { get; set; }
+        public EmploymentType? EmploymentType { get; set; }
+
     }
 }
