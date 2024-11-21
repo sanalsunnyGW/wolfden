@@ -1,42 +1,128 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.Attendence;
+using WolfDen.Domain.Entity;
+using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
 {
-    public class AttendanceHistoryQueryHandler(WolfDenContext context): IRequestHandler<AttendanceHistoryQuery, List<AttendanceHistoryDTO>>
+    public class AttendanceHistoryQueryHandler(WolfDenContext context): IRequestHandler<AttendanceHistoryQuery, List<WeeklySummaryDTO>>
     {
         private readonly WolfDenContext _context=context;
-        public async Task<List<AttendanceHistoryDTO>> Handle(AttendanceHistoryQuery request, CancellationToken cancellationToken)
+        public async Task<List<WeeklySummaryDTO>> Handle(AttendanceHistoryQuery request, CancellationToken cancellationToken)
         {
             DateOnly yearStart = new DateOnly(request.Year,1,1);
-            DateOnly yearEnd = new DateOnly(request.Year+1,1,0);
+            DateOnly yearEnd = new DateOnly(request.Year+1,1,1);
 
-            var dailyAttendance =await _context.DailyAttendence
-                .Where(x=>x.EmployeeId == request.EmployeeId && x.Date >= yearStart && x.Date <=yearEnd)
-                .Select(x=> new AttendanceHistoryDTO
-                {
-                    ArrivalTime = x.ArrivalTime,
-                    DepartureTime = x.DepartureTime,
-                    InsideHours = x.InsideDuration,
-                    OutsideHours = x.OutsideDuration,
-                    MissedPunch = x.MissedPunch,
+            int minWorkDuration = 360;
 
-                })
-                .ToListAsync();
+            List<WeeklySummaryDTO> attendanceHistory = new List<WeeklySummaryDTO>();
 
-            int totalCount=dailyAttendance.Count;
-            int perPageCount = 15;
+            DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
-            var records = new List<AttendanceHistoryDTO>
+            List<DailyAttendence> attendanceRecords = await _context.DailyAttendence
+                .Where(x => x.EmployeeId == request.EmployeeId && x.Date >= yearStart && x.Date <yearEnd)
+                .ToListAsync(cancellationToken);
+
+            List<Holiday> holidays = await _context.Holiday
+                .Where(x => x.Date >= yearStart && x.Date < yearEnd)
+                .ToListAsync(cancellationToken);
+
+            List<LeaveRequest> leaveRequests = await _context.LeaveRequests
+                .Where(x => x.EmployeeId == request.EmployeeId &&
+                            x.FromDate < yearEnd && x.ToDate >= yearStart &&
+                            x.LeaveRequestStatusId == LeaveRequestStatus.Approved)
+                .ToListAsync(cancellationToken);
+
+            List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
+
+            for (var currentDate = yearStart; currentDate < yearEnd; currentDate = currentDate.AddDays(1))
             {
-                Date
-            };
-            
-            var displayAttendance = dailyAttendance.Skip(request.CurrentPage * perPageCount).Take(perPageCount).ToList();
+                if (currentDate > today)
+                {
+                    break;
+                }
 
-            return records;
+                AttendanceStatus statusId = AttendanceStatus.Absent;
+
+                DailyAttendence? attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
+                if (attendanceRecord is not null)
+                {
+
+                    if (attendanceRecord.InsideDuration >= minWorkDuration)
+                    {
+                        statusId = AttendanceStatus.Present;
+                    }
+                    else
+                    {
+                        statusId = AttendanceStatus.IncompleteShift;
+                    }
+                }
+                else
+                {
+                    Holiday? holiday = holidays.FirstOrDefault(x => x.Date == currentDate);
+                    if (holiday is not null)
+                    {
+
+                        if (holiday.Type is AttendanceStatus.NormalHoliday)
+                        {
+                            statusId = AttendanceStatus.NormalHoliday;
+                        }
+                        else if (holiday.Type == AttendanceStatus.RestrictedHoliday)
+                        {
+                            LeaveRequest? leaveRequestForHoliday = leaveRequests.FirstOrDefault(x => x.FromDate <= currentDate && x.ToDate >= currentDate);
+
+                            if (leaveRequestForHoliday is not null)
+                            {
+                                LeaveType? leaveType = leaveTypes.FirstOrDefault(x => x.Id == leaveRequestForHoliday.TypeId);
+
+                                if (leaveType is not null && leaveType.LeaveCategoryId is LeaveCategory.RestrictedHoliday)
+                                {
+                                    statusId = AttendanceStatus.RestrictedHoliday;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        LeaveRequest? leaveRequest = leaveRequests.FirstOrDefault(x => x.FromDate <= currentDate && x.ToDate >= currentDate);
+                        if (leaveRequest is not null)
+                        {
+                            LeaveType? leaveType = leaveTypes.FirstOrDefault(x => x.Id == leaveRequest.TypeId);
+                            if (leaveType is not null && leaveType.LeaveCategoryId is LeaveCategory.WorkFromHome)
+                            {
+                                statusId = AttendanceStatus.WFH;
+                            }
+                            else
+                            {
+                                statusId = AttendanceStatus.Leave;
+                            }
+                        }
+                        else
+                        {
+                            statusId = AttendanceStatus.Absent;
+                        }
+                    }
+                }
+                attendanceHistory.Add(new WeeklySummaryDTO
+                {
+                    Date = currentDate,
+                    ArrivalTime = attendanceRecord?.ArrivalTime,
+                    DepartureTime = attendanceRecord?.DepartureTime,
+                    InsideDuration = attendanceRecord?.InsideDuration,
+                    OutsideDuration = attendanceRecord?.OutsideDuration,
+                    MissedPunch = attendanceRecord?.MissedPunch,
+                    AttendanceStatusId = statusId
+                });
+            }
+
+            int totalCount= attendanceHistory.Count;
+            int perPageCount = 15;
+            
+            var displayAttendance = attendanceHistory.Skip(request.CurrentPage * perPageCount).Take(perPageCount).ToList();
+
+            return displayAttendance;
         }
     }
 }
