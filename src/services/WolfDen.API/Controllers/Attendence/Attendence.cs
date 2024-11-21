@@ -73,7 +73,7 @@ namespace WolfDen.API.Controllers.Attendence
         }
 
         [HttpGet("employee/history")]
-        public async Task<List<WeeklySummaryDTO>> GetHistory([FromQuery] AttendanceHistoryQuery query, CancellationToken cancellationToken)
+        public async Task<AttendanceHistoryDTO> GetHistory([FromQuery] AttendanceHistoryQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
         }

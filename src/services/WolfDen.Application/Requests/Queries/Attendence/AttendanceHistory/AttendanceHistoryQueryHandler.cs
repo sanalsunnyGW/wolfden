@@ -7,10 +7,10 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
 {
-    public class AttendanceHistoryQueryHandler(WolfDenContext context): IRequestHandler<AttendanceHistoryQuery, List<WeeklySummaryDTO>>
+    public class AttendanceHistoryQueryHandler(WolfDenContext context): IRequestHandler<AttendanceHistoryQuery, AttendanceHistoryDTO>
     {
         private readonly WolfDenContext _context=context;
-        public async Task<List<WeeklySummaryDTO>> Handle(AttendanceHistoryQuery request, CancellationToken cancellationToken)
+        public async Task<AttendanceHistoryDTO> Handle(AttendanceHistoryQuery request, CancellationToken cancellationToken)
         {
             DateOnly yearStart = new DateOnly(request.Year,1,1);
             DateOnly yearEnd = new DateOnly(request.Year+1,1,1);
@@ -18,6 +18,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
             int minWorkDuration = 360;
 
             List<WeeklySummaryDTO> attendanceHistory = new List<WeeklySummaryDTO>();
+            List<WeeklySummaryDTO> filteredAttendance = new List<WeeklySummaryDTO>();
 
             DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
@@ -117,12 +118,25 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
                 });
             }
 
-            int totalCount= attendanceHistory.Count;
-            int perPageCount = 15;
-            
-            var displayAttendance = attendanceHistory.Skip(request.CurrentPage * perPageCount).Take(perPageCount).ToList();
+            if (request.AttendanceStatusId.HasValue)
+            {
+                filteredAttendance = attendanceHistory.Where(x => x.AttendanceStatusId == request.AttendanceStatusId).ToList();
+            }
+            else
+            {
+                filteredAttendance = attendanceHistory;
+            }
 
-            return displayAttendance;
+            int totalCount = filteredAttendance.Count();
+            int totalPageCount = totalCount / request.PageSize;
+            
+            List<WeeklySummaryDTO> displayAttendance = filteredAttendance.Skip(request.PageNumber * request.PageSize).Take(request.PageSize).ToList();
+
+            return new AttendanceHistoryDTO
+            {
+                AttendanceHistory = displayAttendance,
+                TotalPages = totalPageCount
+            };
         }
     }
 }
