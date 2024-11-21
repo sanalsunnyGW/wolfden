@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using QuestPDF.Fluent;
 using WolfDen.Application.DTOs.Attendence;
+using WolfDen.Application.Requests.Commands.Attendence.CloseAttendance;
 using WolfDen.Application.Requests.DTOs.Attendence;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
@@ -42,6 +43,12 @@ namespace WolfDen.API.Controllers.Attendence
         {
             MonthlyReportDTO monthlyReport= await _mediator.Send(MonthlyReportQuery, cancellationToken);
             return Ok(monthlyReport);
+        }
+        [HttpPost("close-attendance")]
+        public async Task<IActionResult> GCloseAttendance([FromQuery]CloseAttendanceCommand closeAttendanceCommand, CancellationToken cancellationToken)
+        {
+            var closeAttendance = await _mediator.Send(closeAttendanceCommand, cancellationToken);
+            return Ok(closeAttendance);
         }
 
     }

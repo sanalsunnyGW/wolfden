@@ -1,5 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using sib_api_v3_sdk.Api;

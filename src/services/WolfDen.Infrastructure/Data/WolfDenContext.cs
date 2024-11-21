@@ -24,8 +24,7 @@ namespace WolfDen.Infrastructure.Data
         public DbSet<LeaveSetting> LeaveSettings { get; set; }
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
         public DbSet<LeaveType> LeaveType { get; set; }
-
-
+        public DbSet<LOP> LOP { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Calling the AddConventions extension method
