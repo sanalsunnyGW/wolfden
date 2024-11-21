@@ -9,5 +9,6 @@ namespace WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee
         public int? DepartmentId { get; set; }
         public int? ManagerId { get; set; }
         public bool? IsActive { get; set; }
+        public DateOnly? JoiningDate { get;  set; }
     }
 }

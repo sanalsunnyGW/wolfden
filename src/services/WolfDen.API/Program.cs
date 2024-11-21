@@ -1,10 +1,9 @@
 using FluentValidation;
-using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
-using WolfDen.Infrastructure.Data;
-using FluentValidation;
+using System.Reflection;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
+using WolfDen.Infrastructure.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);

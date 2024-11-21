@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule,ValidatorFn, Validators } from '@angular/forms';
 import { ISignupForm } from './iSignup-form';
 import { Router, RouterLink } from '@angular/router';
 import { MatNativeDateModule } from '@angular/material/core'; // For native date adapter
@@ -24,6 +24,18 @@ import { WolfDenService } from '../../Service/wolf-den.service'
 })
 export class SigninComponent {
   userForm : FormGroup<ISignupForm>;
+
+  passwordMatchValidator: ValidatorFn = (control: AbstractControl) : null => {
+    const password = control.get('password')
+    const confirmPassword = control.get('confirmPassword')
+
+    if(password && confirmPassword && password.value != confirmPassword.value)
+      confirmPassword?.setErrors({ passwordMismatch: true })
+    else
+    confirmPassword?.setErrors(null)
+  
+    return null;
+  }
   
   constructor(private fb: FormBuilder, 
     private userService: WolfDenService, 
@@ -32,16 +44,22 @@ export class SigninComponent {
   ) {
 
     const isdate=new Date();
+
     this.userForm = this.fb.group({
       firstName: new FormControl('', Validators.required),
       lastName:new FormControl('',Validators.required),
       email: new FormControl('', [
         Validators.required,Validators.email]),
-        dateofBirth:new FormControl(isdate,Validators.required),
-        gender: new FormControl<number | null>(null, Validators.required),
-        phoneNumber:new FormControl<string|null>(null,Validators.required)
-    })
+        
+      dateofBirth:new FormControl(isdate,Validators.required),
+      gender: new FormControl<number | null>(null, Validators.required),
+      phoneNumber:new FormControl<string|null>(null,Validators.required),
+      password:new FormControl<string|null>(null,Validators.required),
+      confirmPassword:new FormControl<string|null>(null,Validators.required)
+    },{validators:this.passwordMatchValidator})
   }
+
+
 
 
   isSubmitted: boolean = false;
@@ -61,12 +79,13 @@ export class SigninComponent {
         lastName:this.userForm.value.lastName ??'',
         email : this.userForm.value.email ?? '',
         phoneNumber:this.userForm.value.phoneNumber??'',
-        //dateofBirth:this.userForm.value.dateofBirth ??'',
-        dateofBirth: formattedDate, 
-        joiningDate: formatDate,
-        gender:this.userForm.value.gender?? ''
+        dateofBirth: formattedDate,   
+        gender:this.userForm.value.gender?? '',
+        password:this.userForm.value.password??''
+
 
       }
+  
 
       this.userService.signIn(userData).subscribe({
         next: (response: any) => {
@@ -95,4 +114,3 @@ export class SigninComponent {
   }
 
 }
-

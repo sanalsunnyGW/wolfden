@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-check-user',
   standalone: true,
-  imports: [ReactiveFormsModule,RouterLink],
+  imports: [ReactiveFormsModule],
   templateUrl: './check-user.component.html',
   styleUrl: './check-user.component.scss'
 })
@@ -35,8 +35,16 @@ export class CheckUserComponent {
      
       this.userService.getEmployeeSignUp(this.userForm.value.employeeCode,this.userForm.value.rfId).subscribe({
         next: (response: any) => {
-        this.toastr.success('Sucess')
-        this.router.navigate(['/user/sign-in'])
+          if(response.status){
+            
+            this.toastr.error('user already exist')
+            this.router.navigate(['/user/login'])
+          }
+          else{
+            this.toastr.success('Sucess')
+            this.router.navigate(['/user/sign-in'])
+          }
+        
       },
       error: (error: any) => {
         this.toastr.error('Invalid Credentials')

@@ -6,6 +6,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 import { WolfDenService } from '../../Service/wolf-den.service';
 import { ILoginForm } from './ilogin-form';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,11 @@ import { ILoginForm } from './ilogin-form';
 export class LoginComponent {
   userForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router, private userService: WolfDenService) {
+  constructor(private fb: FormBuilder, 
+              private router: Router, 
+              private userService: WolfDenService,
+              private toastr :ToastrService
+            ) {
     this.userForm = this.fb.group<ILoginForm>({
       email: new FormControl(
         '',
@@ -31,13 +36,24 @@ export class LoginComponent {
 
   onSubmit() {
     this.isSubmitted = true;
-    //api logic
-    this.router.navigate(['/dashboard']);
+    if(this.userForm.valid){
+
+      this.userService.getEmployeeLogin(this.userForm.value.Email,this.userForm.value.Password).subscribe({
+        next:(response:any)=>{
+            this.userService.userId=response.id;
+            this.toastr.success('Login sucessfull')
+            this.router.navigate(['/dashboard']);
+        }
+      });
+    }
+    else{
+      this.toastr.error("Invalid Credentials")
+    }
     }
     hasDisplayableError(controlName: string ):Boolean {
       const control = this.userForm.get(controlName);
       return Boolean(control?.invalid) && (this.isSubmitted || Boolean(control?.touched) || Boolean(control?.dirty))
-  }
+    }
   }
 
 

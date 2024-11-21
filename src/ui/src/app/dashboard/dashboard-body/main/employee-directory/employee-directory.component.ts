@@ -38,14 +38,17 @@ export class EmployeeDirectoryComponent implements OnInit {
     const value = (event.target as HTMLInputElement).value;
     this.searchTerm = value;
     this.searchSubject.next(value);
-  }
-
-  onDepartmentChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value;
-    this.selectedDepartment = value ? Number(value) : null;
     this.loadEmployees();
   }
 
+  onDepartmentChange(event: Event): void {
+    const target = event.target as HTMLSelectElement | null; 
+    if (target) {
+      const value = target.value;
+      this.selectedDepartment = value ? Number(value) : null; 
+      this.loadEmployees(); 
+    }
+  }
   loadEmployees(): void {
     this.isLoading = true;
     this.wolfDenService.getAllEmployees(

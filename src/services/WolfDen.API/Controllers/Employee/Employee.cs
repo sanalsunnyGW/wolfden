@@ -10,6 +10,7 @@ using WolfDen.Application.Requests.Queries.Employees.GetEmployeeIdSignUp;
 using WolfDen.Application.DTOs;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam;
 using WolfDen.Application.DTOs.Employees;
+using WolfDen.Application.Requests.Queries.Employees.EmployeeLogin;
 
 namespace WolfDen.API.Controllers.Employee
 {
@@ -91,6 +92,11 @@ namespace WolfDen.API.Controllers.Employee
         }
         [HttpGet("sign-up")]
         public async Task<EmployeeSignUpDto> GetEmployeeSignUp([FromQuery] GetEmployeeIDSignUpQuery query, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(query, cancellationToken);
+        }
+        [HttpGet("login")]
+        public async Task<EmployeeSignUpDto> EmployeeLogin([FromQuery] EmployeeLoginQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
         }

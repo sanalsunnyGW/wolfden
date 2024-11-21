@@ -24,21 +24,21 @@ namespace WolfDen.Domain.Entity
         public virtual Employee? Manager { get; private set; }
         public bool? IsActive { get; private set; }
 
+        public string? Password {  get; private set; }
+
 
         private Employee()
         {
 
         }
 
-        public Employee(int employeeCode, string rfId, string? firstName)
+        public Employee(int employeeCode, string rfId)
         {
             EmployeeCode = employeeCode;
             RFId = rfId;
-            FirstName = firstName;
-
-
         }
-        public void EmployeeUpdateEmployee(string? firstName, string? lastName, DateOnly? dateofBirth, string? email, string? phoneNumber, Gender? gender, DateOnly? joiningDate)
+
+        public void EmployeeUpdateEmployee(string? firstName, string? lastName, DateOnly? dateofBirth, string? email, string? phoneNumber, Gender? gender,string password)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -46,15 +46,17 @@ namespace WolfDen.Domain.Entity
             Email = email;
             PhoneNumber = phoneNumber;
             Gender = gender;
-            JoiningDate = joiningDate;
+            Password = password;
 
         }
-        public void AdminUpdateEmployee(int? designationId, int? departmentId, int? managerId, bool? isActive)
+        public void AdminUpdateEmployee(int? designationId, int? departmentId, int? managerId, bool? isActive, DateOnly? joiningDate)
         {
             DepartmentId = departmentId;
             DesignationId = designationId;
             ManagerId = managerId;
             IsActive = isActive;
+            JoiningDate = joiningDate;
+
 
         }
     }

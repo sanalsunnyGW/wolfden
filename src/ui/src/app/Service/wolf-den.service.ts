@@ -10,7 +10,7 @@ import { IEmployeeDirectoryDto } from '../dashboard/dashboard-body/main/employee
 export class WolfDenService {
 
   private baseUrl=environment.apiUrl;
-  public userId : number=1;
+  public userId : number=3;
 
   constructor(private http:HttpClient) { }
 
@@ -30,8 +30,20 @@ export class WolfDenService {
         );
       }
 
+      getEmployeeLogin(email: string, password: string): Observable<{ id: number, status: boolean }> {
+        let params = new HttpParams()
+          .set('Email', email)
+          .set('Password', password);
+
+        return this.http.get<{ id: number, status: boolean }>(
+          `${this.baseUrl}/api/Employee/login`,
+          { headers: this.getHeaders(), params }
+         
+        );
+      }
+
       signIn(data: any): Observable<any> {
-        return this.http.put(`${this.baseUrl}/api/Employee/EmployeeUpdateEmployee`, data, { headers: this.getHeaders() });
+        return this.http.put(`${this.baseUrl}/api/Employee/employee-update-employee`, data, { headers: this.getHeaders() });
       }
 
       getAllEmployees(departmentId?: number, employeeName?: string): Observable<IEmployeeDirectoryDto[]> {

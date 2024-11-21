@@ -8,6 +8,6 @@ export interface ISignupForm {
     dateofBirth:FormControl<Date|null>;
     gender:FormControl<number|null>;
     phoneNumber:FormControl<string|null>;
-
-
+    password: FormControl<string|null>;
+    confirmPassword: FormControl<string|null>;
 }
