@@ -58,7 +58,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                     }
                     else
                     {
-                        LeaveType leaveType = await _context.LeaveType.FirstOrDefaultAsync(x => x.Id == leave.TypeId);
+                        LeaveType leaveType = await _context.LeaveType.FindAsync(leave.TypeId);
                         if (leaveType.LeaveCategoryId == LeaveCategory.WorkFromHome)
                         {
                             notPresentDay.AttendanceStatusId = AttendanceStatus.WFH;

@@ -6,7 +6,6 @@ using WolfDen.Application.Requests.DTOs.Attendence;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
-//using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
 
 namespace WolfDen.API.Controllers.Attendence
 {
@@ -26,8 +25,6 @@ namespace WolfDen.API.Controllers.Attendence
         public async Task<IActionResult> GetAttendenceLog([FromQuery]DailyDetails DailyDetails, CancellationToken cancellationToken)
         {
             DailyAttendanceDTO attendance = await _mediator.Send(DailyDetails, cancellationToken);
-            if (attendance is null)
-                return NotFound("No Attendence Log found");
             return Ok(attendance);
         }
 
@@ -44,8 +41,6 @@ namespace WolfDen.API.Controllers.Attendence
         public async Task<IActionResult> GenerateMonthlyReport([FromQuery]MonthlyReportQuery MonthlyReportQuery, CancellationToken cancellationToken)
         {
             MonthlyReportDTO monthlyReport= await _mediator.Send(MonthlyReportQuery, cancellationToken);
-            if (monthlyReport is null)
-                return NotFound("No report found");
             return Ok(monthlyReport);
         }
 

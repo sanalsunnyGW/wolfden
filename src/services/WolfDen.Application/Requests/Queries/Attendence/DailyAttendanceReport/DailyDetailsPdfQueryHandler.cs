@@ -54,11 +54,11 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport
                     LeaveRequest leave = await _context.LeaveRequests.Where(x => x.EmployeeId == request.EmployeeId && x.FromDate <= request.Date && request.Date <= x.ToDate && x.LeaveRequestStatusId == LeaveRequestStatus.Approved).Include(x => x.LeaveType).FirstOrDefaultAsync(cancellationToken);
                     if (leave is null)
                     {
-=                        notPresentDay.AttendanceStatusId = AttendanceStatus.Absent;
+                        notPresentDay.AttendanceStatusId = AttendanceStatus.Absent;
                     }
                     else
                     {
-                        LeaveType leaveType = await _context.LeaveType.FirstOrDefaultAsync(x => x.Id == leave.TypeId);
+                        LeaveType leaveType = await _context.LeaveType.FindAsync(leave.TypeId);
                         if (leaveType.LeaveCategoryId == LeaveCategory.WorkFromHome)
                         {
                             notPresentDay.AttendanceStatusId = AttendanceStatus.WFH;
