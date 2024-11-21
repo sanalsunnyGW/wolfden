@@ -39,7 +39,7 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
                 leaveRequestDto.Description = leaveRequest.Description;
                  var approverName=await _context.Employees.Where(x=>x.Id.Equals(leaveRequest.ProcessedBy)).Select(x=>x.FirstName).FirstOrDefaultAsync(cancellationToken);
                 leaveRequestDto.ProcessedBy = approverName;
-                leaveRequestDto.LeaveRequestStatus = leaveRequest.LeaveRequestStatus;
+                leaveRequestDto.LeaveRequestStatus = leaveRequest.LeaveRequestStatusId;
                 leaveRequestList.Add(leaveRequestDto);  
             }
             return leaveRequestList;
