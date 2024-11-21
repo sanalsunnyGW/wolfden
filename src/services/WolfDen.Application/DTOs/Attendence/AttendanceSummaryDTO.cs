@@ -10,5 +10,4 @@
         public int WFH { get; set; }
         public int Leave { get; set; }
     }
-
 }

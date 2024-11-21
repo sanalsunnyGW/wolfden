@@ -1,4 +1,4 @@
-export interface IattendanceData {
+export interface IAttendanceData {
     date:string,
     attendanceStatusId:number
 }

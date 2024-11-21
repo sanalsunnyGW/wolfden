@@ -7,14 +7,9 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
 {
-    public class WeeklySummaryQueryHandler : IRequestHandler<WeeklySummaryQuery, List<WeeklySummaryDTO>>
+    public class WeeklySummaryQueryHandler(WolfDenContext context) : IRequestHandler<WeeklySummaryQuery, List<WeeklySummaryDTO>>
     {
-        private readonly WolfDenContext _context;
-
-        public WeeklySummaryQueryHandler(WolfDenContext context)
-        {
-            _context = context;
-        }
+        private readonly WolfDenContext _context = context;
 
         public async Task<List<WeeklySummaryDTO>> Handle(WeeklySummaryQuery request, CancellationToken cancellationToken)
         {
@@ -23,7 +18,6 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
             List<WeeklySummaryDTO> weeklySummary = new List<WeeklySummaryDTO>();
 
             DateOnly today = DateOnly.FromDateTime(DateTime.Now);
-
 
             List<DailyAttendence> attendanceRecords = await _context.DailyAttendence
                 .Where(x => x.EmployeeId == request.EmployeeId && x.Date >= request.WeekStart && x.Date <= request.WeekEnd)
@@ -45,7 +39,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
             {
                 if (currentDate > today)
                 {
-                    continue;
+                    break;
                 }
 
                 AttendanceStatus statusId = AttendanceStatus.Absent;
@@ -73,7 +67,6 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
                         {
                             statusId = AttendanceStatus.NormalHoliday;
                         }
-
                         else if (holiday.Type == AttendanceStatus.RestrictedHoliday)
                         {
                             LeaveRequest leaveRequestForHoliday = leaveRequests.FirstOrDefault(x => x.FromDate <= currentDate && x.ToDate >= currentDate);
@@ -89,7 +82,6 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
                             }
                         }
                     }
-
                     else
                     {
                         LeaveRequest leaveRequest = leaveRequests.FirstOrDefault(x => x.FromDate <= currentDate && x.ToDate >= currentDate);
@@ -110,10 +102,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
                             statusId = AttendanceStatus.Absent;
                         }
                     }
-
                 }
-
-
                 weeklySummary.Add(new WeeklySummaryDTO
                 {
                     Date = currentDate,
@@ -124,13 +113,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
                     MissedPunch = attendanceRecord?.MissedPunch,
                     AttendanceStatusId = statusId
                 });
-
-
             }
-
             return weeklySummary;
-
-
         }
     }
 }

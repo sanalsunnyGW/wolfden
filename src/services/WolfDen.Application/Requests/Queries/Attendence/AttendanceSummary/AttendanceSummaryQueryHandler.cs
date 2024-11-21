@@ -7,17 +7,9 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
 {
-    public class AttendanceSummaryQueryHandler : IRequestHandler<AttendanceSummaryQuery, AttendanceSummaryDTO>
+    public class AttendanceSummaryQueryHandler(WolfDenContext context) : IRequestHandler<AttendanceSummaryQuery, AttendanceSummaryDTO>
     {
-
-
-        private readonly WolfDenContext _context;
-
-        public AttendanceSummaryQueryHandler(WolfDenContext context)
-        {
-            _context = context;
-        }
-
+        private readonly WolfDenContext _context = context;
         public async Task<AttendanceSummaryDTO> Handle(AttendanceSummaryQuery request, CancellationToken cancellationToken)
         {
             int minWorkDuration = 360;
@@ -36,7 +28,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
                 Leave = 0
             };
 
-            DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+            DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
 
             List<DailyAttendence> attendanceRecords = await _context.DailyAttendence
                 .Where(x => x.EmployeeId == request.EmployeeId && x.Date >= monthStart && x.Date <= monthEnd)
@@ -54,12 +46,11 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
 
             List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
 
-
             for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
                 if (currentDate > today)
                 {
-                    continue;
+                    break;
                 }
 
                 DailyAttendence attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
@@ -124,7 +115,6 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
                     }
                 }
             }
-
             return summaryDto;
         }
     }

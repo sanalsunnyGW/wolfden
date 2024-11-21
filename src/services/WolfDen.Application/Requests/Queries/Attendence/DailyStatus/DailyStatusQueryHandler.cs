@@ -7,16 +7,9 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
 {
-    public class DailyStatusQueryHandler : IRequestHandler<DailyStatusQuery, List<DailyStatusDTO>>
+    public class DailyStatusQueryHandler(WolfDenContext context) : IRequestHandler<DailyStatusQuery, List<DailyStatusDTO>>
     {
-        private readonly WolfDenContext _context;
-
-        public DailyStatusQueryHandler(WolfDenContext context)
-        {
-            _context = context;
-        }
-
-
+        private readonly WolfDenContext _context = context;
         public async Task<List<DailyStatusDTO>> Handle(DailyStatusQuery request, CancellationToken cancellationToken)
         {
             int minWorkDuration = 360;
@@ -49,10 +42,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
             {
                 if (currentDate > today)
                 {
-                    continue;
+                    break;
                 }
-
-
 
                 DailyAttendence attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (attendanceRecord is not null)
@@ -114,20 +105,14 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                             statusId = AttendanceStatus.Absent;
                         }
                     }
-
-
                 }
                 dailyStatuses.Add(new DailyStatusDTO
                 {
                     Date = currentDate,
                     AttendanceStatusId = statusId
                 });
-
-
             }
-
             return dailyStatuses;
-
         }
     }
 }

@@ -8,7 +8,7 @@ using WolfDen.Infrastructure.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
-Configuration.Default.ApiKey.Add("api-key", builder.Configuration["BrevoApi:ApiKey"]);
+
 
 // Add services to the container.
 

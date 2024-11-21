@@ -46,7 +46,7 @@ namespace WolfDen.API.Controllers.Attendence
             return await _mediator.Send(query, cancellationToken);
         }
 
-        [HttpGet("employee/daily-status")]
+        [HttpGet("employee/daily")]
         public async Task<List<DailyStatusDTO>> GetDailyStatus([FromQuery] DailyStatusQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);

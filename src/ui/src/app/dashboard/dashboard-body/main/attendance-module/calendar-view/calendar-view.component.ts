@@ -4,6 +4,8 @@ import { CalendarOptions, DatesSetArg, DayCellContentArg } from '@fullcalendar/c
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { AttendanceService } from '../../../../../Service/attendance.service';
+import { IAttendanceData } from '../../../../../Interface/attendance-data';
+import { IAttendanceSummary } from '../../../../../Interface/attendance-summary';
 
 @Component({
   selector: 'app-calendar-view',
@@ -24,10 +26,7 @@ export class CalendarViewComponent implements OnInit {
     dateClick: (arg) => this.handleDateClick(arg),
     datesSet: (arg) => this.onCalendarMonthChange(arg),
     dayCellClassNames: (arg) => this.getDayCellClassNames(arg)
-
-
   };
-
 
   present: number = 0;
   absent: number = 0;
@@ -44,59 +43,42 @@ export class CalendarViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("intialised");
     this.fetchAttendanceData(this.currentYear, this.currentMonth);
     this.getStatusData(this.currentYear, this.currentMonth);
-
   }
 
 
   fetchAttendanceData(year: number, month: number): void {
-    console.log("attendance count")
-    this.service.getAttendanceSummary(this.employeeId, year, month).subscribe((data: any) => {
-
-      console.log(data);
-
+    this.service.getAttendanceSummary(this.employeeId, year, month).subscribe((data: IAttendanceSummary) => {
       this.present = data.present;
       this.absent = data.absent;
       this.incompleteShift = data.incompleteShift;
       this.wfh = data.wfh;
     });
-    console.log("count fetched after")
   }
 
-  getStatusData(year: number, month: number): void {
+  getStatusData(year: number, month: number) {
     console.log("date fetched")
-    this.service.getDailyStatus(this.employeeId, year, month).subscribe((data: any) => {
-
-      data.forEach((item: { date: string, attendanceStatusId: number }) => {
-        console.log(item)
+    this.service.getDailyStatus(this.employeeId, year, month).subscribe((data: IAttendanceData[]) => {
+      data.forEach((item: IAttendanceData) => {
         this.attendanceData[item.date] = item.attendanceStatusId;
-        console.log(this.attendanceData)
       });
-
-
     });
-
   }
 
   handleDateClick(arg: DateClickArg) {
     alert('date click! ' + arg.dateStr)
   }
 
-
   getDayCellClassNames(arg: DayCellContentArg): string[] {
-
     const date = new Date(arg.date);
     date.setDate(date.getDate() + 1);
     const dateStr = date.toISOString().split('T')[0];
-
     const status = this.attendanceData[dateStr];
 
     if (arg.date.getDay() === 6 || arg.date.getDay() === 0) {
       return ['weekend-day'];
     }
-
 
     if (status === 1) {
       return ['present'];
@@ -107,20 +89,13 @@ export class CalendarViewComponent implements OnInit {
     } else if (status === 4) {
       return ['wfh'];
     }
-
-
     return [];
   }
-
-
 
   onCalendarMonthChange(arg: DatesSetArg): void {
     const currentDate = arg.view.currentStart;
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
-
-
-    console.log("im i working")
     this.fetchAttendanceData(year, month);
     this.getStatusData(year, month);
   }
