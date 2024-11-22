@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { ILeaveUpdate, IUpdateLeaveSetting } from '../interface/update-leave-setting';
 import { IAddNewLeaveType } from '../interface/add-new-leave-type-interface';
 import { ILeaveBalanceList } from '../interface/leave-balance-list-interface';
-import { ILeaveRequestHistory, ILeaveRequestHistoryResponse } from '../interface/leave-request-history';
+import { ILeaveRequestHistoryResponse } from '../interface/leave-request-history';
 import { IGetLeaveTypeIdAndname } from '../interface/get-leave-type-interface';
 import { IEditLeaveType } from '../interface/edit-leave-type';
 

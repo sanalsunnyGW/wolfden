@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ILeaveBalanceList } from '../../../../../interface/leave-balance-list-interface';
 import { FormsModule } from '@angular/forms';
-import { LeaveManagementService } from '../../../../../service/leave-management.service';
+import { LeaveManagementService } from '../../../../../Service/leave-management.service';
 
 
 @Component({
