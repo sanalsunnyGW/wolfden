@@ -1,32 +1,40 @@
 <div class="nav-items">
-    <div class="nav-item" routerLink="/dashboard/main-page" >
-      <span class="cursor-pointer">Dashboard</span>
-    </div>
-    <div class="nav-item"  routerLink="/dashboard/employee-directory" >
-      <span class="cursor-pointer">Employee Directory</span>
-    </div>
-    <div class="nav-item">
-      <span>Company Hierarchy</span>
-    </div>
-    <div class="nav-item dropdown">
-      <span class="dropdown-toggle" id="attendanceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-        Leave
-      </span>
-      <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
-        <li><a class="dropdown-item" [routerLink]="'/leave-dashboard'">Leave Dashboard</a></li>
-        <li><a class="dropdown-item" [routerLink]="'/leave-request-history'">Leave Request History</a></li>
-        <li><a class="dropdown-item" [routerLink]="'/leave-request-approval'">Approve/Reject Leave</a></li>
-        <li><a class="dropdown-item" [routerLink]="'/add-new-leave-type'">Add New Leave Type </a></li>
-        <li><a class="dropdown-item" [routerLink]="'/edit-leave-type'">Edit Existing Leave Type </a></li>
-      </ul>
-    </div>
-    <div class="nav-item">
-      <span>Calendar</span>
-    </div>
-    <div class="nav-item">
-      <span>Attendance</span>
-    </div>
-  
+  <div class="nav-item">
+    <span>Dashboard</span>
+  </div>
+  <div class="nav-item">
+    <span>Employee Directory</span>
+  </div>
+  <div class="nav-item">
+    <span>Company Hierarchy</span>
+  </div>
+  <div class="nav-item dropdown">
+    <span class="dropdown-toggle" id="attendanceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+      Leave
+    </span>
+    <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
+      <li><a class="dropdown-item" [routerLink]="'/leave-dashboard'">Leave Dashboard</a></li>
+      <li><a class="dropdown-item" [routerLink]="'/leave-request-history'">Leave Request History</a></li>
+      <li><a class="dropdown-item" [routerLink]="'/leave-request-approval'">Approve/Reject Leave</a></li>
+      <li><a class="dropdown-item" [routerLink]="'/add-new-leave-type'">Add New Leave Type </a></li>
+      <li><a class="dropdown-item" [routerLink]="'/edit-leave-type'">Edit Existing Leave Type </a></li>
+    </ul>
+  </div>
+  <div class="nav-item">
+    <span>Calendar</span>
+  </div>
+
+  <div class="nav-item dropdown">
+    <span class="dropdown-toggle" id="attendanceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+      Attendance
+    </span>
+    <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
+      <li><a class="dropdown-item" [routerLink]="'/attendance/summary'">Attendance Dashboard</a></li>
+      <li><a class="dropdown-item" [routerLink]="'/attendance/details'">Attendance Summary</a></li>
+      <li><a class="dropdown-item" [routerLink]="'/attendance/reports'">Attendance Reports</a></li>
+      <li><a class="dropdown-item" [routerLink]="'/attendance/details'">Team Attendance </a></li>
+    </ul>
+  </div>
 
 
-
+</div>

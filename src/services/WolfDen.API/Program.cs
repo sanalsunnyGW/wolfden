@@ -2,11 +2,13 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
 using System.Reflection;
+using sib_api_v3_sdk.Client;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Infrastructure.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 
@@ -54,6 +56,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors(options => options.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowAnyMethod());
+
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

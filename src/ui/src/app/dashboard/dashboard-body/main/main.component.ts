@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-import { EmployeeDirectoryComponent } from "./employee-directory/employee-directory.component";
-import { UpdateLeaveSettingsComponent } from './leave-management/update-leave-settings/update-leave-settings.component';
-import { LeaveApplicationComponent } from "./leave-management/leave-application/leave-application.component";
 import { RouterOutlet } from '@angular/router';
 
 
