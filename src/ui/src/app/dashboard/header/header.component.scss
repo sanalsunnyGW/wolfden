@@ -27,6 +27,23 @@
         align-items: center;
         justify-content: center;
         font-weight: bold;
+        cursor: pointer;
       }
     }
   }
+  
+  .custom-btn{
+    background-color: #1e507f;
+    border:none;
+    max-height: 44px;
+    width: 190px;
+
+
+  }
+  .custom-btn:hover{
+    background-color: darken(#1e507f, 13%);
+    border:none;
+    max-height: 44px;
+    width: 190px;
+  }
+  
