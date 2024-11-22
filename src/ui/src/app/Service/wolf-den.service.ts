@@ -2,7 +2,6 @@ import { Injectable, inject } from '@angular/core';
 import { environment } from '../../enviornments/environment';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IEmployeeDirectoryDto } from '../Interface/iemployee-directory';
 import { IEmployeeDirectoryWithPagecount } from '../Interface/iemployee-directory-with-pagecount';
 @Injectable({
   providedIn: 'root'
