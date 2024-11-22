@@ -1,11 +1,13 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ILeaveUpdate, IUpdateLeaveSetting } from '../interface/update-leave-setting';
-import { IAddNewLeaveType } from '../interface/add-new-leave-type-interface';
-import { ILeaveBalanceList } from '../interface/leave-balance-list-interface';
-import { ILeaveRequestHistory } from '../interface/leave-request-history';
-import { IGetLeaveTypeIdAndname } from '../interface/get-leave-type-interface';
+
+import { IAddNewLeaveType } from '../Interface/Add-New-Leave-Type-Interface';
+import { ILeaveBalanceList } from '../Interface/leave-balance-list-interface';
+import { ILeaveRequestHistory } from '../Interface/leave-request-history';
+import { IGetLeaveTypeIdAndname } from '../Interface/get-leave-type-interface';
+import { ILeaveUpdate, IUpdateLeaveSetting } from '../Interface/update-leave-setting';
+
 
 @Injectable({
   providedIn: 'root'

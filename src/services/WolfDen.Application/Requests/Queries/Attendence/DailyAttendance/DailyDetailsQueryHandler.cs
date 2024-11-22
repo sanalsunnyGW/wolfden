@@ -1,4 +1,4 @@
-﻿﻿using MediatR;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.Requests.DTOs.Attendence;
 using WolfDen.Domain.Entity;

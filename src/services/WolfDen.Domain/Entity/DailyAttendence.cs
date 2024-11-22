@@ -1,4 +1,6 @@
-﻿namespace WolfDen.Domain.Entity
+﻿using WolfDen.Domain.Enums;
+
+namespace WolfDen.Domain.Entity
 {
     public class DailyAttendence
     {
@@ -10,7 +12,7 @@
         public int InsideDuration { get;private set; }
         public int OutsideDuration { get;private set; }
         public int PantryDuration { get;private set; }
-        public string MissedPunch {  get;private set; }
+        public string? MissedPunch {  get;private set; }
         public int? AttendanceStatusId { get; private set; }
         private DailyAttendence()
         {
