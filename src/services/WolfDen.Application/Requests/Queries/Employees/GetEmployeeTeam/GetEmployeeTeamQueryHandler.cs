@@ -13,6 +13,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam
         public async Task<List<EmployeeHierarchyDto>> Handle(GetEmployeeTeamQuery request, CancellationToken cancellationToken)
         {
             EmployeeHierarchyService service = new(_context);
+            GetEmployeeService s = new(_context);
             List<EmployeeHierarchyDto> teamList = new();
             EmployeeHierarchyDto result = new();
             var employee = await _context.Employees
@@ -80,7 +81,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam
                 }
                 return teamList;
             }
-            if (request.GetFullHierarchy)
+            if (request.Hierarchy)
             {
                 result.Id = employee.Id;
                 result.EmployeeCode = employee.EmployeeCode;
@@ -109,31 +110,8 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam
             var subordinates = _context.Employees.Where(x => x.ManagerId == employee.Id && x.IsActive == true);
             foreach (var subordinate in subordinates)
             {
-                EmployeeHierarchyDto employeeDto = new()
-                {
-                    Id = subordinate.Id,
-                    EmployeeCode = subordinate.EmployeeCode,
-                    FirstName = subordinate.FirstName,
-                    LastName = subordinate.LastName,
-                    Email = subordinate.Email,
-                    PhoneNumber = subordinate.PhoneNumber,
-                    DateofBirth = subordinate.DateofBirth,
-                    DepartmentId = subordinate.DepartmentId,
-                    DepartmentName = subordinate.Department != null ? subordinate.Department.Name : null,
-                    DesignationId = subordinate.DesignationId,
-                    DesignationName = subordinate.Designation != null ? subordinate.Designation.Name : null,
-                    ManagerId = subordinate.ManagerId,
-                    ManagerName = subordinate.Manager != null
-                   ? $"{subordinate.Manager.FirstName}{(string.IsNullOrWhiteSpace(subordinate.Manager.LastName) ? "" : " " + subordinate.Manager.LastName)}"
-                   : null,
-                    IsActive = subordinate.IsActive,
-                    Address = subordinate.Address,
-                    Country = subordinate.Country,
-                    State = subordinate.State,
-                    EmploymentType = subordinate.EmploymentType,
-                    Photo = subordinate.Photo
-                };
-                teamList.Add(employeeDto);
+                
+                teamList.Add(await s.GetEmployee(subordinate,cancellationToken));
             }
             return teamList;
         }

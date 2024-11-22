@@ -1,8 +1,8 @@
-import { AfterViewChecked, Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import mermaid from 'mermaid';
-import { EmployeeServiceService } from '../Service/employee-service.service';
 import { IEmployeeData } from '../Interface/employee-data';
+import { EmployeeService } from '../Service/employee.service';
 
 
 @Component({
@@ -14,11 +14,10 @@ import { IEmployeeData } from '../Interface/employee-data';
 })
 export class EmployeeHierarchyTreeComponent implements OnInit {
   @ViewChild('mermaidDiv', { static: true }) mermaidDiv!: ElementRef;
-  router = inject(Router)
+  constructor(private router: Router, private employeeService: EmployeeService) { }
   inDate = new Date();
-  service = inject(EmployeeServiceService)
-  isDataLoaded: boolean = false; 
-  employeeData: IEmployeeData={
+  isDataLoaded: boolean = false;
+  employeeData: IEmployeeData = {
     id: 0,
     employeeCode: 0,
     firstName: '',
@@ -27,24 +26,23 @@ export class EmployeeHierarchyTreeComponent implements OnInit {
     phoneNumber: '',
     dateOfBirth: this.inDate,
     designationId: 0,
-    designationName:'',
+    designationName: '',
     departmentId: 0,
     departmentName: '',
-    managerId:0,
+    managerId: 0,
     managerName: '',
     isActive: true,
     address: '',
     country: '',
     state: '',
     employmentType: 0,
-    photo: '', 
-    subordinates:[]
+    photo: '',
+    subordinates: []
   }
 
   ngOnInit(): void {
     this.loadEmployeeHierarchy();
     (window as any).onA = (nodeName: string) => {
-      console.log('Node clicked:', nodeName);
       this.router.navigate(['/employee-display']);
     };
 
@@ -79,26 +77,24 @@ export class EmployeeHierarchyTreeComponent implements OnInit {
   }
 
   loadEmployeeHierarchy() {
-    this.service.getHierarchy().subscribe({
+    this.employeeService.getHierarchy().subscribe({
       next: (response: any) => {
         if (response) {
           this.employeeData = response;
-          this.isDataLoaded = true; 
-          this.renderMermaidChart(); 
-          console.log('Employee data loaded:', this.employeeData);
+          this.isDataLoaded = true;
+          this.renderMermaidChart();
         } else {
           alert('No Employee found');
         }
       },
       error: (error) => {
-        console.error('Error Displaying Hierarchy:', error);
         alert('An error occurred while displaying hierarchy');
       },
     });
   }
 
   private renderMermaidChart() {
-    if (!this.isDataLoaded || !this.employeeData) return; 
+    if (!this.isDataLoaded || !this.employeeData) return;
     const graphDefinition = this.generateMermaidGraph(this.employeeData);
     mermaid
       .render('mermaidDiv', graphDefinition)

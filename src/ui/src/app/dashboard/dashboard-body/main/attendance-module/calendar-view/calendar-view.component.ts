@@ -58,7 +58,6 @@ export class CalendarViewComponent implements OnInit {
   }
 
   getStatusData(year: number, month: number) {
-    console.log("date fetched")
     this.service.getDailyStatus(this.employeeId, year, month).subscribe((data: IAttendanceData[]) => {
       data.forEach((item: IAttendanceData) => {
         this.attendanceData[item.date] = item.attendanceStatusId;

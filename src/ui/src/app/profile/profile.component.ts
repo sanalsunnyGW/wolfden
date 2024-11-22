@@ -1,11 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IProfileForm } from '../Interface/iprofile-from';
-import { Employee } from '../../models/iemployee';
+import { Employee } from '../Interface/iemployee';
 import { Gender } from '../enum/gender-enum';
 import { EmploymentType } from '../enum/employment-type-enum';
-import { EmployeeServiceService } from '../Service/employee-service.service';
+import { EmployeeService } from '../Service/employee.service';
 
 @Component({
   selector: 'app-profile',
@@ -41,8 +41,7 @@ export class ProfileComponent {
     employmentType: 0,
     photo: ''
   };
-  service = inject(EmployeeServiceService)
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private employeeService: EmployeeService) {
     this.buildForm();
   }
   private buildForm() {
@@ -104,7 +103,7 @@ export class ProfileComponent {
 
   }
   loadEmployeeData() {
-    this.service.getEmployeeProfile().subscribe({
+    this.employeeService.getEmployeeProfile().subscribe({
       next: (response: any) => {
         if (response) {
           this.employeeData = response;
@@ -129,10 +128,9 @@ export class ProfileComponent {
 
   onSubmit() {
     if (this.userForm.valid) {
-      console.log('Form Values:', this.userForm.value);
       const formData = this.userForm.value;
       formData.gender = Number(formData.gender);
-      this.service.employeeUpdateEmployee(formData).subscribe({
+      this.employeeService.employeeUpdateEmployee(formData).subscribe({
         next: (response: any) => {
           if (response == true) {
             alert("Profile Updated Successfully")
@@ -144,7 +142,6 @@ export class ProfileComponent {
         }
       })
     } else {
-      console.log('Form is invalid');
     }
 
   }

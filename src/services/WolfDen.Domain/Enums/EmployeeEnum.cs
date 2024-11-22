@@ -10,7 +10,7 @@
         }
         public enum EmploymentType
         {
-            Contract=1,
+            Contract = 1,
             Permanent
         }
     }

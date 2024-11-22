@@ -32,7 +32,6 @@ export class LeaveManagementService {
     }
 
     getLeaveSetting(){
-      console.log("test")
       return this.http.get<ILeaveUpdate>("https://localhost:7015/api/leave-setting")
 
     }

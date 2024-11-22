@@ -1,8 +1,8 @@
 import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import mermaid from 'mermaid';
-import { EmployeeServiceService } from '../Service/employee-service.service';
 import { IEmployeeData } from '../Interface/employee-data';
+import { EmployeeService } from '../Service/employee.service';
 
 @Component({
   selector: 'app-my-team',
@@ -14,59 +14,56 @@ import { IEmployeeData } from '../Interface/employee-data';
 export class MyTeamComponent {
 
   @ViewChild('mermaidDiv', { static: false }) mermaidDiv!: ElementRef;
-  router = inject(Router)
-  inDate=new Date();
-  employeeData: IEmployeeData[]=[{
-    id: 0,
-    employeeCode: 0,
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    dateOfBirth: this.inDate,
-    designationId: 0,
-    designationName:'',
-    departmentId: 0,
-    departmentName: '',
-    managerId:0,
-    managerName: '',
-    isActive: true,
-    address: '',
-    country: '',
-    state: '',
-    employmentType: 0,
-    photo: '', 
-    subordinates:[]
-  }];
-  employeeDataModal: IEmployeeData[]=[{
-    id: 0,
-    employeeCode: 0,
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    dateOfBirth: this.inDate,
-    designationId: 0,
-    designationName:'',
-    departmentId: 0,
-    departmentName: '',
-    managerId:0,
-    managerName: '',
-    isActive: true,
-    address: '',
-    country: '',
-    state: '',
-    employmentType: 0,
-    photo: '', 
-    subordinates:[]
-  }];
+  constructor(private router: Router, private employeeService: EmployeeService) { }
+  inDate = new Date();
   isDataLoaded: boolean = false;
-  service = inject(EmployeeServiceService)
-
+  employeeData: IEmployeeData[] = [{
+    id: 0,
+    employeeCode: 0,
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    dateOfBirth: this.inDate,
+    designationId: 0,
+    designationName: '',
+    departmentId: 0,
+    departmentName: '',
+    managerId: 0,
+    managerName: '',
+    isActive: true,
+    address: '',
+    country: '',
+    state: '',
+    employmentType: 0,
+    photo: '',
+    subordinates: []
+  }];
+  employeeDataModal: IEmployeeData[] = [{
+    id: 0,
+    employeeCode: 0,
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    dateOfBirth: this.inDate,
+    designationId: 0,
+    designationName: '',
+    departmentId: 0,
+    departmentName: '',
+    managerId: 0,
+    managerName: '',
+    isActive: true,
+    address: '',
+    country: '',
+    state: '',
+    employmentType: 0,
+    photo: '',
+    subordinates: []
+  }];
   ngOnInit(): void {
     this.loadEmployeeHierarchy();
     (window as any).onA = (nodeName: string) => {
-      console.log('Node clicked:', nodeName);
       this.router.navigate(['/employee-display']);
     };
 
@@ -99,12 +96,11 @@ export class MyTeamComponent {
           fill: #ffffff !important;
         }
       `
-
     });
 
   }
   viewTeamHierarchy() {
-    this.service.getMyTeamHierarchy(true).subscribe({
+    this.employeeService.getMyTeamHierarchy(true).subscribe({
       next: (response: any) => {
         if (response) {
           this.employeeDataModal = response;
@@ -122,13 +118,12 @@ export class MyTeamComponent {
   }
 
   loadEmployeeHierarchy() {
-    this.service.getMyTeamHierarchy(false).subscribe({
+    this.employeeService.getMyTeamHierarchy(false).subscribe({
       next: (response: any) => {
         if (response) {
           this.employeeData = response;
           this.isDataLoaded = true;
           this.renderMermaidChart();
-          console.log('Employee data loaded:', this.employeeData);
         } else {
           alert('No Employee found');
         }

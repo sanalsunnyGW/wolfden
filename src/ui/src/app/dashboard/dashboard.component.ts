@@ -8,7 +8,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [HeaderComponent, SideNavComponent, DashboardBodyComponent,RouterLink,RouterLinkActive],
+  imports: [HeaderComponent, SideNavComponent, DashboardBodyComponent, RouterLink, RouterLinkActive],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })

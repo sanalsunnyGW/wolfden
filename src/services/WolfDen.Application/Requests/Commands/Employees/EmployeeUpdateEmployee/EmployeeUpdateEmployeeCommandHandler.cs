@@ -28,7 +28,7 @@ namespace WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee
             {
                 return false;
             }
-            employee.EmployeeUpdateEmployee(request.FirstName, request.LastName, request.DateofBirth, request.Email, request.PhoneNumber, request.Gender,request.Address,request.Country,request.State,request.Photo);
+            employee.EmployeeUpdateEmployee(request.FirstName, request.LastName, request.DateofBirth, request.Email, request.PhoneNumber, request.Gender, request.Address, request.Country, request.State, request.Photo);
             _context.Employees.Update(employee);
             await _context.SaveChangesAsync(cancellationToken);
             return true;
