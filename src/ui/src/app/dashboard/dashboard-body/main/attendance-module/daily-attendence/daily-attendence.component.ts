@@ -4,6 +4,7 @@ import { CommonModule, formatDate } from '@angular/common';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { DailyAttendance } from '../../../../../interface/idaily-attendance';
 
+
 @Component({
   selector: 'app-daily-attendence',
   standalone: true,

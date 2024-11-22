@@ -1,9 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { AttendanceService } from '../../../../../service/attendance.service';
-import { allEmployeesMonthlyReports, MonthlyReports } from '../../../../../interface/monthly-report';
+
 import { FormsModule } from '@angular/forms';
 import { CommonModule, formatDate } from '@angular/common';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { AttendanceService } from '../../../../../service/attendance.service';
+import { allEmployeesMonthlyReports, MonthlyReports } from '../../../../../interface/monthly-report';
+import { ICheckAttencdanceClose } from '../../../../../interface/check-attendance-close';
 
 @Component({
   selector: 'app-monthly-report',
@@ -15,18 +17,18 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 export class MonthlyReportComponent {
   service=inject(AttendanceService)
   selectedMonth: any;
-  monthNumber:number=0
-  yearNumber:number=0
-  checkStatus:boolean=false
-  checkClosedStatus:boolean=false
-  monthIsSelected:boolean=false
-  display:boolean=false
-  pageNumber: number=1;
-  pageSize:number=1
-  totalPages: number=0;
+  monthNumber=0
+  yearNumber=0
+  checkStatus=false
+  checkClosedStatus=false
+  monthIsSelected=false
+  display=false
+  pageNumber=0;
+  pageSize=1
+  totalPages=0;
   constructor() {}
   monthlyData!:MonthlyReports
-  EmployeeReport:allEmployeesMonthlyReports[]=[]
+  employeeReport:allEmployeesMonthlyReports[]=[]
   ngOnInit() {}
   monthNames: string[] = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -42,8 +44,8 @@ export class MonthlyReportComponent {
     this.monthNumber=Number(month);
     this.yearNumber=Number(year);
     this.service.checkAttendanceClose(this.monthNumber,this.yearNumber).subscribe(
-      (response: boolean) =>{
-        if(response==true){
+      (response: ICheckAttencdanceClose) =>{
+        if(response.status==true){
           this.checkStatus=true;
       }
       else{
@@ -62,7 +64,7 @@ export class MonthlyReportComponent {
         if(response){
           this.monthlyData=response
           this.totalPages=this.monthlyData.pageCount;
-          this.EmployeeReport=this.monthlyData.allEmployeesMonthlyReports
+          this.employeeReport=this.monthlyData.allEmployeesMonthlyReports
           this.display=true
       }
       else {alert("no data found") };

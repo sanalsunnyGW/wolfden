@@ -51,7 +51,6 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                         if (attendanceRecord.InsideDuration < minWorkDuration)
                         {
                             incompleteShiftDays += currentDate.ToString("yyyy-MM-dd") + ",";
-                            Console.WriteLine(incompleteShiftDays);
                             incompleteShiftCount++;
                         }
                     }

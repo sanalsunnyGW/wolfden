@@ -5,6 +5,8 @@ import { environment } from '../../enviornments/environment';
 import { MonthlyReports } from '../interface/monthly-report';
 import { IAttendanceSummary } from '../interface/attendance-summary';
 import { IAttendanceData } from '../interface/attendance-data';
+import { WeeklyAttendance } from '../interface/iweekly-attendance';
+import { ICheckAttencdanceClose } from '../interface/check-attendance-close';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +34,7 @@ export class AttendanceService {
   checkAttendanceClose(month:number,year:number)
   {
     const url = `${this.baseUrl}/api/attendance/check-attendance-close?Month=${month}&Year=${year}`;
-    return this.http.get<boolean>(url); 
+    return this.http.get<ICheckAttencdanceClose>(url); 
   }
   closeAttendance(month: number, year: number)
   {
@@ -44,6 +46,10 @@ export class AttendanceService {
   }
   getDailyStatus(employeeId: number, year: number, month: number) {
     return this.http.get<IAttendanceData[]>(`${this.baseUrl}/api/attendance/employee/daily?EmployeeId=${employeeId}&Year=${year}&Month=${month}`);
+  }
+  getWeeklyChart(employeeId:number,weekStart:string,weekEnd:string)
+  {
+    return this.http.get<WeeklyAttendance[]>(`${this.baseUrl}/api/attendance/employee/weekly?EmployeeId=${employeeId}&WeekStart=${weekStart}&WeekEnd=${weekEnd}`)
   }
 }
 

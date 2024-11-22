@@ -6,6 +6,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 
+
 @Component({
   selector: 'app-leave-application',
   standalone: true,
