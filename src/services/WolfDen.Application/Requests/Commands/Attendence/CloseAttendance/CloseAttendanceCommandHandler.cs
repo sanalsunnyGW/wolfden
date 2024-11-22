@@ -43,7 +43,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                 int incompleteShiftCount = 0;
                 string lopdays = "";
                 string incompleteShiftDays = "";
-                for (var currentDate = monthStart; currentDate <= attendanceClosingDate; currentDate = currentDate.AddDays(1))
+                for (DateOnly currentDate = monthStart; currentDate <= attendanceClosingDate; currentDate = currentDate.AddDays(1))
                 {
                     DailyAttendence attendanceRecord = attendanceRecords.FirstOrDefault(x => x.EmployeeId == employee.Id && x.Date == currentDate);
                     if (attendanceRecord is not null)
