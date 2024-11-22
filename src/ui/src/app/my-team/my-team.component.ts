@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import mermaid from 'mermaid';
 import { EmployeeServiceService } from '../Service/employee-service.service';
+import { IEmployeeData } from '../Interface/employee-data';
 
 @Component({
   selector: 'app-my-team',
@@ -14,8 +15,51 @@ export class MyTeamComponent {
 
   @ViewChild('mermaidDiv', { static: false }) mermaidDiv!: ElementRef;
   router = inject(Router)
-  employeeData: any[] = [];
-  employeeDataModal: any[] = [];
+  inDate=new Date();
+  employeeData: IEmployeeData[]=[{
+    id: 0,
+    employeeCode: 0,
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    dateOfBirth: this.inDate,
+    designationId: 0,
+    designationName:'',
+    departmentId: 0,
+    departmentName: '',
+    managerId:0,
+    managerName: '',
+    isActive: true,
+    address: '',
+    country: '',
+    state: '',
+    employmentType: 0,
+    photo: '', 
+    subordinates:[]
+  }];
+  employeeDataModal: IEmployeeData[]=[{
+    id: 0,
+    employeeCode: 0,
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    dateOfBirth: this.inDate,
+    designationId: 0,
+    designationName:'',
+    departmentId: 0,
+    departmentName: '',
+    managerId:0,
+    managerName: '',
+    isActive: true,
+    address: '',
+    country: '',
+    state: '',
+    employmentType: 0,
+    photo: '', 
+    subordinates:[]
+  }];
   isDataLoaded: boolean = false;
   service = inject(EmployeeServiceService)
 

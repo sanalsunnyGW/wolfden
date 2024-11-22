@@ -2,6 +2,7 @@ import { AfterViewChecked, Component, ElementRef, Input, OnInit, ViewChild, inje
 import { Router } from '@angular/router';
 import mermaid from 'mermaid';
 import { EmployeeServiceService } from '../Service/employee-service.service';
+import { IEmployeeData } from '../Interface/employee-data';
 
 
 @Component({
@@ -14,9 +15,31 @@ import { EmployeeServiceService } from '../Service/employee-service.service';
 export class EmployeeHierarchyTreeComponent implements OnInit {
   @ViewChild('mermaidDiv', { static: true }) mermaidDiv!: ElementRef;
   router = inject(Router)
+  inDate = new Date();
   service = inject(EmployeeServiceService)
-  employeeData: any[] = [];
   isDataLoaded: boolean = false; 
+  employeeData: IEmployeeData={
+    id: 0,
+    employeeCode: 0,
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    dateOfBirth: this.inDate,
+    designationId: 0,
+    designationName:'',
+    departmentId: 0,
+    departmentName: '',
+    managerId:0,
+    managerName: '',
+    isActive: true,
+    address: '',
+    country: '',
+    state: '',
+    employmentType: 0,
+    photo: '', 
+    subordinates:[]
+  }
 
   ngOnInit(): void {
     this.loadEmployeeHierarchy();
