@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolfDen.Domain.Entity;
-using WolfDen.Domain.Enums;
+﻿using WolfDen.Domain.Enums;
 
 namespace WolfDen.Application.DTOs.LeaveManagement
 {
     public class LeaveRequestDto
     {
-       
-        public string TypeName { get; set; }  //to get leave type name from table LeaveType
+       public int Id { get; set; }  
+        public string TypeName { get; set; }  
         public bool? HalfDay { get; set; }
         public DateOnly FromDate { get; set; }
         public DateOnly ToDate { get; set; }

@@ -10,22 +10,47 @@
       <th scope="col">Description</th>
       <th scope="col">Status</th>
       <th scope="col">Processed By</th>
+      <th scope="col">Edit Leave Request</th>
+      <th scope="col">Delete Leave Request</th>
     </tr>
   </thead>
   <tbody class="table-group-divider">
+
+    @for(leaveRequest of leaveRequestList;track leaveRequest;let i = $index)
+    {
     <tr>
-      @for(leaveRequest of leaveRequestList;track leaveRequest;let i = $index)
-      {
-      <th scope="row">{{i+1}}</th>
+      <th scope="row">{{indexValue+i}}</th>
       <td>{{leaveRequest.applyDate}}</td>
       <td>{{leaveRequest.typeName}}</td>
       <td>{{leaveRequest.fromDate}}</td>
       <td>{{leaveRequest.toDate}}</td>
       <td>{{leaveRequest.halfDay}}</td>
       <td>{{leaveRequest.description}}</td>
-      <td>{{requestStatus(leaveRequest)}}</td>
+      <td>{{requestStatus(leaveRequest.leaveRequestStatusId)}}</td>
       <td>{{leaveRequest.processedBy}}</td>
-      }
+      <td><button class="btn btn-secondary" (click)="onEdit(leaveRequest.id)">Edit </button></td>
+      <td><button class="btn btn-danger" (click)="onDelete(leaveRequest.id)">Delete</button></td>
     </tr>
+    }
   </tbody>
 </table>
+
+@if(totalPages > 1)
+{
+<div class="d-flex justify-content-center">
+  <button class="btn btn-secondary shadow" type="button" (click)="previousPage()" [disabled]="pageNumber === 1">
+    Previous
+  </button>
+
+  @for( count of leaveRequestCountArray;track count)
+  {
+  <div>
+    <button class="btn shadow" type="button" (click)="countSend(count)">{{ count }}</button>
+  </div>
+  }
+
+  <button class="btn btn-secondary shadow" type="button" (click)="nextPage()" [disabled]="pageNumber === totalPages">
+    Next
+  </button>
+</div>
+}

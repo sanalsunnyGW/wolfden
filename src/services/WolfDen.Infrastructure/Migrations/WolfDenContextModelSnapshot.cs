@@ -554,6 +554,9 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<int>("IncrementValue")
                         .HasColumnType("int");
 
+                    b.Property<DateOnly>("LastCreditedMonth")
+                        .HasColumnType("date");
+
                     b.Property<int>("LeaveBalanceId")
                         .HasColumnType("int");
 
