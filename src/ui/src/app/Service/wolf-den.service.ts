@@ -2,7 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { environment } from '../../enviornments/environment';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IEmployeeDirectoryDto } from '../dashboard/dashboard-body/main/employee-directory/employee-directory-dto';
+import { IEmployeeDirectoryDto } from '../Interface/iemployee-directory';
+import { IEmployeeDirectoryWithPagecount } from '../Interface/iemployee-directory-with-pagecount';
 @Injectable({
   providedIn: 'root'
 })
@@ -46,7 +47,7 @@ export class WolfDenService {
         return this.http.put(`${this.baseUrl}/api/Employee/employee-update-employee`, data, { headers: this.getHeaders() });
       }
 
-      getAllEmployees(departmentId?: number, employeeName?: string): Observable<IEmployeeDirectoryDto[]> {
+      getAllEmployees(pageNumber: number, pageSize: number, departmentId?: number, employeeName?: string ): Observable<IEmployeeDirectoryWithPagecount> {
         let params = new HttpParams();
         
         if (departmentId) {
@@ -55,8 +56,10 @@ export class WolfDenService {
         if (employeeName) {
           params = params.append('EmployeeName', employeeName);
         }
+        params = params.append('PageNumber', pageNumber.toString());
+        params = params.append('PageSize', pageSize.toString());
 
-        return this.http.get<IEmployeeDirectoryDto[]>(
+        return this.http.get<IEmployeeDirectoryWithPagecount>(
           `${this.baseUrl}/api/Employee/all`,
           { headers: this.getHeaders(), params }
         );

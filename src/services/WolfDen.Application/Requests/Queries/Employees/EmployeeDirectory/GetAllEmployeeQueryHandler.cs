@@ -1,21 +1,23 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using WolfDen.Application.DTOs;
+using WolfDen.Application.DTOs.Employees;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
 {
-    public class GetAllEmployeeQueryHandler : IRequestHandler<GetAllEmployeeQuery, List<EmployeeDirectoryDTO>>
+    public class GetAllEmployeeQueryHandler : IRequestHandler<GetAllEmployeeQuery, EmployeeDirecotyWithPageCountDTO>
     {
         private readonly WolfDenContext _context;
 
         public GetAllEmployeeQueryHandler(WolfDenContext context)
-        {
+        {  
             _context = context;
         }
-        public async Task<List<EmployeeDirectoryDTO>> Handle(GetAllEmployeeQuery request, CancellationToken cancellationToken)
+        public async Task<EmployeeDirecotyWithPageCountDTO> Handle(GetAllEmployeeQuery request, CancellationToken cancellationToken)
         {
+            int pageNumber = request.PageNumber > 0 ? request.PageNumber : 1;
+            int pageSize = request.PageSize;
             var baseQuery = _context.Employees
                .Include(e => e.Designation)
                .Include(e => e.Department)
@@ -50,8 +52,17 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
                    IsActive = e.IsActive
                })
             .ToListAsync(cancellationToken);
+            int totalpage=employees.Count;
+            int pageCount = (int)(Math.Ceiling((decimal)totalpage / request.PageSize));
+            var emp = employees.Skip(pageSize * pageNumber)
+               .Take(pageSize).ToList();
+            var empDirectory = new EmployeeDirecotyWithPageCountDTO
+            {
+                EmployeeDirectoryDTOs = emp,
+                TotalPages = totalpage,
+            };
 
-            return employees;
+            return empDirectory;
         }
     }
 }

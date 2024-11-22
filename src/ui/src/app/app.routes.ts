@@ -5,6 +5,7 @@ import { LoginComponent } from './user/login/login.component';
 import { UserComponent } from './user/user.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { EmployeeDirectoryComponent } from './dashboard/dashboard-body/main/employee-directory/employee-directory.component';
+import { MainPageComponent } from './dashboard/dashboard-body/main/main-page/main-page.component';
 
 export const routes: Routes = [
     {
@@ -13,19 +14,21 @@ export const routes: Routes = [
         children:[
             {path: 'check-user', component: CheckUserComponent},
             {path: 'sign-in', component: SigninComponent},
-            {path: 'login', component: LoginComponent}
+            {path: 'login', component: LoginComponent},
         ]
     },
-    {path: 'dashboard', component: DashboardComponent},
+  
 
     {
         path:'dashboard',
         component:DashboardComponent,
         children:[
-            {path:'employee-directory',component: EmployeeDirectoryComponent}
+            {path:'main-page',component:MainPageComponent},
+            {path:'employee-directory',component: EmployeeDirectoryComponent},
+            
         ]
-    }
-
+    },
+    { path: '', redirectTo: '/dashboard/main-page', pathMatch: 'full' }, 
 
  
 ];

@@ -115,7 +115,7 @@ namespace WolfDen.API.Controllers.Employee
         }
        
         [HttpGet("all")]
-        public async Task<ActionResult<List<EmployeeDirectoryDTO>>> GetAllEmployees([FromQuery] GetAllEmployeeQuery query, CancellationToken cancellationToken)
+        public async Task<ActionResult<EmployeeDirecotyWithPageCountDTO>> GetAllEmployees([FromQuery] GetAllEmployeeQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
 
