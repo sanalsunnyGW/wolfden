@@ -16,7 +16,9 @@ namespace WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClosed
         }
         public async Task<CheckAttendanceClosedDTO> Handle(CheckAttendanceClosedQuery request, CancellationToken cancellationToken)
         {
-            AttendenceClose? attendenceClose=await _context.AttendenceClose.Where(x=>x.AttendanceClosedDate.Month==request.Month && x.AttendanceClosedDate.Year==request.Year && x.IsClosed==true).FirstOrDefaultAsync(cancellationToken);
+            AttendenceClose? attendenceClose=await _context.AttendenceClose
+                .Where(x=>x.AttendanceClosedDate.Month==request.Month && x.AttendanceClosedDate.Year==request.Year && x.IsClosed==true)
+                .FirstOrDefaultAsync(cancellationToken);
             CheckAttendanceClosedDTO checkAttendanceClosedDTO = new CheckAttendanceClosedDTO();
             if (attendenceClose != null)
             {

@@ -17,9 +17,10 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyRep
         {
             MonthlyReportAndPageCountDTO monthlyReportAndPageCountDTO = new MonthlyReportAndPageCountDTO();
             List<AllEmployeesMonthlyReportDTO> allEmployeesReport = new List<AllEmployeesMonthlyReportDTO>();
-            List<LOP> LOPReport = await _context.LOP.Where(x => x.AttendanceClosedDate.Month == request.Month).Include(x=>x.Employee).ToListAsync(cancellationToken);
-         
-            foreach(var lop in LOPReport)
+            List<LOP> LOPReport = await _context.LOP.
+                Where(x => x.AttendanceClosedDate.Month == request.Month)
+                .Include(x=>x.Employee).ToListAsync(cancellationToken);
+            foreach(LOP lop in LOPReport)
             {
                 AllEmployeesMonthlyReportDTO report = new AllEmployeesMonthlyReportDTO();
                 report.EmployeeId = lop.EmployeeId;
@@ -32,7 +33,9 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyRep
             }
             int totalPage = allEmployeesReport.Count();
             int noOfPage =(int)(Math.Ceiling((decimal)totalPage / request.PageSize));
-            List<AllEmployeesMonthlyReportDTO> allEmployeesReports=allEmployeesReport.Skip((request.PageNumber)*request.PageSize).Take(request.PageSize).ToList();
+            List<AllEmployeesMonthlyReportDTO> allEmployeesReports=allEmployeesReport.
+                Skip((request.PageNumber)*request.PageSize).
+                Take(request.PageSize).ToList();
             monthlyReportAndPageCountDTO.AllEmployeesMonthlyReports = allEmployeesReports;
             monthlyReportAndPageCountDTO.PageCount = noOfPage;
             return monthlyReportAndPageCountDTO;

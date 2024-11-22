@@ -84,8 +84,6 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                 }
                 LOP lop = new LOP(attendanceClosingDate, employee.Id, lopCount, incompleteShiftCount, lopdays, incompleteShiftDays);
                 await _context.AddAsync(lop);
-                await _context.SaveChangesAsync(cancellationToken);
-
             }
             DateTime date = new DateTime(request.Year, request.Month, 1);
             AttendenceClose attendenceClose = new AttendenceClose(attendanceClosingDate, true, date.ToString("MMMM"), request.Year);
