@@ -12,8 +12,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
         private readonly WolfDenContext _context=context;
         public async Task<AttendanceHistoryDTO> Handle(AttendanceHistoryQuery request, CancellationToken cancellationToken)
         {
-            DateOnly yearStart = new DateOnly(request.Year,1,1);
-            DateOnly yearEnd = new DateOnly(request.Year+1,1,1);
+            DateOnly monthStart = new DateOnly(request.Year, request.Month, 1);
+            DateOnly monthEnd = monthStart.AddMonths(1).AddDays(-1);
 
             int minWorkDuration = 360;
 
@@ -23,22 +23,22 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
             DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
             List<DailyAttendence> attendanceRecords = await _context.DailyAttendence
-                .Where(x => x.EmployeeId == request.EmployeeId && x.Date >= yearStart && x.Date <yearEnd)
+                .Where(x => x.EmployeeId == request.EmployeeId && x.Date >= monthStart && x.Date <= monthEnd)
                 .ToListAsync(cancellationToken);
 
             List<Holiday> holidays = await _context.Holiday
-                .Where(x => x.Date >= yearStart && x.Date < yearEnd)
+                .Where(x => x.Date >= monthStart && x.Date <= monthEnd)
                 .ToListAsync(cancellationToken);
 
             List<LeaveRequest> leaveRequests = await _context.LeaveRequests
                 .Where(x => x.EmployeeId == request.EmployeeId &&
-                            x.FromDate < yearEnd && x.ToDate >= yearStart &&
+                            x.FromDate <= monthEnd && x.ToDate >= monthStart &&
                             x.LeaveRequestStatusId == LeaveRequestStatus.Approved)
                 .ToListAsync(cancellationToken);
 
             List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
 
-            for (var currentDate = yearStart; currentDate < yearEnd; currentDate = currentDate.AddDays(1))
+            for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
                 if (currentDate > today)
                 {
@@ -128,7 +128,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
             }
 
             int totalCount = filteredAttendance.Count();
-            int totalPageCount = totalCount / request.PageSize;
+            int totalPageCount = (int)Math.Ceiling((decimal)totalCount / request.PageSize);
             
             List<WeeklySummaryDTO> displayAttendance = filteredAttendance.Skip(request.PageNumber * request.PageSize).Take(request.PageSize).ToList();
 

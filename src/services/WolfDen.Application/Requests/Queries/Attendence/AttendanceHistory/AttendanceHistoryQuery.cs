@@ -8,6 +8,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
     {
         public int EmployeeId { get; set; }
         public int Year { get; set; }
+        public int Month { get; set; }
         public AttendanceStatus? AttendanceStatusId { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
