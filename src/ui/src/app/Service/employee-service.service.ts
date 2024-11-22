@@ -7,19 +7,20 @@ import { Injectable, inject } from '@angular/core';
 export class EmployeeServiceService {
 
   constructor() { }
-  private http=inject(HttpClient);
+  private http = inject(HttpClient);
+  employeeId = 1;
 
 
-  getHierarchy()
-  {
+  getHierarchy() {
     return this.http.get("https://localhost:7015/api/Employee/hierarchy");
   }
-  getEmployeeProfile()
-  {
+  getEmployeeProfile() {
     return this.http.get("https://localhost:7015/api/Employee/by-Id?EmployeeId=1");
   }
-  employeeUpdateEmployee(userForm:any)
-  {
-    return this.http.put("https://localhost:7015/api/Employee/employee-update-employee",userForm)
+  employeeUpdateEmployee(userForm: any) {
+    return this.http.put("https://localhost:7015/api/Employee/employee-update-employee", userForm)
+  }
+  getMyTeamHierarchy(getFullHierarchy: boolean) {
+    return this.http.get(`https://localhost:7015/api/Employee/team?Id=${this.employeeId}&GetFullHierarchy=${getFullHierarchy}`);
   }
 }

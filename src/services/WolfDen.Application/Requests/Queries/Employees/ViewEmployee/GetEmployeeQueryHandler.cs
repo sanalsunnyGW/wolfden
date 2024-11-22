@@ -1,10 +1,5 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WolfDen.Application.DTOs;
 using WolfDen.Infrastructure.Data;
 
@@ -16,7 +11,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.ViewEmployee
 
         public GetEmployeeQueryHandler(WolfDenContext context)
         {
-            _context=context;
+            _context = context;
         }
         public async Task<EmployeeDTO> Handle(GetEmployeeQuery request, CancellationToken cancellationToken)
         {
@@ -43,7 +38,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.ViewEmployee
                 JoiningDate = employee.JoiningDate,
                 Gender = employee.Gender,
                 DesignationId = employee.DesignationId,
-                DesignationName= employee.Designation != null ? employee.Designation.Name : null,
+                DesignationName = employee.Designation != null ? employee.Designation.Name : null,
                 DepartmentId = employee.DepartmentId,
                 DepartmentName = employee.Department != null ? employee.Department.Name : null,
                 ManagerId = employee.ManagerId,
@@ -55,7 +50,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.ViewEmployee
                 State = employee.State,
                 Country = employee.Country,
                 EmploymentType = employee.EmploymentType,
-                Photo = employee.Photo,
+                Photo = employee.Photo
             };
 
 

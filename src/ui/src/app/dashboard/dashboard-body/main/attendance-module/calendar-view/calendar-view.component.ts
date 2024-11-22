@@ -80,6 +80,8 @@ export class CalendarViewComponent implements OnInit {
       return ['weekend-day'];
     }
 
+    
+
     if (status === 1) {
       return ['present'];
     } else if (status === 2) {

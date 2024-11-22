@@ -2,10 +2,10 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IProfileForm } from '../Interface/iprofile-from';
-import { EmployeeServiceService } from '../services/employee-service.service';
 import { Employee } from '../../models/iemployee';
 import { Gender } from '../enum/gender-enum';
 import { EmploymentType } from '../enum/employment-type-enum';
+import { EmployeeServiceService } from '../Service/employee-service.service';
 
 @Component({
   selector: 'app-profile',
@@ -87,7 +87,7 @@ export class ProfileComponent {
   ngOnInit() {
     this.loadEmployeeData();
   }
-  loadForm(employeeData:Employee){
+  loadForm(employeeData: Employee) {
     this.userForm.patchValue({
       id: 1,                                        //local storage id
       firstName: this.employeeData.firstName,
@@ -126,7 +126,6 @@ export class ProfileComponent {
       reader.readAsDataURL(file);
     }
   }
-
 
   onSubmit() {
     if (this.userForm.valid) {

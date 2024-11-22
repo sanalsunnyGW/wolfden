@@ -13,9 +13,9 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy
         public async Task<EmployeeHierarchyDto> Handle(GetEmployeeHierarchyQuery request, CancellationToken cancellationToken)
         {
 
-        var employee = await _context.Employees
-        .Where(e => e.ManagerId == null&&e.IsActive==true) 
-        .FirstOrDefaultAsync(e => _context.Employees.Any(sub => sub.ManagerId == e.Id), cancellationToken);
+            var employee = await _context.Employees
+            .Where(e => e.ManagerId == null && e.IsActive == true)
+            .FirstOrDefaultAsync(e => _context.Employees.Any(sub => sub.ManagerId == e.Id), cancellationToken);
             if (employee == null)
             {
                 throw new InvalidOperationException("No team head found.");
@@ -34,7 +34,12 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy
                 ManagerId = employee.ManagerId,
                 PhoneNumber = employee.PhoneNumber,
                 IsActive = employee.IsActive,
-                Subordinates = await service.GetSubordinates(employee.Id)
+                Address = employee.Address,
+                Country = employee.Country,
+                State = employee.State,
+                EmploymentType = employee.EmploymentType,
+                Photo = employee.Photo,
+                Subordinates = await service.GetSubordinates(employee.Id, cancellationToken)
             };
             return result;
 

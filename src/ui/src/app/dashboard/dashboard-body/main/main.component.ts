@@ -10,7 +10,7 @@ import { UpdateLeaveSettingsComponent } from './leave-management/update-leave-se
   selector: 'app-main',
   standalone: true,
   // imports: [ LeaveApplicationComponent],
-  imports: [ProfileComponent,RouterOutlet,CalendarViewComponent],
+  imports: [RouterOutlet],
  // imports: [ LeaveApplicationComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'

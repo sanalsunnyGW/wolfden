@@ -1,7 +1,7 @@
 import { AfterViewChecked, Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import mermaid from 'mermaid';
-import { EmployeeServiceService } from '../services/employee-service.service';
+import { EmployeeServiceService } from '../Service/employee-service.service';
 
 
 @Component({
@@ -101,16 +101,8 @@ export class EmployeeHierarchyTreeComponent implements OnInit {
 
     const traverse = (emp: any) => {
       const nodeId = `Node${emp.id}`;
-      if (emp.lastName != null) {
-        const nodeLabel = `${emp.firstName} ${emp.lastName}`;
-        graph += `${nodeId}[${nodeLabel}]\n`;
-
-      }
-      else {
-        const nodeLabel = `${emp.firstName}`;
-        graph += `${nodeId}[${nodeLabel}]\n`;
-
-      }
+      const nodeLabel = `${emp.firstName || 'No Name'} ${emp.lastName || ''}`.trim();
+      graph += `${nodeId}[${nodeLabel}]\n`;
       if (emp.subordinates && emp.subordinates.length > 0) {
         emp.subordinates.forEach((subordinate: any) => {
           const subNodeId = `Node${subordinate.id}`;

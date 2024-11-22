@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import mermaid from 'mermaid';
+import { EmployeeServiceService } from '../Service/employee-service.service';
 
 @Component({
   selector: 'app-my-team',
@@ -11,130 +12,20 @@ import mermaid from 'mermaid';
 })
 export class MyTeamComponent {
 
-  @ViewChild('mermaidDiv', { static: true }) mermaidDiv!: ElementRef;
+  @ViewChild('mermaidDiv', { static: false }) mermaidDiv!: ElementRef;
   router = inject(Router)
-
-
-  employeeData = {
-    id: 1,
-    employeeCode: 777,
-    firstName: 'Abhi',
-    lastName: 'Kumar',
-    email: 'abhi.kumar@example.com',
-    phoneNumber: '1234567890',
-    dateofBirth: new Date('1990-05-15'),
-    designationId: 2,
-    departmentId: 1,
-    managerId: null,
-    isActive: true,
-    subordinates: [
-      {
-        id: 2,
-        employeeCode: 900,
-        firstName: 'Nohan',
-        lastName: 'Antony',
-        email: 'nohanantony@gmail.com',
-        phoneNumber: '892127666',
-        dateofBirth: new Date('1995-11-20'),
-        designationId: 1,
-        departmentId: 1,
-        managerId: 1,
-        isActive: true,
-        subordinates: [
-          {
-            id: 3,
-            employeeCode: 901,
-            firstName: 'Ravi',
-            lastName: 'Sharma',
-            email: 'ravi.sharma@example.com',
-            phoneNumber: '9888776655',
-            dateofBirth: new Date('1992-08-12'),
-            designationId: 3,
-            departmentId: 2,
-            managerId: 2,
-            isActive: true,
-            subordinates: [{
-              id: 81,
-              employeeCode: 901,
-              firstName: 'Ravi',
-              lastName: 'Sharma',
-              email: 'ravi.sharma@example.com',
-              phoneNumber: '9888776655',
-              dateofBirth: new Date('1992-08-12'),
-              designationId: 3,
-              departmentId: 2,
-              managerId: 2,
-              isActive: true,
-              subordinates: []
-            }],
-          },
-          {
-            id: 4,
-            employeeCode: 902,
-            firstName: 'aaaa',
-            lastName: 'Verma',
-            email: 'saurabh.verma@example.com',
-            phoneNumber: '9988774455',
-            dateofBirth: new Date('1994-01-25'),
-            designationId: 4,
-            departmentId: 3,
-            managerId: 2,
-            isActive: true,
-            subordinates: [
-              {
-                id: 7,
-                employeeCode: 905,
-                firstName: 'Kartik',
-                lastName: 'Yadav',
-                email: 'kartik.yadav@example.com',
-                phoneNumber: '9998776655',
-                dateofBirth: new Date('1999-05-20'),
-                designationId: 7,
-                departmentId: 5,
-                managerId: 6,
-                isActive: true,
-                subordinates: [
-                  {
-                    id: 75,
-                    employeeCode: 905,
-                    firstName: 'Kartik',
-                    lastName: 'Yadav',
-                    email: 'kartik.yadav@example.com',
-                    phoneNumber: '9998776655',
-                    dateofBirth: new Date('1999-05-20'),
-                    designationId: 7,
-                    departmentId: 5,
-                    managerId: 6,
-                    isActive: true,
-                    subordinates: [{}]
-                  }
-                ]              }
-            ]
-          },
-          {
-            id: 5,
-            employeeCode: 903,
-            firstName: 'Shubham',
-            lastName: 'Singh',
-            email: 'shubham.singh@example.com',
-            phoneNumber: '9008779988',
-            dateofBirth: new Date('1996-07-18'),
-            designationId: 5,
-            departmentId: 3,
-            managerId: 2,
-            isActive: true,
-            subordinates: []
-          }
-        ]
-      }
-    ]
-  };
+  employeeData: any[] = [];
+  employeeDataModal: any[] = [];
+  isDataLoaded: boolean = false;
+  service = inject(EmployeeServiceService)
 
   ngOnInit(): void {
+    this.loadEmployeeHierarchy();
     (window as any).onA = (nodeName: string) => {
       console.log('Node clicked:', nodeName);
       this.router.navigate(['/employee-display']);
     };
+
     mermaid.initialize({
       securityLevel: 'loose',
       theme: 'base',
@@ -167,13 +58,47 @@ export class MyTeamComponent {
 
     });
 
-
-
+  }
+  viewTeamHierarchy() {
+    this.service.getMyTeamHierarchy(true).subscribe({
+      next: (response: any) => {
+        if (response) {
+          this.employeeDataModal = response;
+          this.isDataLoaded = true;
+          this.renderMermaidChart();
+        } else {
+          alert('No Employee found');
+        }
+      },
+      error: (error) => {
+        console.error('Error Displaying Hierarchy:', error);
+        alert('An error occurred while displaying hierarchy');
+      },
+    });
   }
 
+  loadEmployeeHierarchy() {
+    this.service.getMyTeamHierarchy(false).subscribe({
+      next: (response: any) => {
+        if (response) {
+          this.employeeData = response;
+          this.isDataLoaded = true;
+          this.renderMermaidChart();
+          console.log('Employee data loaded:', this.employeeData);
+        } else {
+          alert('No Employee found');
+        }
+      },
+      error: (error) => {
+        console.error('Error Displaying Hierarchy:', error);
+        alert('An error occurred while displaying hierarchy');
+      },
+    });
 
-  ngAfterViewInit(): void {
-    const graphDefinition = this.generateMermaidGraph(this.employeeData);
+  }
+  private renderMermaidChart() {
+    if (!this.isDataLoaded || !this.employeeDataModal) return;
+    const graphDefinition = this.generateMermaidGraph(this.employeeDataModal);
     mermaid
       .render('mermaidDiv', graphDefinition)
       .then(({ svg, bindFunctions }) => {
@@ -183,39 +108,34 @@ export class MyTeamComponent {
         setTimeout(() => {
           const svgElement = element.querySelector('svg');
           if (svgElement) {
-            svgElement.style.display = 'block';  // Ensure block-level display
-            svgElement.style.margin = '0 auto';  // Centering the SVG
+            svgElement.style.display = 'block'; // Ensure block-level display
+            svgElement.style.margin = '0 auto'; // Centering the SVG
           }
         }, 0);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Mermaid render error:', error);
       });
   }
 
-
-  private generateMermaidGraph(employee: any): string {
+  private generateMermaidGraph(employees: any[]): string {
     let graph = 'graph TB;\n';
     const traverse = (emp: any) => {
-    const nodeId = `Node${emp.id}`;
-    const nodeLabel = `${emp.firstName} ${emp.lastName}`;
-    graph += `${nodeId}[${nodeLabel}]\n`;
-    if (emp.subordinates && emp.subordinates.length > 0)
-     {
-       emp.subordinates.forEach((subordinate: any) => {
-         const subNodeId = `Node${subordinate.id}`;
-         graph += `${nodeId}-->${subNodeId}\n`;
-         traverse(subordinate);
-       });
-     }
-    graph += `click ${nodeId} onA\n`;
+      const nodeId = `Node${emp.id}`;
+      const nodeLabel = `${emp.firstName || 'No Name'} ${emp.lastName || ''}`.trim();
+      graph += `${nodeId}[${nodeLabel}]\n`;
+      if (emp.subordinates && Array.isArray(emp.subordinates) && emp.subordinates.length > 0) {
+        emp.subordinates.forEach((subordinate: any) => {
+          const subNodeId = `Node${subordinate.id}`;
+          graph += `${nodeId}-->${subNodeId}\n`;
+          traverse(subordinate);
+        });
+      }
+      graph += `click ${nodeId} onA\n`;
     };
-    traverse(employee);
+    employees.forEach(employee => traverse(employee));
     return graph;
   }
-
-
-
 }
 
 
