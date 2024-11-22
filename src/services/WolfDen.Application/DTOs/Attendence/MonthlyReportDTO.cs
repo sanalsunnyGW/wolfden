@@ -6,13 +6,13 @@
         public int Absent { get; set; }
         public int IncompleteShift { get; set; }
         public int Holiday  { get; set; }
-        public List<DateOnly> IncompleteShiftDays { get; set; }
-        public List<DateOnly> RestrictedHolidays { get; set; }
-        public List<DateOnly> NormalHolidays { get; set; }
-        public List<DateOnly> WFHDays { get; set; }
-        public List<DateOnly> LeaveDays { get; set; }
+        public string IncompleteShiftDays { get; set; }
+        public string RestrictedHolidays { get; set; }
+        public string NormalHolidays { get; set; }
+        public string WFHDays { get; set; }
+        public string LeaveDays { get; set; }
         public int Leave { get; set; }
-        public List<DateOnly> AbsentDays { get; set; }
+        public string AbsentDays { get; set; }
         public int WFH{ get; set; }
     }
 }

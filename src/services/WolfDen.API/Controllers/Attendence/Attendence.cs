@@ -4,6 +4,8 @@ using QuestPDF.Fluent;
 using WolfDen.Application.DTOs.Attendence;
 using WolfDen.Application.Requests.Commands.Attendence.CloseAttendance;
 using WolfDen.Application.Requests.DTOs.Attendence;
+using WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyReport;
+using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
@@ -44,11 +46,26 @@ namespace WolfDen.API.Controllers.Attendence
             MonthlyReportDTO monthlyReport= await _mediator.Send(MonthlyReportQuery, cancellationToken);
             return Ok(monthlyReport);
         }
+
         [HttpPost("close-attendance")]
-        public async Task<IActionResult> GCloseAttendance([FromQuery]CloseAttendanceCommand closeAttendanceCommand, CancellationToken cancellationToken)
+        public async Task<IActionResult> CloseAttendance([FromQuery]CloseAttendanceCommand closeAttendanceCommand, CancellationToken cancellationToken)
         {
-            var closeAttendance = await _mediator.Send(closeAttendanceCommand, cancellationToken);
+            int closeAttendance = await _mediator.Send(closeAttendanceCommand, cancellationToken);
             return Ok(closeAttendance);
+        }
+
+        [HttpGet("all-employees-monthly-report")]
+        public async Task<IActionResult> AllEmployeeMonthlyReport([FromQuery]AllEmployeesMonthlyReportQuery employeesMonthlyReportQuery, CancellationToken cancellationToken)
+        {
+            MonthlyReportAndPageCountDTO monthlyReport = await _mediator.Send(employeesMonthlyReportQuery, cancellationToken);
+            return Ok(monthlyReport);
+        }
+
+        [HttpGet("check-attendance-close")]
+        public async Task<bool> CheckAttendanceClose([FromQuery]CheckAttendanceClosedQuery checkAttendanceClosedQuery, CancellationToken cancellationToken)
+        {
+            bool isClosed = await _mediator.Send(checkAttendanceClosedQuery, cancellationToken);
+            return isClosed;
         }
 
     }
