@@ -12,10 +12,12 @@ namespace WolfDen.Application.Requests.Services
     public class GetEmployeeService(WolfDenContext context)
     {
         private readonly WolfDenContext _context = context;
-        public async Task<EmployeeHierarchyDto> GetEmployee(Employee employee, CancellationToken cancellationToken)
+        public async Task<EmployeeHierarchyDto> GetEmployee(Employee employee, bool subordinates, CancellationToken cancellationToken)
         {
             EmployeeHierarchyService service = new(_context);
-            EmployeeHierarchyDto employeeDto = new()
+            if (!subordinates)
+            {
+                EmployeeHierarchyDto result = new()
                 {
                     Id = employee.Id,
                     EmployeeCode = employee.EmployeeCode,
@@ -38,8 +40,36 @@ namespace WolfDen.Application.Requests.Services
                     State = employee.State,
                     EmploymentType = employee.EmploymentType,
                     Photo = employee.Photo,
-                    Subordinates = await service.GetSubordinates(employee.Id, cancellationToken)
+                    Subordinates = null
                 };
+                return result;
+            }
+
+            EmployeeHierarchyDto employeeDto = new()
+            {
+                Id = employee.Id,
+                EmployeeCode = employee.EmployeeCode,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Email = employee.Email,
+                PhoneNumber = employee.PhoneNumber,
+                DateofBirth = employee.DateofBirth,
+                DepartmentId = employee.DepartmentId,
+                DepartmentName = employee.Department != null ? employee.Department.Name : null,
+                DesignationId = employee.DesignationId,
+                DesignationName = employee.Designation != null ? employee.Designation.Name : null,
+                ManagerId = employee.ManagerId,
+                ManagerName = employee.Manager != null
+                       ? $"{employee.Manager.FirstName}{(string.IsNullOrWhiteSpace(employee.Manager.LastName) ? "" : " " + employee.Manager.LastName)}"
+                       : null,
+                IsActive = employee.IsActive,
+                Address = employee.Address,
+                Country = employee.Country,
+                State = employee.State,
+                EmploymentType = employee.EmploymentType,
+                Photo = employee.Photo,
+                Subordinates = await service.GetSubordinates(employee.Id, cancellationToken)
+            };
             return employeeDto;
         }
     }

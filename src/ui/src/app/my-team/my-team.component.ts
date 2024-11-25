@@ -121,6 +121,7 @@ export class MyTeamComponent {
     this.employeeService.getMyTeamHierarchy(false).subscribe({
       next: (response: any) => {
         if (response) {
+          console.log(response)
           this.employeeData = response;
           this.isDataLoaded = true;
           this.renderMermaidChart();

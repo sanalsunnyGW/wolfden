@@ -21,6 +21,6 @@ export class EmployeeService {
     return this.http.put(`${this.baseUrl}/employee-update-employee`, userForm)
   }
   getMyTeamHierarchy(getFullHierarchy: boolean) {
-    return this.http.get(`${this.baseUrl}/team?Id=${this.employeeId}&GetFullHierarchy=${getFullHierarchy}`);
+    return this.http.get(`${this.baseUrl}/team?Id=${this.employeeId}&Hierarchy=${getFullHierarchy}`);
   }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.Employees;
+using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Services
@@ -10,7 +11,7 @@ namespace WolfDen.Application.Requests.Services
         public async Task<List<EmployeeHierarchyDto>> GetSubordinates(int managerId, CancellationToken cancellationToken)
         {
             List<EmployeeHierarchyDto> result = new();
-            var employees = await _context.Employees.Where(x => x.ManagerId == managerId && x.IsActive == true).ToListAsync();
+            List<Employee> employees = await _context.Employees.Where(x => x.ManagerId == managerId && x.IsActive == true).ToListAsync();
             foreach (var employee in employees)
             {
                 EmployeeHierarchyDto employeeDto = new()

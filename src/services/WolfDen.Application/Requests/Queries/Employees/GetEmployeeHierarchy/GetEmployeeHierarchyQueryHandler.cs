@@ -21,7 +21,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy
                 throw new InvalidOperationException("No team head found.");
             }
             GetEmployeeService service = new(_context);
-            return await service.GetEmployee(employee, cancellationToken);
+            return await service.GetEmployee(employee, true, cancellationToken);
 
         }
 
