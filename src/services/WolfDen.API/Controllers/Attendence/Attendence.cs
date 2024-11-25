@@ -11,10 +11,7 @@ using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
 using WolfDen.Application.Requests.Queries.Attendence.WeeklySummary;
-using WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyReport;
-using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
-using WolfDen.Application.Requests.DTOs.Attendence;
 
 namespace WolfDen.API.Controllers.Attendence
 {
