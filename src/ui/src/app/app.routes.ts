@@ -40,7 +40,6 @@ export const routes: Routes = [
             {path:'leave-request-history',component:LeaveHistoryComponent},
             { path: 'edit-leave-type', component: EditLeaveTypeComponent },
             { path: 'update-leave-balance', component: UpdateLeaveBalanceComponent },
-
         ]
     },
     { path: '', redirectTo: '/dashboard/main-page', pathMatch: 'full' }, 

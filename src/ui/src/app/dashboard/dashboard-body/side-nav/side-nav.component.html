@@ -2,25 +2,15 @@
   <div class="nav-item" routerLink="/dashboard/main-page">
     <span>Dashboard</span>
   </div>
-<<<<<<< HEAD
-  <div class="nav-item" routerLink="/company-hierarchy">
-    <span >Company Hierarchy</span>
-  </div>
-  <div class="nav-item" routerLink="/my-team">
-    <span >My Team</span>
-=======
   <div class="nav-item" routerLink="/dashboard/employee-directory">
     <span>Employee Directory</span>
->>>>>>> refs/remotes/upstream/main
   </div>
-  <div class="nav-item">
-    <span>Employee Directory</span>
-  </div>
+
   <div class="nav-item dropdown">
-    <span class="dropdown-toggle" id="attendanceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="dropdown-toggle" id="leaveDropdown" data-bs-toggle="dropdown" aria-expanded="false">
       Leave
     </span>
-    <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
+    <ul class="dropdown-menu" aria-labelledby="leaveDropdown">
       <li><a class="dropdown-item" [routerLink]="'/dashboard/leave-dashboard'">Leave Dashboard</a></li>
       <li><a class="dropdown-item" [routerLink]="'/dashboard/leave-request-history'">Leave Request History</a></li>
       <li><a class="dropdown-item" [routerLink]="'/dashboard/leave-request-approval'">Approve/Reject Leave</a></li>
