@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { WolfDenService } from '../../Service/wolf-den.service';
-import { IcheckForm } from './icheck-form';
+import { ICheckForm } from './iCheckForm';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -20,7 +20,7 @@ export class CheckUserComponent {
               private userService: WolfDenService,
               private toastr : ToastrService
             ) {
-    this.userForm = this.fb.group<IcheckForm>({
+    this.userForm = this.fb.group<ICheckForm>({
       rfid: new FormControl('', [Validators.required, ]),
       employeeCode: new FormControl('', Validators.required)
     });

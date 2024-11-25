@@ -10,6 +10,7 @@ using WolfDen.Application.Requests.Commands.Attendence.CloseAttendance;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
+using WolfDen.Application.Requests.DTOs.Attendence;
 
 namespace WolfDen.API.Controllers.Attendence
 {
@@ -58,6 +59,7 @@ namespace WolfDen.API.Controllers.Attendence
         public async Task<List<WeeklySummaryDTO>> GetWeeklySummary([FromQuery] WeeklySummaryQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
+        }
         [HttpGet("monthly-report")]
         public async Task<IActionResult> GenerateMonthlyReport([FromQuery]MonthlyReportQuery MonthlyReportQuery, CancellationToken cancellationToken)
         {
@@ -74,4 +76,3 @@ namespace WolfDen.API.Controllers.Attendence
     }
  }
     
-}

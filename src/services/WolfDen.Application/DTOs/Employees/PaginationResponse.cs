@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WolfDen.Application.DTOs.Employees
 {
-    public class EmployeeDirecotyWithPageCountDTO
+    public class PaginationResponse
     {
         public List<EmployeeDirectoryDTO> EmployeeDirectoryDTOs { get; set; }
         public int TotalPages {  get; set; }

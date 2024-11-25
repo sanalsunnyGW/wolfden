@@ -38,7 +38,8 @@ namespace WolfDen.Domain.Entity
             RFId = rfId;
         }
 
-        public void EmployeeUpdateEmployee(string? firstName, string? lastName, DateOnly? dateofBirth, string? email, string? phoneNumber, Gender? gender,string password)
+        public void EmployeeUpdateEmployee(string? firstName, string? lastName, DateOnly? dateofBirth, 
+                                           string? email, string? phoneNumber, Gender? gender,string password)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -47,17 +48,15 @@ namespace WolfDen.Domain.Entity
             PhoneNumber = phoneNumber;
             Gender = gender;
             Password = password;
-
         }
-        public void AdminUpdateEmployee(int? designationId, int? departmentId, int? managerId, bool? isActive, DateOnly? joiningDate)
+        public void AdminUpdateEmployee(int? designationId, int? departmentId, int? managerId, 
+                                        bool? isActive, DateOnly? joiningDate)
         {
             DepartmentId = departmentId;
             DesignationId = designationId;
             ManagerId = managerId;
             IsActive = isActive;
             JoiningDate = joiningDate;
-
-
         }
     }
 }

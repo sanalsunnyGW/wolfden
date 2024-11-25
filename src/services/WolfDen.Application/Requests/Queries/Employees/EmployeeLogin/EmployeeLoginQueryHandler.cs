@@ -7,13 +7,14 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeLogin
 {
     public class EmployeeLoginQueryHandler(WolfDenContext context) : IRequestHandler<EmployeeLoginQuery, EmployeeSignUpDto> 
     {
-        private readonly WolfDenContext _context=context;
+        private readonly WolfDenContext _context = context;
 
 
         public async Task<EmployeeSignUpDto>Handle(EmployeeLoginQuery request, CancellationToken cancellationToken)
         {
             EmployeeSignUpDto result = new();
-            var employee = await _context.Employees.FirstOrDefaultAsync(x => x.Email == request.Email && x.Password == request.Password, cancellationToken);
+            var employee = await _context.Employees.
+                FirstOrDefaultAsync(x => x.Email == request.Email && x.Password == request.Password, cancellationToken);
                 if (employee == null) {
                     result.Id = 0;
                     result.status = false;

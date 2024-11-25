@@ -1,6 +1,6 @@
 import { FormControl } from "@angular/forms";
 
-export interface IcheckForm {
+export interface ICheckForm {
 
     rfid: FormControl<string | null>;
     employeeCode: FormControl<string | null>;

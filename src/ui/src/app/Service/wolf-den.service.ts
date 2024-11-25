@@ -9,10 +9,21 @@ import { IEmployeeDirectoryWithPagecount } from '../Interface/iemployee-director
 
 export class WolfDenService {
 
+
   private baseUrl=environment.apiUrl;
   public userId : number=3;
 
   constructor(private http:HttpClient) { }
+
+  private createHttpParams(params: { [key: string]: any }): HttpParams {
+    let httpParams = new HttpParams();
+    Object.keys(params).forEach((key) => {
+      if (params[key] !== null && params[key] !== undefined) {
+        httpParams = httpParams.set(key, params[key].toString());
+      }
+    });
+    return httpParams;
+  }
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -20,10 +31,10 @@ export class WolfDenService {
   }
 
       getEmployeeSignUp(employeeCode: number, rfId: string): Observable<{ id: number, status: boolean }> {
-        let params = new HttpParams()
-          .set('EmployeeCode', employeeCode.toString())
-          .set('RFId', rfId);
-
+        const params = this.createHttpParams({
+          EmployeeCode: employeeCode,
+          RFId: rfId,
+        });
         return this.http.get<{ id: number, status: boolean }>(
           `${this.baseUrl}/api/Employee/sign-up`,
           { headers: this.getHeaders(), params }
@@ -31,10 +42,10 @@ export class WolfDenService {
       }
 
       getEmployeeLogin(email: string, password: string): Observable<{ id: number, status: boolean }> {
-        let params = new HttpParams()
-          .set('Email', email)
-          .set('Password', password);
-
+        const params = this.createHttpParams({
+          Email: email,
+          Password: password,
+        });
         return this.http.get<{ id: number, status: boolean }>(
           `${this.baseUrl}/api/Employee/login`,
           { headers: this.getHeaders(), params }
@@ -46,18 +57,13 @@ export class WolfDenService {
         return this.http.put(`${this.baseUrl}/api/Employee/employee-update-employee`, data, { headers: this.getHeaders() });
       }
 
-      getAllEmployees(pageNumber: number, pageSize: number, departmentId?: number, employeeName?: string ): Observable<IEmployeeDirectoryWithPagecount> {
-        let params = new HttpParams();
-        
-        if (departmentId) {
-          params = params.append('DepartmentID', departmentId.toString());
-        }
-        if (employeeName) {
-          params = params.append('EmployeeName', employeeName);
-        }
-        params = params.append('PageNumber', pageNumber.toString());
-        params = params.append('PageSize', pageSize.toString());
-
+      getAllEmployees(pageNumber: number, pageSize: number, departmentId?: number, employeeName?: string): Observable<IEmployeeDirectoryWithPagecount> {
+        const params = this.createHttpParams({
+          PageNumber: pageNumber,
+          PageSize: pageSize,
+          DepartmentID: departmentId,
+          EmployeeName: employeeName,
+        });
         return this.http.get<IEmployeeDirectoryWithPagecount>(
           `${this.baseUrl}/api/Employee/all`,
           { headers: this.getHeaders(), params }

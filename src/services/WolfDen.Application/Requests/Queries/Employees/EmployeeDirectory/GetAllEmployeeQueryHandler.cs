@@ -6,7 +6,7 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
 {
-    public class GetAllEmployeeQueryHandler : IRequestHandler<GetAllEmployeeQuery, EmployeeDirecotyWithPageCountDTO>
+    public class GetAllEmployeeQueryHandler : IRequestHandler<GetAllEmployeeQuery, PaginationResponse>
     {
         private readonly WolfDenContext _context;
 
@@ -14,9 +14,9 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
         {  
             _context = context;
         }
-        public async Task<EmployeeDirecotyWithPageCountDTO> Handle(GetAllEmployeeQuery request, CancellationToken cancellationToken)
+        public async Task<PaginationResponse> Handle(GetAllEmployeeQuery request, CancellationToken cancellationToken)
         {
-            int pageNumber = request.PageNumber > 0 ? request.PageNumber : 1;
+            int pageNumber = request.PageNumber > 0 ? request.PageNumber : 0;
             int pageSize = request.PageSize;
             var baseQuery = _context.Employees
                .Include(e => e.Designation)
@@ -52,14 +52,14 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
                    IsActive = e.IsActive
                })
             .ToListAsync(cancellationToken);
-            int totalpage=employees.Count;
+            int totalpage = employees.Count;
             int pageCount = (int)(Math.Ceiling((decimal)totalpage / request.PageSize));
             var emp = employees.Skip(pageSize * pageNumber)
                .Take(pageSize).ToList();
-            var empDirectory = new EmployeeDirecotyWithPageCountDTO
+            var empDirectory = new PaginationResponse
             {
                 EmployeeDirectoryDTOs = emp,
-                TotalPages = totalpage,
+                TotalPages = pageCount,
             };
 
             return empDirectory;
