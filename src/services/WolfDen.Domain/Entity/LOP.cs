@@ -9,6 +9,7 @@
         public int NoOfIncompleteShiftDays {  get; private set; }
         public string LOPDays { get; private set; }
         public string IncompleteShiftDays { get; private set; }
+        public virtual Employee Employee { get; private set; }
         private LOP()
         {
             

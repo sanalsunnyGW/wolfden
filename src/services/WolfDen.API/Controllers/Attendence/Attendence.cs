@@ -3,13 +3,16 @@ using Microsoft.AspNetCore.Mvc;
 using QuestPDF.Fluent;
 using WolfDen.Application.DTOs.Attendence;
 using WolfDen.Application.Requests.Commands.Attendence.CloseAttendance;
-using WolfDen.Application.Requests.DTOs.Attendence;
 using WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory;
 using WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
-using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.WeeklySummary;
+using WolfDen.Application.Requests.Commands.Attendence.CloseAttendance;
+using WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyReport;
+using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
+using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
+using WolfDen.Application.Requests.Queries.Attendence.SubOrdinates;
 
 namespace WolfDen.API.Controllers.Attendence
 {
@@ -41,7 +44,6 @@ namespace WolfDen.API.Controllers.Attendence
             return Results.File(pdf, "application/pdf", "DailyReport.pdf");
         }
 
-
         [HttpGet("employee/monthly")]
         public async Task<AttendanceSummaryDTO> GetMonthlyAttendance([FromQuery] AttendanceSummaryQuery query, CancellationToken cancellationToken)
         {
@@ -59,17 +61,40 @@ namespace WolfDen.API.Controllers.Attendence
         {
             return await _mediator.Send(query, cancellationToken);
         }
+
         [HttpGet("monthly-report")]
         public async Task<IActionResult> GenerateMonthlyReport([FromQuery] MonthlyReportQuery MonthlyReportQuery, CancellationToken cancellationToken)
         {
             MonthlyReportDTO monthlyReport = await _mediator.Send(MonthlyReportQuery, cancellationToken);
             return Ok(monthlyReport);
         }
+
         [HttpPost("close-attendance")]
-        public async Task<IActionResult> GCloseAttendance([FromQuery] CloseAttendanceCommand closeAttendanceCommand, CancellationToken cancellationToken)
+        public async Task<IActionResult> CloseAttendance([FromQuery] CloseAttendanceCommand closeAttendanceCommand, CancellationToken cancellationToken)
         {
-            var closeAttendance = await _mediator.Send(closeAttendanceCommand, cancellationToken);
+            int closeAttendance = await _mediator.Send(closeAttendanceCommand, cancellationToken);
             return Ok(closeAttendance);
+        }
+
+        [HttpGet("all-employees-monthly-report")]
+        public async Task<IActionResult> AllEmployeeMonthlyReport([FromQuery] AllEmployeesMonthlyReportQuery employeesMonthlyReportQuery, CancellationToken cancellationToken)
+        {
+            MonthlyReportAndPageCountDTO monthlyReport = await _mediator.Send(employeesMonthlyReportQuery, cancellationToken);
+            return Ok(monthlyReport);
+        }
+
+        [HttpGet("check-attendance-close")]
+        public async Task<IActionResult> CheckAttendanceClose([FromQuery] CheckAttendanceClosedQuery checkAttendanceClosedQuery, CancellationToken cancellationToken)
+        {
+            CheckAttendanceClosedDTO isClosed = await _mediator.Send(checkAttendanceClosedQuery, cancellationToken);
+            return Ok(isClosed);
+        }
+
+        [HttpGet("get-subordinates")]
+        public async Task<IActionResult> getSubOrdinates([FromQuery] SubOrdinatesQuery subOrdinatesQuery, CancellationToken cancellationToken)
+        {
+            List<SubOrdinatesDTO> subOrdinates = await _mediator.Send(subOrdinatesQuery, cancellationToken);
+            return Ok(subOrdinates);
         }
 
         [HttpGet("employee/history")]
@@ -80,3 +105,6 @@ namespace WolfDen.API.Controllers.Attendence
     }
 }
 
+
+       
+ 
