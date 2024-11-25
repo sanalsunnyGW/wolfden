@@ -49,14 +49,10 @@ export const routes: Routes = [
 
  
 
-]
+];
 
-    {path:'leave-dashboard',component:LeaveDashboardComponent},
-    {path:'leave-request-history',component:LeaveHistoryComponent},
-    {path:'attendance/weekly',component:WeeklyAttendanceComponent}
 
     
-   
-];
+
 
 
