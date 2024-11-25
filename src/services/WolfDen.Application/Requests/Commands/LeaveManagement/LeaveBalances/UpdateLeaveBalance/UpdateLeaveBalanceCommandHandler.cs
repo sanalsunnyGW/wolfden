@@ -55,7 +55,7 @@
 //                        {
 //                            if (leaveIncrementLog != null)
 //                            {
-//                                decimal UpdateReq = DateTime.Now.Month - leaveIncrementLog.LastCreditedMonth.Month;  
+//                                decimal UpdateReq = DateTime.Now.Month - leaveIncrementLog.LastCreditedMonth.Month;
 //                                //check whether the applied date is more than the increment gap mentioned
 
 //                                if (LeaveIncrementGapMonth.Month == leaveType.LeaveType.IncrementGapId)   //monthly increment

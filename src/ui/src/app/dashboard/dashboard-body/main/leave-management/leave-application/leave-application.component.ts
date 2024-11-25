@@ -4,7 +4,7 @@ import { ILeaveApplication } from '../../../../../interface/Leave-Application-In
 import { CommonModule } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
-import { LeaveManagementService } from '../../../../../service/leave-management.service';
+import { LeaveManagementService } from '../../../../../Service/leave-management.service';
 
 @Component({
   selector: 'app-leave-application',

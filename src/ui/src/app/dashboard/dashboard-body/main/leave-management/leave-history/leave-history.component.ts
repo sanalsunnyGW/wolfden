@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { LeaveManagementService } from '../../../../../service/leave-management.service';
+import { LeaveManagementService } from '../../../../../Service/leave-management.service';
 import { ILeaveRequestHistory, ILeaveRequestHistoryResponse } from '../../../../../interface/leave-request-history';
 import { LeaveRequestStatus } from '../../../../../enum/leave-request-status-enum';
 

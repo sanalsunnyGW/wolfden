@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { LeaveManagementService } from '../../../../../service/leave-management.service';
+import { LeaveManagementService } from '../../../../../Service/leave-management.service';
 import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
 import { IEditLeaveType } from '../../../../../interface/edit-leave-type';
 

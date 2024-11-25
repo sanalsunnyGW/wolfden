@@ -13,10 +13,17 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.In
         {
             int result;
             List<LeaveType> leaveType = await _context.LeaveType.ToListAsync(cancellationToken);
-            foreach (LeaveType type in leaveType)
+            Employee emp = await _context.Employees.Where(x => x.Id.Equals(request.RequestId)).FirstOrDefaultAsync(cancellationToken);
+            if (emp.JoiningDate.HasValue)
             {
-                LeaveBalance leaveBalance = new LeaveBalance(request.RequestId, type.Id, 0);
-                _context.LeaveBalances.Add(leaveBalance);
+                foreach (LeaveType type in leaveType)
+                {
+                    LeaveBalance leaveBalance = new LeaveBalance(request.RequestId, type.Id, 0);
+                    _context.LeaveBalances.Add(leaveBalance);
+                    await _context.SaveChangesAsync();
+                    LeaveIncrementLog leaveIncrementLog = new LeaveIncrementLog(leaveBalance.Id, DateOnly.FromDateTime(DateTime.Now), 0, 0, (DateOnly)leaveBalance.Employee.JoiningDate);
+                    _context.LeaveIncrementLogs.Add(leaveIncrementLog);
+                }
             }
             result = await _context.SaveChangesAsync();
             return result > 0;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LeaveManagementService } from '../../../../../service/leave-management.service';
+import { LeaveManagementService } from '../../../../../Service/leave-management.service';
 
 @Component({
   selector: 'app-update-leave-balance',
