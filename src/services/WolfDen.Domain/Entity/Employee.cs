@@ -28,20 +28,21 @@ namespace WolfDen.Domain.Entity
         public string? State { get; private set; }
         public EmploymentType? EmploymentType { get; private set; }
         public string? Photo { get; private set; }
+
+        public string? Password {  get; private set; }
+
+
         private Employee()
         {
 
         }
 
-        public Employee(int employeeCode, string rfId, string? firstName)
+        public Employee(int employeeCode, string rfId)
         {
             EmployeeCode = employeeCode;
             RFId = rfId;
-            FirstName = firstName;
-
-
         }
-        public void EmployeeUpdateEmployee(string? firstName, string? lastName, DateOnly? dateofBirth, string? email, string? phoneNumber, Gender? gender, string? address, string? country, string? state, string? photo)
+        public void EmployeeUpdateEmployee(string? firstName, string? lastName, DateOnly? dateofBirth, string? email, string? phoneNumber, Gender? gender, string? address, string? country, string? state, string? photo,string password)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -53,6 +54,7 @@ namespace WolfDen.Domain.Entity
             Country = country;
             State = state;
             Photo = photo;
+            Password = password;
 
 
         }

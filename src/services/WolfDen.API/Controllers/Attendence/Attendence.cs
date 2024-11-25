@@ -12,6 +12,7 @@ using WolfDen.Application.Requests.Commands.Attendence.CloseAttendance;
 using WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyReport;
 using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
+using WolfDen.Application.Requests.DTOs.Attendence;
 using WolfDen.Application.Requests.Queries.Attendence.SubOrdinates;
 
 namespace WolfDen.API.Controllers.Attendence
@@ -60,6 +61,7 @@ namespace WolfDen.API.Controllers.Attendence
         public async Task<List<WeeklySummaryDTO>> GetWeeklySummary([FromQuery] WeeklySummaryQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
+        }
         }
 
         [HttpGet("monthly-report")]

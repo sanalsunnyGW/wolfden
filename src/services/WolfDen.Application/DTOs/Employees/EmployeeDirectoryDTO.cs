@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using static WolfDen.Domain.Enums.EmployeeEnum;
 using WolfDen.Domain.Entity;
 
-namespace WolfDen.Application.DTOs
+namespace WolfDen.Application.DTOs.Employees
 {
     public class EmployeeDirectoryDTO
     {
