@@ -18,21 +18,15 @@ export class LeaveHistoryComponent {
 
 id:number=1;
 leaveRequestList:ILeaveRequestHistory[]=[];
-
-/**
- *
- */
 constructor() {}  
 
 leaveManagementService=inject(LeaveManagementService);
 ngOnInit(): void {
-  //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-  //Add 'implements OnInit' to the class.
+ 
   this.leaveManagementService.getLeaveRequestHistory(this.id).subscribe({
     next: (data) => {
         },
     error: (error) => {
-      console.log(error);
     }
   })
 }

@@ -23,6 +23,11 @@ namespace WolfDen.Domain.Entity
         public int? ManagerId { get; private set; }
         public virtual Employee? Manager { get; private set; }
         public bool? IsActive { get; private set; }
+        public string? Address { get; private set; }
+        public string? Country { get; private set; }
+        public string? State { get; private set; }
+        public EmploymentType? EmploymentType { get; private set; }
+        public string? Photo { get; private set; }
 
         public string? Password {  get; private set; }
 
@@ -37,9 +42,7 @@ namespace WolfDen.Domain.Entity
             EmployeeCode = employeeCode;
             RFId = rfId;
         }
-
-        public void EmployeeUpdateEmployee(string? firstName, string? lastName, DateOnly? dateofBirth, 
-                                           string? email, string? phoneNumber, Gender? gender,string password)
+        public void EmployeeUpdateEmployee(string? firstName, string? lastName, DateOnly? dateofBirth, string? email, string? phoneNumber, Gender? gender, string? address, string? country, string? state, string? photo,string password)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -47,16 +50,23 @@ namespace WolfDen.Domain.Entity
             Email = email;
             PhoneNumber = phoneNumber;
             Gender = gender;
+            Address = address;
+            Country = country;
+            State = state;
+            Photo = photo;
             Password = password;
+
+
         }
-        public void AdminUpdateEmployee(int? designationId, int? departmentId, int? managerId, 
-                                        bool? isActive, DateOnly? joiningDate)
+        public void AdminUpdateEmployee(int? designationId, int? departmentId, int? managerId, bool? isActive, DateOnly? joiningDate, EmploymentType? employmentType)
         {
             DepartmentId = departmentId;
             DesignationId = designationId;
             ManagerId = managerId;
             IsActive = isActive;
             JoiningDate = joiningDate;
+            EmploymentType = employmentType;
+
         }
     }
 }
