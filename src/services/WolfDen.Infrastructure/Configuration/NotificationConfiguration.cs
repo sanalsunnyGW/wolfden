@@ -10,7 +10,6 @@ namespace WolfDen.Infrastructure.Configuration
         {
             builder.Property(x => x.Id).ValueGeneratedOnAdd().HasColumnName("NotificationId");
             builder.Property(x => x.Message).HasMaxLength(255);
-            builder.HasOne(x => x.Employee).WithMany().HasForeignKey(x => x.EmployeeId);
 
         }
     }
