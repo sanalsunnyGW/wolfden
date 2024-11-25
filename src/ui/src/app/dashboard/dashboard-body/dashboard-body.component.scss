@@ -1,7 +1,8 @@
 .side-nav {
     width: 250px;
-    min-width: 230px;
-    min-height: calc(100vh - 30px);
+    min-width: 10%;
+    min-height: calc(100vh);
+    top: 70px;
     background-color: #113c60;
     position: fixed;
     color: #fefefe;
@@ -14,17 +15,18 @@
   }
 
   .main {
-    margin-left: 250px;          // Space for the fixed sidebar
+    margin-left: 250px;  
+    margin-top: 70px;
+    min-height: calc(100vh);
     padding: 20px;
     width: 100vw;
+    top: 70px;
     flex-grow: 1;
-    min-height: calc(100vh - 50px);
     background-color: #f1eded;
     overflow: auto;
 
-    // Responsive adjustments based on sidebar width
     @media only screen and (max-width: 1300px) {
-        margin-left: 100px;      // Adjust margin for smaller sidebar width
+        margin-left: 100px;      
     }
 }
 

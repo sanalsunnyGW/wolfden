@@ -20,7 +20,7 @@ namespace WolfDen.Application.Requests.Commands.Employees.AddEmployee
                 throw new ValidationException($"Validation failed: {errors}");
             }
 
-            Employee Employee = new Employee(request.EmployeeCode, request.RFId, request.FirstName);
+            Employee Employee = new Employee(request.EmployeeCode, request.RFId);
             _context.Employees.Add(Employee);
             await _context.SaveChangesAsync(cancellationToken);
 

@@ -6,10 +6,20 @@
 <div class="mb-3">
     <input class="form-control bg-body-secondary"
     placeholder="Email" formControlName="email">
+    @if (hasDisplayableError('email') && userForm.controls['email'].hasError('required')) {
+        <div class="error-feedback">
+            Please enter your email
+        </div>
+        }
 </div>
 <div class="mb-3">
     <input type="password" class="form-control bg-body-secondary"
     placeholder="Password" formControlName="password">
+    @if (hasDisplayableError('password') && userForm.controls['password'].hasError('required')) {
+        <div class="error-feedback">
+            Please enter your password
+        </div>
+        }
 </div>
 
 <button type="submit" class="btn btn-success w-100 rounded-3">
@@ -22,4 +32,4 @@
     <hr class="flex-grow-1">
   </div>
 
-  <button routerLink="/user/signup" class="btn mt-3 btn-success w-100 rounded-3">Sign Up</button>
+  <button routerLink="/user/check-user" class="btn mt-3 btn-success w-100 rounded-3">Create Account</button>

@@ -1,5 +1,6 @@
 ﻿//using MediatR;
 //using Microsoft.EntityFrameworkCore;
+//using Wolfden.Application.Requests.Commands.LeaveManagement.LeaveBalances.UpdateLeaveBalance;
 //using WolfDen.Domain.Entity;
 //using WolfDen.Domain.Enums;
 //using WolfDen.Infrastructure.Data;
@@ -126,10 +127,10 @@
 //                                        else    //if no carry forward & also balance updated in next/new year 
 //                                        {
 //                                            value = (int)Math.Floor((decimal)DateTime.Now.Month / 3);
-//                                            leaveType.Balance = (int)(leaveType.LeaveType.IncrementCount * (value+1));                //to get the value assigned acclrding to the current month no. 
+//                                            leaveType.Balance = (int)(leaveType.LeaveType.IncrementCount * (value + 1));                //to get the value assigned acclrding to the current month no. 
 //                                            //lastCreditedMonth = leaveIncrementLog.LastCreditedMonth.AddMonths((value * 3)+1);     //get the latest credited month but here in log field, its of prev. yr so cant add months
 //                                            lastCreditedMonth = new DateOnly(DateTime.Now.Year, 1, 1).AddMonths(value * 3);        //gets latest credited month of this new yr  
-//                                            LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, (int)(leaveType.LeaveType.IncrementCount * (value+1)), lastCreditedMonth);
+//                                            LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, (int)(leaveType.LeaveType.IncrementCount * (value + 1)), lastCreditedMonth);
 //                                            _context.LeaveIncrementLogs.Add(leaveIncrement);
 //                                        }
 //                                    }
@@ -168,7 +169,7 @@
 //                                        {
 //                                            value = (int)Math.Floor((decimal)DateTime.Now.Month / 6);
 //                                            leaveType.Balance = (int)(leaveType.LeaveType.IncrementCount * (value + 1));
-//                                            lastCreditedMonth = new DateOnly(DateTime.Now.Year,1,1).AddMonths((value * 6));
+//                                            lastCreditedMonth = new DateOnly(DateTime.Now.Year, 1, 1).AddMonths((value * 6));
 //                                            LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, (int)(leaveType.LeaveType.IncrementCount * (value + 1)), lastCreditedMonth);
 //                                            _context.LeaveIncrementLogs.Add(leaveIncrement);
 //                                        }

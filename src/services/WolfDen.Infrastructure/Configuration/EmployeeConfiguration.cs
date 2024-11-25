@@ -20,6 +20,7 @@ namespace WolfDen.Infrastructure.Configuration
             builder.HasOne(x => x.Designation).WithMany().HasForeignKey(x => x.DesignationId);
             builder.HasOne(x => x.Department).WithMany().HasForeignKey(x => x.DepartmentId);
             builder.HasOne(x => x.Manager).WithMany().HasForeignKey(x => x.ManagerId);
+            builder.Property(x=>x.Password).HasMaxLength(20);
 
         }
     }
