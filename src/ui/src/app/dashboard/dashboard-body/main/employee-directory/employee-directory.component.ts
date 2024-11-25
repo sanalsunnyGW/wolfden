@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { IEmployeeDirectoryDto } from '../../../../Interface/iemployee-directory';
 import { WolfDenService } from '../../../../Service/wolf-den.service';
-import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
+import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import { IEmployeeDirectoryWithPagecount } from '../../../../Interface/iemployee-directory-with-pagecount';
 
 
@@ -25,7 +25,8 @@ export class EmployeeDirectoryComponent implements OnInit {
   private searchSubject = new Subject<string>();
   isLoading: boolean = false;
   pageNumber: number = 0;  
-  pageSize: number = 1;   
+  pageSize: number = 2;   
+  @ViewChild('paginator') paginator1?: MatPaginator;
 
   constructor(private wolfDenService: WolfDenService) {
     this.searchSubject.pipe(
@@ -69,6 +70,8 @@ export class EmployeeDirectoryComponent implements OnInit {
       next: (data) => {
         console.log(data)
         this.isLoading = false; 
+        if(this.paginator1)
+        this.paginator1.length=data.totalPages;
         this.employeesPagecount=data      
       },
       error: (error) => {

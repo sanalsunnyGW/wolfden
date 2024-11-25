@@ -70,7 +70,10 @@
         </div>
 
         <div class="w-100">
-          <mat-paginator [length]="employeesPagecount.totalPages" [pageSize]="pageSize" [pageIndex]="pageNumber"
+          {{employeesPagecount.totalPages}}
+          {{pageSize}}
+          {{pageNumber}}
+          <mat-paginator #paginator [length]="employeesPagecount.totalPages" [pageSize]="pageSize" [pageIndex]="pageNumber"
             [pageSizeOptions]="[1, 2, 3, 5]" (page)="onPaginateChange($event)">
           </mat-paginator>
         </div>
