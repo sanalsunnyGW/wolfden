@@ -11,9 +11,9 @@ namespace WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
         public DateOnly? DateofBirth { get; set; }
-        public DateOnly? JoiningDate { get; set; }
         public Gender? Gender { get; set; }
 
-         
+        public string? Password { get;  set; }
+
     }
 }

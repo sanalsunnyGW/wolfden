@@ -60,6 +60,7 @@ namespace WolfDen.API.Controllers.Attendence
         {
             return await _mediator.Send(query, cancellationToken);
         }
+
         [HttpGet("monthly-report")]
         public async Task<IActionResult> GenerateMonthlyReport([FromQuery] MonthlyReportQuery MonthlyReportQuery, CancellationToken cancellationToken)
         {
