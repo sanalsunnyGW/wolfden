@@ -29,12 +29,6 @@ export const routes: Routes = [
         path:'attendance/calendar',
         component:CalendarViewComponent
     },
-    {
-        path:'',
-        component:UserComponent
-
-    },
-
 
     {
         path:'dashboard',
@@ -46,7 +40,7 @@ export const routes: Routes = [
             {path:'leave-request-history',component:LeaveHistoryComponent},
             { path: 'edit-leave-type', component: EditLeaveTypeComponent },
             { path: 'update-leave-balance', component: UpdateLeaveBalanceComponent },
-            { path: 'attendance/calendar', component: CalendarViewComponent },
+
         ]
     },
     { path: '', redirectTo: '/dashboard/main-page', pathMatch: 'full' }, 
