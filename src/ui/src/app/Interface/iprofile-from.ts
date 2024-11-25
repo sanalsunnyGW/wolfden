@@ -1,7 +1,6 @@
 import { FormControl } from "@angular/forms";
 
 export interface IProfileForm {
-    id: FormControl<number | null>;
     firstName: FormControl<string | null>;
     lastName: FormControl<string | null>;
     gender: FormControl<number | null>;

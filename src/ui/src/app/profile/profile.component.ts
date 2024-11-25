@@ -46,7 +46,6 @@ export class ProfileComponent {
   }
   private buildForm() {
     this.userForm = this.fb.group({
-      id: new FormControl<number | null>(null, Validators.required),
       firstName: new FormControl('', Validators.required),
       lastName: new FormControl(''),
       gender: new FormControl<number | null>(null, Validators.required),
@@ -88,7 +87,6 @@ export class ProfileComponent {
   }
   loadForm(employeeData: Employee) {
     this.userForm.patchValue({
-      id: 1,                                        //local storage id
       firstName: this.employeeData.firstName,
       lastName: this.employeeData.lastName,
       gender: this.employeeData.gender,
@@ -129,8 +127,20 @@ export class ProfileComponent {
   onSubmit() {
     if (this.userForm.valid) {
       const formData = this.userForm.value;
-      formData.gender = Number(formData.gender);
-      this.employeeService.employeeUpdateEmployee(formData).subscribe({
+      const params = {
+        id: 1,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phoneNumber: formData.phoneNumber,
+        dateofBirth: formData.dateofBirth,
+        gender: Number(formData.gender),
+        address: formData.address,
+        country: formData.country,
+        state: formData.state,
+        photo: formData.photo
+      }
+      this.employeeService.employeeUpdateEmployee(params).subscribe({
         next: (response: any) => {
           if (response == true) {
             alert("Profile Updated Successfully")
