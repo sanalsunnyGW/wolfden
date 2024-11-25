@@ -5,6 +5,7 @@ import { LeaveDashboardComponent } from './dashboard/dashboard-body/main/leave-m
 import { LeaveHistoryComponent } from './dashboard/dashboard-body/main/leave-management/leave-history/leave-history.component';
 
 import { UserComponent } from './user/user.component';
+import { WeeklyAttendanceComponent } from './dashboard/dashboard-body/main/attendance-module/weekly-attendance/weekly-attendance.component';
 
 export const routes: Routes = [
     {
@@ -17,7 +18,9 @@ export const routes: Routes = [
 
     },
     {path:'leave-dashboard',component:LeaveDashboardComponent},
-  {path:'leave-request-history',component:LeaveHistoryComponent}
+    {path:'leave-request-history',component:LeaveHistoryComponent},
+    {path:'attendance/weekly',component:WeeklyAttendanceComponent}
+
     
    
 ];

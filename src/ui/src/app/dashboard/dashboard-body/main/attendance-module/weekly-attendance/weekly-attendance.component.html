@@ -1,0 +1,10 @@
+<div class="d-flex flex-column gap-5">
+<div>
+<label for="week">Select a week:</label>
+<input type="week" id="week" name="week" [(ngModel)]="selectedWeek" (change)="getStartOfWeek(selectedWeek)">
+</div>
+<div style="display: block; width: 500px">
+  <canvas id="canvas" height="320"></canvas>
+</div>
+</div>
+

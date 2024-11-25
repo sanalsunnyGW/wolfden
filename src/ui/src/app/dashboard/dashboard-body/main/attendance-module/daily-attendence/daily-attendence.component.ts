@@ -4,6 +4,7 @@ import { CommonModule, formatDate } from '@angular/common';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { DailyAttendance } from '../../../../../interface/idaily-attendance';
 
+
 @Component({
   selector: 'app-daily-attendence',
   standalone: true,
@@ -17,7 +18,9 @@ export class DailyAttendenceComponent {
   constructor(private router: Router) {}
   attendanceDate!:string
   dailyData!:DailyAttendance
-  ngOnInit() {}
+  ngOnInit() {
+    this.getDailyAttendence()
+  }
  
   attendanceStatus = [
     { id: 1, viewValue: 'Present' },
