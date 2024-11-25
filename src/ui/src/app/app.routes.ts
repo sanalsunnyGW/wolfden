@@ -6,6 +6,7 @@ import { LeaveHistoryComponent } from './dashboard/dashboard-body/main/leave-man
 import { EditLeaveTypeComponent } from './dashboard/dashboard-body/main/leave-management/edit-leave-type/edit-leave-type.component';
 import { UpdateLeaveBalanceComponent } from './dashboard/dashboard-body/main/leave-management/update-leave-balance/update-leave-balance.component';
 import { UserComponent } from './user/user.component';
+import { WeeklyAttendanceComponent } from './dashboard/dashboard-body/main/attendance-module/weekly-attendance/weekly-attendance.component';
 
 export const routes: Routes =
   [
@@ -14,7 +15,8 @@ export const routes: Routes =
     { path: 'edit-leave-type', component: EditLeaveTypeComponent },
     { path: 'update-leave-balance', component: UpdateLeaveBalanceComponent },
     { path: 'attendance/calendar', component: CalendarViewComponent },
-    { path: '', component: UserComponent }
+    { path: '', component: UserComponent },
+    {path:'attendance/weekly',component:WeeklyAttendanceComponent}
   ];
 
 

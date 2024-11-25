@@ -12,13 +12,8 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-<<<<<<<< HEAD:src/services/WolfDen.Infrastructure/Migrations/20241125090843_UpdateEmployeesLeave.Designer.cs
-    [Migration("20241125090843_UpdateEmployeesLeave")]
-    partial class UpdateEmployeesLeave
-========
-    [Migration("20241121102331_pagination")]
-    partial class pagination
->>>>>>>> upstream/main:src/services/WolfDen.Infrastructure/Migrations/20241121102331_pagination.Designer.cs
+    [Migration("20241122105005_leaveRequets")]
+    partial class leaveRequets
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -497,6 +492,8 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmployeeId");
+
                     b.ToTable("LOP", "wolfden");
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
@@ -576,9 +573,6 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<int>("IncrementValue")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("LastCreditedMonth")
-                        .HasColumnType("date");
-
                     b.Property<int>("LeaveBalanceId")
                         .HasColumnType("int");
 
@@ -636,7 +630,7 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<DateOnly>("FromDate")
                         .HasColumnType("date");
 
-                    b.Property<bool?>("HalfDay")
+                    b.Property<bool>("HalfDay")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
@@ -792,7 +786,7 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<int?>("DaysCheckEqualOrLess")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DaysCheckMore")
+                    b.Property<int?>("DaysChekcMore")
                         .HasColumnType("int");
 
                     b.Property<int?>("DutyDaysRequired")
@@ -934,6 +928,17 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Navigation("Designation");
 
                     b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("WolfDen.Domain.Entity.LOP", b =>
+                {
+                    b.HasOne("WolfDen.Domain.Entity.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.LeaveBalance", b =>
