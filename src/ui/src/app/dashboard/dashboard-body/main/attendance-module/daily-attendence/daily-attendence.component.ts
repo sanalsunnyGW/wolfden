@@ -18,7 +18,9 @@ export class DailyAttendenceComponent {
   constructor(private router: Router) {}
   attendanceDate!:string
   dailyData!:DailyAttendance
-  ngOnInit() {}
+  ngOnInit() {
+    this.getDailyAttendence()
+  }
  
   attendanceStatus = [
     { id: 1, viewValue: 'Present' },

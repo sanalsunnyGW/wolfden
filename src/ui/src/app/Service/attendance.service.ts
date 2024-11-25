@@ -7,6 +7,7 @@ import { IAttendanceSummary } from '../interface/attendance-summary';
 import { IAttendanceData } from '../interface/attendance-data';
 import { WeeklyAttendance } from '../interface/iweekly-attendance';
 import { ICheckAttencdanceClose } from '../interface/check-attendance-close';
+import { SubordinatesDetails } from '../interface/subordinates-details';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +51,10 @@ export class AttendanceService {
   getWeeklyChart(employeeId:number,weekStart:string,weekEnd:string)
   {
     return this.http.get<WeeklyAttendance[]>(`${this.baseUrl}/api/attendance/employee/weekly?EmployeeId=${employeeId}&WeekStart=${weekStart}&WeekEnd=${weekEnd}`)
+  }
+  getSubOrdinates(employeeId:number)
+  {
+    return this.http.get<SubordinatesDetails[]>(`${this.baseUrl}/api/attendance/get-subordinates?EmployeeId=${employeeId}`)
   }
 }
 

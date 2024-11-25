@@ -1,10 +1,69 @@
-.c-style{
-    width: 18rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    border: none;
-    font-size: 12px;
-  }
-  .cardStyle{
-    font-weight: bold;
-    font-size: medium; 
-  }
+.card {
+  border-radius: 10px;
+}
+.card-body {
+  padding: 1.25rem;
+} 
+h5.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.arrival
+{
+  background:#9EDF9C;
+}
+.dep{
+  background: #DA7297;
+}
+.ins{
+  background: #F87A53;
+}
+.out{
+  
+  background: #608BC1;
+}
+.miss{
+  background: #7776B3;
+}
+.pun{
+  background: #EE4E4E;
+}
+table {
+  font-size: 0.875rem;
+} 
+table th {
+  text-align: center;
+}
+.table-responsive {
+  margin-top: 20px;
+}
+.btn-success {
+  font-size: 1rem;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+.text-primary {
+  color: #ffffff !important;
+}
+.text-white {
+  color: #fff !important;
+}
+.rep{
+  background: #0F67B1;
+  color: white;
+}
+.table-rounded {
+  border-radius: 10px;
+}
+
+.table th, .table td {
+  padding: 12px;
+  text-align: center;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f0f8ff; 
+}
+.tab{
+  background: #F5F7F8;
+}
