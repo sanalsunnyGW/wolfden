@@ -15,11 +15,6 @@ namespace WolfDen.Application.Requests.Commands.Attendence.SendNotification
                 .Where(x=>x.Id == request.EmployeeId)
                 .FirstOrDefaultAsync();
 
-            if (employee == null)
-            {
-                throw new Exception("Employee Not Found");
-            }
-
             Notification notification = new Notification(request.EmployeeId, request.Message);
 
             await _context.Notification.AddAsync(notification);
