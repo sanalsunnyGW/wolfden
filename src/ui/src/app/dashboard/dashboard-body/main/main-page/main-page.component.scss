@@ -1,0 +1,132 @@
+/* main-page.component.scss */
+.dashboard-container {
+    padding: 20px;
+    background-color: #f4f4f4;
+  
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+  
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+  
+      .card-header {
+        padding: 15px;
+        background: #f8f9fa;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+  
+        h3 {
+          margin: 0;
+          font-size: 14px;
+          font-weight: 500;
+        }
+  
+        i {
+          font-size: 14px;
+          color: #666;
+        }
+      }
+  
+      .card-content {
+        padding: 15px;
+  
+        .metric-value {
+          font-size: 24px;
+          font-weight: bold;
+          color: #2563eb;
+          text-align: center;
+        }
+      }
+    }
+  
+    .absences-list {
+      height: 200px;
+      overflow-y: auto;
+  
+      .absence-item {
+        padding: 10px;
+        border-radius: 4px;
+        background: #8398ad;
+        margin-bottom: 8px;
+  
+        .absence-name {
+          font-weight: 500;
+          font-size: 14px;
+        }
+  
+        .absence-details {
+          font-size: 12px;
+          color: #e6dddd;
+          margin-top: 4px;
+        }
+      }
+    }
+  
+    .calendar {
+      .calendar-header {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        text-align: center;
+        font-size: 12px;
+        font-weight: 500;
+        color: #051e7a;
+        margin-bottom: 8px;
+      }
+  
+      .calendar-body {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 2px;
+  
+        .calendar-day {
+          text-align: center;
+          padding: 4px;
+          font-size: 12px;
+          border-radius: 4px;
+          cursor: pointer;
+  
+          &:hover {
+            background: #f0f0f0;
+          }
+  
+          &.holiday {
+            background: #035002;
+            color: #f6f6f6;
+  
+            &:hover {
+              background: #bfdbfe;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 1024px) {
+    .dashboard-container .metrics-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .dashboard-container .metrics-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+
+  .margin10{
+    margin: 10px;
+  }
+
+.bigcard{
+    height: 700px;
+}

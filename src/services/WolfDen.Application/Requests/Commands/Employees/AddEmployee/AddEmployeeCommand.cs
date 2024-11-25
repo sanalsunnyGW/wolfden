@@ -6,7 +6,6 @@ namespace WolfDen.Application.Requests.Commands.Employees.AddEmployee
     {
         public int EmployeeCode { get; set; }
         public string RFId { get; set; }
-        public string FirstName { get; set; }
 
 
     }
