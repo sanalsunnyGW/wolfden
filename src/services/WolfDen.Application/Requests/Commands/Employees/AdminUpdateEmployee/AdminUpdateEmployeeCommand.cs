@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using static WolfDen.Domain.Enums.EmployeeEnum;
 
 namespace WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee
 {
@@ -9,6 +10,7 @@ namespace WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee
         public int? DepartmentId { get; set; }
         public int? ManagerId { get; set; }
         public bool? IsActive { get; set; }
-        public DateOnly? JoiningDate { get;  set; }
+        public DateOnly? JoiningDate { get; set; }
+        public EmploymentType? EmploymentType { get; set; }
     }
 }

@@ -28,7 +28,13 @@
     "angular-material-pagination": "^1.0.1",
     "angular-paginator": "^12.0.0",
     "bootstrap": "^5.3.3",
+<<<<<<< HEAD
+    "jquery": "^3.7.1",
+    "mermaid": "^11.4.0",
+    "fullcalendar": "^6.1.15",
+=======
     "chart.js": "^4.3.0",
+>>>>>>> refs/remotes/upstream/main
     "chartjs-plugin-annotation": "^3.1.0",
     "date-fns": "^4.1.0",
     "fullcalendar": "^6.1.15",
@@ -45,6 +51,7 @@
     "@angular/cli": "^18.2.7",
     "@angular/compiler-cli": "^18.2.0",
     "@types/jasmine": "~5.1.0",
+    "@types/jquery": "^3.5.32",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

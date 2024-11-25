@@ -1,7 +1,9 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.Employees;
 using WolfDen.Application.Requests.Services;
+using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam
@@ -11,70 +13,39 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam
         private readonly WolfDenContext _context = context;
         public async Task<List<EmployeeHierarchyDto>> Handle(GetEmployeeTeamQuery request, CancellationToken cancellationToken)
         {
-            EmployeeHierarchyService service = new(_context);
+            GetEmployeeService service = new(_context);
             List<EmployeeHierarchyDto> teamList = new();
-            EmployeeHierarchyDto result = new();
-            var employee = await _context.Employees.FindAsync(request.Id, cancellationToken);
+            Employee employee = await _context.Employees
+            .Include(e => e.Department)
+            .Include(e => e.Designation)
+            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (employee.IsActive == false)
             {
-                result.Id = employee.Id;
-                result.EmployeeCode = employee.EmployeeCode;
-                result.FirstName = employee.FirstName;
-                result.LastName = employee.LastName;
-                result.Email = employee.Email;
-                result.DateofBirth = employee.DateofBirth;
-                result.DepartmentId = employee.DepartmentId;
-                result.DesignationId = employee.DesignationId;
-                result.ManagerId = employee.ManagerId;
-                result.PhoneNumber = employee.PhoneNumber;
-                result.IsActive = employee.IsActive;
-                result.Subordinates = await service.GetSubordinates(employee.Id);
-                teamList.Add(result);
+                teamList.Add(await service.GetEmployee(employee, false, cancellationToken));
                 return teamList;
             }
-            var myTeam = await _context.Employees.Where(x => x.ManagerId == request.Id && x.IsActive == true).ToListAsync();
+            List<Employee> myTeam = await _context.Employees.Where(x => x.ManagerId == request.Id && x.IsActive == true).ToListAsync();
             if (myTeam.Count == 0)
             {
-                var teamMates = _context.Employees.Where(x => x.ManagerId == employee.ManagerId && x.IsActive == true);
+                List<Employee> teamMates = await _context.Employees.Where(x => x.ManagerId == employee.ManagerId && x.IsActive == true).ToListAsync();
 
-                foreach (var teamMate in teamMates)
+                foreach (Employee teamMate in teamMates)
                 {
-                    EmployeeHierarchyDto employeeDto = new()
-                    {
-                        Id = teamMate.Id,
-                        EmployeeCode = teamMate.EmployeeCode,
-                        FirstName = teamMate.FirstName,
-                        LastName = teamMate.LastName,
-                        Email = teamMate.Email,
-                        PhoneNumber = teamMate.PhoneNumber,
-                        DateofBirth = teamMate.DateofBirth,
-                        DepartmentId = teamMate.DepartmentId,
-                        DesignationId = teamMate.DesignationId,
-                        ManagerId = teamMate.ManagerId,
-                        IsActive = teamMate.IsActive,
+                    teamList.Add(await service.GetEmployee(teamMate, false, cancellationToken));
 
-                    };
-                    teamList.Add(employeeDto);
                 }
                 return teamList;
             }
-
-            result.Id = employee.Id;
-            result.EmployeeCode = employee.EmployeeCode;
-            result.FirstName = employee.FirstName;
-            result.LastName = employee.LastName;
-            result.Email = employee.Email;
-            result.DateofBirth = employee.DateofBirth;
-            result.DepartmentId = employee.DepartmentId;
-            result.DesignationId = employee.DesignationId;
-            result.ManagerId = employee.ManagerId;
-            result.PhoneNumber = employee.PhoneNumber;
-            result.IsActive = employee.IsActive;
-            result.Subordinates = await service.GetSubordinates(employee.Id);
-            teamList.Add(result);
+            if (request.Hierarchy)
+            {
+                teamList.Add(await service.GetEmployee(employee, true, cancellationToken));
+                return teamList;
+            }
+            foreach (Employee subordinate in myTeam)
+            {
+                teamList.Add(await service.GetEmployee(subordinate, false, cancellationToken));
+            }
             return teamList;
         }
-
-
     }
 }
