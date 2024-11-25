@@ -27,10 +27,9 @@ namespace WolfDen.API.Controllers.LeaveManagement
 
         [HttpGet]
 
-        public async Task<List<LeaveTypeDto>> GetLeaveTypeIdAndName(CancellationToken cancellationToken)
+        public async Task<List<LeaveTypeDto>> GetLeaveTypeIdAndName([FromQuery]GetAllLeaveTypeIdAndNameQuery query,CancellationToken cancellationToken)
         {
-            GetAllLeaveTypeIdAndNameQuery getAllLeaveTypeIdAndNameQuery = new GetAllLeaveTypeIdAndNameQuery();
-            return await _mediator.Send(getAllLeaveTypeIdAndNameQuery, cancellationToken);
+            return await _mediator.Send(query, cancellationToken);
         }
     }
 }

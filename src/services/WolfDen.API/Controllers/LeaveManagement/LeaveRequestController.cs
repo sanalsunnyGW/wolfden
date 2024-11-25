@@ -11,13 +11,9 @@ namespace WolfDen.API.Controllers.LeaveManagement
     {
         private readonly IMediator _mediator = mediator;
 
-        [HttpGet("{id}/{pageNumber}/{pageSize}")]
-        public async Task<LeaveRequestHistoryResponseDto> GetLeaveRequestHistory(int id,int pageNumber,int pageSize,CancellationToken cancellationToken)
-        {
-            GetLeaveRequestHistoryQuery query= new GetLeaveRequestHistoryQuery();
-            query.RequestId=id;
-            query.PageNumber = pageNumber;
-            query.PageSize=pageSize;
+        [HttpGet]
+        public async Task<LeaveRequestHistoryResponseDto> GetLeaveRequestHistory([FromQuery] GetLeaveRequestHistoryQuery query, CancellationToken cancellationToken)
+        { 
             return await _mediator.Send(query,cancellationToken); 
         }
     }

@@ -16,19 +16,19 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
             int pageSize = request.PageSize > 0 ? request.PageSize : 1;
 
             int totalCount = await _context.LeaveRequests
-                                    .Where(x => x.EmployeeId.Equals(request.RequestId))
-                                    .CountAsync(cancellationToken);
+                .Where(x => x.EmployeeId.Equals(request.RequestId))
+                .CountAsync(cancellationToken);
 
             int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
             List<LeaveRequestDto> leaveRequestList = await _context.LeaveRequests
-            .Where(x => x.EmployeeId.Equals(request.RequestId))
-            .Include(x => x.LeaveType)
-            .Join(
-                _context.Employees,
-                leaveRequest => leaveRequest.ProcessedBy,
-                employee => employee.Id,
-                (leaveRequest, employee) => new LeaveRequestDto
+                .Where(x => x.EmployeeId.Equals(request.RequestId))
+                .Include(x => x.LeaveType)
+                .Include(x => x.Employee)
+                .Skip((pageNumber) * pageSize)
+                .Take(pageSize)
+                .OrderByDescending(x => x.Id)
+                .Select(leaveRequest => new LeaveRequestDto
                 {
                     Id = leaveRequest.Id,
                     FromDate = leaveRequest.FromDate,
@@ -37,12 +37,9 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
                     TypeName = leaveRequest.LeaveType.TypeName,
                     HalfDay = leaveRequest.HalfDay,
                     Description = leaveRequest.Description,
-                    ProcessedBy = employee.FirstName,
+                    ProcessedBy = leaveRequest.Employee.FirstName,
                     LeaveRequestStatusId = leaveRequest.LeaveRequestStatusId
                 })
-           .Skip((pageNumber) * pageSize)
-            .Take(pageSize)
-               .OrderByDescending(x => x.Id)
                 .ToListAsync(cancellationToken);
 
             return new LeaveRequestHistoryResponseDto

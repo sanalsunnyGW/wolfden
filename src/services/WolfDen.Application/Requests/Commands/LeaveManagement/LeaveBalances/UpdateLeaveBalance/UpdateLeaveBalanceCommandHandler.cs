@@ -14,10 +14,8 @@
 
 //        public async Task<bool> Handle(UpdateLeaveBalanceCommand command, CancellationToken cancellationToken)
 //        {
-//            // List<Employee> employee = await _context.Employees.ToListAsync(cancellationToken);
 //            LeaveSetting leaveSetting = await _context.LeaveSettings.FirstOrDefaultAsync(cancellationToken);
 
-//            //remove forach employees 
 //            List<LeaveBalance> leaveBalance = await _context.LeaveBalances
 //                .Include(x => x.LeaveType)
 //                .Include(x => x.Employee)
@@ -25,7 +23,7 @@
 
 //            foreach (LeaveBalance leaveType in leaveBalance)  //fetching leave balance row for each leave type
 //            {
-//                if (leaveType.Employee.Id == leaveType.EmployeeId)
+//                if (leaveType.Employee.Id == leaveType.EmployeeId)          //to update the each employee's leave balance
 //                {
 //                    LeaveIncrementLog leaveIncrementLog = await _context.LeaveIncrementLogs
 //                    .Where(x => x.LeaveBalanceId == leaveType.Id)
@@ -42,14 +40,12 @@
 //                        {
 //                            leaveType.Balance = 0;
 //                        }
-//                        LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, 0, lastCreditedMonth);
+//                        LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, 0, leaveType.Employee.JoiningDate.Value);
 //                        _context.LeaveIncrementLogs.Add(leaveIncrement);
-//                        //result=  await _context.SaveChangesAsync(cancellationToken);
 //                    }
 //                    else
 //                    {
 //                        DateTime JoiningDateTime = leaveType.Employee.JoiningDate.Value.ToDateTime(TimeOnly.MinValue);
-//                        // DateTime incrementLog = leaveIncrementLog.LogDate.ToDateTime(TimeOnly.MinValue);
 
 //                        if (DateTime.Now.Subtract(JoiningDateTime).Days >= leaveType.LeaveType.DutyDaysRequired)
 //                        {
@@ -89,9 +85,9 @@
 //                                        }
 //                                        else    //if no carry forward & also balance updated in next/new year 
 //                                        {
-//                                            leaveType.Balance = (int)(leaveType.LeaveType.IncrementCount * value);
-//                                            lastCreditedMonth = leaveIncrementLog.LastCreditedMonth.AddMonths(value * 1);
-//                                            LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, (int)(leaveType.LeaveType.IncrementCount * value), lastCreditedMonth);
+//                                            leaveType.Balance = (int)(leaveType.LeaveType.IncrementCount * DateTime.Now.Month);
+//                                            lastCreditedMonth = DateOnly.FromDateTime(DateTime.Now);
+//                                            LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, (int)(leaveType.LeaveType.IncrementCount * DateTime.Now.Month), lastCreditedMonth);
 //                                            _context.LeaveIncrementLogs.Add(leaveIncrement);
 //                                        }
 //                                    }
@@ -114,7 +110,7 @@
 //                                        {
 //                                            leaveType.Balance += (decimal)leaveType.LeaveType.IncrementCount * value;
 //                                            lastCreditedMonth = leaveIncrementLog.LastCreditedMonth.AddMonths(value * 3);
-//                                            LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, (int)(leaveType.LeaveType?.IncrementCount * value), lastCreditedMonth);
+//                                            LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, (int)(leaveType.LeaveType.IncrementCount * value), lastCreditedMonth);
 //                                            _context.LeaveIncrementLogs.Add(leaveIncrement);
 //                                        }
 //                                    }
@@ -124,14 +120,16 @@
 //                                        {
 //                                            leaveType.Balance += (decimal)leaveType.LeaveType.IncrementCount * value;
 //                                            lastCreditedMonth = leaveIncrementLog.LastCreditedMonth.AddMonths(value * 3);
-//                                            LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, (int)(leaveType.LeaveType?.IncrementCount * value), lastCreditedMonth);
+//                                            LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, (int)(leaveType.LeaveType.IncrementCount * value), lastCreditedMonth);
 //                                            _context.LeaveIncrementLogs.Add(leaveIncrement);
 //                                        }
 //                                        else    //if no carry forward & also balance updated in next/new year 
 //                                        {
-//                                            leaveType.Balance = (int)(leaveType.LeaveType.IncrementCount * value);
-//                                            lastCreditedMonth = leaveIncrementLog.LastCreditedMonth.AddMonths(value * 3);
-//                                            LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, (int)(leaveType.LeaveType.IncrementCount * value), lastCreditedMonth);
+//                                            value = (int)Math.Floor((decimal)DateTime.Now.Month / 3);
+//                                            leaveType.Balance = (int)(leaveType.LeaveType.IncrementCount * (value+1));                //to get the value assigned acclrding to the current month no. 
+//                                            //lastCreditedMonth = leaveIncrementLog.LastCreditedMonth.AddMonths((value * 3)+1);     //get the latest credited month but here in log field, its of prev. yr so cant add months
+//                                            lastCreditedMonth = new DateOnly(DateTime.Now.Year, 1, 1).AddMonths(value * 3);        //gets latest credited month of this new yr  
+//                                            LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, (int)(leaveType.LeaveType.IncrementCount * (value+1)), lastCreditedMonth);
 //                                            _context.LeaveIncrementLogs.Add(leaveIncrement);
 //                                        }
 //                                    }
@@ -139,7 +137,7 @@
 
 //                                else if (LeaveIncrementGapMonth.Half == leaveType.LeaveType.IncrementGapId)  //half yearly increment
 //                                {
-//                                    int value = (int)Math.Floor(UpdateReq / 2);
+//                                    int value = (int)Math.Floor(UpdateReq / 6);
 //                                    if (leaveType.LeaveType.CarryForward == true)
 //                                    {
 //                                        if ((leaveType.Balance + (leaveType.LeaveType.IncrementCount * value)) > leaveType.LeaveType.CarryForwardLimit)          //if new balance exceeds carrylimit
@@ -162,15 +160,16 @@
 //                                        if (DateTime.Now.Year == leaveIncrementLog.LastCreditedMonth.Year)   //check if balance updated in the same yr as that of last updated
 //                                        {
 //                                            leaveType.Balance += (decimal)leaveType.LeaveType.IncrementCount * value;
-//                                            lastCreditedMonth = leaveIncrementLog.LastCreditedMonth.AddMonths(value * 2);
+//                                            lastCreditedMonth = leaveIncrementLog.LastCreditedMonth.AddMonths(value * 6);
 //                                            LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, (int)(leaveType.LeaveType.IncrementCount * value), lastCreditedMonth);
 //                                            _context.LeaveIncrementLogs.Add(leaveIncrement);
 //                                        }
 //                                        else    //if no carry forward & also balance updated in next/new year 
 //                                        {
-//                                            leaveType.Balance = (int)(leaveType.LeaveType.IncrementCount * value);
-//                                            lastCreditedMonth = leaveIncrementLog.LastCreditedMonth.AddMonths(value * 2);
-//                                            LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, (int)(leaveType.LeaveType.IncrementCount * value), lastCreditedMonth);
+//                                            value = (int)Math.Floor((decimal)DateTime.Now.Month / 6);
+//                                            leaveType.Balance = (int)(leaveType.LeaveType.IncrementCount * (value + 1));
+//                                            lastCreditedMonth = new DateOnly(DateTime.Now.Year,1,1).AddMonths((value * 6));
+//                                            LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, (int)(leaveType.LeaveType.IncrementCount * (value + 1)), lastCreditedMonth);
 //                                            _context.LeaveIncrementLogs.Add(leaveIncrement);
 //                                        }
 //                                    }
@@ -226,14 +225,13 @@
 //                                        }
 //                                        else    //if no carry forward & also balance updated in next/new year 
 //                                        {
-//                                            leaveType.Balance = (int)(leaveType.LeaveType.IncrementCount * value);
+//                                            leaveType.Balance = (int)(leaveType.LeaveType.IncrementCount * DateTime.Now.Month);
 //                                            lastCreditedMonth = leaveIncrementLog.LastCreditedMonth.AddMonths(value * 1);
-//                                            LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, (int)(leaveType.LeaveType.IncrementCount * value), lastCreditedMonth);
+//                                            LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveType.Id, DateOnly.FromDateTime(DateTime.Now), leaveType.Balance, (int)(leaveType.LeaveType.IncrementCount * DateTime.Now.Month), lastCreditedMonth);
 //                                            _context.LeaveIncrementLogs.Add(leaveIncrement);
 //                                        }
 //                                    }
 //                                }
-//                                //result= await _context.SaveChangesAsync(cancellationToken);
 //                            }
 //                        }
 //                        else

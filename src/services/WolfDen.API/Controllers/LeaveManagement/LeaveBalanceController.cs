@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WolfDen.Application.DTOs.LeaveManagement;
 using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.InitializeLeaveBalance;
-using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.UpdateLeaveBalance;
+//using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.UpdateLeaveBalance;
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveBalances.GetLeaveBalance;
 
 namespace WolfDen.API.Controllers.LeaveManagement
@@ -13,11 +13,9 @@ namespace WolfDen.API.Controllers.LeaveManagement
     {
         private readonly IMediator _mediator = mediator;
 
-        [HttpGet("{id}")]
-        public async Task<List<LeaveBalanceDto>> GetLeaveBalances(int id, CancellationToken cancellationToken)
+        [HttpGet]
+        public async Task<List<LeaveBalanceDto>> GetLeaveBalances([FromQuery] GetLeaveBalanceQuery query, CancellationToken cancellationToken)
         {
-            GetLeaveBalanceQuery query = new GetLeaveBalanceQuery();
-            query.RequestId = id;
             return await _mediator.Send(query, cancellationToken);
         }
 

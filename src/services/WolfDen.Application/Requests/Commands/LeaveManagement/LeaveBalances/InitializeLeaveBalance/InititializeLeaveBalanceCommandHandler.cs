@@ -21,7 +21,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.In
                     LeaveBalance leaveBalance = new LeaveBalance(request.RequestId, type.Id, 0);
                     _context.LeaveBalances.Add(leaveBalance);
                     await _context.SaveChangesAsync();
-                    LeaveIncrementLog leaveIncrementLog = new LeaveIncrementLog(leaveBalance.Id, DateOnly.FromDateTime(DateTime.Now), 0, 0, (DateOnly)leaveBalance.Employee.JoiningDate);
+                    LeaveIncrementLog leaveIncrementLog = new LeaveIncrementLog(leaveBalance.Id, (DateOnly)leaveBalance.Employee.JoiningDate, 0, 0, (DateOnly)leaveBalance.Employee.JoiningDate);
                     _context.LeaveIncrementLogs.Add(leaveIncrementLog);
                 }
             }

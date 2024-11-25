@@ -17,11 +17,12 @@ export class LeaveManagementService {
   constructor() { }
   private http = inject(HttpClient);
   getLeaveBalance(id: number) {
-    return this.http.get<Array<ILeaveBalanceList>>(`https://localhost:7015/api/leave-balance/${id}`);
+    return this.http.get<Array<ILeaveBalanceList>>(`https://localhost:7015/api/leave-balance?RequestId=${id}`);
   }
 
   getLeaveRequestHistory(id: number, pageNumber: number, pageSize: number) {
-    return this.http.get<ILeaveRequestHistoryResponse>(`https://localhost:7015/api/leave-request/${id}/${pageNumber}/${pageSize}`);
+    return this.http.get<ILeaveRequestHistoryResponse>(`https://localhost:7015/api/leave-request?RequestId=${id}&PageNumber=${pageNumber}&PageSize=${pageSize}`);
+    
   }
 
   addNewLeaveType(newType: FormGroup<IAddNewLeaveType>) {
