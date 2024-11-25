@@ -58,7 +58,6 @@ export class AddNewLeaveTypeComponent {
               }
             },
               error:(error) =>{
-
                 alert(error)
                 }
            }

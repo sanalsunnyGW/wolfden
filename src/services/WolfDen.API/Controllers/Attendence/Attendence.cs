@@ -10,8 +10,8 @@ using WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary;
 using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
-using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.WeeklySummary;
+using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
 
 namespace WolfDen.API.Controllers.Attendence
 {
@@ -60,7 +60,7 @@ namespace WolfDen.API.Controllers.Attendence
         {
             return await _mediator.Send(query, cancellationToken);
         }
-
+        
         [HttpGet("monthly-report")]
         public async Task<IActionResult> GenerateMonthlyReport([FromQuery] MonthlyReportQuery MonthlyReportQuery, CancellationToken cancellationToken)
         {
@@ -88,15 +88,14 @@ namespace WolfDen.API.Controllers.Attendence
             CheckAttendanceClosedDTO isClosed = await _mediator.Send(checkAttendanceClosedQuery, cancellationToken);
             return Ok(isClosed);
         }
-       
         [HttpGet("employee/history")]
         public async Task<AttendanceHistoryDTO> GetHistory([FromQuery] AttendanceHistoryQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
         }
     }
+
+
 }
-
-
        
  

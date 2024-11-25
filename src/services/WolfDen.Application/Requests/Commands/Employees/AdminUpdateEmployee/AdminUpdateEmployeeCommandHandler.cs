@@ -25,7 +25,7 @@ namespace WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee
             {
                 return false;
             }
-            employee.AdminUpdateEmployee(request.DesignationId, request.DepartmentId, request.ManagerId, request.IsActive, request.JoiningDate);
+            employee.AdminUpdateEmployee(request.DesignationId, request.DepartmentId, request.ManagerId, request.IsActive, request.JoiningDate, request.EmploymentType);
             _context.Employees.Update(employee);
             await _context.SaveChangesAsync(cancellationToken);
             return true;
