@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
 using sib_api_v3_sdk.Client;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
+using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
 using WolfDen.Infrastructure.Data;
 
 
@@ -36,6 +37,8 @@ builder.Services.AddDbContext<WolfDenContext>(x =>
 });
 builder.Services.AddScoped<WolfDenContext>();
 builder.Services.AddSingleton<PdfService>();
+builder.Services.AddScoped<MonthlyPdf>();
+
 QuestPDF.Settings.License = LicenseType.Community;
 
 builder.Services.AddMediatR(x =>

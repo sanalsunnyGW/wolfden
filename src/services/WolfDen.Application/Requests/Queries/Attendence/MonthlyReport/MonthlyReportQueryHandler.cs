@@ -54,10 +54,13 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                 .ToListAsync(cancellationToken);
 
             LOP lop =await _context.LOP.Where(x=>x.EmployeeId==request.EmployeeId && x.AttendanceClosedDate.Month==request.Month).FirstOrDefaultAsync(cancellationToken);
-            summaryDto.IncompleteShiftDays = lop.IncompleteShiftDays;
-            summaryDto.IncompleteShift = lop.NoOfIncompleteShiftDays;
-            summaryDto.Absent = lop.LOPDaysCount;
-            summaryDto.AbsentDays = lop.LOPDays;
+            if (lop is not null)
+            {
+                summaryDto.IncompleteShiftDays = lop.IncompleteShiftDays;
+                summaryDto.IncompleteShift = lop.NoOfIncompleteShiftDays;
+                summaryDto.Absent = lop.LOPDaysCount;
+                summaryDto.AbsentDays = lop.LOPDays;
+            }
 
             List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
 
