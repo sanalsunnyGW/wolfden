@@ -1,6 +1,10 @@
 export interface WeeklyAttendance {
     date:Date,
-    duration:number,
-    status:string
+    arrivalTime: string,
+    departureTime: string,
+    insideDuration: number,
+    outsideDuration: number,
+    missedPunch: string,
+    attendanceStatusId:number
 }
 

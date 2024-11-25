@@ -8,6 +8,7 @@ import { EmployeeHierarchyTreeComponent } from './employee-hierarchy-tree/employ
 import { EmloyeeHierarchyDisplayComponent } from './employee-hierarchy-tree/emloyee-hierarchy-display/emloyee-hierarchy-display.component';
 import { MyTeamComponent } from './my-team/my-team.component';
 import { UserComponent } from './user/user.component';
+import { WeeklyAttendanceComponent } from './dashboard/dashboard-body/main/attendance-module/weekly-attendance/weekly-attendance.component';
 
 
 export const routes: Routes = [
@@ -45,10 +46,12 @@ export const routes: Routes = [
         component: UserComponent
 
     },
-    { path: 'leave-dashboard', component: LeaveDashboardComponent },
-    { path: 'leave-request-history', component: LeaveHistoryComponent }
+    {path:'leave-dashboard',component:LeaveDashboardComponent},
+    {path:'leave-request-history',component:LeaveHistoryComponent},
+    {path:'attendance/weekly',component:WeeklyAttendanceComponent}
 
-
+    
+   
 ];
 
 
