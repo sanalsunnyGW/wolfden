@@ -12,8 +12,8 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241121102331_pagination")]
-    partial class pagination
+    [Migration("20241125122042_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -322,6 +322,12 @@ namespace WolfDen.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateOnly?>("DateofBirth")
                         .HasColumnType("date");
 
@@ -336,6 +342,9 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<int>("EmployeeCode")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EmploymentType")
                         .HasColumnType("int");
 
                     b.Property<string>("FirstName")
@@ -358,6 +367,10 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<int?>("ManagerId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Password")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<DateTime>("PeriodEnd")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
@@ -372,9 +385,15 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
+                    b.Property<string>("Photo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RFId")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -491,6 +510,8 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnName("PeriodStart");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("LOP", "wolfden");
 
@@ -926,6 +947,17 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Navigation("Designation");
 
                     b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("WolfDen.Domain.Entity.LOP", b =>
+                {
+                    b.HasOne("WolfDen.Domain.Entity.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.LeaveBalance", b =>
