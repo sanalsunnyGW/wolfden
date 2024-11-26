@@ -24,9 +24,9 @@ export class EmployeeDirectoryComponent implements OnInit {
   searchTerm: string = '';
   private searchSubject = new Subject<string>();
   isLoading: boolean = false;
-  pageNumber: number = 0;  
-  pageSize: number = 2;   
-  @ViewChild('paginator') paginator1?: MatPaginator;
+  pageNumber: number = 0;
+  pageSize: number = 2;
+  totalCount?: number = undefined;
 
   constructor(private wolfDenService: WolfDenService) {
     this.searchSubject.pipe(
@@ -44,9 +44,11 @@ export class EmployeeDirectoryComponent implements OnInit {
   onPaginateChange(event: PageEvent): void {
     this.pageNumber = event.pageIndex;  
     this.pageSize = event.pageSize;
+    this.totalCount = undefined;
     this.loadEmployees();
   }
   onSearch(): void {
+    this.totalCount = undefined;
     this.loadEmployees(); 
     this.pageNumber = 0;
   }
@@ -56,6 +58,7 @@ export class EmployeeDirectoryComponent implements OnInit {
       const value = target.value;
       this.selectedDepartment = value ? Number(value) : 0; 
       this.pageNumber=0;
+      this.totalCount = undefined;
       this.loadEmployees(); 
     }
   }
@@ -70,8 +73,7 @@ export class EmployeeDirectoryComponent implements OnInit {
       next: (data) => {
         console.log(data)
         this.isLoading = false; 
-        if(this.paginator1)
-        this.paginator1.length=data.totalPages;
+        this.totalCount = data.totalPages;
         this.employeesPagecount=data      
       },
       error: (error) => {
