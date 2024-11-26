@@ -21,7 +21,7 @@ export class CheckUserComponent {
               private toastr : ToastrService
             ) {
     this.userForm = this.fb.group<ICheckForm>({
-      rfid: new FormControl('', [Validators.required, ]),
+      rfId: new FormControl('', [Validators.required, ]),
       employeeCode: new FormControl('', Validators.required)
     });
   }
@@ -33,16 +33,16 @@ export class CheckUserComponent {
     ;
     if(this.userForm.valid){
      
-      this.userService.getEmployeeSignUp(this.userForm.value.employeeCode,this.userForm.value.rfId).subscribe({
+      this.userService.getEmployeeSignUp(this.userForm.value.employeeCode,this.userForm.value.rfid).subscribe({
         next: (response: any) => {
           if(response.status){
-            
-            this.toastr.error('user already exist')
-            this.router.navigate(['/user/login'])
-          }
-          else{
             this.toastr.success('Sucess')
             this.router.navigate(['/user/sign-in'])
+        
+          }
+          else{
+            this.toastr.error('user already exist')
+            this.router.navigate(['/user/login'])
           }
         
       },
