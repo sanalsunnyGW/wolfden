@@ -17,7 +17,6 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
         public async Task<PaginationResponse> Handle(GetAllEmployeeQuery request, CancellationToken cancellationToken)
         {
             int pageNumber = request.PageNumber > 0 ? request.PageNumber : 0;
-            int pageSize = request.PageSize;
             var baseQuery = _context.Employees
                .Include(e => e.Designation)
                .Include(e => e.Department)
@@ -30,7 +29,12 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
             {
                 baseQuery = baseQuery.Where(e =>(e.FirstName + " " + e.LastName).Contains(request.EmployeeName));
             }
+
+            int totalCount = await baseQuery.CountAsync(cancellationToken);
+
             var employees = await baseQuery
+               .Skip(request.PageSize * pageNumber)
+               .Take(request.PageSize)
                .Select(e => new EmployeeDirectoryDTO
                {
                    EmployeeCode = e.EmployeeCode,
@@ -52,13 +56,13 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
                    IsActive = e.IsActive
                })
             .ToListAsync(cancellationToken);
-            int totalpage = employees.Count;
-            int pageCount = (int)(Math.Ceiling((decimal)totalpage / request.PageSize));
-            var emp = employees.Skip(pageSize * pageNumber)
-               .Take(pageSize).ToList();
+            /* int totalpage = employees.Count;*/
+            int pageCount = (int)(Math.Ceiling((decimal)totalCount / request.PageSize));
+            var emp = employees.ToList();
             var empDirectory = new PaginationResponse
             {
                 EmployeeDirectoryDTOs = emp,
+                TotalRecords=totalCount,
                 TotalPages = pageCount,
             };
 
