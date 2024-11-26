@@ -10,24 +10,21 @@ import { CalendarViewComponent } from './dashboard/dashboard-body/main/attendanc
 
 import { LeaveDashboardComponent } from './dashboard/dashboard-body/main/leave-management/leave-dashboard/leave-dashboard.component';
 import { LeaveHistoryComponent } from './dashboard/dashboard-body/main/leave-management/leave-history/leave-history.component';
-<<<<<<< HEAD
 import { ProfileComponent } from './profile/profile.component';
 import { EmployeeHierarchyTreeComponent } from './employee-hierarchy-tree/employee-hierarchy-tree.component';
 import { EmloyeeHierarchyDisplayComponent } from './employee-hierarchy-tree/emloyee-hierarchy-display/emloyee-hierarchy-display.component';
 import { MyTeamComponent } from './my-team/my-team.component';
-import { UserComponent } from './user/user.component';
-=======
+import { AttendanceHistoryComponent } from './dashboard/dashboard-body/main/attendance-module/attendance-history/attendance-history.component';
 
->>>>>>> refs/remotes/upstream/main
-import { WeeklyAttendanceComponent } from './dashboard/dashboard-body/main/attendance-module/weekly-attendance/weekly-attendance.component';
 
 
 export const routes: Routes = [
     {
-<<<<<<< HEAD
         path: 'profile',
         component: ProfileComponent
-=======
+    },
+    {
+
         path: 'user', 
         component: UserComponent,
         children:[
@@ -39,7 +36,6 @@ export const routes: Routes = [
     {
         path:'attendance/calendar',
         component:CalendarViewComponent
->>>>>>> refs/remotes/upstream/main
     },
     {
         path: 'leave-dashboard',
@@ -67,13 +63,6 @@ export const routes: Routes = [
         component: CalendarViewComponent
     },
     {
-        path: '',
-        component: UserComponent
-
-    },
-
-
-    {
         path:'dashboard',
         component:DashboardComponent,
         children:[
@@ -81,12 +70,11 @@ export const routes: Routes = [
             {path:'employee-directory',component: EmployeeDirectoryComponent},
             {path:'leave-dashboard',component:LeaveDashboardComponent},
             {path:'leave-request-history',component:LeaveHistoryComponent},
+            {path:'attendance-history',component:AttendanceHistoryComponent}
             
         ]
     },
     { path: '', redirectTo: '/dashboard/main-page', pathMatch: 'full' }, 
-
- 
 
 ];
 

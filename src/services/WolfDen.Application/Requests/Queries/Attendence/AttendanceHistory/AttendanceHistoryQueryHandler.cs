@@ -135,7 +135,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
             return new AttendanceHistoryDTO
             {
                 AttendanceHistory = displayAttendance,
-                TotalPages = totalPageCount
+                TotalPages = totalCount
             };
         }
     }

@@ -28,16 +28,12 @@
     "angular-material-pagination": "^1.0.1",
     "angular-paginator": "^12.0.0",
     "bootstrap": "^5.3.3",
-<<<<<<< HEAD
     "jquery": "^3.7.1",
     "mermaid": "^11.4.0",
     "fullcalendar": "^6.1.15",
-=======
     "chart.js": "^4.3.0",
->>>>>>> refs/remotes/upstream/main
     "chartjs-plugin-annotation": "^3.1.0",
     "date-fns": "^4.1.0",
-    "fullcalendar": "^6.1.15",
     "ng2-charts": "^6.0.1",
     "ngx-toastr": "^19.0.0",
     "primeicons": "^7.0.0",

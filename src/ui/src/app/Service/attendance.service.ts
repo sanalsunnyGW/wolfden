@@ -56,6 +56,26 @@ export class AttendanceService {
   {
     return this.http.get<SubordinatesDetails[]>(`${this.baseUrl}/api/attendance/get-subordinates?EmployeeId=${employeeId}`)
   }
+  // getMonthlyHistoryByStatus(employeeId:number,year:number,month:number,attendanceStatusId:number,pagenumber:number,pagesize:number)
+  // {
+  //   return this.http.get(`${this.baseUrl}/api/attendance/employee/history?EmployeeId=${employeeId}&Year=${year}&Month=${month}&AttendanceStatusId=${attendanceStatusId}&PageNumber=${pagenumber}&PageSize=${pagesize}`)
+  // }
+  // getMonthlyHistory(employeeId:number,year:number,month:number,pagenumber:number,pagesize:number)
+  // {
+  //   return this.http.get(`${this.baseUrl}/api/attendance/employee/history?EmployeeId=${employeeId}&Year=${year}&Month=${month}&PageNumber=${pagenumber}&PageSize=${pagesize}`)
+  // }
+
+  getMonthlyHistoryByStatus(employeeId: number, year: number, month: number, attendanceStatusId: number, pageNumber: number, pageSize: number) {
+    let url = `${this.baseUrl}/api/attendance/employee/history?EmployeeId=${employeeId}&Year=${year}&Month=${month}&PageNumber=${pageNumber}&PageSize=${pageSize}`;
+  
+    // Only add AttendanceStatusId if it's not zero (indicating no filter)
+    if (attendanceStatusId !== 0) {
+      url += `&AttendanceStatusId=${attendanceStatusId}`;
+    }
+  
+    return this.http.get(url);
+  }
+  
 }
 
 

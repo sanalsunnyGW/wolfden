@@ -3,9 +3,9 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions, DatesSetArg, DayCellContentArg } from '@fullcalendar/core/index.js';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-import { AttendanceService } from '../../../../../service/attendance.service';
-import { IAttendanceSummary } from '../../../../../interface/attendance-summary';
-import { IAttendanceData } from '../../../../../interface/attendance-data';
+import { AttendanceService } from '../../../../../Service/attendance.service';
+import { IAttendanceSummary } from '../../../../../Interface/attendance-summary';
+import { IAttendanceData } from '../../../../../Interface/attendance-data';
 
 
 
