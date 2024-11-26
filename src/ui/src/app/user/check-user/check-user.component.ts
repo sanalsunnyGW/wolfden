@@ -21,7 +21,7 @@ export class CheckUserComponent {
               private toastr : ToastrService
             ) {
     this.userForm = this.fb.group<ICheckForm>({
-      rfid: new FormControl('', [Validators.required, ]),
+      rfId: new FormControl('', [Validators.required, ]),
       employeeCode: new FormControl('', Validators.required)
     });
   }
