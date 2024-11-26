@@ -1,9 +1,14 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using QuestPDF.Infrastructure;
 using System.Reflection;
-using sib_api_v3_sdk.Client;
+using System.Text;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
+using WolfDen.Domain.ConfigurationModel;
+using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
 
@@ -18,6 +23,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
 
+builder.Services.AddIdentityCore<User>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<WolfDenContext>();
+builder.Services.Configure<JwtKey>(builder.Configuration.GetSection("JWT"));
+
+
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "_myAllowSpecificOrigins",
@@ -29,11 +42,43 @@ builder.Services.AddCors(options =>
                       });
 });
 
+
 builder.Services.AddDbContext<WolfDenContext>(x =>
 {
     x.UseSqlServer(connectionString);
 
 });
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(x =>
+{
+    x.Password.RequiredLength = 5;
+    x.Password.RequireUppercase = true;
+    x.Password.RequireLowercase = true;
+    x.Password.RequireDigit = true;
+
+}).AddEntityFrameworkStores<WolfDenContext>().AddDefaultTokenProviders();
+
+
+
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.SaveToken = false;
+    x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+
+        RequireExpirationTime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!))
+    };
+});
+
+
+
 builder.Services.AddScoped<WolfDenContext>();
 builder.Services.AddSingleton<PdfService>();
 QuestPDF.Settings.License = LicenseType.Community;
@@ -61,6 +106,7 @@ app.UseCors(options => options.WithOrigins("http://localhost:4200").AllowAnyHead
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllers();
 
