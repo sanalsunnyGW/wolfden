@@ -32,12 +32,11 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyRep
                 allEmployeesReport.Add(report);
             }
             int totalPage = allEmployeesReport.Count();
-            int noOfPage =(int)(Math.Ceiling((decimal)totalPage / request.PageSize));
             List<AllEmployeesMonthlyReportDTO> allEmployeesReports=allEmployeesReport.
                 Skip((request.PageNumber)*request.PageSize).
                 Take(request.PageSize).ToList();
             monthlyReportAndPageCountDTO.AllEmployeesMonthlyReports = allEmployeesReports;
-            monthlyReportAndPageCountDTO.PageCount = noOfPage;
+            monthlyReportAndPageCountDTO.PageCount = totalPage;
             return monthlyReportAndPageCountDTO;
         }
     }

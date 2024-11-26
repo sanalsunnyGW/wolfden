@@ -5,6 +5,7 @@ export interface SubordinatesDetails {
     email: string,
     photo: string,
     department: string,
-    designation: string
+    designation: string,
+    manager:string,
     subOrdinates?:SubordinatesDetails[]
 }

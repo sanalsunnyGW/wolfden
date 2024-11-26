@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, inject, Input, signal } from '@angular/core';
 import { ModalDetailsComponent } from '../modal-details/modal-details.component';  
-import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { AttendanceService } from '../../../../../service/attendance.service';
-import { SubordinatesDetails } from '../../../../../interface/subordinates-details';
+import { SubordinatesDetails } from '../../../../../Interface/subordinates-details';
 
 
 @Component({
@@ -11,24 +11,49 @@ import { SubordinatesDetails } from '../../../../../interface/subordinates-detai
   standalone: true,
   imports: [CommonModule],
   templateUrl: './tree-node.component.html',
-  styleUrl: './tree-node.component.scss'
+  styleUrl: './tree-node.component.scss',
+  // changeDetection : ChangeDetectionStrategy.OnPush
 })
 export class TreeNodeComponent {
-  data!:SubordinatesDetails
+  selected!:SubordinatesDetails
+  status=false;
+  name:string=""
+  newName = signal<string>('');
+  testName="";
+  node! : SubordinatesDetails;
+  isModalOpened = signal<boolean>(false);
   imageUrl: string = 'https://picsum.photos/300/200';
-  constructor(public dialog: MatDialog) {   
+  dialogRef = inject(MatDialog);
+  constructor(public dialog: MatDialog,private cd : ChangeDetectorRef,
+   
+  ) {   
+
+
   }
-  @Input() node!: SubordinatesDetails;
+  @Input()
+  set item(node2: SubordinatesDetails) {
+    this.node = node2;
+    console.log(this.node)
+    this.newName.set(node2.name);
+    this.testName =node2.name;
+    this.cd.markForCheck();
+  }
   expanded = false;
   toggle(): void {
     this.expanded = !this.expanded; 
   }
-  openDetails(node: SubordinatesDetails): void {
-    // this.dialog.open(ModalDetailsComponent, {
-    //   data: { node },  
-    // });
-    this.data=node;
-
+  openModal(node:SubordinatesDetails)
+  {
+    this.dialogRef.open(ModalDetailsComponent, {
+      data: {
+        name: node.name,
+        employeeCode: node.employeeCode,
+        email: node.email,
+        department: node.department,
+        designation: node.designation,
+        manager:node.manager
+      }
+    })
   }
 }
 

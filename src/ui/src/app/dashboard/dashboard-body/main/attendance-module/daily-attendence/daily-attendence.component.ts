@@ -2,8 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule, formatDate } from '@angular/common';
 import { AttendanceService } from '../../../../../service/attendance.service';
-import { DailyAttendance } from '../../../../../interface/idaily-attendance';
-
+import { DailyAttendance } from '../../../../../Interface/idaily-attendance';
 
 @Component({
   selector: 'app-daily-attendence',
@@ -42,7 +41,7 @@ export class DailyAttendenceComponent {
   {
     //const employeeId=localStorage.getItem('employeeId');
     const employeeId=1;
-    const selectedDate=new Date('2024-11-11')
+    const selectedDate=new Date('2024-11-13')
     const date=formatDate(selectedDate, 'yyyy-MM-dd', 'en-US');
     this.service.getDailyAttendence(employeeId,date).subscribe(
       (response: DailyAttendance) =>{
@@ -62,16 +61,20 @@ export class DailyAttendenceComponent {
     return `${hours}h ${minutes}m`;
   }
   convertToTime(dateStr: string): string {
-    const date = new Date(dateStr); 
-    const hours = date.getHours().toString().padStart(2, '0'); 
-    const minutes = date.getMinutes().toString().padStart(2, '0'); 
-    return `${hours}:${minutes}`; 
+    if(dateStr)
+    {
+      const date = new Date(dateStr); 
+      const hours = date.getHours().toString().padStart(2, '0'); 
+      const minutes = date.getMinutes().toString().padStart(2, '0'); 
+      return `${hours}:${minutes}`; 
+    }
+    return '' 
   }
   downloadDailyReport()
   {
     //const employeeId=localStorage.getItem('employeeId');
     const employeeId=1;
-    const selectedDate=new Date('2024-11-11')
+    const selectedDate=new Date('2024-11-13')
     const selected=formatDate(selectedDate, 'yyyy-MM-dd', 'en-US');
     this.service.downloadDailyReport(employeeId,selected).subscribe(
       (response: any) =>{

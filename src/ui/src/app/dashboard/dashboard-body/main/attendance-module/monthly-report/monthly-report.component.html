@@ -27,7 +27,7 @@
         </tr>
       </thead>
       <tbody *ngIf="display">
-        <tr *ngFor="let data of EmployeeReport; let i = index">
+        <tr *ngFor="let data of employeeReport; let i = index">
             <td>{{i + 1}}</td> 
             <td>{{data.employeeName}}</td> 
             <td>{{data.noOfAbsentDays}}</td> 
@@ -40,6 +40,7 @@
   </div> 
   <div class="w-100">  <mat-paginator [length]="totalPages"
     [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizes"
     (page)="onPaginateChange($event)">
   </mat-paginator>
   </div>

@@ -7,27 +7,21 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { EmployeeDirectoryComponent } from './dashboard/dashboard-body/main/employee-directory/employee-directory.component';
 import { MainPageComponent } from './dashboard/dashboard-body/main/main-page/main-page.component';
 import { CalendarViewComponent } from './dashboard/dashboard-body/main/attendance-module/calendar-view/calendar-view.component';
-
 import { LeaveDashboardComponent } from './dashboard/dashboard-body/main/leave-management/leave-dashboard/leave-dashboard.component';
 import { LeaveHistoryComponent } from './dashboard/dashboard-body/main/leave-management/leave-history/leave-history.component';
-<<<<<<< HEAD
 import { ProfileComponent } from './profile/profile.component';
 import { EmployeeHierarchyTreeComponent } from './employee-hierarchy-tree/employee-hierarchy-tree.component';
 import { EmloyeeHierarchyDisplayComponent } from './employee-hierarchy-tree/emloyee-hierarchy-display/emloyee-hierarchy-display.component';
 import { MyTeamComponent } from './my-team/my-team.component';
-import { UserComponent } from './user/user.component';
-=======
-
->>>>>>> refs/remotes/upstream/main
 import { WeeklyAttendanceComponent } from './dashboard/dashboard-body/main/attendance-module/weekly-attendance/weekly-attendance.component';
-
+import { DailyAttendenceComponent } from './dashboard/dashboard-body/main/attendance-module/daily-attendence/daily-attendence.component';
+import { MonthlyReportComponent } from './dashboard/dashboard-body/main/attendance-module/monthly-report/monthly-report.component';
+import { SubordinatesComponent } from './dashboard/dashboard-body/main/attendance-module/subordinates/subordinates.component';
 
 export const routes: Routes = [
     {
-<<<<<<< HEAD
         path: 'profile',
-        component: ProfileComponent
-=======
+        component: ProfileComponent},{
         path: 'user', 
         component: UserComponent,
         children:[
@@ -39,7 +33,6 @@ export const routes: Routes = [
     {
         path:'attendance/calendar',
         component:CalendarViewComponent
->>>>>>> refs/remotes/upstream/main
     },
     {
         path: 'leave-dashboard',
@@ -81,7 +74,10 @@ export const routes: Routes = [
             {path:'employee-directory',component: EmployeeDirectoryComponent},
             {path:'leave-dashboard',component:LeaveDashboardComponent},
             {path:'leave-request-history',component:LeaveHistoryComponent},
-            
+            {path:'daily',component:DailyAttendenceComponent},
+            {path:'weekly',component:WeeklyAttendanceComponent},
+            {path:'monthly',component:MonthlyReportComponent},
+            {path:'subordinates',component:SubordinatesComponent}    
         ]
     },
     { path: '', redirectTo: '/dashboard/main-page', pathMatch: 'full' }, 
@@ -91,7 +87,7 @@ export const routes: Routes = [
 ];
 
 
-    
+
 
 
 

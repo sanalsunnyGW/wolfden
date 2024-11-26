@@ -13,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class ModalDetailsComponent {
   constructor(
-    // @Inject(MAT_DIALOG_DATA) public data: any,  
+@Inject(MAT_DIALOG_DATA) public data: {name: string,department:string,designation:string,employeeCode:number,email:string,manager:string},  
     private dialogRef: MatDialogRef<ModalDetailsComponent>  
   ) {}
   close(): void {

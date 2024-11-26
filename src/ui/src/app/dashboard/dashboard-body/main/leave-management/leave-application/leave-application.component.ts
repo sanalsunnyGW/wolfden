@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormControlName, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ILeaveApplication } from '../../../../../interface/Leave-Application-Interface';
+import { ILeaveApplication } from '../../../../../Interface/Leave-Application-Interface';
 import { CommonModule } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
+import { IGetLeaveTypeIdAndname } from '../../../../../Interface/get-leave-type-interface';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 
 

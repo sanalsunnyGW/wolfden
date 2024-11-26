@@ -6,7 +6,7 @@
           <h5 class="card-title text-primary">
             <i class="fas fa-clock"></i> Arrival Time
           </h5>
-          <p class="card-text">{{ convertToTime(dailyData.arrivalTime) }}</p>
+          <p class="card-text">{{convertToTime(dailyData.arrivalTime) }}</p>
         </div>
       </div>
     </div>
@@ -17,7 +17,7 @@
           <h5 class="card-title">
             <i class="fas fa-sign-out-alt"></i> Departure
           </h5>
-          <p class="card-text">{{ convertToTime(dailyData.departureTime) }}</p>
+          <p class="card-text">{{convertToTime(dailyData.departureTime) }}</p>
         </div>
       </div>
     </div>
@@ -28,7 +28,7 @@
           <h5 class="card-title">
             <i class="fas fa-hourglass-half"></i> Inside Hours
           </h5>
-          <p class="card-text">{{ NumToTime(dailyData.insideHours) }}</p>
+          <p class="card-text">{{NumToTime(dailyData.insideHours) }}</p>
         </div>
       </div>
     </div>
@@ -39,7 +39,7 @@
           <h5 class="card-title">
             <i class="fas fa-external-link-alt"></i> Outside Hours
           </h5>
-          <p class="card-text">{{ NumToTime(dailyData.outsideHours) }}</p>
+          <p class="card-text">{{NumToTime(dailyData.outsideHours) }}</p>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@
           <h5 class="card-title">
             <i class="fas fa-times-circle"></i> Missed Punch
           </h5>
-          <p class="card-text">{{ dailyData.missedPunch }}</p>
+          <p class="card-text">{{dailyData.missedPunch }}</p>
         </div>
       </div>
     </div>
@@ -63,7 +63,7 @@
           <h5 class="card-title">
             <i class="fas fa-clipboard-check"></i> Status
           </h5>
-          <p class="card-text">{{ getAttendanceStatus(dailyData.attendanceStatusId) }}</p>
+          <p class="card-text">{{getAttendanceStatus(dailyData.attendanceStatusId)}}</p>
         </div>
       </div>
     </div>
@@ -85,7 +85,7 @@
             <td>{{ convertToTime(log.time) }}</td>
             <td>{{ log.deviceName }}</td>
             <td>
-                {{ log.direction === 1 ? 'Out' : 'In' }}
+                {{ log.direction === 1 ? 'IN' : 'OUT' }}
             </td>
           </tr>
         </tbody>

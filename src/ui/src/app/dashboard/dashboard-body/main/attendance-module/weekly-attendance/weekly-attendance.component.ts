@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { getISOWeek, getYear } from 'date-fns';
 import { Chart,registerables } from 'chart.js';
 import { AttendanceService } from '../../../../../service/attendance.service';
-import { WeeklyAttendance } from '../../../../../interface/iweekly-attendance';
+import { WeeklyAttendance } from '../../../../../Interface/iweekly-attendance';
 
 Chart.register(...registerables);
 
@@ -75,7 +75,7 @@ export class WeeklyAttendanceComponent {
             tooltip: {
               callbacks: {
                 label: (context: any) => {
-                  return `${context.label}: ${context.raw} hours`;
+                  return `${context.label}: ${context.raw} minutes`;
                 }
               }
             }
