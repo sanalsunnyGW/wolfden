@@ -65,7 +65,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                         }
                         else
                         {
-                            notPresentDay.AttendanceStatusId = AttendanceStatus.Absent;
+                            notPresentDay.AttendanceStatusId = AttendanceStatus.Leave;
                         }
                     }
                 }

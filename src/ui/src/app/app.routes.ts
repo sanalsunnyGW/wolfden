@@ -75,10 +75,10 @@ export const routes: Routes = [
             {path:'employee-directory',component: EmployeeDirectoryComponent},
             {path:'leave-dashboard',component:LeaveDashboardComponent},
             {path:'leave-request-history',component:LeaveHistoryComponent},
-            {path:'daily',component:DailyAttendenceComponent},
-            {path:'weekly',component:WeeklyAttendanceComponent},
-            {path:'monthly',component:MonthlyReportComponent},
-            {path:'subordinates',component:SubordinatesComponent} ,   
+            {path:'attendance/daily/:attendanceDate',component:DailyAttendenceComponent},
+            {path:'attendance/weekly',component:WeeklyAttendanceComponent},
+            {path:'attendance/monthly',component:MonthlyReportComponent},
+            {path:'attendance/subordinates',component:SubordinatesComponent} ,   
             {
                 path: 'company-hierarchy',
                 component: EmployeeHierarchyTreeComponent
@@ -102,12 +102,6 @@ export const routes: Routes = [
             {
                 path: 'leave-request-history',
                 component: LeaveHistoryComponent
-            },
-        
-        
-            {
-                path: 'attendance/calendar',
-                component: CalendarViewComponent
             },
             {
                 path: '',

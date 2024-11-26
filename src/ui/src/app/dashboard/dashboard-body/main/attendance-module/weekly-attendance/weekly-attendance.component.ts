@@ -5,6 +5,7 @@ import { getISOWeek, getYear } from 'date-fns';
 import { Chart,registerables } from 'chart.js';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { WeeklyAttendance } from '../../../../../Interface/iweekly-attendance';
+import { WolfDenService } from '../../../../../Service/wolf-den.service';
 
 Chart.register(...registerables);
 
@@ -90,9 +91,10 @@ export class WeeklyAttendanceComponent {
     }
   }
  service=inject(AttendanceService)
+ baseService=inject(WolfDenService)
  selectedWeek!:string;
  offset=0;
- employeeId=1;
+ employeeId=this.baseService.userId;
  weeklyData:WeeklyAttendance[]=[]
  barChart!:Chart;
  status:number[]=[]

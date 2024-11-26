@@ -6,6 +6,7 @@ import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { IAttendanceSummary } from '../../../../../Interface/attendance-summary';
 import { IAttendanceData } from '../../../../../Interface/attendance-data';
+import { Router } from '@angular/router';
 
 
 
@@ -36,12 +37,12 @@ export class CalendarViewComponent implements OnInit {
   incompleteShift: number = 0;
   wfh: number = 0;
 
-  employeeId: number = 123;
+  employeeId: number = 1;
   currentYear: number = new Date().getFullYear();
   currentMonth: number = new Date().getMonth() + 1;
   attendanceData: { [date: string]: number } = {};
 
-  constructor() {
+  constructor(private router:Router) {
     this.attendanceData = {};
   }
 
@@ -67,11 +68,12 @@ export class CalendarViewComponent implements OnInit {
       });
     });
   }
-
+  newDate!:string;
   handleDateClick(arg: DateClickArg) {
-    alert('date click! ' + arg.dateStr)
+    const selectedDate=arg.dateStr;
+    this.newDate=selectedDate;
+    this.router.navigate(['dashboard/attendance/daily',this.newDate])
   }
-
   getDayCellClassNames(arg: DayCellContentArg): string[] {
     const date = new Date(arg.date);
     date.setDate(date.getDate() + 1);

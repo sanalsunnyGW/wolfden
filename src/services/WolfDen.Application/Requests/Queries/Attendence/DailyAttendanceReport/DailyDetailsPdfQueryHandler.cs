@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using WolfDen.Application.Requests.Commands.Attendence.Email;
 using WolfDen.Application.Requests.DTOs.Attendence;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
@@ -65,7 +66,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport
                         }      
                         else
                         {
-                            notPresentDay.AttendanceStatusId = AttendanceStatus.Absent;
+                            notPresentDay.AttendanceStatusId = AttendanceStatus.Leave;
                         }
                     }
                 }  
@@ -76,6 +77,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport
                 if (attendence.InsideHours >= minWorkDuration)
                 {
                     attendence.AttendanceStatusId = AttendanceStatus.Present;
+                    
                 }
                 else
                 {
