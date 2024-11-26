@@ -1,14 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/@ng-select/ng-select/themes/default.theme.css";
+$nav-color:#113c60;
 
-html, body {
-    overflow-x: hidden;
-}
 
+$side-nav:#113c60;
 $primary-color: #0f065433;
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
-html, body { height: 100%; }
+html, body { height: 100%; overflow-x: hidden;}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

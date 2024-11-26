@@ -128,5 +128,12 @@
   }
 
 .bigcard{
-    height: 700px;
+    height: 1000px;
+}
+
+
+.card-content.absences-list {
+  max-height: 1000px; /* Set a maximum height */
+  overflow-y: auto; /* Add a scrollbar if the content exceeds the height */
+  padding: 10px;    /* Optional: Adjust padding for spacing */
 }

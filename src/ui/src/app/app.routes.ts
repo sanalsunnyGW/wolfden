@@ -10,22 +10,17 @@ import { CalendarViewComponent } from './dashboard/dashboard-body/main/attendanc
 
 import { LeaveDashboardComponent } from './dashboard/dashboard-body/main/leave-management/leave-dashboard/leave-dashboard.component';
 import { LeaveHistoryComponent } from './dashboard/dashboard-body/main/leave-management/leave-history/leave-history.component';
-
-import { WeeklyAttendanceComponent } from './dashboard/dashboard-body/main/attendance-module/weekly-attendance/weekly-attendance.component';
+import { EmployeeHierarchyTreeComponent } from './employee-hierarchy-tree/employee-hierarchy-tree.component';
+import { EmloyeeHierarchyDisplayComponent } from './employee-hierarchy-tree/emloyee-hierarchy-display/emloyee-hierarchy-display.component';
+import { MyTeamComponent } from './my-team/my-team.component';
 import { EditLeaveTypeComponent } from './dashboard/dashboard-body/main/leave-management/edit-leave-type/edit-leave-type.component';
 import { UpdateLeaveBalanceComponent } from './dashboard/dashboard-body/main/leave-management/update-leave-balance/update-leave-balance.component';
 import { ProfileComponent } from './profile/profile.component';
-import { MyTeamComponent } from './my-team/my-team.component';
-import { EmloyeeHierarchyDisplayComponent } from './employee-hierarchy-tree/emloyee-hierarchy-display/emloyee-hierarchy-display.component';
-import { EmployeeHierarchyTreeComponent } from './employee-hierarchy-tree/employee-hierarchy-tree.component';
+
+
 
 export const routes: Routes = [
-    {
-      path:'profile',
-      component:ProfileComponent
-    },
-
-    {
+ {
         path: 'user', 
         component: UserComponent,
         children:[
@@ -34,22 +29,7 @@ export const routes: Routes = [
             {path: 'login', component: LoginComponent},
         ]
     },
-    {
-        path:'attendance/calendar',
-        component:CalendarViewComponent
-    },
-    {
-        path: 'company-hierarchy',
-        component: EmployeeHierarchyTreeComponent
-    },
-    {
-        path: 'employee-display',
-        component: EmloyeeHierarchyDisplayComponent
-    },
-    {
-        path: 'my-team',
-        component: MyTeamComponent
-    },
+   
 
 
     {
@@ -62,6 +42,46 @@ export const routes: Routes = [
             {path:'leave-request-history',component:LeaveHistoryComponent},
             { path: 'edit-leave-type', component: EditLeaveTypeComponent },
             { path: 'update-leave-balance', component: UpdateLeaveBalanceComponent },
+            {
+                path: 'company-hierarchy',
+                component: EmployeeHierarchyTreeComponent
+            },
+            {
+                path: 'employee-display',
+                component: EmloyeeHierarchyDisplayComponent
+            },
+            {
+                path: 'my-team',
+                component: MyTeamComponent
+            },
+            {
+                path:'attendance/calendar',
+                component:CalendarViewComponent
+            },
+            {
+                path: 'leave-dashboard',
+                component: LeaveDashboardComponent
+            },
+            {
+                path: 'leave-request-history',
+                component: LeaveHistoryComponent
+            },
+        
+        
+            {
+                path: 'attendance/calendar',
+                component: CalendarViewComponent
+            },
+            {
+                path: '',
+                component: UserComponent
+        
+            },
+            {
+                path: 'profile',
+                component: ProfileComponent
+            },
+            
         ]
     },
     { path: '', redirectTo: '/dashboard/main-page', pathMatch: 'full' }, 

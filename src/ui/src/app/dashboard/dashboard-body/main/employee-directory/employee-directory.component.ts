@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { IEmployeeDirectoryDto } from '../../../../interface/iemployee-directory';
 import { WolfDenService } from '../../../../Service/wolf-den.service';
-import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
-import { IEmployeeDirectoryWithPagecount } from '../../../../interface/iemployee-directory-with-pagecount';
+import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
+import { IEmployeeDirectoryWithPagecount } from '../../../../Interface/iemployee-directory-with-pagecount';
 
 
 @Component({
@@ -24,8 +24,9 @@ export class EmployeeDirectoryComponent implements OnInit {
   searchTerm: string = '';
   private searchSubject = new Subject<string>();
   isLoading: boolean = false;
-  pageNumber: number = 0;  
-  pageSize: number = 1;   
+  pageNumber: number = 0;
+  pageSize: number = 2;
+  totalCount?: number = undefined;
 
   constructor(private wolfDenService: WolfDenService) {
     this.searchSubject.pipe(
@@ -43,9 +44,11 @@ export class EmployeeDirectoryComponent implements OnInit {
   onPaginateChange(event: PageEvent): void {
     this.pageNumber = event.pageIndex;  
     this.pageSize = event.pageSize;
+    this.totalCount = undefined;
     this.loadEmployees();
   }
   onSearch(): void {
+    this.totalCount = undefined;
     this.loadEmployees(); 
     this.pageNumber = 0;
   }
@@ -55,6 +58,7 @@ export class EmployeeDirectoryComponent implements OnInit {
       const value = target.value;
       this.selectedDepartment = value ? Number(value) : 0; 
       this.pageNumber=0;
+      this.totalCount = undefined;
       this.loadEmployees(); 
     }
   }
@@ -67,8 +71,8 @@ export class EmployeeDirectoryComponent implements OnInit {
       this.searchTerm || undefined
     ).subscribe({
       next: (data) => {
-        console.log(data)
         this.isLoading = false; 
+        this.totalCount = data.totalPages;
         this.employeesPagecount=data      
       },
       error: (error) => {

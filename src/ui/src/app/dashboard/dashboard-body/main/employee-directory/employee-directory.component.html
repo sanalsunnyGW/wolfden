@@ -70,8 +70,10 @@
         </div>
 
         <div class="w-100">
-          <mat-paginator [length]="employeesPagecount.totalPages" [pageSize]="pageSize" [pageIndex]="pageNumber"
-            [pageSizeOptions]="[1, 2, 3, 5]" (page)="onPaginateChange($event)">
+    
+          <mat-paginator *ngIf="totalCount" [length]="totalCount" 
+                                    [pageSize]="pageSize" [pageIndex]="pageNumber"
+                                    (page)="onPaginateChange($event)" [showFirstLastButtons]="true">
           </mat-paginator>
         </div>
 
