@@ -64,6 +64,7 @@ export const routes: Routes = [
         component: UserComponent
 
     },
+   
 
 
     {
@@ -77,7 +78,47 @@ export const routes: Routes = [
             {path:'daily',component:DailyAttendenceComponent},
             {path:'weekly',component:WeeklyAttendanceComponent},
             {path:'monthly',component:MonthlyReportComponent},
-            {path:'subordinates',component:SubordinatesComponent}    
+            {path:'subordinates',component:SubordinatesComponent} ,   
+            {
+                path: 'company-hierarchy',
+                component: EmployeeHierarchyTreeComponent
+            },
+            {
+                path: 'employee-display',
+                component: EmloyeeHierarchyDisplayComponent
+            },
+            {
+                path: 'my-team',
+                component: MyTeamComponent
+            },
+            {
+                path:'attendance/calendar',
+                component:CalendarViewComponent
+            },
+            {
+                path: 'leave-dashboard',
+                component: LeaveDashboardComponent
+            },
+            {
+                path: 'leave-request-history',
+                component: LeaveHistoryComponent
+            },
+        
+        
+            {
+                path: 'attendance/calendar',
+                component: CalendarViewComponent
+            },
+            {
+                path: '',
+                component: UserComponent
+        
+            },
+            {
+                path: 'profile',
+                component: ProfileComponent
+            },
+            
         ]
     },
     { path: '', redirectTo: '/dashboard/main-page', pathMatch: 'full' }, 

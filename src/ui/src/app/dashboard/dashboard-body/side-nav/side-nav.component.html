@@ -2,25 +2,26 @@
   <div class="nav-item" routerLink="/dashboard/main-page">
     <span>Dashboard</span>
   </div>
-  <div class="nav-item" routerLink="/company-hierarchy">
+  <div class="nav-item" routerLink="/dashboard/company-hierarchy">
     <span >Company Hierarchy</span>
   </div>
-  <div class="nav-item" routerLink="/my-team">
+  <div class="nav-item" routerLink="/dashboard/my-team">
     <span >My Team</span>
-    </div>
+  </div>
   <div class="nav-item" routerLink="/dashboard/employee-directory">
     <span>Employee Directory</span>
   </div>
+
   <div class="nav-item dropdown">
     <span class="dropdown-toggle" id="attendanceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
       Leave
     </span>
     <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
-      <li><a class="dropdown-item" [routerLink]="'/leave-dashboard'">Leave Dashboard</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/leave-request-history'">Leave Request History</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/leave-request-approval'">Approve/Reject Leave</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/add-new-leave-type'">Add New Leave Type </a></li>
-      <li><a class="dropdown-item" [routerLink]="'/edit-leave-type'">Edit Existing Leave Type </a></li>
+      <li><a class="dropdown-item" [routerLink]="'/dashboard/leave-dashboard'">Leave Dashboard</a></li>
+      <li><a class="dropdown-item" [routerLink]="'/dashboard/leave-request-history'">Leave Request History</a></li>
+      <li><a class="dropdown-item" [routerLink]="'/dashboard/leave-request-approval'">Approve/Reject Leave</a></li>
+      <li><a class="dropdown-item" [routerLink]="'/dashboard/add-new-leave-type'">Add New Leave Type </a></li>
+      <li><a class="dropdown-item" [routerLink]="'/dashboard/edit-leave-type'">Edit Existing Leave Type </a></li>
     </ul>
   </div>
   <div class="nav-item">
@@ -32,11 +33,11 @@
       Attendance
     </span>
     <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
-      <li><a class="dropdown-item" [routerLink]="'/attendance/summary'">Attendance Dashboard</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/attendance/details'">Attendance Summary</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/attendance/reports'">Attendance Reports</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/attendance/details'">Team Attendance </a></li>
-      <li><a class="dropdown-item" [routerLink]="'/attendance/weekly'">Weekly Attendance </a></li>
+      <li><a class="dropdown-item" [routerLink]="'/dashboard/attendance/summary'">Attendance Dashboard</a></li>
+      <li><a class="dropdown-item" [routerLink]="'/dashboard/attendance/details'">Attendance Summary</a></li>
+      <li><a class="dropdown-item" [routerLink]="'/dashboard/attendance/reports'">Attendance Reports</a></li>
+      <li><a class="dropdown-item" [routerLink]="'/dashboard/attendance/details'">Team Attendance </a></li>
+      <li><a class="dropdown-item" [routerLink]="'/dashboard/attendance/weekly'">Weekly Attendance </a></li>
     </ul>
   </div>
 

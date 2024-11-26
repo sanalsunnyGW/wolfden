@@ -5,9 +5,9 @@ import { DailyAttendance } from '../Interface/idaily-attendance';
 import { MonthlyReports } from '../Interface/monthly-report';
 import { ICheckAttencdanceClose } from '../Interface/check-attendance-close';
 import { IAttendanceSummary } from '../Interface/attendance-summary';
-import { IAttendanceData } from '../Interface/attendance-data';
 import { WeeklyAttendance } from '../Interface/iweekly-attendance';
 import { SubordinatesDetails } from '../Interface/subordinates-details';
+import { IAttendanceData } from '../Interface/attendance-data';
 
 @Injectable({
   providedIn: 'root'
