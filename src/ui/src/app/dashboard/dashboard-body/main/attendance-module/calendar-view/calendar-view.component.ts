@@ -6,6 +6,8 @@ import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { AttendanceService } from '../../../../../Service/attendance.service';
 import { IAttendanceSummary } from '../../../../../Interface/attendance-summary';
 import { IAttendanceData } from '../../../../../Interface/attendance-data';
+import { Router } from '@angular/router';
+import { WolfDenService } from '../../../../../Service/wolf-den.service';
 
 
 
@@ -19,6 +21,7 @@ import { IAttendanceData } from '../../../../../Interface/attendance-data';
 export class CalendarViewComponent implements OnInit {
 
   service = inject(AttendanceService);
+  baseService=inject(WolfDenService)
 
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
@@ -35,12 +38,13 @@ export class CalendarViewComponent implements OnInit {
   incompleteShift: number = 0;
   wfh: number = 0;
 
-  employeeId: number = 123;
+  //employeeId: number = 1;
   currentYear: number = new Date().getFullYear();
   currentMonth: number = new Date().getMonth() + 1;
   attendanceData: { [date: string]: number } = {};
+  
 
-  constructor() {
+  constructor(private router:Router) {
     this.attendanceData = {};
   }
 
@@ -51,7 +55,7 @@ export class CalendarViewComponent implements OnInit {
 
 
   fetchAttendanceData(year: number, month: number): void {
-    this.service.getAttendanceSummary(this.employeeId, year, month).subscribe((data: IAttendanceSummary) => {
+    this.service.getAttendanceSummary(this.baseService.userId, year, month).subscribe((data: IAttendanceSummary) => {
       this.present = data.present;
       this.absent = data.absent;
       this.incompleteShift = data.incompleteShift;
@@ -60,15 +64,20 @@ export class CalendarViewComponent implements OnInit {
   }
 
   getStatusData(year: number, month: number) {
-    this.service.getDailyStatus(this.employeeId, year, month).subscribe((data: IAttendanceData[]) => {
+    this.service.getDailyStatus(this.baseService.userId, year, month).subscribe((data: IAttendanceData[]) => {
       data.forEach((item: IAttendanceData) => {
         this.attendanceData[item.date] = item.attendanceStatusId;
       });
     });
   }
-
+ newDate!:string
   handleDateClick(arg: DateClickArg) {
-    alert('date click! ' + arg.dateStr)
+   //alert('date click! ' + arg.dateStr)
+    const selectedDate = arg.dateStr;
+    this.newDate=selectedDate;
+    // // Navigate to a new route, passing the selected date as a query parameter
+    this.router.navigate(['dashboard/attendance/daily', this.newDate]);
+
   }
 
   getDayCellClassNames(arg: DayCellContentArg): string[] {

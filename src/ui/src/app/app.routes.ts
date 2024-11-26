@@ -14,6 +14,7 @@ import { EmployeeHierarchyTreeComponent } from './employee-hierarchy-tree/employ
 import { EmloyeeHierarchyDisplayComponent } from './employee-hierarchy-tree/emloyee-hierarchy-display/emloyee-hierarchy-display.component';
 import { MyTeamComponent } from './my-team/my-team.component';
 import { AttendanceHistoryComponent } from './dashboard/dashboard-body/main/attendance-module/attendance-history/attendance-history.component';
+import { DailyAttendenceComponent } from './dashboard/dashboard-body/main/attendance-module/daily-attendence/daily-attendence.component';
 
 export const routes: Routes = [
  {
@@ -33,6 +34,7 @@ export const routes: Routes = [
             {path:'employee-directory',component: EmployeeDirectoryComponent},
             {path:'leave-dashboard',component:LeaveDashboardComponent},
             {path:'leave-request-history',component:LeaveHistoryComponent},
+            {path:'attendance/daily/:attendanceDate',component:DailyAttendenceComponent},
             {path:'attendance-history',component:AttendanceHistoryComponent},
             {
                 path: 'company-hierarchy',
@@ -47,10 +49,6 @@ export const routes: Routes = [
                 component: MyTeamComponent
             },
             {
-                path:'attendance/calendar',
-                component:CalendarViewComponent
-            },
-            {
                 path: 'leave-dashboard',
                 component: LeaveDashboardComponent
             },
@@ -58,8 +56,6 @@ export const routes: Routes = [
                 path: 'leave-request-history',
                 component: LeaveHistoryComponent
             },
-        
-        
             {
                 path: 'attendance/calendar',
                 component: CalendarViewComponent
