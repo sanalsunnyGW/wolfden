@@ -75,7 +75,6 @@ export class CalendarViewComponent implements OnInit {
    //alert('date click! ' + arg.dateStr)
     const selectedDate = arg.dateStr;
     this.newDate=selectedDate;
-    // // Navigate to a new route, passing the selected date as a query parameter
     this.router.navigate(['dashboard/attendance/daily', this.newDate]);
 
   }
