@@ -14,8 +14,17 @@ import { LeaveHistoryComponent } from './dashboard/dashboard-body/main/leave-man
 import { WeeklyAttendanceComponent } from './dashboard/dashboard-body/main/attendance-module/weekly-attendance/weekly-attendance.component';
 import { EditLeaveTypeComponent } from './dashboard/dashboard-body/main/leave-management/edit-leave-type/edit-leave-type.component';
 import { UpdateLeaveBalanceComponent } from './dashboard/dashboard-body/main/leave-management/update-leave-balance/update-leave-balance.component';
+import { ProfileComponent } from './profile/profile.component';
+import { MyTeamComponent } from './my-team/my-team.component';
+import { EmloyeeHierarchyDisplayComponent } from './employee-hierarchy-tree/emloyee-hierarchy-display/emloyee-hierarchy-display.component';
+import { EmployeeHierarchyTreeComponent } from './employee-hierarchy-tree/employee-hierarchy-tree.component';
 
 export const routes: Routes = [
+    {
+      path:'profile',
+      component:ProfileComponent
+    },
+
     {
         path: 'user', 
         component: UserComponent,
@@ -29,6 +38,19 @@ export const routes: Routes = [
         path:'attendance/calendar',
         component:CalendarViewComponent
     },
+    {
+        path: 'company-hierarchy',
+        component: EmployeeHierarchyTreeComponent
+    },
+    {
+        path: 'employee-display',
+        component: EmloyeeHierarchyDisplayComponent
+    },
+    {
+        path: 'my-team',
+        component: MyTeamComponent
+    },
+
 
     {
         path:'dashboard',
