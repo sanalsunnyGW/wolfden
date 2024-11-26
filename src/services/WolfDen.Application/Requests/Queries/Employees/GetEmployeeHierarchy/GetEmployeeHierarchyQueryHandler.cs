@@ -1,6 +1,8 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.Employees;
 using WolfDen.Application.Requests.Services;
+using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy
@@ -12,27 +14,14 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy
         public async Task<EmployeeHierarchyDto> Handle(GetEmployeeHierarchyQuery request, CancellationToken cancellationToken)
         {
 
-            var employee = await _context.Employees.FindAsync(request.Id, cancellationToken);
-            EmployeeHierarchyDto result = new();
-            if (employee.IsActive == false)
+            Employee employee = await _context.Employees
+            .FirstOrDefaultAsync(e => e.ManagerId == null && e.IsActive == true && _context.Employees.Any(sub => sub.ManagerId == e.Id), cancellationToken);
+            if (employee is null)
             {
-                result.IsActive = false;
-                return result;
+                throw new InvalidOperationException("No team head found.");
             }
-            EmployeeHierarchyService service = new(_context);
-            result.Id = employee.Id;
-            result.EmployeeCode = employee.EmployeeCode;
-            result.FirstName = employee.FirstName;
-            result.LastName = employee.LastName;
-            result.Email = employee.Email;
-            result.DateofBirth = employee.DateofBirth;
-            result.DepartmentId = employee.DepartmentId;
-            result.DesignationId = employee.DesignationId;
-            result.ManagerId = employee.ManagerId;
-            result.PhoneNumber = employee.PhoneNumber;
-            result.IsActive = employee.IsActive;
-            result.Subordinates = await service.GetSubordinates(employee.Id);
-            return result;
+            GetEmployeeService service = new(_context);
+            return await service.GetEmployee(employee, true, cancellationToken);
 
         }
 

@@ -26,7 +26,6 @@ ngOnInit()
       this.leaveList= data; 
         },
     error: (error) => {
-      console.log(error);
     }
   })
 }

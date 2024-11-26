@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static WolfDen.Domain.Enums.EmployeeEnum;
 using WolfDen.Domain.Entity;
+using WolfDen.Application.DTOs.Employees;
 
 namespace WolfDen.Application.DTOs
 {

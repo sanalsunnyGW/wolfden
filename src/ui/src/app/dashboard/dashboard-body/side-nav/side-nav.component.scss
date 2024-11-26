@@ -33,7 +33,7 @@
       
       // Hide the text on smaller screens
       @media only screen and (max-width: 1300px) {
-        display: none;
+        display: inline-block;
       }
     }
 
@@ -97,7 +97,10 @@
 
   // For mobile views, where navigation items stack
   @media only screen and (max-width: 1300px) {
-    flex-direction: row; /* Horizontally align on smaller screens */
+    flex-direction: row; 
+    span {
+      display: inline-block; 
+    }
     .nav-item {
       padding: 15px 20px;
       text-align: center;
@@ -107,12 +110,11 @@
         color: white;
       }
 
-      // Ensure dropdown on small screens still works
       &.dropdown .dropdown-toggle {
-        display: block; /* Ensure dropdown is a block element on small screens */
+        display: block; 
       }
 
-      // For mobile, show the span text (since it's hidden on large screens)
+   
       span {
         display: block;
       }

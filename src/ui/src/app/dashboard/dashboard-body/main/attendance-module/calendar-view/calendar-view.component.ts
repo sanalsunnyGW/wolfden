@@ -60,7 +60,6 @@ export class CalendarViewComponent implements OnInit {
   }
 
   getStatusData(year: number, month: number) {
-    console.log("date fetched")
     this.service.getDailyStatus(this.employeeId, year, month).subscribe((data: IAttendanceData[]) => {
       data.forEach((item: IAttendanceData) => {
         this.attendanceData[item.date] = item.attendanceStatusId;
@@ -81,6 +80,8 @@ export class CalendarViewComponent implements OnInit {
     if (arg.date.getDay() === 6 || arg.date.getDay() === 0) {
       return ['weekend-day'];
     }
+
+    
 
     if (status === 1) {
       return ['present'];

@@ -9,6 +9,7 @@ using WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeIdSignUp;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam;
+using WolfDen.Application.Requests.Queries.Employees.EmployeeLogin;
 using WolfDen.Application.Requests.Queries.Employees.ViewEmployee;
 
 namespace WolfDen.API.Controllers.Employee
@@ -83,14 +84,18 @@ namespace WolfDen.API.Controllers.Employee
             return await _mediator.Send(command, cancellationToken);
         }
         [HttpGet("hierarchy")]
-        public async Task<EmployeeHierarchyDto> GetEmployeeHierarchy([FromQuery] GetEmployeeHierarchyQuery query, CancellationToken cancellationToken)
+        public async Task<EmployeeHierarchyDto> GetEmployeeHierarchy()
         {
-
-            return await _mediator.Send(query, cancellationToken);
+            return await _mediator.Send(new GetEmployeeHierarchyQuery());
 
         }
         [HttpGet("sign-up")]
         public async Task<EmployeeSignUpDto> GetEmployeeSignUp([FromQuery] GetEmployeeIDSignUpQuery query, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(query, cancellationToken);
+        }
+        [HttpGet("login")]
+        public async Task<EmployeeSignUpDto> EmployeeLogin([FromQuery] EmployeeLoginQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
         }
@@ -109,7 +114,7 @@ namespace WolfDen.API.Controllers.Employee
         }
        
         [HttpGet("all")]
-        public async Task<ActionResult<List<EmployeeDirectoryDTO>>> GetAllEmployees([FromQuery] GetAllEmployeeQuery query, CancellationToken cancellationToken)
+        public async Task<ActionResult<PaginationResponse>> GetAllEmployees([FromQuery] GetAllEmployeeQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
 

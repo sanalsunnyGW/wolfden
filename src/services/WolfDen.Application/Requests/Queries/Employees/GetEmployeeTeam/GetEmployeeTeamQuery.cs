@@ -6,5 +6,6 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam
     public class GetEmployeeTeamQuery : IRequest<List<EmployeeHierarchyDto>>
     {
         public int Id { get; set; }
+        public bool Hierarchy { get; set; } = false;
     }
 }
