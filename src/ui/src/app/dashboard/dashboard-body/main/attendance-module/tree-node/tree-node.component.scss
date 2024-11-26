@@ -1,0 +1,35 @@
+.example-tree-invisible {
+    display: none;
+  }
+  
+  .example-tree ul,
+  .example-tree li {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+  }
+  
+  .mat-tree-position {
+      position: fixed;
+      top: 5%;
+  }
+  .but{
+    margin-bottom: 20px;
+    background-color:#304463;
+    margin-left: 15px;
+    margin-right: 15px;
+    color:white
+  }
+  .pcard{
+    margin: 15px;   
+  }
+  .name{
+    margin: 10px;
+  }
+  .view{
+    background-color: #5A72A0;
+    color: white;
+  }
+  .ba{
+    margin-top: 300px;
+  }

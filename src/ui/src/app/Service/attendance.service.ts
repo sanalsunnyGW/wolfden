@@ -54,7 +54,7 @@ export class AttendanceService {
   }
   getSubOrdinates(employeeId:number)
   {
-    return this.http.get<SubordinatesDetails[]>(`${this.baseUrl}/api/attendance/get-subordinates?EmployeeId=${employeeId}`)
+    return this.http.get<SubordinatesDetails>(`${this.baseUrl}/api/attendance/get-subordinates?EmployeeId=${employeeId}`)
   }
 }
 

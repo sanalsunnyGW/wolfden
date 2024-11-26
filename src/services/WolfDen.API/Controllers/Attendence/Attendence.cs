@@ -13,6 +13,7 @@ using WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyReport;
 using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.SubOrdinates;
+using WolfDen.Application.Requests.DTOs.Attendence;
 
 namespace WolfDen.API.Controllers.Attendence
 {
@@ -93,7 +94,7 @@ namespace WolfDen.API.Controllers.Attendence
         [HttpGet("get-subordinates")]
         public async Task<IActionResult> getSubOrdinates([FromQuery] SubOrdinatesQuery subOrdinatesQuery, CancellationToken cancellationToken)
         {
-            List<SubOrdinatesDTO> subOrdinates = await _mediator.Send(subOrdinatesQuery, cancellationToken);
+            SubOrdinateDTO subOrdinates = await _mediator.Send(subOrdinatesQuery, cancellationToken);
             return Ok(subOrdinates);
         }
 
