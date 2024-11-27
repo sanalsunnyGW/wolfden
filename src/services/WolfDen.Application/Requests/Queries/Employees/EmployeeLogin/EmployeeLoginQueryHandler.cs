@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -29,12 +28,14 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeLogin
                 Employee employee = await _context.Employees.FirstOrDefaultAsync(x => x.UserId == user.Id);
                 var secretKey = _optionsMonitor.CurrentValue.Key;
                 var signInKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+                var currentRoles = await _userManager.GetRolesAsync(user);
+                var rolesString = string.Join(",", currentRoles);
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                         new Claim("EmployeeId",employee.Id.ToString()),
-                        new Claim("RoleType",employee.RoleType.ToString()),
+                        new Claim(ClaimTypes.Role, rolesString),
                         new Claim("Email",employee.Email.ToString()),
                         new Claim("FirstName",employee.FirstName.ToString())
 
@@ -45,7 +46,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeLogin
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                 var token = tokenHandler.WriteToken(securityToken);
-                return new LoginResponseDTO { Token=token};
+                return new LoginResponseDTO { Token = token };
             }
             return new LoginResponseDTO { ErrorMessage = "Invalid UserName or Password" };
 
