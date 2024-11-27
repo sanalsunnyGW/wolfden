@@ -31,10 +31,10 @@ export const routes: Routes = [
 
 
     {
-        path:'dashboard',
+        path:'portal',
         component:DashboardComponent,
         children:[
-            {path:'main-page',component:MainPageComponent},
+            {path:'dashboard',component:MainPageComponent},
             {path:'employee-directory',component: EmployeeDirectoryComponent},
             {path:'leave-dashboard',component:LeaveDashboardComponent},
             {path:'leave-request-history',component:LeaveHistoryComponent},

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule, formatDate } from '@angular/common';
-import { AttendanceService } from '../../../../../Service/attendance.service';
+import { AttendanceService } from '../../../../../service/attendance.service';
 import { DailyAttendance } from '../../../../../Interface/idaily-attendance';
 
 

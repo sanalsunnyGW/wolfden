@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
-import { LeaveManagementService } from '../../../../../service/leave-management.service';
-import { ILeaveBalanceList } from '../../../../../interface/leave-balance-list-interface';
+import { ILeaveBalanceList } from '../../../../../Interface/leave-balance-list-interface';
+import { LeaveManagementService } from '../../../../../service/leave-management.service'
 
 
 @Component({

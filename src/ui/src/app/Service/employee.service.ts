@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../enviornments/environment';
+import { WolfDenService } from './wolf-den.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import { environment } from '../../enviornments/environment';
 export class EmployeeService {
 
   constructor(private http: HttpClient) { }
-  employeeId = 1;
+  employeeId=8
   private baseUrl = environment.employeeapiUrl;
 
   getHierarchy() {

@@ -5,7 +5,7 @@ import { IProfileForm } from '../Interface/iprofile-from';
 import { Employee } from '../Interface/iemployee';
 import { Gender } from '../enum/gender-enum';
 import { EmploymentType } from '../enum/employment-type-enum';
-import { EmployeeService } from '../Service/employee.service';
+import { EmployeeService } from '../service/employee.service';
 
 @Component({
   selector: 'app-profile',

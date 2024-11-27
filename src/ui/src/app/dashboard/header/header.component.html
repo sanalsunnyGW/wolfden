@@ -1,23 +1,13 @@
 <div class="header">
-    <div class="logo">Geeky Wolf</div>
-    <div class="user">
-      <div class="user-name">Nohan</div>
-      <div class="user-image" data-bs-toggle="modal" data-bs-target="#profile">NA</div>
+  <div class="logo">Geeky Wolf</div>
+  <div class="user">
+    <div class="user-name">Nohan</div>
+    <div class="user-menu-container">
+      <span class="user-image" (click)="toggleDropdown()">NA</span>
+      <ul class="dropdown-menu" [class.show]="isDropdownOpen">
+        <li><a routerLink="/portal/profile">Profile</a></li>
+        <li><a href="#">LogOut</a></li>
+      </ul>
     </div>
   </div>
-
-  <!-- Modal -->
-  <div class="modal fade" id="profile" tabindex="-1" aria-labelledby="profile" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-        <div class="modal-body">
-          <div class="d-flex flex-column align-items-start gap-3">
-            <button type="button" class="btn-close align-self-end" data-bs-dismiss="modal" aria-label="Close"></button>
-            <button type="button" class="btn btn-primary w-100 custom-btn" data-bs-dismiss="modal" routerLink="/profile">Profile</button>
-            <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Log Out</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
+</div>

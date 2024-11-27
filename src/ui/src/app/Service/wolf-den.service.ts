@@ -11,7 +11,7 @@ export class WolfDenService {
 
 
   private baseUrl=environment.apiUrl;
-  public userId : number=3;
+  public userId : number=8;
 
   constructor(private http:HttpClient) { }
 

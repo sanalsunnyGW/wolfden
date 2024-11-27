@@ -319,6 +319,12 @@ namespace WolfDen.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateOnly?>("DateofBirth")
                         .HasColumnType("date");
 
@@ -333,6 +339,9 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<int>("EmployeeCode")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EmploymentType")
                         .HasColumnType("int");
 
                     b.Property<string>("FirstName")
@@ -373,9 +382,15 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
+                    b.Property<string>("Photo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RFId")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -863,7 +878,7 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsAcknowledged")
+                    b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
                     b.Property<string>("Message")
@@ -882,8 +897,6 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnName("PeriodStart");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Notification", "wolfden");
 
@@ -1008,17 +1021,6 @@ namespace WolfDen.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("LeaveRequest");
-                });
-
-            modelBuilder.Entity("WolfDen.Domain.Entity.Notification", b =>
-                {
-                    b.HasOne("WolfDen.Domain.Entity.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
                 });
 #pragma warning restore 612, 618
         }

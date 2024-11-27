@@ -5,6 +5,7 @@ using System.Reflection;
 using sib_api_v3_sdk.Client;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Infrastructure.Data;
+using Microsoft.AspNetCore.Identity;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,8 +46,10 @@ builder.Services.AddMediatR(x =>
 });
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("WolfDen.Application"));
 
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+                .AddEntityFrameworkStores<WolfDenContext>();
 
-
+builder.Services.AddAuthentication();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

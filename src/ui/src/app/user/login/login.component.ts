@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { WolfDenService } from '../../Service/wolf-den.service';
+import { WolfDenService } from '../../service/wolf-den.service';
 import { ILoginForm } from './ilogin-form';
 import { ToastrService } from 'ngx-toastr';
 
@@ -35,13 +35,14 @@ export class LoginComponent {
 
   onSubmit() {
     this.isSubmitted = true;
+    console.log
     if(this.userForm.valid){
 
-      this.userService.getEmployeeLogin(this.userForm.value.Email,this.userForm.value.Password).subscribe({
+      this.userService.getEmployeeLogin(this.userForm.value.email ,this.userForm.value.password).subscribe({
         next:(response:any)=>{
             this.userService.userId=response.id;
             this.toastr.success('Login sucessfull')
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/portal/main-page']);
         }
       });
     }
