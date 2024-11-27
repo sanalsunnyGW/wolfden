@@ -55,32 +55,17 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                             incompleteShiftCount++;
                         }
                     }
-                    else
+                    else 
                     {
                         Holiday? holiday = holidays.FirstOrDefault(x => x.Date == currentDate);
                         LeaveRequest? leaveRequest = leaveRequests
                                    .FirstOrDefault(x => x.EmployeeId == employee.Id && x.FromDate <= currentDate && x.ToDate >= currentDate);
-                        if (holiday is not null)
+                        if ((holiday is null || holiday.Type is not AttendanceStatus.NormalHoliday) && leaveRequest is null)
                         {
-                            if (holiday.Type is not AttendanceStatus.NormalHoliday)
-                            {
-                                if (leaveRequest is null)
-                                {
-                                    lopdays += currentDate.ToString("yyyy-MM-dd") + ",";
-                                    lopCount++;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (leaveRequest is null)
-                            {
-                                lopdays += currentDate.ToString("yyyy-MM-dd") + ",";
-                                lopCount++;
-                            }
+                            lopdays += currentDate.ToString("yyyy-MM-dd") + ",";
+                            lopCount++;
                         }
                     }
-
                 }
                 LOP lop = new LOP(attendanceClosingDate, employee.Id, lopCount, incompleteShiftCount, lopdays, incompleteShiftDays);
                 await _context.AddAsync(lop);
