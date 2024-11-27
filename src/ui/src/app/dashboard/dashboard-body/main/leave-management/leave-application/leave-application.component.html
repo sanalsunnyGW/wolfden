@@ -10,8 +10,9 @@
               formControlName="typeId" 
               id="typeId">
           </ng-select>
-          <div class="error" *ngIf="applyLeave.get('typeId')?.invalid && applyLeave.get('typeId')?.touched">
-              Leave type is required.
+          <div class="error">@if(applyLeave.get('typeId')?.invalid && applyLeave.get('typeId')?.touched){
+            Leave Type is Required
+            } 
           </div>
       </div>
 
@@ -30,24 +31,27 @@
       <div class="form-group mb-3">
           <label for="fromDate" class="form-label">From Date</label>
           <input type="date" class="form-control" id="fromDate" formControlName="fromDate">
-          <div class="error" *ngIf="applyLeave.get('fromDate')?.invalid && applyLeave.get('fromDate')?.touched">
-              From date is required.
+          <div class="error">@if(applyLeave.get('fromDate')?.invalid && applyLeave.get('fromDate')?.touched){
+            From Date is Required
+            } 
           </div>
       </div>
 
       <div class="form-group mb-3">
           <label for="toDate" class="form-label">To Date</label>
           <input type="date" class="form-control" id="toDate" formControlName="toDate">
-          <div class="error" *ngIf="applyLeave.get('toDate')?.invalid && applyLeave.get('toDate')?.touched">
-              To date is required.
+          <div class="error">@if(applyLeave.get('toDate')?.invalid && applyLeave.get('toDate')?.touched){
+            To Date is Required
+            } 
           </div>
       </div>
 
       <div class="form-group mb-3">
           <label for="description" class="form-label">Description</label>
           <textarea class="form-control" id="description" rows="5" formControlName="description"></textarea>
-          <div class="error" *ngIf="applyLeave.get('description')?.invalid && applyLeave.get('description')?.touched">
-              Description is required.
+          <div class="error">@if(applyLeave.get('description')?.invalid && applyLeave.get('description')?.touched){
+            Employee Code is required
+            } 
           </div>
       </div>
 

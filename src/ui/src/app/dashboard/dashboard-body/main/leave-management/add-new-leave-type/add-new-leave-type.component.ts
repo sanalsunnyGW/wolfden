@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, NgSelectOption, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IAddNewLeaveTypeFormcontrol } from '../../../../../interface/add-new-leave-type-interface';
-import { CommonModule } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { LeaveManagementService } from '../../../../../Service/leave-management.service';
 
@@ -9,7 +8,7 @@ import { LeaveManagementService } from '../../../../../Service/leave-management.
 @Component({
   selector: 'app-add-new-leave-type',
   standalone: true,
-  imports: [ReactiveFormsModule,CommonModule,NgSelectComponent],
+  imports: [ReactiveFormsModule,NgSelectComponent],
   templateUrl: './add-new-leave-type.component.html',
   styleUrl: './add-new-leave-type.component.scss'
 })

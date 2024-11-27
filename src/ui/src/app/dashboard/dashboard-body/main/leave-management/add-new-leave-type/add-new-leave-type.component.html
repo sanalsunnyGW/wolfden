@@ -4,8 +4,9 @@
       <div class="form-group mb-3">
         <label for="typeName" class="form-label">Enter New Leave Type Name</label>
         <input type="text" class="form-control" id="typeName" placeholder="Enter Name" formControlName="typeName">
-        <div class="error"*ngIf="addNewLeaveType.get('typeName')?.invalid && addNewLeaveType.get('typeName')?.touched ">
-         Type Name is required
+        <div class="error">@if(addNewLeaveType.get('typeName')?.invalid && addNewLeaveType.get('typeName')?.touched){
+          Type Name is Required
+          } 
         </div>
       </div>
 
