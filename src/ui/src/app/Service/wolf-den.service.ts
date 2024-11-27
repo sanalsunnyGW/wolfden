@@ -10,10 +10,10 @@ import { IEmployeeDirectoryWithPagecount } from '../Interface/iemployee-director
 export class WolfDenService {
 
 
-  private baseUrl=environment.apiUrl;
-  public userId : number=3;
+  private baseUrl = environment.apiUrl;
+  public userId: number = 3;
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   private createHttpParams(params: { [key: string]: any }): HttpParams {
     let httpParams = new HttpParams();
@@ -30,43 +30,43 @@ export class WolfDenService {
 
   }
 
-      getEmployeeSignUp(employeeCode: number, rfId: string): Observable<{ id: number, status: boolean }> {
-        const params = this.createHttpParams({
-          EmployeeCode: employeeCode,
-          RFId: rfId,
-        });
-        return this.http.get<{ id: number, status: boolean }>(
-          `${this.baseUrl}/api/Employee/sign-up`,
-          { headers: this.getHeaders(), params }
-        );
-      }
+  getEmployeeSignUp(employeeCode: number, rfId: string): Observable<{ id: number, status: boolean }> {
+    const params = this.createHttpParams({
+      EmployeeCode: employeeCode,
+      RFId: rfId,
+    });
+    return this.http.get<{ id: number, status: boolean }>(
+      `${this.baseUrl}/api/Employee/sign-up`,
+      { headers: this.getHeaders(), params }
+    );
+  }
 
-      getEmployeeLogin(email: string, password: string): Observable<{ id: number, status: boolean }> {
-        const params = this.createHttpParams({
-          Email: email,
-          Password: password,
-        });
-        return this.http.get<{ id: number, status: boolean }>(
-          `${this.baseUrl}/api/Employee/login`,
-          { headers: this.getHeaders(), params }
-         
-        );
-      }
+  getEmployeeLogin(email: string, password: string): Observable<any> {
+    const params = this.createHttpParams({
+      Email: email,
+      Password: password,
+    });
+    return this.http.get<any>(
+      `${this.baseUrl}/api/Employee/login`,
+      { headers: this.getHeaders(), params }
 
-      signIn(data: any): Observable<any> {
-        return this.http.put(`${this.baseUrl}/api/Employee/employee-update-employee`, data, { headers: this.getHeaders() });
-      }
+    );
+  }
 
-      getAllEmployees(pageNumber: number, pageSize: number, departmentId?: number, employeeName?: string): Observable<IEmployeeDirectoryWithPagecount> {
-        const params = this.createHttpParams({
-          PageNumber: pageNumber,
-          PageSize: pageSize,
-          DepartmentID: departmentId,
-          EmployeeName: employeeName,
-        });
-        return this.http.get<IEmployeeDirectoryWithPagecount>(
-          `${this.baseUrl}/api/Employee/all`,
-          { headers: this.getHeaders(), params }
-        );
-      }
+  signIn(data: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/api/Employee/employee-update-employee`, data, { headers: this.getHeaders() });
+  }
+
+  getAllEmployees(pageNumber: number, pageSize: number, departmentId?: number, employeeName?: string): Observable<IEmployeeDirectoryWithPagecount> {
+    const params = this.createHttpParams({
+      PageNumber: pageNumber,
+      PageSize: pageSize,
+      DepartmentID: departmentId,
+      EmployeeName: employeeName,
+    });
+    return this.http.get<IEmployeeDirectoryWithPagecount>(
+      `${this.baseUrl}/api/Employee/all`,
+      { headers: this.getHeaders(), params }
+    );
+  }
 }
