@@ -53,6 +53,10 @@ export class CalendarViewComponent implements OnInit {
     this.getStatusData(this.currentYear, this.currentMonth);
   }
 
+  download()
+  {
+    
+  }
 
   fetchAttendanceData(year: number, month: number): void {
     this.service.getAttendanceSummary(this.baseService.userId, year, month).subscribe((data: IAttendanceSummary) => {
