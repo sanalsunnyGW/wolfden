@@ -4,7 +4,10 @@ using QuestPDF.Fluent;
 using WolfDen.Application.DTOs.Attendence;
 using WolfDen.Application.Requests.Commands.Attendence.CloseAttendance;
 using WolfDen.Application.Requests.DTOs.Attendence;
+using WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyReport;
+using WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory;
 using WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary;
+using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
@@ -15,7 +18,6 @@ using WolfDen.Application.Requests.Commands.Attendence.CloseAttendance;
 using WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyReport;
 using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
-using WolfDen.Application.Requests.Queries.Attendence.SubOrdinates;
 
 namespace WolfDen.API.Controllers.Attendence
 {
@@ -66,7 +68,7 @@ namespace WolfDen.API.Controllers.Attendence
         {
             return await _mediator.Send(query, cancellationToken);
         }
-
+        
         [HttpGet("monthly-report")]
         public async Task<IActionResult> GenerateMonthlyReport([FromQuery] MonthlyReportQuery MonthlyReportQuery, CancellationToken cancellationToken)
         {
@@ -103,22 +105,14 @@ namespace WolfDen.API.Controllers.Attendence
             CheckAttendanceClosedDTO isClosed = await _mediator.Send(checkAttendanceClosedQuery, cancellationToken);
             return Ok(isClosed);
         }
-
-        [HttpGet("get-subordinates")]
-        public async Task<IActionResult> getSubOrdinates([FromQuery] SubOrdinatesQuery subOrdinatesQuery, CancellationToken cancellationToken)
-        {
-            List<SubOrdinatesDTO> subOrdinates = await _mediator.Send(subOrdinatesQuery, cancellationToken);
-            return Ok(subOrdinates);
-        }
-
         [HttpGet("employee/history")]
         public async Task<AttendanceHistoryDTO> GetHistory([FromQuery] AttendanceHistoryQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
         }
     }
+
+
 }
-
-
        
  

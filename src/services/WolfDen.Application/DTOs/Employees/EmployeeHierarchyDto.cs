@@ -1,4 +1,6 @@
-﻿namespace WolfDen.Application.DTOs.Employees
+﻿using static WolfDen.Domain.Enums.EmployeeEnum;
+
+namespace WolfDen.Application.DTOs.Employees
 {
     public class EmployeeHierarchyDto
     {
@@ -10,12 +12,18 @@
         public string? PhoneNumber { get; set; }
         public DateOnly? DateofBirth { get; set; }
         public int? DesignationId { get; set; }
+        public string? DesignationName { get; set; }
         public int? DepartmentId { get; set; }
+        public string? DepartmentName { get; set; }
         public int? ManagerId { get; set; }
-
+        public string? ManagerName { get; set; }
         public bool? IsActive { get; set; }
+        public string? Address { get; set; }
+        public string? Country { get; set; }
+        public string? State { get; set; }
+        public EmploymentType? EmploymentType { get; set; }
+        public string? Photo { get; set; }
         public List<EmployeeHierarchyDto> Subordinates { get; set; }
-
 
     }
 }

@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee
@@ -8,11 +10,15 @@ namespace WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee
     {
         private readonly WolfDenContext _context;
         private readonly EmployeeUpdateEmployeeValidator _validator;
+        private readonly UserManager<User> _userManager;
+        private readonly IPasswordHasher<User> _passwordHasher;
 
-        public EmployeeUpdateEmployeeCommandHandler(WolfDenContext context, EmployeeUpdateEmployeeValidator validator)
+        public EmployeeUpdateEmployeeCommandHandler(WolfDenContext context, EmployeeUpdateEmployeeValidator validator, UserManager<User> userManager, IPasswordHasher<User> passwordHasher)
         {
             _context = context;
             _validator = validator;
+            _userManager = userManager;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<bool> Handle(EmployeeUpdateEmployeeCommand request, CancellationToken cancellationToken)
@@ -28,11 +34,24 @@ namespace WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee
             {
                 return false;
             }
-            employee.EmployeeUpdateEmployee(request.FirstName, request.LastName, request.DateofBirth, request.Email, request.PhoneNumber, request.Gender, request.JoiningDate);
-            _context.Employees.Update(employee);
-            await _context.SaveChangesAsync(cancellationToken);
-            return true;
 
+            using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+            try
+            {
+                var user = await _userManager.FindByNameAsync(employee.RFId);
+                user.SetEmailPassword(request.Email, request.Password, _passwordHasher);
+                var updateResult = await _userManager.UpdateAsync(user);
+                employee.EmployeeUpdateEmployee(request.FirstName, request.LastName, request.DateofBirth, request.Email, request.PhoneNumber, request.Gender, request.Address, request.Country, request.State, request.Photo, user.Id);
+                _context.Employees.Update(employee);
+                await transaction.CommitAsync(cancellationToken);
+                await _context.SaveChangesAsync(cancellationToken);
+                return true;
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw new Exception("Transaction Failed ");
+            }
         }
     }
 }

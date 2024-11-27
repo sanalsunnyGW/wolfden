@@ -3,9 +3,9 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions, DatesSetArg, DayCellContentArg } from '@fullcalendar/core/index.js';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-import { AttendanceService } from '../../../../../service/attendance.service';
-import { IAttendanceSummary } from '../../../../../interface/attendance-summary';
-import { IAttendanceData } from '../../../../../interface/attendance-data';
+import { AttendanceService } from '../../../../../Service/attendance.service';
+import { IAttendanceSummary } from '../../../../../Interface/attendance-summary';
+import { IAttendanceData } from '../../../../../Interface/attendance-data';
 
 
 
@@ -60,7 +60,6 @@ export class CalendarViewComponent implements OnInit {
   }
 
   getStatusData(year: number, month: number) {
-    console.log("date fetched")
     this.service.getDailyStatus(this.employeeId, year, month).subscribe((data: IAttendanceData[]) => {
       data.forEach((item: IAttendanceData) => {
         this.attendanceData[item.date] = item.attendanceStatusId;
@@ -81,6 +80,8 @@ export class CalendarViewComponent implements OnInit {
     if (arg.date.getDay() === 6 || arg.date.getDay() === 0) {
       return ['weekend-day'];
     }
+
+    
 
     if (status === 1) {
       return ['present'];

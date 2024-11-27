@@ -3,12 +3,13 @@
     margin-left: 0 !important;
     padding-right: 0 !important;
     margin-right: 0 !important; 
+    
 }
 
 .main-container {
     display: flex;
 
- 
+
     
     .main {
         padding: 30px;
@@ -18,4 +19,13 @@
   body{
     margin:0px;
 
+  }
+
+
+  .fixed-header {
+    position: fixed; 
+    top: 0;          
+    left: 0;         
+    width: 100%;     
+    z-index: 1000;   
   }
