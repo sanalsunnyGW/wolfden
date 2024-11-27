@@ -99,6 +99,8 @@ builder.Services.AddScoped<WolfDenContext>();
 builder.Services.AddSingleton<PdfService>();
 builder.Services.AddScoped<ManagerEmailFinder>();
     
+builder.Services.AddScoped<MonthlyPdf>();
+
 QuestPDF.Settings.License = LicenseType.Community;
 
 builder.Services.AddMediatR(x =>

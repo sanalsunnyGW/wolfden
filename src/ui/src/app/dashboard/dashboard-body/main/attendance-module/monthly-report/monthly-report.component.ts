@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
 import { CommonModule, formatDate } from '@angular/common';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
