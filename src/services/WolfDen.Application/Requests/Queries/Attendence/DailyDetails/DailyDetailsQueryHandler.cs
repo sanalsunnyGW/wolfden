@@ -7,17 +7,17 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
 {
-    public class DailyDetailsQueryHandler :IRequestHandler<DailyDetails,DailyAttendanceDTO>
+    public class DailyDetailsQueryHandler :IRequestHandler<DailyDetailsQuery,DailyAttendanceDTO>
     {
         private readonly WolfDenContext _context;
         public DailyDetailsQueryHandler(WolfDenContext context)
         {
             _context = context;
         }
-        public async Task<DailyAttendanceDTO> Handle(DailyDetails request, CancellationToken cancellationToken)
+        public async Task<DailyAttendanceDTO> Handle(DailyDetailsQuery request, CancellationToken cancellationToken)
         {
             int minWorkDuration = 360;
-            var attendence = await _context.DailyAttendence.Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date).Select(x => new DailyAttendanceDTO
+            DailyAttendanceDTO? attendence = await _context.DailyAttendence.Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date).Select(x => new DailyAttendanceDTO
             {
                 ArrivalTime = x.ArrivalTime,
                 DepartureTime = x.DepartureTime,
@@ -28,7 +28,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
 
             if (attendence is null)
             {
-                var notPresentDay = new DailyAttendanceDTO();
+                DailyAttendanceDTO notPresentDay = new DailyAttendanceDTO();
                 Holiday holiday = await _context.Holiday.Where(x => x.Date == request.Date).FirstOrDefaultAsync(cancellationToken);
                 if (holiday is not null)
                 {
@@ -82,7 +82,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                     attendence.AttendanceStatusId = AttendanceStatus.IncompleteShift;
                 }
             }
-            var attendenceRecords = await _context.AttendenceLog.Where(x => x.EmployeeId == request.EmployeeId && x.PunchDate == request.Date).Include(x => x.Device)
+            List<AttendenceLogDTO> attendenceRecords = await _context.AttendenceLog.Where(x => x.EmployeeId == request.EmployeeId && x.PunchDate == request.Date).Include(x => x.Device)
              .Select(x => new AttendenceLogDTO
              {
                  Time = x.PunchTime,

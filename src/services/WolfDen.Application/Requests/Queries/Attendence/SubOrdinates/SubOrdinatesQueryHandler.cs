@@ -15,7 +15,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.SubOrdinates
         {
             TeamHeirarchyService service = new(_context);
             Employee employee = await _context.Employees.FindAsync(request.EmployeeId, cancellationToken);
-            if (employee == null) 
+            if (employee is null) 
             {
                 return null;
             }

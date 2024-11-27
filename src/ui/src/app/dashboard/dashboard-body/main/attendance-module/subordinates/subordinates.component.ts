@@ -1,11 +1,9 @@
-
 import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';  
 import { TreeNodeComponent } from '../tree-node/tree-node.component';
 import { Component, inject } from '@angular/core';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { SubordinatesDetails } from '../../../../../Interface/subordinates-details';
-
 
 @Component({
   selector: 'app-subordinates',
@@ -15,7 +13,6 @@ import { SubordinatesDetails } from '../../../../../Interface/subordinates-detai
   styleUrl: './subordinates.component.scss'
 })
 export class SubordinatesComponent {
-
   service=inject(AttendanceService)
   employeeData: SubordinatesDetails[]=[] ;
   ngOnInit() {
@@ -24,11 +21,8 @@ export class SubordinatesComponent {
       (response: SubordinatesDetails) =>{
         if(response){
           this.employeeData=response.subOrdinates || [];  
-          console.log(response);
       }
         else {alert("no subordinate found") };
    });   
-  }
- 
-   
+  } 
 }

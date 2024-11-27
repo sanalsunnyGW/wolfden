@@ -76,7 +76,13 @@ export class WeeklyAttendanceComponent {
             tooltip: {
               callbacks: {
                 label: (context: any) => {
+                  if(context.raw==1)
+                  {
+                    return `0 minutes`;
+                  }
                   return `${context.label}: ${context.raw} minutes`;
+
+                 
                 }
               }
             }
@@ -130,8 +136,11 @@ getStartOfWeek(selectedWeek:string){
             return { ...item, date: convertedDate };
           });
           this.barChart.data.labels=this.weeklyData.map((x:WeeklyAttendance)=>x.date.toLocaleDateString())
-          this.barChart.data.datasets[0].data=this.weeklyData.map((x:WeeklyAttendance)=>x.insideDuration)
-          this.status=this.weeklyData.map(x=>x.attendanceStatusId)
+          const maxValue = Math.max(...this.weeklyData.map((x: WeeklyAttendance) => x.insideDuration || 1));
+          this.barChart.data.datasets[0].data = this.weeklyData.map((x: WeeklyAttendance) => 
+              x.insideDuration !== null ? x.insideDuration : maxValue
+          ); 
+          this.barChart.data .datasets[0].hoverBackgroundColor='#F1F0E8'        
           this.barChart.data.datasets[0].backgroundColor,this.barChart.data.datasets[0].borderColor= this.weeklyData.map(x=>{
             if(x.attendanceStatusId===1)
             {

@@ -4,7 +4,7 @@ using QuestPDF.Infrastructure;
 using WolfDen.Application.Requests.DTOs.Attendence;
 using WolfDen.Domain.Enums;
 
-namespace WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport
+namespace WolfDen.Application.Requests.Queries.Attendence.DailyDetails
 {
     public class PdfService
     {
@@ -37,7 +37,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport
                                   {
                                       row.RelativeItem().Padding(5).AlignLeft().Text($"Arrival Time: {dailyStatusDTO.ArrivalTime}")
                                           .SemiBold().FontSize(14).FontColor(Colors.Black);
-                                     
+
                                   });
                                   col.Item().Row(row =>
                                   {
@@ -150,4 +150,3 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport
 
 
 
-        

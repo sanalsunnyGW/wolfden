@@ -3,8 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
 using System.Reflection;
 using sib_api_v3_sdk.Client;
-using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Infrastructure.Data;
+using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
+using WolfDen.Application.Helpers;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,6 +37,8 @@ builder.Services.AddDbContext<WolfDenContext>(x =>
 });
 builder.Services.AddScoped<WolfDenContext>();
 builder.Services.AddSingleton<PdfService>();
+builder.Services.AddScoped<ManagerEmailFinder>();
+    
 QuestPDF.Settings.License = LicenseType.Community;
 
 builder.Services.AddMediatR(x =>

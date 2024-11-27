@@ -8,11 +8,11 @@ using WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyReport;
 using WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory;
 using WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary;
 using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
-using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
 using WolfDen.Application.Requests.Queries.Attendence.WeeklySummary;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.SubOrdinates;
+using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
 
 
 namespace WolfDen.API.Controllers.Attendence
@@ -30,16 +30,16 @@ namespace WolfDen.API.Controllers.Attendence
         }
 
         [HttpGet("daily-attendance")]
-        public async Task<IActionResult> GetAttendenceLog([FromQuery] DailyDetails DailyDetails, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAttendenceLog([FromQuery]DailyDetailsQuery DailyDetails, CancellationToken cancellationToken)
         {
             DailyAttendanceDTO attendance = await _mediator.Send(DailyDetails, cancellationToken);
             return Ok(attendance);
         }
 
         [HttpGet("daily-attendance-pdf")]
-        public async Task<IResult> GeneratePdf([FromQuery] DailyDetailsPdf DailyDetailspdf, CancellationToken cancellationToken)
+        public async Task<IResult> GeneratePdf([FromQuery]DailyDetailsQuery DailyDetails, CancellationToken cancellationToken)
         {
-            DailyAttendanceDTO attendenceList = await _mediator.Send(DailyDetailspdf, cancellationToken);
+            DailyAttendanceDTO attendenceList = await _mediator.Send(DailyDetails, cancellationToken);
             var document = _pdfService.CreateDocument(attendenceList);
             var pdf = document.GeneratePdf();
             return Results.File(pdf, "application/pdf", "DailyReport.pdf");
@@ -92,7 +92,7 @@ namespace WolfDen.API.Controllers.Attendence
             return Ok(isClosed);
         }
 
-        [HttpGet("get-subordinates")]
+        [HttpGet("subordinates")]
         public async Task<IActionResult> getSubOrdinates([FromQuery] SubOrdinatesQuery subOrdinatesQuery, CancellationToken cancellationToken)
         {
             SubOrdinateDTO subOrdinates = await _mediator.Send(subOrdinatesQuery, cancellationToken);
