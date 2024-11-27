@@ -38,7 +38,6 @@ export class CalendarViewComponent implements OnInit {
   incompleteShift: number = 0;
   wfh: number = 0;
 
-  //employeeId: number = 1;
   currentYear: number = new Date().getFullYear();
   currentMonth: number = new Date().getMonth() + 1;
   attendanceData: { [date: string]: number } = {};
@@ -51,11 +50,6 @@ export class CalendarViewComponent implements OnInit {
   ngOnInit(): void {
     this.fetchAttendanceData(this.currentYear, this.currentMonth);
     this.getStatusData(this.currentYear, this.currentMonth);
-  }
-
-  download()
-  {
-    
   }
 
   fetchAttendanceData(year: number, month: number): void {
