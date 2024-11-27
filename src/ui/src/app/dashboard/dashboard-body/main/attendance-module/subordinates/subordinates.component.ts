@@ -4,6 +4,7 @@ import { TreeNodeComponent } from '../tree-node/tree-node.component';
 import { Component, inject } from '@angular/core';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { SubordinatesDetails } from '../../../../../Interface/subordinates-details';
+import { WolfDenService } from '../../../../../Service/wolf-den.service';
 
 @Component({
   selector: 'app-subordinates',
@@ -14,9 +15,10 @@ import { SubordinatesDetails } from '../../../../../Interface/subordinates-detai
 })
 export class SubordinatesComponent {
   service=inject(AttendanceService)
+  baseService=inject(WolfDenService)
   employeeData: SubordinatesDetails[]=[] ;
   ngOnInit() {
-    const employeeId=2;
+    const employeeId=this.baseService.userId
     this.service.getSubOrdinates(employeeId).subscribe(
       (response: SubordinatesDetails) =>{
         if(response){

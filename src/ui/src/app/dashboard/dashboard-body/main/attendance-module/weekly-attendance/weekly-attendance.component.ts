@@ -140,7 +140,7 @@ getStartOfWeek(selectedWeek:string){
           this.barChart.data.datasets[0].data = this.weeklyData.map((x: WeeklyAttendance) => 
               x.insideDuration !== null ? x.insideDuration : maxValue
           ); 
-          this.barChart.data .datasets[0].hoverBackgroundColor='#F1F0E8'        
+          this.barChart.data .datasets[0].hoverBackgroundColor="#fffff"   
           this.barChart.data.datasets[0].backgroundColor,this.barChart.data.datasets[0].borderColor= this.weeklyData.map(x=>{
             if(x.attendanceStatusId===1)
             {

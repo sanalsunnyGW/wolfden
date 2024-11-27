@@ -16,8 +16,8 @@
   .but{
     margin-bottom: 20px;
     background-color:#5A72A0;
-    margin-left: 15px;
-    margin-right: 15px;
+    margin-left: 4px;
+    margin-right: 4px;
     color:white
   }
   .pcard{
@@ -33,3 +33,24 @@
   .ba{
     margin-top: 300px;
   }
+  .card {
+    border: 1px solid #ccc; 
+    padding: 11px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    border-radius: 1;
+    width: 20rem; 
+    margin-left: 25rem;
+    background-color: rgb(244, 244, 244);
+    
+  }
+  .card2 {
+    border: 1px solid #ccc; 
+    padding: 11px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 1;
+    height: 150px;
+    background-color: rgb(245, 245, 245);
+    
+  }
+  

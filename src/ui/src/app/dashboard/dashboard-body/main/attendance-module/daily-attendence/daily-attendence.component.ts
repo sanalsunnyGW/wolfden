@@ -26,9 +26,9 @@ export class DailyAttendenceComponent {
   attendanceStatus = [
     { id: 1, viewValue: 'Present' },
     { id: 2, viewValue: 'Absent' },
-    { id: 3, viewValue: 'IncompleteShift' },
-    { id: 4, viewValue: 'RestrictedHoliday' },
-    { id: 5, viewValue: 'NormalHoliday' },
+    { id: 3, viewValue: 'Incomplete Shift' },
+    { id: 4, viewValue: 'Restricted Holiday' },
+    { id: 5, viewValue: 'Normal Holiday' },
     { id: 6, viewValue: 'WFH' },
     { id: 7, viewValue: 'Leave' },
   ];
