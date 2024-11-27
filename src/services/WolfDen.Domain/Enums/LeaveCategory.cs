@@ -2,7 +2,7 @@
 {
     public enum LeaveCategory
     {
-        CasualLeave =1,
+        CasualLeave = 1,
         PrivilegeLeave,
         BereavementLeave,
         EmergencyLeave,
