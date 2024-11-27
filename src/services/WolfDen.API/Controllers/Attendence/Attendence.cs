@@ -13,6 +13,7 @@ using WolfDen.Application.Requests.Queries.Attendence.WeeklySummary;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.SubOrdinates;
 using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
+using QuestPDF.Infrastructure;
 
 
 namespace WolfDen.API.Controllers.Attendence
@@ -40,8 +41,8 @@ namespace WolfDen.API.Controllers.Attendence
         public async Task<IResult> GeneratePdf([FromQuery]DailyDetailsQuery DailyDetails, CancellationToken cancellationToken)
         {
             DailyAttendanceDTO attendenceList = await _mediator.Send(DailyDetails, cancellationToken);
-            var document = _pdfService.CreateDocument(attendenceList);
-            var pdf = document.GeneratePdf();
+            IDocument document = _pdfService.CreateDocument(attendenceList);
+            byte[] pdf = document.GeneratePdf();
             return Results.File(pdf, "application/pdf", "DailyReport.pdf");
         }
 

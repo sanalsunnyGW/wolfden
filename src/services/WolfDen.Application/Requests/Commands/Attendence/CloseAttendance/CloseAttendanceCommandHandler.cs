@@ -45,7 +45,8 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                 string incompleteShiftDays = "";
                 for (DateOnly currentDate = monthStart; currentDate <= attendanceClosingDate; currentDate = currentDate.AddDays(1))
                 {
-                    DailyAttendence attendanceRecord = attendanceRecords.FirstOrDefault(x => x.EmployeeId == employee.Id && x.Date == currentDate);
+                    DailyAttendence? attendanceRecord = attendanceRecords.
+                        FirstOrDefault(x => x.EmployeeId == employee.Id && x.Date == currentDate);
                     if (attendanceRecord is not null)
                     {
                         if (attendanceRecord.InsideDuration < minWorkDuration)
@@ -61,7 +62,8 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                         {
                             if (holiday.Type is not AttendanceStatus.NormalHoliday)
                             {
-                                LeaveRequest leaveRequestForHoliday = leaveRequests.FirstOrDefault(x => x.EmployeeId == employee.Id && x.FromDate <= currentDate && x.ToDate >= currentDate);
+                                LeaveRequest? leaveRequestForHoliday = leaveRequests
+                                    .FirstOrDefault(x => x.EmployeeId == employee.Id && x.FromDate <= currentDate && x.ToDate >= currentDate);
 
                                 if (leaveRequestForHoliday is null)
                                 {
@@ -72,7 +74,8 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                         }
                         else
                         {
-                            LeaveRequest leaveRequest = leaveRequests.FirstOrDefault(x => x.EmployeeId == employee.Id && x.FromDate <= currentDate && x.ToDate >= currentDate);
+                            LeaveRequest? leaveRequest = leaveRequests
+                                .FirstOrDefault(x => x.EmployeeId == employee.Id && x.FromDate <= currentDate && x.ToDate >= currentDate);
                             if (leaveRequest is null)
                             {
                                 lopdays += currentDate.ToString("yyyy-MM-dd") + ",";

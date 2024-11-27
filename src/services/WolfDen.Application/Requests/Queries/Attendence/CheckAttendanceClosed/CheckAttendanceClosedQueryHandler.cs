@@ -20,7 +20,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClosed
                 .Where(x=>x.AttendanceClosedDate.Month==request.Month && x.AttendanceClosedDate.Year==request.Year && x.IsClosed==true)
                 .FirstOrDefaultAsync(cancellationToken);
             CheckAttendanceClosedDTO checkAttendanceClosedDTO = new CheckAttendanceClosedDTO();
-            if (attendenceClose != null)
+            if (attendenceClose is not null)
             {
                 checkAttendanceClosedDTO.status = true;
                 return checkAttendanceClosedDTO;

@@ -14,7 +14,6 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyDetails
             {
                 container.Page(page =>
                 {
-
                     container.Page(page =>
                     {
                         page.Size(PageSizes.A4);
@@ -35,19 +34,22 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyDetails
 
                                   col.Item().Row(row =>
                                   {
-                                      row.RelativeItem().Padding(5).AlignLeft().Text($"Arrival Time: {dailyStatusDTO.ArrivalTime}")
-                                          .SemiBold().FontSize(14).FontColor(Colors.Black);
+                                      row.RelativeItem().Padding(5).AlignLeft()
+                                      .Text($"Arrival Time: {dailyStatusDTO.ArrivalTime}")
+                                      .SemiBold().FontSize(14).FontColor(Colors.Black);
 
                                   });
                                   col.Item().Row(row =>
                                   {
-                                      row.RelativeItem().Padding(5).AlignLeft().Text($"Departure Time: {dailyStatusDTO.DepartureTime}")
-                                         .SemiBold().FontSize(14).FontColor(Colors.Black);
+                                      row.RelativeItem().Padding(5).AlignLeft()
+                                      .Text($"Departure Time: {dailyStatusDTO.DepartureTime}")
+                                      .SemiBold().FontSize(14).FontColor(Colors.Black);
                                   });
                                   col.Item().Row(row =>
                                   {
-                                      row.RelativeItem().Padding(5).AlignLeft().Text($"Inside Duration: {dailyStatusDTO.InsideHours} minutes")
-                                          .SemiBold().FontSize(14).FontColor(Colors.Black);
+                                      row.RelativeItem().Padding(5).AlignLeft()
+                                      .Text($"Inside Duration: {dailyStatusDTO.InsideHours} minutes")
+                                      .SemiBold().FontSize(14).FontColor(Colors.Black);
 
                                   });
                                   string status = "";
@@ -77,18 +79,21 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyDetails
                                   }
                                   col.Item().Row(row =>
                                   {
-                                      row.RelativeItem().Padding(5).AlignLeft().Text($"Status: {status}")
-                                          .SemiBold().FontSize(14).FontColor(Colors.Black);
+                                      row.RelativeItem().Padding(5).AlignLeft()
+                                      .Text($"Status: {status}")
+                                      .SemiBold().FontSize(14).FontColor(Colors.Black);
                                   });
                                   col.Item().Row(row =>
                                   {
-                                      row.RelativeItem().Padding(5).AlignLeft().Text($"Outside Duration: {dailyStatusDTO.OutsideHours} minutes")
-                                          .SemiBold().FontSize(14).FontColor(Colors.Black);
+                                      row.RelativeItem().Padding(5).AlignLeft()
+                                      .Text($"Outside Duration: {dailyStatusDTO.OutsideHours} minutes")
+                                      .SemiBold().FontSize(14).FontColor(Colors.Black);
                                   });
                                   col.Item().Row(row =>
                                   {
-                                      row.RelativeItem().Padding(5).AlignLeft().Text($"Missed Punch: {dailyStatusDTO.MissedPunch}")
-                                          .SemiBold().FontSize(14).FontColor(Colors.Black);
+                                      row.RelativeItem().Padding(5).AlignLeft()
+                                      .Text($"Missed Punch: {dailyStatusDTO.MissedPunch}")
+                                      .SemiBold().FontSize(14).FontColor(Colors.Black);
                                   });
                               });
 
@@ -104,28 +109,30 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyDetails
                                 {
                                     header.Cell().Border(1).BorderColor(Colors.Black)
                                           .Background(Colors.Grey.Lighten3)
-                                          .Padding(10).AlignCenter().Text("Time").Bold().FontSize(12);
+                                          .Padding(10).AlignCenter().Text("Time")
+                                          .Bold().FontSize(12);
                                     header.Cell().Border(1).BorderColor(Colors.Black)
                                           .Background(Colors.Grey.Lighten3)
-                                          .Padding(10).AlignCenter().Text("Device Name").Bold().FontSize(12);
+                                          .Padding(10).AlignCenter().Text("Device Name")
+                                          .Bold().FontSize(12);
                                     header.Cell().Border(1).BorderColor(Colors.Black)
                                           .Background(Colors.Grey.Lighten3)
-                                          .Padding(10).AlignCenter().Text("Direction").Bold().FontSize(12);
+                                          .Padding(10).AlignCenter().Text("Direction")
+                                          .Bold().FontSize(12);
                                 });
                                  foreach (var attendenceLog in dailyStatusDTO.DailyLog)
                                  {
                                      string direction = "in";
-                                     table.Cell().Border(1).Padding(10).Text(attendenceLog.Time.ToString("HH:mm")).FontSize(12);
-
-
-                                     table.Cell().Border(1).Padding(10).Text(attendenceLog.DeviceName).FontSize(12);
-
+                                     table.Cell().Border(1).Padding(10)
+                                     .Text(attendenceLog.Time.ToString("HH:mm")).FontSize(12);
+                                     table.Cell().Border(1).Padding(10)
+                                     .Text(attendenceLog.DeviceName).FontSize(12);
                                      if (attendenceLog.Direction == 0)
                                      {
                                          direction = "out";
                                      }
-                                     table.Cell().Border(1).Padding(10).Text(direction).FontSize(12);
-
+                                     table.Cell().Border(1).Padding(10)
+                                     .Text(direction).FontSize(12);
                                  }
                              });
                              page.Footer()

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Helpers
@@ -14,15 +15,12 @@ namespace WolfDen.Application.Helpers
         public async Task<List<string>> FindManagerEmailsAsync(int? managerId, CancellationToken cancellationToken)
         {
             List<string> managerEmails = new List<string>();
-            if (managerId == null) 
+            if (managerId is null) 
                 return managerEmails;
-
-            var manager = await _context.Employees
+            Employee? manager = await _context.Employees
                 .Where(m => m.Id == managerId)
-                .Select(m => new { m.Email, m.ManagerId })
                 .FirstOrDefaultAsync(cancellationToken);
-
-            if (manager != null)
+            if (manager is not null)
             {
                 managerEmails.Add(manager.Email);
                 List<string> higherManagerEmails = await FindManagerEmailsAsync(manager.ManagerId, cancellationToken);

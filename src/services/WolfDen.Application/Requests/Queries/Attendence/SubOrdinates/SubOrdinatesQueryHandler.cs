@@ -14,16 +14,12 @@ namespace WolfDen.Application.Requests.Queries.Employees.SubOrdinates
         public async Task<SubOrdinateDTO> Handle(SubOrdinatesQuery request, CancellationToken cancellationToken)
         {
             TeamHeirarchyService service = new(_context);
-            Employee employee = await _context.Employees.FindAsync(request.EmployeeId, cancellationToken);
-            if (employee is null) 
+            Employee? employee = await _context.Employees.FindAsync(request.EmployeeId, cancellationToken);
+            if (employee is null || employee.IsActive is false) 
             {
                 return null;
             }
             SubOrdinateDTO subOrdinate = new SubOrdinateDTO();
-            if (employee.IsActive == false)
-            {
-                return null;
-            }
             subOrdinate.SubOrdinates = await service.GetSubordinates(employee.Id);
             return subOrdinate;
         }
