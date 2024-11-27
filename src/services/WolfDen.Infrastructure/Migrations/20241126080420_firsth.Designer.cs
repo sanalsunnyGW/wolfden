@@ -12,13 +12,8 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-<<<<<<<< HEAD:src/services/WolfDen.Infrastructure/Migrations/20241126125710_test1.Designer.cs
-    [Migration("20241126125710_test1")]
-    partial class test1
-========
-    [Migration("20241127050921_emailnull")]
-    partial class emailnull
->>>>>>>> upstream/main:src/services/WolfDen.Infrastructure/Migrations/20241127050921_emailnull.Designer.cs
+    [Migration("20241126080420_firsth")]
+    partial class firsth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -652,11 +647,6 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-<<<<<<<< HEAD:src/services/WolfDen.Infrastructure/Migrations/20241126125710_test1.Designer.cs
-                    b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
-
-========
                     b.Property<int?>("RoleType")
                         .HasColumnType("int");
 
@@ -666,7 +656,6 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
->>>>>>>> upstream/main:src/services/WolfDen.Infrastructure/Migrations/20241127050921_emailnull.Designer.cs
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
@@ -1202,6 +1191,7 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 

@@ -10,50 +10,48 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
   userForm: FormGroup;
 
-  constructor(private fb: FormBuilder, 
-              private router: Router, 
-              private userService: WolfDenService,
-              private toastr :ToastrService
-            ) {
+  constructor(private fb: FormBuilder,
+    private router: Router,
+    private userService: WolfDenService,
+    private toastr: ToastrService
+  ) {
     this.userForm = this.fb.group<ILoginForm>({
       email: new FormControl(
         '',
-        [Validators.required, ]
+        [Validators.required,]
       ),
       password: new FormControl('', Validators.required)
     });
   }
 
-  isSubmitted :boolean= false;
+  isSubmitted: boolean = false;
 
   onSubmit() {
     this.isSubmitted = true;
-    console.log
-    if(this.userForm.valid){
-
-      this.userService.getEmployeeLogin(this.userForm.value.email ,this.userForm.value.password).subscribe({
-        next:(response:any)=>{
-            this.userService.userId=response.id;
-            this.toastr.success('Login sucessfull')
-            this.router.navigate(['/portal/main-page']);
+    if (this.userForm.valid) {
+      this.userService.getEmployeeLogin(this.userForm.value.email, this.userForm.value.password).subscribe({
+        next: (response: any) => {
+          localStorage.setItem('token', response.token);
+          this.toastr.success('Login sucessfull')
+          this.router.navigate(['/dashboard']);
         }
       });
     }
-    else{
+    else {
       this.toastr.error("Invalid Credentials")
     }
-    }
-    hasDisplayableError(controlName: string ):Boolean {
-      const control = this.userForm.get(controlName);
-      return Boolean(control?.invalid) && (this.isSubmitted || Boolean(control?.touched) || Boolean(control?.dirty))
-    }
   }
+  hasDisplayableError(controlName: string): Boolean {
+    const control = this.userForm.get(controlName);
+    return Boolean(control?.invalid) && (this.isSubmitted || Boolean(control?.touched) || Boolean(control?.dirty))
+  }
+}
 
 
