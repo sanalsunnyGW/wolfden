@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using QuestPDF.Infrastructure;
 using System.Reflection;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Domain.ConfigurationModel;
@@ -13,24 +15,39 @@ using WolfDen.Infrastructure.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(x =>
+{
+    x.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Description = "Enter the Bearer Authorization:`Bearer Genetrated-JWT_Token`",
+        In = ParameterLocation.Header,
+        Scheme = "Bearer"
+    });
+    x.AddSecurityRequirement(new OpenApiSecurityRequirement
+{
+    {
+    new OpenApiSecurityScheme
+    {
+        Reference = new OpenApiReference
+        {
+            Type = ReferenceType.SecurityScheme,
+            Id = JwtBearerDefaults.AuthenticationScheme,
+        }
+    },
+    new string[] { }
+    }
+});
+});
 var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
-
 builder.Services.AddIdentityCore<User>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<WolfDenContext>();
 builder.Services.Configure<JwtKey>(builder.Configuration.GetSection("JWT"));
-
-
-
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "_myAllowSpecificOrigins",
@@ -41,7 +58,6 @@ builder.Services.AddCors(options =>
                                   .AllowAnyHeader();
                       });
 });
-
 
 builder.Services.AddDbContext<WolfDenContext>(x =>
 {
@@ -58,9 +74,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(x =>
 
 }).AddEntityFrameworkStores<WolfDenContext>().AddDefaultTokenProviders();
 
-
-
-
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -68,16 +81,16 @@ builder.Services.AddAuthentication(x =>
 }).AddJwtBearer(x =>
 {
     x.SaveToken = false;
-    x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    x.TokenValidationParameters = new TokenValidationParameters
     {
 
         RequireExpirationTime = true,
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!)),
+        ValidateIssuer = false,
+        ValidateAudience = false,
     };
 });
-
-
 
 builder.Services.AddScoped<WolfDenContext>();
 builder.Services.AddSingleton<PdfService>();
@@ -90,8 +103,6 @@ builder.Services.AddMediatR(x =>
 });
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("WolfDen.Application"));
 
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -102,11 +113,10 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors(options => options.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowAnyMethod());
 
-
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

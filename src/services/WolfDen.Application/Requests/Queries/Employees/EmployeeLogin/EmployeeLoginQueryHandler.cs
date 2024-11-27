@@ -3,23 +3,25 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using WolfDen.Application.DTOs.Employees;
 using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Employees.EmployeeLogin
 {
-    public class EmployeeLoginQueryHandler(IOptionsMonitor<JwtKey> optionsMonitort, UserManager<User> userManager, WolfDenContext context) : IRequestHandler<EmployeeLoginQuery, string>
+    public class EmployeeLoginQueryHandler(IOptionsMonitor<JwtKey> optionsMonitort, UserManager<User> userManager, WolfDenContext context) : IRequestHandler<EmployeeLoginQuery, LoginResponseDTO>
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly IOptionsMonitor<JwtKey> _optionsMonitor = optionsMonitort;
         private readonly WolfDenContext _context = context;
 
 
-        public async Task<string> Handle(EmployeeLoginQuery request, CancellationToken cancellationToken)
+        public async Task<LoginResponseDTO> Handle(EmployeeLoginQuery request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user != null && await _userManager.CheckPasswordAsync(user, request.Password))
@@ -32,7 +34,9 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeLogin
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                         new Claim("EmployeeId",employee.Id.ToString()),
-                        new Claim("RoleType",employee.RoleType.ToString())
+                        new Claim("RoleType",employee.RoleType.ToString()),
+                        new Claim("Email",employee.Email.ToString()),
+                        new Claim("FirstName",employee.FirstName.ToString())
 
                     }),
                     Expires = DateTime.UtcNow.AddMinutes(60),
@@ -41,9 +45,9 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeLogin
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                 var token = tokenHandler.WriteToken(securityToken);
-                return token;
+                return new LoginResponseDTO { Token=token};
             }
-            return "Invalid email or password";
+            return new LoginResponseDTO { ErrorMessage = "Invalid UserName or Password" };
 
         }
     }

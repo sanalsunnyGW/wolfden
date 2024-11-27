@@ -14,16 +14,21 @@ namespace WolfDen.Domain.Entity
             get => base.Email;
             private set => base.Email = value;
         }
-
+       
 
         public User()
         {
 
         }
-        public User(string email,string Name)
+        public User(string rfId)
+        {
+            UserName = rfId;
+        }
+        public void SetEmailPassword(string email, string password, IPasswordHasher<User> passwordHasher)
         {
             Email = email;
-            UserName = Name;
+            PasswordHash = passwordHasher.HashPassword(this, password);
         }
+
     }
 }
