@@ -1,7 +1,7 @@
 <h3 class="text-center mb-4">Attendance History</h3>
 <form (ngSubmit)="onSubmit()">
   <div class="row justify-content-center">
-    <!-- Year Dropdown -->
+
     <div class="col-md-3 mb-3">
       <div class="form-group">
         <ng-select
@@ -15,7 +15,6 @@
       </div>
     </div>
 
-    <!-- Month Dropdown -->
     <div class="col-md-3 mb-3">
       <div class="form-group">
         <ng-select
@@ -30,7 +29,6 @@
       </div>
     </div>
 
-    <!-- Status Dropdown -->
     <div class="col-md-3 mb-3">
       <div class="form-group">
         <ng-select
@@ -45,22 +43,6 @@
       </div>
     </div>
 
-    <!-- Page Size Dropdown -->
-    <!-- <div class="col-md-2 mb-3">
-        <div class="form-group">
-          <ng-select
-            id="pageSize"
-            name="pageSize"
-            [items]="pageSizes"
-            bindLabel="size"
-            placeholder="Page Size"
-            [(ngModel)]="selectedPageSize">
-            
-          </ng-select>
-        </div>
-      </div> -->
-
-    <!-- Submit Button -->
     <div class="col-md-3 mb-3">
       <button type="submit" class="btn btn-primary w-50">Submit</button>
     </div>
@@ -92,7 +74,6 @@
     </tbody>
   </table>
 
-  <!-- Pagination -->
   <mat-paginator [length]="totalPages"
                  [pageSize]="selectedPageSize"
                  [pageSizeOptions]="pageSizes"

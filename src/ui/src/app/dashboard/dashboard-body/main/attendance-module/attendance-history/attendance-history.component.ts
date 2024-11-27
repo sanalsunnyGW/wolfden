@@ -5,6 +5,7 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AttendanceService } from '../../../../../Service/attendance.service';
+import { AttendanceHistory } from '../../../../../Interface/attendance-history';
 
 @Component({
   selector: 'app-attendance-history',
@@ -16,22 +17,20 @@ import { AttendanceService } from '../../../../../Service/attendance.service';
 export class AttendanceHistoryComponent implements OnInit {
 
   service=inject(AttendanceService);
-selectedYear: number;
+  selectedYear: number;
   selectedMonth!: number;
-selectedStatus: number=0;  
-selectedPageSize: number = 5;   
-selectedPageNumber:number=0;
-
+  selectedStatus: number=0;  
+  selectedPageSize: number = 5;   
+  selectedPageNumber:number=0;
   attendanceData: any[] = [];
-  totalRecords: number = 0;
-  displayedColumns: string[] = ['date', 'status']; 
-
+ 
   employeeId=1;
-years: number[] = [];
-pageSizes = [5, 10, 20, 30, 40];
-  totalPages: any;
+  years: number[] = [];
+  pageSizes = [5, 10, 20, 30, 40];
+  totalPages!: number;
 
-constructor() {
+constructor() 
+{
   this.selectedYear = new Date().getFullYear();
   for (let year = this.selectedYear; year >= 2020; year--) {
     this.years.push(year);
@@ -74,17 +73,16 @@ fetchHistory(){
     this.selectedStatus,
     this.selectedPageNumber,
     this.selectedPageSize).subscribe(
-    (response:any)=>{
+    (response:AttendanceHistory)=>{
       this.attendanceData=response.attendanceHistory;
       this.totalPages=response.totalPages;
-console.log(this.attendanceData);
     }
   )
 }
 
 getStatusName(statusId: number): string {
   const statusObj = this.status.find(s => s.id === statusId);
-  return statusObj ? statusObj.name : 'Unknown';  // Return 'Unknown' if status not found
+  return statusObj ? statusObj.name : 'Unknown';  
 }
 
 onPageChange(event:PageEvent):void{
@@ -94,7 +92,7 @@ onPageChange(event:PageEvent):void{
 }
 
 onSubmit(): void {
-  this.selectedPageNumber = 0;  // Reset to first page when submitting the form
-  this.fetchHistory();  // Fetch attendance data based on selected filters
+  this.selectedPageNumber = 0;  
+  this.fetchHistory();  
 }
 }

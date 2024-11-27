@@ -10,6 +10,6 @@ export interface MonthlyHistory {
     attendanceStatusId:number
 }
 export interface AttendanceHistory{
-    attendancehistory: MonthlyHistory[];
-    totalpages: number;
+    attendanceHistory: MonthlyHistory[];
+    totalPages: number;
 }
