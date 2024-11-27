@@ -57,15 +57,14 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                     }
                     else
                     {
-                        Holiday holiday = holidays.FirstOrDefault(x => x.Date == currentDate);
+                        Holiday? holiday = holidays.FirstOrDefault(x => x.Date == currentDate);
+                        LeaveRequest? leaveRequest = leaveRequests
+                                   .FirstOrDefault(x => x.EmployeeId == employee.Id && x.FromDate <= currentDate && x.ToDate >= currentDate);
                         if (holiday is not null)
                         {
                             if (holiday.Type is not AttendanceStatus.NormalHoliday)
                             {
-                                LeaveRequest? leaveRequestForHoliday = leaveRequests
-                                    .FirstOrDefault(x => x.EmployeeId == employee.Id && x.FromDate <= currentDate && x.ToDate >= currentDate);
-
-                                if (leaveRequestForHoliday is null)
+                                if (leaveRequest is null)
                                 {
                                     lopdays += currentDate.ToString("yyyy-MM-dd") + ",";
                                     lopCount++;
@@ -74,8 +73,6 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                         }
                         else
                         {
-                            LeaveRequest? leaveRequest = leaveRequests
-                                .FirstOrDefault(x => x.EmployeeId == employee.Id && x.FromDate <= currentDate && x.ToDate >= currentDate);
                             if (leaveRequest is null)
                             {
                                 lopdays += currentDate.ToString("yyyy-MM-dd") + ",";
