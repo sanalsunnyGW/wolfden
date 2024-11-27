@@ -1,5 +1,8 @@
-import { Component, HostListener } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, HostListener, inject } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { WolfDenService } from '../../service/wolf-den.service';
+import { EmployeeService } from '../../service/employee.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-header',
@@ -9,14 +12,18 @@ import { RouterLink } from '@angular/router';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-
+  constructor(
+    private router: Router,
+    private userService: WolfDenService,
+    private employeeService: EmployeeService,
+    private toastr: ToastrService){}
   isDropdownOpen = false;
 
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  // Close dropdown when clicking outside
+  // Close clicking outside
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     const userMenuContainer = document.querySelector('.user-menu-container');
@@ -25,8 +32,15 @@ export class HeaderComponent {
     }
   }
 
-openProfile(){
-// route link-------------------------------------
+
+
+
+onLogout(){
+  this.userService.userId=0;
+  //destroy local stored tocken
+  localStorage.removeItem('token');
+  this.router.navigate(['/user/login']);
+  this.toastr.success("Logged out")
 }
 
 }

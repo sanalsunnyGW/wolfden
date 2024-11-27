@@ -6,7 +6,7 @@
       <span class="user-image" (click)="toggleDropdown()">NA</span>
       <ul class="dropdown-menu" [class.show]="isDropdownOpen">
         <li><a routerLink="/portal/profile">Profile</a></li>
-        <li><a href="#">LogOut</a></li>
+        <li><a (click)="onLogout()">LogOut</a></li>
       </ul>
     </div>
   </div>

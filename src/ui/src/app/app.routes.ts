@@ -14,6 +14,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { EmployeeHierarchyTreeComponent } from './employee-hierarchy-tree/employee-hierarchy-tree.component';
 import { EmloyeeHierarchyDisplayComponent } from './employee-hierarchy-tree/emloyee-hierarchy-display/emloyee-hierarchy-display.component';
 import { MyTeamComponent } from './my-team/my-team.component';
+import { guardsGuard } from './guards.guard';
 
 
 
@@ -22,6 +23,7 @@ export const routes: Routes = [
         path: 'user', 
         component: UserComponent,
         children:[
+            { path: '', redirectTo: 'login', pathMatch: 'full' }, 
             {path: 'check-user', component: CheckUserComponent},
             {path: 'sign-in', component: SigninComponent},
             {path: 'login', component: LoginComponent},
@@ -34,55 +36,65 @@ export const routes: Routes = [
         path:'portal',
         component:DashboardComponent,
         children:[
-            {path:'dashboard',component:MainPageComponent},
-            {path:'employee-directory',component: EmployeeDirectoryComponent},
-            {path:'leave-dashboard',component:LeaveDashboardComponent},
-            {path:'leave-request-history',component:LeaveHistoryComponent},
+            { path: '', redirectTo: '/dashboard', pathMatch: 'full' }, 
+            {path:'dashboard',component:MainPageComponent,canActivate: [guardsGuard]},
+            {path:'employee-directory',component: EmployeeDirectoryComponent,canActivate: [guardsGuard]},
+            {path:'leave-dashboard',component:LeaveDashboardComponent,canActivate: [guardsGuard]},
+            {path:'leave-request-history',component:LeaveHistoryComponent,canActivate: [guardsGuard]},
             {
                 path: 'company-hierarchy',
-                component: EmployeeHierarchyTreeComponent
+                component: EmployeeHierarchyTreeComponent,
+                canActivate: [guardsGuard]
             },
             {
                 path: 'employee-display',
-                component: EmloyeeHierarchyDisplayComponent
+                component: EmloyeeHierarchyDisplayComponent,
+                canActivate: [guardsGuard]
             },
             {
                 path: 'my-team',
-                component: MyTeamComponent
+                component: MyTeamComponent,
+                canActivate: [guardsGuard]
             },
             {
                 path:'attendance/calendar',
-                component:CalendarViewComponent
+                component:CalendarViewComponent,
+                canActivate: [guardsGuard]
             },
             {
                 path: 'leave-dashboard',
-                component: LeaveDashboardComponent
+                component: LeaveDashboardComponent,
+                canActivate: [guardsGuard]
             },
             {
                 path: 'leave-request-history',
-                component: LeaveHistoryComponent
+                component: LeaveHistoryComponent,
+                canActivate: [guardsGuard]
             },
         
         
             {
                 path: 'attendance/calendar',
-                component: CalendarViewComponent
+                component: CalendarViewComponent,
+                canActivate: [guardsGuard]
             },
             {
                 path: '',
-                component: UserComponent
+                component: UserComponent,
+                canActivate: [guardsGuard]
         
             },
             {
                 path: 'profile',
-                component: ProfileComponent
+                component: ProfileComponent,
+                canActivate: [guardsGuard]
             },
             
         ]
     },
-    { path: '', redirectTo: '/dashboard/main-page', pathMatch: 'full' }, 
 
- 
+    { path: '', redirectTo: '/portal/dashboard', pathMatch: 'full' }, 
+
 
 ];
 

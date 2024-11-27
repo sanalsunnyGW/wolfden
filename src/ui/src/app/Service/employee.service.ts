@@ -12,7 +12,7 @@ export class EmployeeService {
   employeeId=8
   private baseUrl = environment.employeeapiUrl;
 
-  decodeToken() {
+   decodeToken() {
     const token = localStorage.getItem('token');
     if (!token) {
       return null;
