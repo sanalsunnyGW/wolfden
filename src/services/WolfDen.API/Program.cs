@@ -6,9 +6,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using QuestPDF.Infrastructure;
 using System.Reflection;
+using System.Security.Claims;
 using System.Security.Cryptography.Xml;
 using System.Text;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
+using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
 using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
@@ -90,11 +92,14 @@ builder.Services.AddAuthentication(x =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!)),
         ValidateIssuer = false,
         ValidateAudience = false,
+        RoleClaimType = ClaimTypes.Role
     };
 });
 
 builder.Services.AddScoped<WolfDenContext>();
 builder.Services.AddSingleton<PdfService>();
+builder.Services.AddScoped<MonthlyPdf>();
+
 QuestPDF.Settings.License = LicenseType.Community;
 
 builder.Services.AddMediatR(x =>

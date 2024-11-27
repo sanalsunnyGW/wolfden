@@ -1,10 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, Inject, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormControlName, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ILeaveApplication } from '../../../../../interface/Leave-Application-Interface';
 import { CommonModule } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
-import { LeaveManagementService } from '../../../../../service/leave-management.service';
+import { LeaveManagementService } from '../../../../../Service/leave-management.service';
+import { takeUntil } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
 @Component({
@@ -20,6 +22,7 @@ export class LeaveApplicationComponent {
   applyLeave : FormGroup<ILeaveApplication>
   leaveManagement = inject(LeaveManagementService)
   leaveType : Array<IGetLeaveTypeIdAndname> = []
+  destroyRef= Inject(DestroyRef);
 
   constructor(){
     this.applyLeave = this.fb.group<ILeaveApplication>({
@@ -32,14 +35,11 @@ export class LeaveApplicationComponent {
   }
 
   ngOnInit(){
-    this.leaveManagement.getLeaveTypeIdAndName().subscribe({
-      next:(response : Array<IGetLeaveTypeIdAndname>) =>{
-              this.leaveType = response
-      },
-      error:(error) => {
-        alert(error)
-      }
-    })
+    this.leaveManagement.getLeaveTypeIdAndName()
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe((response : Array<IGetLeaveTypeIdAndname>) => {
+              this.leaveType = response;
+      });
 
   }
   

@@ -4,10 +4,10 @@ import { DailyAttendance } from '../Interface/idaily-attendance';
 import { environment } from '../../enviornments/environment';
 import { MonthlyReports } from '../Interface/monthly-report';
 import { IAttendanceSummary } from '../Interface/attendance-summary';
+import { IAttendanceData } from '../Interface/attendance-data';
 import { WeeklyAttendance } from '../Interface/iweekly-attendance';
 import { ICheckAttencdanceClose } from '../Interface/check-attendance-close';
 import { SubordinatesDetails } from '../Interface/subordinates-details';
-import { IAttendanceData } from '../Interface/attendance-data';
 
 @Injectable({
   providedIn: 'root'

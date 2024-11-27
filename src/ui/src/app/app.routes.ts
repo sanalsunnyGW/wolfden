@@ -10,11 +10,11 @@ import { CalendarViewComponent } from './dashboard/dashboard-body/main/attendanc
 
 import { LeaveDashboardComponent } from './dashboard/dashboard-body/main/leave-management/leave-dashboard/leave-dashboard.component';
 import { LeaveHistoryComponent } from './dashboard/dashboard-body/main/leave-management/leave-history/leave-history.component';
-import { ProfileComponent } from './profile/profile.component';
 import { EmployeeHierarchyTreeComponent } from './employee-hierarchy-tree/employee-hierarchy-tree.component';
 import { EmloyeeHierarchyDisplayComponent } from './employee-hierarchy-tree/emloyee-hierarchy-display/emloyee-hierarchy-display.component';
 import { MyTeamComponent } from './my-team/my-team.component';
 import { guardsGuard } from './guards.guard';
+import { ProfileComponent } from './profile/profile.component';
 
 
 
