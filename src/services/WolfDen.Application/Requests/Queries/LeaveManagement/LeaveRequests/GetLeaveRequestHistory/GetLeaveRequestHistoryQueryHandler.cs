@@ -16,13 +16,13 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
             int pageSize = request.PageSize > 0 ? request.PageSize : 1;
 
             int totalCount = await _context.LeaveRequests
-                .Where(x => x.EmployeeId.Equals(request.RequestId))
+                .Where(x => x.EmployeeId.Equals(request.EmployeeId))
                 .CountAsync(cancellationToken);
 
             int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
             List<LeaveRequestDto> leaveRequestList = await _context.LeaveRequests
-                .Where(x => x.EmployeeId.Equals(request.RequestId))
+                .Where(x => x.EmployeeId.Equals(request.EmployeeId))
                 .Include(x => x.LeaveType)
                 .Include(x => x.Employee)
                 .Skip((pageNumber) * pageSize)

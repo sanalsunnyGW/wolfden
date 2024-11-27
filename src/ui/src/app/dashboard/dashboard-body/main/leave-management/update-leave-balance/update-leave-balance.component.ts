@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef,  OnInit, inject } from '@angular/core';
 import { LeaveManagementService } from '../../../../../Service/leave-management.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-update-leave-balance',
@@ -9,22 +10,24 @@ import { LeaveManagementService } from '../../../../../Service/leave-management.
   styleUrl: './update-leave-balance.component.scss'
 })
 export class UpdateLeaveBalanceComponent implements OnInit {
+  destroyRef= inject(DestroyRef);
 
   constructor(private leaveManagementService: LeaveManagementService) { }
 
-  ngOnInit() {
-    this.leaveManagementService.updateLeaveBalance().subscribe({
-      next: (data: boolean) => {
-        if (data === true) {
+  ngOnInit() {                     
+    this.leaveManagementService.updateLeaveBalance()
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe((data: boolean) => {
+        if (data) {
           alert('Leave Balance of All employees Updated !!');
         }
         else {
           alert('Sorry ! Encountered some issues while Updating employees leave balance !')
         }
-      },
-      error: (error) => {
-        alert(error);
-      }
-    })
+      });
   }
 }
+
+
+
+

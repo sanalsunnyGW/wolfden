@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { ILeaveBalanceList } from '../../../../../interface/leave-balance-list-interface';
 import { FormsModule } from '@angular/forms';
 import { LeaveManagementService } from '../../../../../Service/leave-management.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
 @Component({
@@ -14,18 +15,20 @@ import { LeaveManagementService } from '../../../../../Service/leave-management.
 export class LeaveDashboardComponent implements OnInit {
 id:number=1; 
 leaveList:ILeaveBalanceList[]=[];
+destroyRef=inject(DestroyRef);
 
 constructor(private leaveManagementService:LeaveManagementService) {}
 
 ngOnInit()
 {
-  this.leaveManagementService.getLeaveBalance(this.id).subscribe({
-    next: (data) => {
+  this.leaveManagementService.getLeaveBalance(this.id)
+  .pipe(takeUntilDestroyed(this.destroyRef))
+  .subscribe((data)=> {
       this.leaveList= data; 
-        },
-    error: (error) => {
-        alert(error);   
-       }
-  })
+  });
 }
 }
+
+
+
+

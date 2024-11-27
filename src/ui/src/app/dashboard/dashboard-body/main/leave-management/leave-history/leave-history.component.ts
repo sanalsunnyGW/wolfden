@@ -1,7 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { LeaveManagementService } from '../../../../../Service/leave-management.service';
 import { ILeaveRequestHistory, ILeaveRequestHistoryResponse } from '../../../../../interface/leave-request-history';
 import { LeaveRequestStatus } from '../../../../../enum/leave-request-status-enum';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-leave-history',
@@ -17,9 +18,10 @@ export class LeaveHistoryComponent implements OnInit {
   leaveManagementService = inject(LeaveManagementService);
 
   pageNumber: number = 1;
-  pageSize: number = 2;
+  pageSize: number = 1;
   totalPages: number = 1;
   leaveRequestCountArray: number[] = [];
+  destroyRef= inject(DestroyRef);
   indexValue: number = (this.pageNumber * this.pageSize) - this.pageSize + 1;
 
   constructor() { }
@@ -44,17 +46,14 @@ export class LeaveHistoryComponent implements OnInit {
     }
   }
 
-  loadLeaveRequests(): void {
-    this.leaveManagementService.getLeaveRequestHistory(this.id, this.pageNumber - 1, this.pageSize).subscribe({
-      next: (data: ILeaveRequestHistoryResponse) => {
-        this.indexValue = (this.pageNumber * this.pageSize) - this.pageSize + 1;
-        this.leaveRequestList = data.leaveRequests;
-        this.totalPages = data.totalPages;
-        this.generatePageNumbers();
-      },
-      error: (error) => {
-        alert(error);
-      }
+  loadLeaveRequests():void {
+    this.leaveManagementService.getLeaveRequestHistory(this.id, this.pageNumber - 1, this.pageSize)
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe((data: ILeaveRequestHistoryResponse)=> {
+      this.indexValue = (this.pageNumber * this.pageSize) - this.pageSize + 1;                
+      this.leaveRequestList = data.leaveRequests;
+      this.totalPages = data.totalPages;
+      this.generatePageNumbers();
     });
   }
 
@@ -91,4 +90,5 @@ export class LeaveHistoryComponent implements OnInit {
   onDelete(i: number) {
 
   }
+
 }

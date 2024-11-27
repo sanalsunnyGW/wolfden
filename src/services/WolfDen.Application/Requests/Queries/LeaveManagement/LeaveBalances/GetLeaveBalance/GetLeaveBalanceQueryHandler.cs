@@ -11,7 +11,7 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveBalances.Get
         public async Task<List<LeaveBalanceDto>> Handle(GetLeaveBalanceQuery request, CancellationToken cancellationToken)
             {
                 List<LeaveBalanceDto> leaveBalanceDtosList = await _context.LeaveBalances
-                        .Where(x => x.EmployeeId.Equals(request.RequestId))
+                        .Where(x => x.EmployeeId.Equals(request.EmployeeId))
                         .Include(x => x.LeaveType)
                         .Select(leave => new LeaveBalanceDto
                         {

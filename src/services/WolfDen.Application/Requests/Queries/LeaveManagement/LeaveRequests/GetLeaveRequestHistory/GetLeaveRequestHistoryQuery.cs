@@ -5,7 +5,7 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
 {
     public class GetLeaveRequestHistoryQuery : IRequest<LeaveRequestHistoryResponseDto>
     {
-        public int RequestId { get; set; }
+        public int EmployeeId { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
      

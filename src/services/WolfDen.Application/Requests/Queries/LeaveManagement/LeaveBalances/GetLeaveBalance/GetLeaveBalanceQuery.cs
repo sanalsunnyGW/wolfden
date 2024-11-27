@@ -5,6 +5,6 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveBalances.Get
 {
     public class GetLeaveBalanceQuery : IRequest<List<LeaveBalanceDto>>
     {
-        public int RequestId { get; set; }
+        public int EmployeeId { get; set; }
     }
 }

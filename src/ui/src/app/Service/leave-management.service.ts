@@ -7,6 +7,7 @@ import { ILeaveBalanceList } from '../interface/leave-balance-list-interface';
 import { ILeaveRequestHistoryResponse } from '../interface/leave-request-history';
 import { IGetLeaveTypeIdAndname } from '../interface/get-leave-type-interface';
 import { IEditLeaveType } from '../interface/edit-leave-type';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,12 +18,11 @@ export class LeaveManagementService {
   constructor() { }
   private http = inject(HttpClient);
   getLeaveBalance(id: number) {
-    return this.http.get<Array<ILeaveBalanceList>>(`https://localhost:7015/api/leave-balance?RequestId=${id}`);
+    return this.http.get<Array<ILeaveBalanceList>>(`https://localhost:7015/api/leave-balance?EmployeeId=${id}`);
   }
 
-  getLeaveRequestHistory(id: number, pageNumber: number, pageSize: number) {
-    return this.http.get<ILeaveRequestHistoryResponse>(`https://localhost:7015/api/leave-request?RequestId=${id}&PageNumber=${pageNumber}&PageSize=${pageSize}`);
-    
+  getLeaveRequestHistory(id: number, pageNumber: number, pageSize: number): Observable<ILeaveRequestHistoryResponse> {
+    return this.http.get<ILeaveRequestHistoryResponse>(`https://localhost:7015/api/leave-request?EmployeeId=${id}&PageNumber=${pageNumber}&PageSize=${pageSize}`); 
   }
 
   addNewLeaveType(newType: FormGroup<IAddNewLeaveType>) {

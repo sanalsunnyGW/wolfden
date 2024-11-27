@@ -38,10 +38,9 @@ namespace WolfDen.Domain.Entity
             Sandwich = sandwich;
         }
 
-        public bool updateLeaveType(int id, int? maxDays, bool? isHalfDayAllowed, int? incrementCount, LeaveIncrementGapMonth? incrementGapId, bool? carryForward, int? carryForwardLimit, int? daysCheck, int? daysCheckMore, int? daysCheckEqualOrLess, int? dutyDaysRequired, bool? sandwich)
+        public void updateLeaveType(int? maxDays, bool? isHalfDayAllowed, int? incrementCount, LeaveIncrementGapMonth? incrementGapId, bool? carryForward, int? carryForwardLimit, int? daysCheck, int? daysCheckMore, int? daysCheckEqualOrLess, int? dutyDaysRequired, bool? sandwich)
         {
-            if (Id == id)
-            {
+            
             MaxDays = maxDays;
             IsHalfDayAllowed = isHalfDayAllowed;
             IncrementCount = incrementCount;
@@ -53,12 +52,6 @@ namespace WolfDen.Domain.Entity
             DaysCheckEqualOrLess = daysCheckEqualOrLess;
             DutyDaysRequired = dutyDaysRequired;
             Sandwich = sandwich;
-                return true;
-            }
-            else
-            {
-                return false;   
-            }
         }
     }
 }
