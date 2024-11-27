@@ -13,24 +13,19 @@ export class EmployeeService {
 
   decodeToken() {
     const token = localStorage.getItem('token');
-
     if (!token) {
       return null;
     }
-
     try {
       const tokenParts = token.split('.');
       if (tokenParts.length !== 3) {
-        console.error('Invalid JWT token');
         return null;
       }
       const payloadBase64 = tokenParts[1];
       const payloadJson = window.atob(payloadBase64);
       const payload = JSON.parse(payloadJson);
-
       return payload;
     } catch (error) {
-      console.error('Error decoding token:', error);
       return null;
     }
   }
