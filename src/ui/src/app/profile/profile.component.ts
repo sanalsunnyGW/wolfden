@@ -7,6 +7,7 @@ import { Gender } from '../enum/gender-enum';
 import { EmploymentType } from '../enum/employment-type-enum';
 import { EmployeeService } from '../Service/employee.service';
 
+
 @Component({
   selector: 'app-profile',
   standalone: true,

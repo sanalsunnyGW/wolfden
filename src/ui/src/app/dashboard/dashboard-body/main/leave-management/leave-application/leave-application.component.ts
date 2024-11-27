@@ -2,10 +2,9 @@ import { Component, DestroyRef, Inject, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormControlName, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import {  ILeaveApplicationFormControl } from '../../../../../interface/leave-application-interface';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
-import { LeaveManagementService } from '../../../../../Service/leave-management.service';
-import { takeUntil } from 'rxjs';
+import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
 
 
 @Component({
