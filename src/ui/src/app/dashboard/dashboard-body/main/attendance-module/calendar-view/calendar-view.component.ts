@@ -19,7 +19,7 @@ import { WolfDenService } from '../../../../../Service/wolf-den.service';
 export class CalendarViewComponent implements OnInit  {
 
   @ViewChild(FullCalendarComponent) calendarComponent!: FullCalendarComponent;
-  
+
   service = inject(AttendanceService);
   baseService=inject(WolfDenService)
 
@@ -33,7 +33,6 @@ export class CalendarViewComponent implements OnInit  {
     dayCellClassNames: (arg) => this.getDayCellClassNames(arg)
   };
 
-
   present: number = 0;
   absent: number = 0;
   incompleteShift: number = 0;
@@ -42,8 +41,6 @@ export class CalendarViewComponent implements OnInit  {
   currentYear: number = new Date().getFullYear();
   currentMonth: number = new Date().getMonth() + 1;
   attendanceData: { [date: string]: number } = {};
-  
-  isStatusDataLoaded: boolean = false;
 
   constructor(private router:Router) {
   }
@@ -67,22 +64,12 @@ export class CalendarViewComponent implements OnInit  {
       data.forEach((item: IAttendanceData) => {
         this.attendanceData[item.date] = item.attendanceStatusId;
       });
-      this.isStatusDataLoaded = true; 
-      this.updateCalendarOptions();
       this.calendarComponent.getApi().render(); 
     });
   }
 
-  updateCalendarOptions(): void {
-    this.calendarOptions = {
-      ...this.calendarOptions,
-      dayCellClassNames: (arg) => this.getDayCellClassNames(arg),
-    };
-  }
-
   newDate!:string
   handleDateClick(arg: DateClickArg) {
-   //alert('date click! ' + arg.dateStr)
     const selectedDate = arg.dateStr;
     this.newDate=selectedDate;
     this.router.navigate(['dashboard/attendance/daily', this.newDate]);
