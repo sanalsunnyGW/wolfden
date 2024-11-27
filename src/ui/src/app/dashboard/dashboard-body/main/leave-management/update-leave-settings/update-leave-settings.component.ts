@@ -26,23 +26,7 @@ export class UpdateLeaveSettingsComponent {
   }
 
     
-  ngOnInit(){
-    this.leaveManagement.getLeaveSetting().subscribe({
-      next:(response : ILeaveUpdate)=>{
-        this.leaveSettings = response
-        if(response)
-        {
-          this.updateLeaveSetting.patchValue({
-            minDaysForLeaveCreditJoining : this.leaveSettings.minDaysForLeaveCreditJoining,
-            maxNegativeBalanceLimit : this.leaveSettings.maxNegativeBalanceLimit
-          });
-        }
-      },
-        error:(error) =>{
-          alert(error)
-          }
-     });
-  }
+
 
   onSubmit(){
     if(this.updateLeaveSetting.valid)

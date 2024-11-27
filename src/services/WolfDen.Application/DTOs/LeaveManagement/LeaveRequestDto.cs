@@ -4,13 +4,13 @@ namespace WolfDen.Application.DTOs.LeaveManagement
 {
     public class LeaveRequestDto
     {
-       
-        public string TypeName { get; set; }  //to get leave type name from table LeaveType
+       public int Id { get; set; }  
+        public string TypeName { get; set; }  
         public bool? HalfDay { get; set; }
         public DateOnly FromDate { get; set; }
         public DateOnly ToDate { get; set; }
         public DateOnly ApplyDate { get;set; }
-        public LeaveRequestStatus LeaveRequestStatus { get; set; }
+        public LeaveRequestStatus LeaveRequestStatusId { get; set; }
         public string Description { get; set; }
         public string ProcessedBy { get; set; }
     }

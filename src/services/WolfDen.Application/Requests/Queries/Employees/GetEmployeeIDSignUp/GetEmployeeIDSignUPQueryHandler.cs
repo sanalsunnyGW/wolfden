@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.Employees;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeIdSignUp;
+using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeIDSignUp
@@ -13,7 +14,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeIDSignUp
         public async Task<EmployeeSignUpDto> Handle(GetEmployeeIDSignUpQuery request, CancellationToken cancellationToken)
         {
             EmployeeSignUpDto result = new();
-            var employee = await _context.Employees.FirstOrDefaultAsync(x => x.EmployeeCode == request.EmployeeCode && x.RFId == request.RFId, cancellationToken);
+            Employee employee = await _context.Employees.FirstOrDefaultAsync(x => x.EmployeeCode == request.EmployeeCode && x.RFId == request.RFId, cancellationToken);
             if (employee == null)
             {
 
@@ -25,12 +26,12 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeIDSignUp
             {
 
                 result.Id = employee.Id;
-                result.status=false;
+                result.status = false;
                 return result;
             }
 
             result.Id = employee.Id;
-            result.status=true;
+            result.status = true;
             return result;
 
         }

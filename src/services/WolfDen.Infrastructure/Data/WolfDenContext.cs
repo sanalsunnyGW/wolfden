@@ -1,11 +1,12 @@
 ﻿using System.Reflection;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Extensions;
 
 namespace WolfDen.Infrastructure.Data
 {
-    public class WolfDenContext:DbContext
+    public class WolfDenContext:IdentityDbContext<User>
     {
         public WolfDenContext(DbContextOptions<WolfDenContext> options):base(options) { }
         
@@ -25,12 +26,13 @@ namespace WolfDen.Infrastructure.Data
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
         public DbSet<LeaveType> LeaveType { get; set; }
         public DbSet<LeaveRequestDay> LeaveRequestDays { get; set; }
-
-
+        public DbSet<LOP> LOP { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Calling the AddConventions extension method
+            base.OnModelCreating(modelBuilder);
             modelBuilder.AddConventions("wolfden", Assembly.GetExecutingAssembly());
 
 

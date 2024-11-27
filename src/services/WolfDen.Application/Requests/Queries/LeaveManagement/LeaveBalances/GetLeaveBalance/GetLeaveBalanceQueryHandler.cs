@@ -1,35 +1,26 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.LeaveManagement;
-using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveBalances.GetLeaveBalance
 {
-    public class GetLeaveBalanceQueryHandler : IRequestHandler<GetLeaveBalanceQuery, List<LeaveBalanceDto>>
+    public class GetLeaveBalanceQueryHandler(WolfDenContext context) : IRequestHandler<GetLeaveBalanceQuery, List<LeaveBalanceDto>>
     {
-        private readonly WolfDenContext _context;
-
-        public GetLeaveBalanceQueryHandler(WolfDenContext context)
-        {
-            _context = context;
-        }
+        private readonly WolfDenContext _context = context;
         public async Task<List<LeaveBalanceDto>> Handle(GetLeaveBalanceQuery request, CancellationToken cancellationToken)
-        {
-            List<LeaveBalance> LeaveBalanceList = await _context.LeaveBalances
-             .Where(x => x.EmployeeId.Equals(request.RequestId))
-                .Include(x => x.LeaveType).ToListAsync(cancellationToken);
-
-            List<LeaveBalanceDto> leaveBalanceDtosList = new List<LeaveBalanceDto>();
-            foreach (LeaveBalance leave in LeaveBalanceList)
             {
-                LeaveBalanceDto leaveBalanceDto = new LeaveBalanceDto();
-                leaveBalanceDto.Name = leave.LeaveType.TypeName;
-                leaveBalanceDto.Balance = leave.Balance;
-                leaveBalanceDtosList.Add(leaveBalanceDto);
-            }
+                List<LeaveBalanceDto> leaveBalanceDtosList = await _context.LeaveBalances
+                        .Where(x => x.EmployeeId.Equals(request.EmployeeId))
+                        .Include(x => x.LeaveType)
+                        .Select(leave => new LeaveBalanceDto
+                        {
+                            Name = leave.LeaveType.TypeName,
+                            Balance = leave.Balance
+                        })
+                        .ToListAsync(cancellationToken);
 
-            return leaveBalanceDtosList;
-        }
+                return leaveBalanceDtosList;
+            }
     }
 }

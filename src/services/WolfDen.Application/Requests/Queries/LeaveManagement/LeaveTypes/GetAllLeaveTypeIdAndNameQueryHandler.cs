@@ -19,8 +19,7 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveTypes
                     Id = leaveType.Id,
                     Name = leaveType.TypeName
                 })
-                .ToListAsync(cancellationToken)
-                .ConfigureAwait(false);
+                .ToListAsync(cancellationToken);
 
             if (leaveTypeDtoList == null)
             {

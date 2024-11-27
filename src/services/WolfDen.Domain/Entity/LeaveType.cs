@@ -18,7 +18,6 @@ namespace WolfDen.Domain.Entity
         public int? DutyDaysRequired { get; private set; }
         public bool? Sandwich { get; private set; }
         public LeaveCategory? LeaveCategoryId { get; private set; }
-
         private LeaveType()
         {
             
@@ -26,6 +25,22 @@ namespace WolfDen.Domain.Entity
         public LeaveType(string typeName, int? maxDays, bool? isHalfDayAllowed, int? incrementCount, LeaveIncrementGapMonth? incrementGapId, bool? carryForward, int? carryForwardLimit, int? daysCheck, int? daysCheckMore, int? daysCheckEqualOrLess, int? dutyDaysRequired, bool? sandwich)
         {
             TypeName = typeName;
+            MaxDays = maxDays;
+            IsHalfDayAllowed = isHalfDayAllowed;
+            IncrementCount = incrementCount;
+            IncrementGapId = incrementGapId;
+            CarryForward = carryForward;
+            CarryForwardLimit = carryForwardLimit;
+            DaysCheck = daysCheck;
+            DaysCheckMore = daysCheckMore;
+            DaysCheckEqualOrLess = daysCheckEqualOrLess;
+            DutyDaysRequired = dutyDaysRequired;
+            Sandwich = sandwich;
+        }
+
+        public void updateLeaveType(int? maxDays, bool? isHalfDayAllowed, int? incrementCount, LeaveIncrementGapMonth? incrementGapId, bool? carryForward, int? carryForwardLimit, int? daysCheck, int? daysCheckMore, int? daysCheckEqualOrLess, int? dutyDaysRequired, bool? sandwich)
+        {
+            
             MaxDays = maxDays;
             IsHalfDayAllowed = isHalfDayAllowed;
             IncrementCount = incrementCount;

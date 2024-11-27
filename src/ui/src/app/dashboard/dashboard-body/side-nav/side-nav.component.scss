@@ -1,9 +1,9 @@
+
 .nav-items {
   padding-top: 40px;
   display: flex;
-  flex-direction: column; /* This ensures that the navigation items are stacked vertically on mobile */
+  flex-direction: column;
   align-items: flex-start;
-
   .nav-item {
     padding: 25px 50px;
     cursor: pointer;
@@ -11,41 +11,34 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    // Hover effect for all items
     &:hover {
       background-color: rgb(1, 38, 69);
-      color: white; /* Add contrast on hover */
+      color: white;
     }
 
-    // When screen width is below 1300px
     @media only screen and (max-width: 1300px) {
       padding: 20px 40px;
       width: 100%;
     }
 
-    // For the text inside each nav-item (span)
     span {
       display: inline;
       font-weight: 600;
-      //color: #333;
-      
-      // Hide the text on smaller screens
+
       @media only screen and (max-width: 1300px) {
-        display: none;
+        display: inline-block;
       }
     }
 
-    // Dropdown styles for the "Attendance" menu
+
     &.dropdown {
       position: relative;
 
-      // Dropdown toggle button
       .dropdown-toggle {
         display: flex;
         align-items: center;
         font-weight: 600;
-        //color: #333;
+
 
         &:hover {
           background-color: rgb(1, 38, 69);
@@ -53,25 +46,25 @@
         }
       }
 
-      // Dropdown menu
+
       .dropdown-menu {
         position: absolute;
         top: 100%;
         left: 0;
         min-width: 250px;
         text-align: left;
-        
-      //  background-color: #fff;
+
+
         border: 1px solid rgba(0, 0, 0, 0.125);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         z-index: 1000;
         padding: 0;
         list-style: none;
-       // margin: 10px;
-        display: none;  // Hide dropdown by default
+
+        display: none;
         border-radius: 4px;
 
-        // Show dropdown on hover
+
         .nav-item:hover & {
           display: block;
         }
@@ -79,44 +72,44 @@
         .dropdown-item {
           padding: 10px 20px;
           cursor: pointer;
-          
+
           &:hover {
-            background-color: #f8f9fa; /* Lighter background color */
-            color: rgb(1, 38, 69); /* Change text color on hover */
+            background-color: #f8f9fa;
+            color: rgb(1, 38, 69);
           }
         }
       }
     }
   }
-
-  // Dropdown behavior (hover to show)
   .nav-item:hover .dropdown-menu {
     display: block;
   }
 
-  // For mobile views, where navigation items stack
+ 
   @media only screen and (max-width: 1300px) {
-    flex-direction: row; /* Horizontally align on smaller screens */
+    flex-direction: row; 
+    span {
+      display: inline-block; 
+    }
     .nav-item {
       padding: 15px 20px;
       text-align: center;
       width: auto;
+
       &:hover {
         background-color: rgb(1, 38, 69);
         color: white;
       }
 
-      // Ensure dropdown on small screens still works
       &.dropdown .dropdown-toggle {
-        display: block; /* Ensure dropdown is a block element on small screens */
+        display: block; 
       }
 
-      // For mobile, show the span text (since it's hidden on large screens)
+   
       span {
         display: block;
       }
 
-      // Adjust dropdown for mobile views
       .dropdown-menu {
         position: static;
         box-shadow: none;

@@ -16,6 +16,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="19.225.1" />
     <PackageReference Include="QuestPDF" Version="2024.10.3" />
     <PackageReference Include="sib_api_v3_sdk" Version="4.0.2" />
   </ItemGroup>
@@ -25,8 +26,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WolfDen.Domain\WolfDen.Domain.csproj" />
+    <Folder Include="Methods\" />
+  </ItemGroup>
+
+  <ItemGroup>
+
+    <Folder Include="Methods\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    
+
     <ProjectReference Include="..\WolfDen.Infrastructure\WolfDen.Infrastructure.csproj" />
+    <ProjectReference Include="..\WolfDen.Domain\WolfDen.Domain.csproj" />
+   
   </ItemGroup>
 
 </Project>

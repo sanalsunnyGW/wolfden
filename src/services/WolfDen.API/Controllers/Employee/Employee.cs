@@ -1,23 +1,28 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WolfDen.Application.DTOs;
+using WolfDen.Application.DTOs.Employees;
 using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
 using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
 using WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy;
-using WolfDen.Application.Requests.Queries.Employees.ViewEmployee;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeIdSignUp;
-using WolfDen.Application.DTOs;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam;
-using WolfDen.Application.DTOs.Employees;
+using WolfDen.Application.Requests.Queries.Employees.EmployeeLogin;
+using WolfDen.Application.Requests.Queries.Employees.ViewEmployee;
+using Microsoft.AspNetCore.Authorization;
+using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.API.Controllers.Employee
 {
+
     [Route("api/[controller]")]
     [ApiController]
-    public class Employee(IMediator mediator) : ControllerBase
+    public class Employee(IMediator mediator, WolfDenContext context) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+        private readonly WolfDenContext _context = context;
 
 
         [HttpPost]
@@ -77,20 +82,25 @@ namespace WolfDen.API.Controllers.Employee
         {
             return await _mediator.Send(command, cancellationToken);
         }
+        [Authorize]
         [HttpPut("admin")]
         public async Task<bool> AdminUpdateEmployee([FromBody] AdminUpdateEmployeeCommand command, CancellationToken cancellationToken)
         {
             return await _mediator.Send(command, cancellationToken);
         }
         [HttpGet("hierarchy")]
-        public async Task<EmployeeHierarchyDto> GetEmployeeHierarchy([FromQuery] GetEmployeeHierarchyQuery query, CancellationToken cancellationToken)
+        public async Task<EmployeeHierarchyDto> GetEmployeeHierarchy()
         {
-
-            return await _mediator.Send(query, cancellationToken);
+            return await _mediator.Send(new GetEmployeeHierarchyQuery());
 
         }
         [HttpGet("sign-up")]
         public async Task<EmployeeSignUpDto> GetEmployeeSignUp([FromQuery] GetEmployeeIDSignUpQuery query, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(query, cancellationToken);
+        }
+        [HttpGet("login")]
+        public async Task<LoginResponseDTO> EmployeeLogin([FromQuery] EmployeeLoginQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
         }
@@ -107,9 +117,9 @@ namespace WolfDen.API.Controllers.Employee
             return await _mediator.Send(query, cancellationToken);
 
         }
-       
+
         [HttpGet("all")]
-        public async Task<ActionResult<List<EmployeeDirectoryDTO>>> GetAllEmployees([FromQuery] GetAllEmployeeQuery query, CancellationToken cancellationToken)
+        public async Task<ActionResult<PaginationResponse>> GetAllEmployees([FromQuery] GetAllEmployeeQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
 
