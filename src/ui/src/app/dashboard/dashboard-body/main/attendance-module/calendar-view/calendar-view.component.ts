@@ -1,6 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions, DatesSetArg, DayCellContentArg } from '@fullcalendar/core/index.js';
+import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
+import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
+import { Calendar, CalendarOptions, DatesSetArg, DayCellContentArg } from '@fullcalendar/core/index.js';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { AttendanceService } from '../../../../../Service/attendance.service';
@@ -16,8 +16,10 @@ import { WolfDenService } from '../../../../../Service/wolf-den.service';
   templateUrl: './calendar-view.component.html',
   styleUrl: './calendar-view.component.scss'
 })
-export class CalendarViewComponent implements OnInit {
+export class CalendarViewComponent implements OnInit  {
 
+  @ViewChild(FullCalendarComponent) calendarComponent!: FullCalendarComponent;
+  
   service = inject(AttendanceService);
   baseService=inject(WolfDenService)
 
@@ -31,6 +33,7 @@ export class CalendarViewComponent implements OnInit {
     dayCellClassNames: (arg) => this.getDayCellClassNames(arg)
   };
 
+
   present: number = 0;
   absent: number = 0;
   incompleteShift: number = 0;
@@ -40,6 +43,7 @@ export class CalendarViewComponent implements OnInit {
   currentMonth: number = new Date().getMonth() + 1;
   attendanceData: { [date: string]: number } = {};
   
+  isStatusDataLoaded: boolean = false;
 
   constructor(private router:Router) {
   }
@@ -63,8 +67,19 @@ export class CalendarViewComponent implements OnInit {
       data.forEach((item: IAttendanceData) => {
         this.attendanceData[item.date] = item.attendanceStatusId;
       });
+      this.isStatusDataLoaded = true; 
+      this.updateCalendarOptions();
+      this.calendarComponent.getApi().render(); 
     });
   }
+
+  updateCalendarOptions(): void {
+    this.calendarOptions = {
+      ...this.calendarOptions,
+      dayCellClassNames: (arg) => this.getDayCellClassNames(arg),
+    };
+  }
+
   newDate!:string
   handleDateClick(arg: DateClickArg) {
    //alert('date click! ' + arg.dateStr)
@@ -79,38 +94,37 @@ export class CalendarViewComponent implements OnInit {
       arg.date.getMonth(),
       arg.date.getDate()
     ));
-  const currentDate = arg.view.currentStart; 
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth(); 
+    const currentDate = arg.view.currentStart; 
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth(); 
 
-  if (date.getFullYear() === currentYear && date.getMonth() === currentMonth) {
-    const dateStr = date.toISOString().split('T')[0];
-    const status = this.attendanceData[dateStr];
+    if (date.getFullYear() === currentYear && date.getMonth() === currentMonth) {
+      const dateStr = date.toISOString().split('T')[0];
+      const status = this.attendanceData[dateStr];
 
-    if (arg.date.getDay() === 6 || arg.date.getDay() === 0) {
-      return ['weekend-day'];
+      if (arg.date.getDay() === 6 || arg.date.getDay() === 0) {
+        return ['weekend-day'];
+      }
+
+      if (status === 1) {
+        return ['present'];
+      } else if (status === 2) {
+        return ['absent'];
+      } else if (status === 3) {
+        return ['incompleteShift'];
+      } else if (status === 4) {
+        return ['wfh'];
+      }
     }
 
-    if (status === 1) {
-      return ['present'];
-    } else if (status === 2) {
-      return ['absent'];
-    } else if (status === 3) {
-      return ['incompleteShift'];
-    } else if (status === 4) {
-      return ['wfh'];
-    }
-  }
-
-  return [];
+    return [];
   }
 
   onCalendarMonthChange(arg: DatesSetArg): void {
     const currentDate = arg.view.currentStart;
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
-    this.fetchAttendanceData(year, month);
     this.getStatusData(year, month);
+    this.fetchAttendanceData(year, month);
   }
-
 }
