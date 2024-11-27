@@ -7,7 +7,10 @@ import { ILeaveBalanceList } from '../Interface/leave-balance-list-interface';
 import { ILeaveRequestHistory, ILeaveRequestHistoryResponse } from '../Interface/leave-request-history';
 import { IGetLeaveTypeIdAndname } from '../Interface/get-leave-type-interface';
 import { ILeaveUpdate, IUpdateLeaveSetting } from '../Interface/update-leave-setting';
-import { IEditLeaveType } from '../interface/edit-leave-type';
+import { Observable } from 'rxjs';
+import { IEditLeaveType } from '../Interface/edit-leave-type'
+
+
 
 
 @Injectable({

@@ -1,10 +1,10 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
-import { LeaveManagementService } from '../../../../../Service/leave-management.service';
-import { ILeaveRequestHistory, ILeaveRequestHistoryResponse } from '../../../../../interface/leave-request-history';
+
 import { LeaveRequestStatus } from '../../../../../enum/leave-request-status-enum';
-import { ILeaveRequestHistory } from '../../../../../Interface/leave-request-history';
-import { LeaveManagementService } from '../../../../../service/leave-management.service';
+
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ILeaveRequestHistory, ILeaveRequestHistoryResponse } from '../../../../../Interface/leave-request-history';
+import { LeaveManagementService } from '../../../../../service/leave-management.service';
 
 
 
