@@ -102,7 +102,8 @@ export class ProfileComponent {
 
   }
   loadEmployeeData() {
-    this.employeeService.getEmployeeProfile().subscribe({
+    const employee = this.employeeService.decodeToken();
+    this.employeeService.getEmployeeProfile(employee.EmployeeId).subscribe({
       next: (response: any) => {
         if (response) {
           this.employeeData = response;
@@ -128,8 +129,9 @@ export class ProfileComponent {
   onSubmit() {
     if (this.userForm.valid) {
       const formData = this.userForm.value;
+      const employee = this.employeeService.decodeToken();
       const params = {
-        id: 1,
+        id: employee.EmployeeId,
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
