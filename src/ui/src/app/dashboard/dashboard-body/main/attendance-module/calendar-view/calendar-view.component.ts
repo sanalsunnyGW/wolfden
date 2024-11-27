@@ -9,8 +9,6 @@ import { IAttendanceData } from '../../../../../Interface/attendance-data';
 import { Router } from '@angular/router';
 import { WolfDenService } from '../../../../../Service/wolf-den.service';
 
-
-
 @Component({
   selector: 'app-calendar-view',
   standalone: true,
@@ -44,7 +42,6 @@ export class CalendarViewComponent implements OnInit {
   
 
   constructor(private router:Router) {
-    this.attendanceData = {};
   }
 
   ngOnInit(): void {
@@ -68,26 +65,31 @@ export class CalendarViewComponent implements OnInit {
       });
     });
   }
- newDate!:string
+  newDate!:string
   handleDateClick(arg: DateClickArg) {
    //alert('date click! ' + arg.dateStr)
     const selectedDate = arg.dateStr;
     this.newDate=selectedDate;
     this.router.navigate(['dashboard/attendance/daily', this.newDate]);
-
   }
 
   getDayCellClassNames(arg: DayCellContentArg): string[] {
-    const date = new Date(arg.date);
-    date.setDate(date.getDate() + 1);
+    const date = new Date(Date.UTC(
+      arg.date.getFullYear(),
+      arg.date.getMonth(),
+      arg.date.getDate()
+    ));
+  const currentDate = arg.view.currentStart; 
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth(); 
+
+  if (date.getFullYear() === currentYear && date.getMonth() === currentMonth) {
     const dateStr = date.toISOString().split('T')[0];
     const status = this.attendanceData[dateStr];
 
     if (arg.date.getDay() === 6 || arg.date.getDay() === 0) {
       return ['weekend-day'];
     }
-
-    
 
     if (status === 1) {
       return ['present'];
@@ -98,7 +100,9 @@ export class CalendarViewComponent implements OnInit {
     } else if (status === 4) {
       return ['wfh'];
     }
-    return [];
+  }
+
+  return [];
   }
 
   onCalendarMonthChange(arg: DatesSetArg): void {
