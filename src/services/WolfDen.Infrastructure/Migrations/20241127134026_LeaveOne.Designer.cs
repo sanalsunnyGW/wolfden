@@ -12,8 +12,8 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241126080420_firsth")]
-    partial class firsth
+    [Migration("20241127134026_LeaveOne")]
+    partial class LeaveOne
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -535,9 +535,6 @@ namespace WolfDen.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DeviceId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -555,11 +552,7 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Device", "wolfden", t =>
-                        {
-                            t.Property("DeviceId")
-                                .HasColumnName("DeviceId1");
-                        });
+                    b.ToTable("Device", "wolfden");
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
                             {
@@ -855,6 +848,9 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<int>("IncrementValue")
                         .HasColumnType("int");
 
+                    b.Property<DateOnly>("LastCreditedMonth")
+                        .HasColumnType("date");
+
                     b.Property<int>("LeaveBalanceId")
                         .HasColumnType("int");
 
@@ -912,7 +908,7 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<DateOnly>("FromDate")
                         .HasColumnType("date");
 
-                    b.Property<bool>("HalfDay")
+                    b.Property<bool?>("HalfDay")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
@@ -930,7 +926,10 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("PeriodStart");
 
-                    b.Property<int>("ProcessedBy")
+                    b.Property<int?>("ProcessedBy")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RequestedBy")
                         .HasColumnType("int");
 
                     b.Property<DateOnly>("ToDate")
@@ -944,6 +943,8 @@ namespace WolfDen.Infrastructure.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("ProcessedBy");
+
+                    b.HasIndex("RequestedBy");
 
                     b.HasIndex("TypeId");
 
@@ -1063,13 +1064,19 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("DaysCheck")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<int?>("DaysCheckEqualOrLess")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
-                    b.Property<int?>("DaysChekcMore")
-                        .HasColumnType("int");
+                    b.Property<int?>("DaysCheckMore")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<int?>("DutyDaysRequired")
                         .HasColumnType("int");
@@ -1191,7 +1198,6 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -1405,9 +1411,11 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasOne("WolfDen.Domain.Entity.Employee", "Manager")
                         .WithMany()
-                        .HasForeignKey("ProcessedBy")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ProcessedBy");
+
+                    b.HasOne("WolfDen.Domain.Entity.Employee", "Requested")
+                        .WithMany()
+                        .HasForeignKey("RequestedBy");
 
                     b.HasOne("WolfDen.Domain.Entity.LeaveType", "LeaveType")
                         .WithMany()
@@ -1420,6 +1428,8 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Navigation("LeaveType");
 
                     b.Navigation("Manager");
+
+                    b.Navigation("Requested");
                 });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.LeaveRequestDay", b =>

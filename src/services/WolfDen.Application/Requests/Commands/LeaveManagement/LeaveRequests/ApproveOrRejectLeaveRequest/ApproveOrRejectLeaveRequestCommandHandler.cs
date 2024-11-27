@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.Employees;
-using WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy;
+using WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
@@ -16,20 +16,21 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
         {
             LeaveRequest leaveRequest = await _context.LeaveRequests.Where(x => x.Id == request.LeaveRequestId && x.LeaveRequestStatusId == LeaveRequestStatus.Open).FirstOrDefaultAsync(cancellationToken);
             LeaveType leaveType1 = await _context.LeaveType.Where(x => x.Id == leaveRequest.TypeId).FirstOrDefaultAsync(cancellationToken);  
-            EmployeeHierarchyDto employeeHierarchyDto = new EmployeeHierarchyDto();
-            GetEmployeeHierarchyQuery getEmployeeHierarchyQuery = new GetEmployeeHierarchyQuery
+            List<EmployeeHierarchyDto> employeeHierarchyDto = new List<EmployeeHierarchyDto>();
+            GetEmployeeTeamQuery employeeTeamQuery = new GetEmployeeTeamQuery
             {
                 Id = request.SuperiorId,
+                Hierarchy=true
             };
 
-            employeeHierarchyDto = await _mediator.Send(getEmployeeHierarchyQuery, cancellationToken);
+            employeeHierarchyDto = await _mediator.Send(employeeTeamQuery, cancellationToken);
 
             if (employeeHierarchyDto == null)
             {
                 throw new Exception("No Subordinates");
             }
 
-            List<int> listSubordinateEmployeeId = GetAllChildIds(employeeHierarchyDto);
+            List<int> listSubordinateEmployeeId = await GetAllChildIds(employeeHierarchyDto);
 
             if (listSubordinateEmployeeId.Contains(leaveRequest.EmployeeId))
             {
@@ -84,24 +85,27 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
                 throw new Exception("You are not superior to the applied leave request employee");
             }
 
-
-        }
-        private List<int> GetAllChildIds(EmployeeHierarchyDto employee)
-        {
-            List<int> result = new List<int>();
-            if (employee.Subordinates == null || employee.Subordinates.Count == 0)
+            async Task<List<int>> GetAllChildIds(List<EmployeeHierarchyDto> employees)
             {
+                List<int> result = new List<int>();
+
+                foreach (EmployeeHierarchyDto employee in employees)
+                {
+                    if (employee.Id != request.SuperiorId)
+                        result.Add(employee.Id);
+
+                    if (employee.Subordinates != null && employee.Subordinates.Count > 0)
+                    {
+                        List<int> childIds = await GetAllChildIds(employee.Subordinates);
+                        result.AddRange(childIds);
+                    }
+                }
+
                 return result;
             }
 
-            foreach (EmployeeHierarchyDto subordinate in employee.Subordinates)
-            {
-                result.Add(subordinate.Id);
-                result.AddRange(GetAllChildIds(subordinate));
-            }
-
-            return result;
         }
+
     }
 
 }

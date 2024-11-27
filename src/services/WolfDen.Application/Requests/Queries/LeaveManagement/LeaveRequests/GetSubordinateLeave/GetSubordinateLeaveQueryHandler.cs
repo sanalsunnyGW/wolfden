@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.Employees;
 using WolfDen.Application.DTOs.LeaveManagement;
-using WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy;
+using WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
 
@@ -14,20 +14,21 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
         private readonly IMediator _mediator = mediator;
         public async Task<List<SubordinateLeaveDto>> Handle(GetSubordinateLeaveQuery request, CancellationToken cancellationToken)
         {
-            EmployeeHierarchyDto employeeHierarchyDto = new EmployeeHierarchyDto();
-            GetEmployeeHierarchyQuery getEmployeeHierarchyQuery = new GetEmployeeHierarchyQuery
+            List<EmployeeHierarchyDto> employeeHierarchyDto = new List<EmployeeHierarchyDto>();
+            GetEmployeeTeamQuery getEmployeeTeamQuery = new GetEmployeeTeamQuery
             {
                 Id = request.Id,
+                Hierarchy = true,
             };
 
-            employeeHierarchyDto = await _mediator.Send(getEmployeeHierarchyQuery, cancellationToken);
+            employeeHierarchyDto = await _mediator.Send(getEmployeeTeamQuery, cancellationToken);
 
             if (employeeHierarchyDto == null)
             {
                 throw new Exception("Error");
             }
 
-            List<int> listSubordinateEmployeeId = GetAllChildIds(employeeHierarchyDto);
+            List<int> listSubordinateEmployeeId = await GetAllChildIds(employeeHierarchyDto);
             List<SubordinateLeaveDto> subordinateLeaveDtos;
 
             if (request.StatusId == LeaveRequestStatus.Rejected)
@@ -67,7 +68,7 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
                        Description = x.Description,
 
 
-                   }).OrderByDescending (x => x.LeaveRequestId)
+                   }).OrderByDescending(x => x.LeaveRequestId)
                    .ToListAsync(cancellationToken);
             }
 
@@ -96,24 +97,28 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
 
 
 
-        }
-
-        private List<int> GetAllChildIds(EmployeeHierarchyDto employee)
-        {
-            List<int> result = new List<int>();
-            if (employee.Subordinates == null || employee.Subordinates.Count == 0)
+            async Task<List<int>>  GetAllChildIds(List<EmployeeHierarchyDto> employees)
             {
-                return result; 
+                List<int> result = new List<int>();
+
+                foreach (EmployeeHierarchyDto employee in employees)
+                {
+                    if(employee.Id != request.Id)
+                    result.Add(employee.Id);
+
+                    if (employee.Subordinates != null && employee.Subordinates.Count > 0)
+                    {
+                        List<int> childIds = await GetAllChildIds(employee.Subordinates);
+                        result.AddRange(childIds);
+                    }
+                }
+
+                return  result;
             }
 
-            foreach (EmployeeHierarchyDto subordinate in employee.Subordinates)
-            {
-                result.Add(subordinate.Id); 
-                result.AddRange(GetAllChildIds(subordinate));
-            }
-
-            return result;
         }
+
+
 
 
     }
