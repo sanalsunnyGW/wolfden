@@ -14,12 +14,14 @@ namespace WolfDen.Domain.Entity
         public LeaveRequestStatus LeaveRequestStatusId { get; private set; }
         public string Description { get; private set; }
         public int? ProcessedBy { get; private set; }
+        public int? RequestedBy { get; private set; }
         public virtual Employee Employee { get; private set; }
         public virtual LeaveType LeaveType { get; private set; }
         public virtual Employee Manager { get; private set; }
+        public virtual Employee Requested { get; private set; }
         private LeaveRequest() { }
 
-        public LeaveRequest(int employeeId, int typeId, bool? halfDay, DateOnly fromDate, DateOnly toDate, DateOnly applyDate, LeaveRequestStatus leaveRequestStatusId, string description)
+        public LeaveRequest(int employeeId, int typeId, bool? halfDay, DateOnly fromDate, DateOnly toDate, DateOnly applyDate, LeaveRequestStatus leaveRequestStatusId, string description, int requestedBy)
         {
             EmployeeId = employeeId;
             TypeId = typeId;
@@ -29,12 +31,35 @@ namespace WolfDen.Domain.Entity
             ApplyDate = applyDate;
             LeaveRequestStatusId = leaveRequestStatusId;
             Description = description;
+            RequestedBy = requestedBy;
 
         }
 
-        public void GetLeaveRequestHistory()
+        public void EditLeave(int typeId,bool? halfDay, DateOnly fromDate, DateOnly toDate,LeaveRequestStatus leaveRequestStatusId, string description)
         {
+            TypeId = typeId;
+            HalfDay = halfDay;
+            FromDate = fromDate;
+            ToDate = toDate;
+            LeaveRequestStatusId = leaveRequestStatusId;
+            Description = description;
 
+        }
+
+        public void RevokeLeave()
+        {
+            LeaveRequestStatusId = LeaveRequestStatus.Deleted;
+
+        }
+
+        public void Reject()
+        {
+            LeaveRequestStatusId = LeaveRequestStatus.Rejected;
+        }
+
+        public void Approve()
+        {
+            LeaveRequestStatusId = LeaveRequestStatus.Approved;
         }
     }
 }

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, NgSelectOption, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IAddNewLeaveType } from '../../../../../interface/add-new-leave-type-interface';
+import { IAddNewLeaveTypeFormcontrol } from '../../../../../interface/add-new-leave-type-interface';
 import { CommonModule } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { LeaveManagementService } from '../../../../../Service/leave-management.service';
@@ -17,9 +17,10 @@ export class AddNewLeaveTypeComponent {
   fb = inject(FormBuilder)
   leaveManagement = inject(LeaveManagementService)
 
-    addNewLeaveType : FormGroup<IAddNewLeaveType>
+    addNewLeaveType : FormGroup
     constructor() {
-      this.addNewLeaveType = this.fb.group<IAddNewLeaveType>({
+      this.addNewLeaveType = this.fb.group<IAddNewLeaveTypeFormcontrol>({
+        adminId : new FormControl(null),
         typeName: new FormControl(null,Validators.required),
         maxDays: new FormControl(null),
         isHalfDayAllowed: new FormControl(null),
@@ -49,8 +50,7 @@ export class AddNewLeaveTypeComponent {
       {
         if(this.addNewLeaveType.valid)
         {
-          console.log(this.addNewLeaveType.value)
-          this.leaveManagement.addNewLeaveType(this.addNewLeaveType).subscribe({
+          this.leaveManagement.addNewLeaveType(this.addNewLeaveType.value).subscribe({
             next:(response : boolean)=>{
               if(response)
               {
@@ -58,7 +58,6 @@ export class AddNewLeaveTypeComponent {
               }
             },
               error:(error) =>{
-                console.log(error)
                 alert(error)
                 }
            }

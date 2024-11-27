@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ILeaveUpdate, IUpdateLeaveSetting } from '../../../../../interface/update-leave-setting';
+import { ILeaveUpdate, IUpdateLeaveSettingFormControl } from '../../../../../interface/update-leave-setting';
 import { CommonModule } from '@angular/common';
 import { LeaveManagementService } from '../../../../../Service/leave-management.service';
 
@@ -15,11 +15,12 @@ export class UpdateLeaveSettingsComponent {
   fb = inject(FormBuilder)
   leaveManagement = inject(LeaveManagementService)
 
-  updateLeaveSetting : FormGroup<IUpdateLeaveSetting>
+  updateLeaveSetting : FormGroup
   leaveSettings : ILeaveUpdate = {} as ILeaveUpdate;
 
   constructor(){
-    this.updateLeaveSetting = this.fb.group<IUpdateLeaveSetting>({
+    this.updateLeaveSetting = this.fb.group<IUpdateLeaveSettingFormControl>({
+      adminId : new FormControl(null),
       minDaysForLeaveCreditJoining : new FormControl(null,Validators.required),
       maxNegativeBalanceLimit : new FormControl(null,Validators.required)
     });
@@ -47,7 +48,7 @@ export class UpdateLeaveSettingsComponent {
   onSubmit(){
     if(this.updateLeaveSetting.valid)
       {
-        this.leaveManagement.updateLeaveSettings(this.updateLeaveSetting).subscribe({
+        this.leaveManagement.updateLeaveSettings(this.updateLeaveSetting.value).subscribe({
           next:(response : boolean)=>{
             if(response)
             {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolfDen.Domain.Entity;
-using WolfDen.Domain.Enums;
+﻿using WolfDen.Domain.Enums;
 
 namespace WolfDen.Application.DTOs.LeaveManagement
 {

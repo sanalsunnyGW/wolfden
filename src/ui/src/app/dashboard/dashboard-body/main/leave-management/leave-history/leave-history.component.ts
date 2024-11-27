@@ -27,6 +27,7 @@ ngOnInit(): void {
   //Add 'implements OnInit' to the class.
   this.leaveManagementService.getLeaveRequestHistory(this.id).subscribe({
     next: (data) => {
+      this.leaveRequestList = data;
         },
     error: (error) => {
       console.log(error);

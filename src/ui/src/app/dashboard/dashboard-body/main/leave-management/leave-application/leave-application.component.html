@@ -1,52 +1,56 @@
-<div class="patientForm">
-    <form [formGroup]="applyLeave" class="pForm" (ngSubmit)="onSubmit()">
-
-
-        <div>
-            <label>Select Leave Type </label>
-            <ng-select [items]="leaveType" class="option"
-            bindLabel="name"
-            bindValue="id" placeholder="select Increment Type" formControlName="typeId">
-            </ng-select>
-            <div class="error"*ngIf="applyLeave.get('typeId')?.invalid && applyLeave.get('typeId')?.touched">
-                Type is required.
-               </div>
+<div>
+  <form [formGroup]="applyLeave" (ngSubmit)="onSubmit()">
+      <div class="form-group mb-3">
+          <label  class="form-label">Select Leave Type</label>
+          <ng-select 
+              [items]="leaveType" 
+              bindLabel="name" 
+              bindValue="id" 
+              placeholder="Select Leave Type" 
+              formControlName="typeId" 
+              id="typeId">
+          </ng-select>
+          <div class="error" *ngIf="applyLeave.get('typeId')?.invalid && applyLeave.get('typeId')?.touched">
+              Leave type is required.
           </div>
+      </div>
 
-
-          <label>Select if Half Day  </label>
-          <div class="isHalfDayAllowed">
-            <div>
-              <input class="form-check-input" type="radio" id="true" value="true" formControlName="halfDay">
-              <label class="form-check-label" for="true">Half Day </label>
-            </div>
+      <div class="form-group mb-3">
+          <label for="halfDay" class="form-label">Select if Half Day</label>
+          <div class="form-check form-switch">
+              <input class="form-check-input" 
+                     type="checkbox" 
+                     id="halfDay" 
+                     [value]="true" 
+                     formControlName="halfDay">
+              <label class="form-check-label" for="halfDay">Half Day</label>
           </div>
-  
-  
-      <div class="form-group">
-        <label for="fromDate">select From date</label>
-        <input type="date" class="form-control" id="fromDate" placeholder="select" formControlName="fromDate">
-        <div class="error"*ngIf="applyLeave.get('fromDate')?.invalid && applyLeave.get('fromDate')?.touched">
-            from Date is required.
-           </div>
       </div>
 
-      <div class="form-group">
-        <label for="toDate">select To date</label>
-        <input type="date" class="form-control" id="toDate" placeholder="select" formControlName="toDate">
-        <div class="error"*ngIf="applyLeave.get('toDate')?.invalid && applyLeave.get('toDate')?.touched">
-            To Date is required.
-           </div>
+      <div class="form-group mb-3">
+          <label for="fromDate" class="form-label">From Date</label>
+          <input type="date" class="form-control" id="fromDate" formControlName="fromDate">
+          <div class="error" *ngIf="applyLeave.get('fromDate')?.invalid && applyLeave.get('fromDate')?.touched">
+              From date is required.
+          </div>
       </div>
 
-      <div class="form-group">
-        <label for="description">Enter Description</label>
-        <input type="text" class="form-control" id="description" placeholder="Enter description" formControlName="description">
-        <div class="error"*ngIf="applyLeave.get('description')?.invalid && applyLeave.get('description')?.touched">
-         Description is required
-        </div>
+      <div class="form-group mb-3">
+          <label for="toDate" class="form-label">To Date</label>
+          <input type="date" class="form-control" id="toDate" formControlName="toDate">
+          <div class="error" *ngIf="applyLeave.get('toDate')?.invalid && applyLeave.get('toDate')?.touched">
+              To date is required.
+          </div>
       </div>
-      <button type="submit">Submit</button>
-    </form>
-  </div>
-  
+
+      <div class="form-group mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control" id="description" rows="5" formControlName="description"></textarea>
+          <div class="error" *ngIf="applyLeave.get('description')?.invalid && applyLeave.get('description')?.touched">
+              Description is required.
+          </div>
+      </div>
+
+      <button class="btn btn-primary" type="submit" [disabled]="applyLeave.invalid">Submit</button>
+  </form>
+</div>

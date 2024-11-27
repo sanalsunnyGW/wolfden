@@ -1,18 +1,31 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using WolfDen.Application.DTOs.LeaveManagement;
 using WolfDen.Application.Methods.LeaveManagement;
+using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequestDays;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
+using static WolfDen.Domain.Enums.EmployeeEnum;
 
 namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.AddLeaveRequest
 {
-    public class AddLeaveRequestCommandHandler(WolfDenContext context) : IRequestHandler<AddLeaveRequestCommand, bool>
+    public class AddLeaveRequestCommandHandler(WolfDenContext context, AddLeaveRequestValidator validator, IMediator mediator) : IRequestHandler<AddLeaveRequestCommand, bool>
     {
         private readonly WolfDenContext _context = context;
+        private readonly AddLeaveRequestValidator _validator = validator;
+        private readonly IMediator _mediator = mediator;
 
         public async Task<bool> Handle(AddLeaveRequestCommand request, CancellationToken cancellationToken)
         {
+
+            var result = await _validator.ValidateAsync(request, cancellationToken);
+            if (!result.IsValid)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.ErrorMessage));
+                throw new ValidationException($"Validation failed: {errors}");
+            }
             LeaveBalance leaveBalance = await _context.LeaveBalances.FirstOrDefaultAsync(x => x.EmployeeId == request.EmpId && x.TypeId == request.TypeId, cancellationToken);
             Employee employee = await _context.Employees.FirstOrDefaultAsync(x => x.Id == request.EmpId, cancellationToken);
             LeaveType leaveType = await _context.LeaveType.FirstOrDefaultAsync(x => x.Id == request.TypeId);
@@ -29,302 +42,63 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ad
             {
                 throw new InvalidOperationException($"Leave balance not found for Employee ID {employee.FirstName} and Type ID {leaveType.TypeName}.");
             }
-
-            int days = 0;
-            bool check = false;
+            decimal virtualLeaveCountWithoutHalfDay = await _context.LeaveRequestDays.Where(x => x.LeaveRequest.EmployeeId == request.EmpId && x.LeaveRequest.TypeId == request.TypeId && x.LeaveRequest.LeaveRequestStatusId == LeaveRequestStatus.Open && x.LeaveRequest.HalfDay !=true).CountAsync(cancellationToken);
+            decimal virtualLeaveCountWithHalfDay = await _context.LeaveRequestDays.Where(x => x.LeaveRequest.EmployeeId == request.EmpId && x.LeaveRequest.TypeId == request.TypeId && x.LeaveRequest.LeaveRequestStatusId == LeaveRequestStatus.Open && x.LeaveRequest.HalfDay == true).CountAsync(cancellationToken);
+            decimal virtualBalance = leaveBalance.Balance - (virtualLeaveCountWithoutHalfDay + (virtualLeaveCountWithHalfDay/2));
+            decimal days = 0;
+            List<DateOnly> dates = new List<DateOnly>();
             DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
-
             CalculateLeaveDays calculateLeaveDays = new CalculateLeaveDays(_context);
             bool sandwich = leaveType.Sandwich ?? false;
-            days = await calculateLeaveDays.LeaveDays(request.FromDate, request.ToDate, sandwich);
-
-            if (leaveType.LeaveCategoryId == LeaveCategory.WorkFromHome)
+            LeaveDaysResultDto leaveDaysResultDto = await calculateLeaveDays.LeaveDays(request.FromDate, request.ToDate, sandwich);
+            days = request.HalfDay == true ? (leaveDaysResultDto.DaysCount / 2) : leaveDaysResultDto.DaysCount;
+            dates = leaveDaysResultDto.ValidDate;
+            bool dateCheck = await _context.LeaveRequestDays
+                .Where(x => dates.Contains(x.LeaveDate) && x.LeaveRequest.TypeId == request.TypeId && x.LeaveRequest.EmployeeId == request.EmpId &&
+                            (x.LeaveRequest.LeaveRequestStatusId == LeaveRequestStatus.Open ||
+                                x.LeaveRequest.LeaveRequestStatusId == LeaveRequestStatus.Approved))
+                .AnyAsync(cancellationToken);
+            if (!dateCheck) 
             {
-                if (leaveType.DaysCheck.HasValue && (days > leaveType.DaysCheck))
+                if (employee.Gender.HasValue && ((employee.Gender == Gender.Male && leaveType.LeaveCategoryId != LeaveCategory.Maternity) || (employee.Gender == Gender.Female && leaveType.LeaveCategoryId != LeaveCategory.Paternity)))
                 {
-                    if (request.FromDate.DayNumber - currentDate.DayNumber >= leaveType.DaysCheckMore)
+                    if (leaveType.LeaveCategoryId == LeaveCategory.WorkFromHome && currentDate < request.FromDate)
                     {
-                        if (leaveType.DutyDaysRequired.HasValue)
+                        if (leaveType.DaysCheck.HasValue && (days > leaveType.DaysCheck))
                         {
-                            if (employee.JoiningDate.HasValue)
+                            if (request.FromDate.DayNumber - currentDate.DayNumber >= leaveType.DaysCheckMore)
                             {
-                                if (employee.JoiningDate.HasValue && (request.FromDate.DayNumber - employee.JoiningDate.Value.DayNumber >= leaveType.DutyDaysRequired))
-                                {
-                                    if (leaveType.LeaveCategoryId.HasValue && (leaveType.LeaveCategoryId == LeaveCategory.RestrictedHoliday))
-                                    {
-                                        int restrictedHolidayCount = await _context.Holiday.Where(x => x.Type == AttendanceStatus.RestrictedHoliday && x.Date >= request.FromDate && x.Date <= request.ToDate).CountAsync();
-                                        if (days == restrictedHolidayCount)
-                                        {
-                                            return await AddLeave();
-                                        }
-                                        else
-                                        {
-                                            throw new InvalidOperationException($"Selected Day Do not Contain Restricted Holiday");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        return await AddLeave();
-                                    }
-                                }
-                                else 
-                                {
-                                    throw new InvalidOperationException($"Minimum Duty Days of {leaveType.DutyDaysRequired} is Required for {leaveType.TypeName} .");
-                                }
-                                
+                                return await WorkFromHomeCheck();
+
                             }
                             else
                             {
-                                throw new InvalidOperationException($"Joining date Not assinged by HR.");
+                                throw new InvalidOperationException($"For more than {leaveType.DaysCheck} {leaveType.TypeName}, leave FromDate should be atleast {leaveType.DaysCheckMore} days before. ");
+                            }
+                        }
+                        else if (leaveType.DaysCheck.HasValue && (days <= leaveType.DaysCheck))
+                        {
+                            if (request.FromDate.DayNumber - currentDate.DayNumber >= leaveType.DaysCheckEqualOrLess)
+                            {
+                                return await WorkFromHomeCheck();
+                            }
+                            else
+                            {
+                                throw new InvalidOperationException($"For less than or {leaveType.DaysCheck} {leaveType.TypeName}, leave should be applied atleast {leaveType.DaysCheckEqualOrLess} days before. ");
                             }
                         }
                         else
                         {
-                            if (leaveType.LeaveCategoryId.HasValue && (leaveType.LeaveCategoryId == LeaveCategory.RestrictedHoliday))
-                            {
-                                int restrictedHolidayCount = await _context.Holiday.Where(x => x.Type == AttendanceStatus.RestrictedHoliday && x.Date >= request.FromDate && x.Date <= request.ToDate).CountAsync();
-                                if (days == restrictedHolidayCount)
-                                {
-                                    return await AddLeave();
-                                }
-                                else
-                                {
-                                    throw new InvalidOperationException($"Selected Day Do not Contain Restricted Holiday");
-                                }
-                            }
-                            else
-                            {
-                                return await AddLeave();
-                            }
-                        }
-
-
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException($"For more than {leaveType.DaysCheck} {leaveType.TypeName}, leave FromDate should be atleast {leaveType.DaysCheckMore} days before. ");
-                    }
-                }
-                else if (leaveType.DaysCheck.HasValue && (days <= leaveType.DaysCheck))
-                {
-                    if (request.FromDate.DayNumber - currentDate.DayNumber >= leaveType.DaysCheckEqualOrLess)
-                    {
-                        if (leaveType.DutyDaysRequired.HasValue)
-                        {
-                            if (employee.JoiningDate.HasValue)
-                            {
-                                if (employee.JoiningDate.HasValue && (request.FromDate.DayNumber - employee.JoiningDate.Value.DayNumber >= leaveType.DutyDaysRequired))
-                                {
-                                    if (leaveType.LeaveCategoryId.HasValue && (leaveType.LeaveCategoryId == LeaveCategory.RestrictedHoliday))
-                                    {
-                                        int restrictedHolidayCount = await _context.Holiday.Where(x => x.Type == AttendanceStatus.RestrictedHoliday && x.Date >= request.FromDate && x.Date <= request.ToDate).CountAsync();
-                                        if (days == restrictedHolidayCount)
-                                        {
-                                            return await AddLeave();
-                                        }
-                                        else
-                                        {
-                                            throw new InvalidOperationException($"Selected Day Do not Contain Restricted Holiday");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        return await AddLeave();
-                                    }
-                                }
-                                else
-                                {
-                                    throw new InvalidOperationException($"Minimum Duty Days of {leaveType.DutyDaysRequired} is Required for {leaveType.TypeName} .");
-                                }
-                                
-                            }
-                            else
-                            {
-                                throw new InvalidOperationException($"Joining date Not assinged by HR.");
-                            }
-                        }
-                        else
-                        {
-                            if (leaveType.LeaveCategoryId.HasValue && (leaveType.LeaveCategoryId == LeaveCategory.RestrictedHoliday))
-                            {
-                                int restrictedHolidayCount = await _context.Holiday.Where(x => x.Type == AttendanceStatus.RestrictedHoliday && x.Date >= request.FromDate && x.Date <= request.ToDate).CountAsync();
-                                if (days == restrictedHolidayCount)
-                                {
-                                    return await AddLeave();
-                                }
-                                else
-                                {
-                                    throw new InvalidOperationException($"Selected Day Do not Contain Restricted Holiday");
-                                }
-                            }
-                            else
-                            {
-                                return await AddLeave();
-                            }
+                            throw new InvalidOperationException($"Days Check Not Assinged");
                         }
                     }
-                    else
+
+
+                    else if (currentDate.DayNumber < request.FromDate.DayNumber && leaveType.LeaveCategoryId != LeaveCategory.BereavementLeave)
                     {
-                        throw new InvalidOperationException($"For less than or {leaveType.DaysCheck} {leaveType.TypeName}, leave should be applied atleast {leaveType.DaysCheckEqualOrLess} days before. ");
-                    }
-                }
-                else
-                {
-                    throw new InvalidOperationException($"Unexpected");
-                }
-            }
-
-
-           else if (currentDate.DayNumber < request.FromDate.DayNumber)
-            {
-                if (leaveType.LeaveCategoryId != LeaveCategory.BereavementLeave)
-                {
-                    if (leaveBalance.Balance >= days)
-                    {
-                        if (!request.HalfDay.HasValue || request.HalfDay == false)
+                        if (leaveBalance.Balance >= days && virtualBalance >= days)
                         {
-                            if (leaveType.DaysCheck.HasValue)
-                            {
-                                if (days > leaveType.DaysCheck)
-                                {
-                                    if (request.FromDate.DayNumber - currentDate.DayNumber >= leaveType.DaysCheckMore)
-                                    {
-                                        if (leaveType.DutyDaysRequired.HasValue)
-                                        {
-                                            if (employee.JoiningDate.HasValue)
-                                            {
-                                                if (employee.JoiningDate.HasValue && (request.FromDate.DayNumber - employee.JoiningDate.Value.DayNumber >= leaveType.DutyDaysRequired))
-                                                {
-                                                    if (leaveType.LeaveCategoryId.HasValue && (leaveType.LeaveCategoryId == LeaveCategory.RestrictedHoliday))
-                                                    {
-                                                        int restrictedHolidayCount = await _context.Holiday.Where(x => x.Type == AttendanceStatus.RestrictedHoliday && x.Date >= request.FromDate && x.Date <= request.ToDate).CountAsync();
-                                                        if (days == restrictedHolidayCount)
-                                                        {
-                                                            return await AddLeave();
-                                                        }
-                                                        else
-                                                        {
-                                                            throw new InvalidOperationException($"Selected Day Do not Contain Restricted Holiday");
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        return await AddLeave();
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    throw new InvalidOperationException($"Minimum Duty Days of {leaveType.DutyDaysRequired} is Required for {leaveType.TypeName} .");
-                                                }
-                                            }
-                                            else
-                                            {
-                                                throw new InvalidOperationException($"Joining date Not assinged by HR.");
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (leaveType.LeaveCategoryId.HasValue && (leaveType.LeaveCategoryId == LeaveCategory.RestrictedHoliday))
-                                            {
-                                                int restrictedHolidayCount = await _context.Holiday.Where(x => x.Type == AttendanceStatus.RestrictedHoliday && x.Date >= request.FromDate && x.Date <= request.ToDate).CountAsync();
-                                                if (days == restrictedHolidayCount)
-                                                {
-                                                    return await AddLeave();
-                                                }
-                                                else
-                                                {
-                                                    throw new InvalidOperationException($"Selected Day Do not Contain Restricted Holiday");
-                                                }
-                                            }
-                                            else
-                                            {
-                                                return await AddLeave();
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        throw new InvalidOperationException($"For more than {leaveType.DaysCheck} {leaveType.TypeName}, leave FromDate should be atleast {leaveType.DaysCheckMore} days before. ");
-                                    }
-                                }
-                                else if (days <= leaveType.DaysCheck)
-                                {
-                                    if (request.FromDate.DayNumber - currentDate.DayNumber >= leaveType.DaysCheckEqualOrLess)
-                                    {
-                                        if (leaveType.DutyDaysRequired.HasValue)
-                                        {
-                                            if (employee.JoiningDate.HasValue)
-                                            {
-                                                if (employee.JoiningDate.HasValue && (request.FromDate.DayNumber - employee.JoiningDate.Value.DayNumber >= leaveType.DutyDaysRequired))
-                                                {
-                                                    if (leaveType.LeaveCategoryId.HasValue && (leaveType.LeaveCategoryId == LeaveCategory.RestrictedHoliday))
-                                                    {
-                                                        int restrictedHolidayCount = await _context.Holiday.Where(x => x.Type == AttendanceStatus.RestrictedHoliday && x.Date >= request.FromDate && x.Date <= request.ToDate).CountAsync();
-                                                        if (days == restrictedHolidayCount)
-                                                        {
-                                                            return await AddLeave();
-                                                        }
-                                                        else
-                                                        {
-                                                            throw new InvalidOperationException($"Selected Day Do not Contain Restricted Holiday");
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        return await AddLeave();
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    throw new InvalidOperationException($"Minimum Duty Days of {leaveType.DutyDaysRequired} is Required for {leaveType.TypeName}  .");
-                                                }
-
-                                            }
-                                            else
-                                            {
-                                                throw new InvalidOperationException($"Joining date Not assinged by HR. joining Date is required for {leaveType.TypeName}");
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (leaveType.LeaveCategoryId.HasValue && (leaveType.LeaveCategoryId == LeaveCategory.RestrictedHoliday))
-                                            {
-                                                int restrictedHolidayCount = await _context.Holiday.Where(x => x.Type == AttendanceStatus.RestrictedHoliday && x.Date >= request.FromDate && x.Date <= request.ToDate).CountAsync();
-                                                if (days == restrictedHolidayCount)
-                                                {
-                                                    return await AddLeave();
-                                                }
-                                                else
-                                                {
-                                                    throw new InvalidOperationException($"Selected Day Do not Contain Restricted Holiday");
-                                                }
-                                            }
-                                            else
-                                            {
-                                                return await AddLeave();
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        throw new InvalidOperationException($"For less than or {leaveType.DaysCheck} {leaveType.TypeName}, leave should be applied atleast {leaveType.DaysCheckEqualOrLess} days before. ");
-                                    }
-                                }
-                                else
-                                {
-                                    throw new InvalidOperationException("Unexpected");
-                                }
-                            }
-                            else
-                            {
-                                throw new InvalidOperationException("Unexpected");
-                            }
-
-
-                        }
-                        else if (request.HalfDay == true)
-                        {
-                            if (leaveType.LeaveCategoryId == LeaveCategory.CasualLeave)
+                            if (!request.HalfDay.HasValue || request.HalfDay == false)
                             {
                                 if (leaveType.DaysCheck.HasValue)
                                 {
@@ -332,144 +106,291 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ad
                                     {
                                         if (request.FromDate.DayNumber - currentDate.DayNumber >= leaveType.DaysCheckMore)
                                         {
-                                            if (leaveType.DutyDaysRequired.HasValue)
-                                            {
-                                                if (employee.JoiningDate.HasValue)
-                                                {
-                                                    if (employee.JoiningDate.HasValue && (request.FromDate.DayNumber - employee.JoiningDate.Value.DayNumber >= leaveType.DutyDaysRequired))
-                                                    {
-                                                        return await AddLeave();
-                                                    }
-                                                    else
-                                                    {
-                                                        throw new InvalidOperationException($"Minimum Duty Days of {leaveType.DutyDaysRequired} is Required for {leaveType.TypeName} .");
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    throw new InvalidOperationException($"Joining date Not assinged by HR.");
-                                                }
-                                            }
-                                            else
-                                            {
-                                                return await AddLeave();
-                                            }
-
+                                            return await CheckOne();
                                         }
                                         else
                                         {
                                             throw new InvalidOperationException($"For more than {leaveType.DaysCheck} {leaveType.TypeName}, leave FromDate should be atleast {leaveType.DaysCheckMore} days before. ");
                                         }
                                     }
-                                    else if (days <= leaveType.DaysCheck)
+                                    else
                                     {
                                         if (request.FromDate.DayNumber - currentDate.DayNumber >= leaveType.DaysCheckEqualOrLess)
                                         {
-                                            if (leaveType.DutyDaysRequired.HasValue)
-                                            {
-                                                if (employee.JoiningDate.HasValue)
-                                                {
-                                                    if (employee.JoiningDate.HasValue && (request.FromDate.DayNumber - employee.JoiningDate.Value.DayNumber >= leaveType.DutyDaysRequired))
-                                                    {
-                                                        return await AddLeave();
-                                                    }
-                                                    else
-                                                    {
-                                                        throw new InvalidOperationException($"Minimum Duty Days of {leaveType.DutyDaysRequired} is Required for {leaveType.TypeName}  .");
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    throw new InvalidOperationException($"Joining date Not assinged by HR. joining Date is required for {leaveType.TypeName}");
-                                                }
-                                            }
-                                            else
-                                            {
-                                                return await AddLeave();
-                                            }
+                                            return await CheckOne();
                                         }
                                         else
                                         {
                                             throw new InvalidOperationException($"For less than or {leaveType.DaysCheck} {leaveType.TypeName}, leave should be applied atleast {leaveType.DaysCheckEqualOrLess} days before. ");
                                         }
                                     }
+                                }
+                                else
+                                {
+                                    throw new InvalidOperationException("Days Check Not Assinged");
+                                }
+
+
+                            }
+                            else
+                            {
+                                if (leaveType.IsHalfDayAllowed == true)
+                                {
+                                    if (leaveDaysResultDto.DaysCount == 1)
+                                    {
+                                        if (leaveType.DaysCheck.HasValue)
+                                        {
+                                            if (days > leaveType.DaysCheck)
+                                            {
+                                                if (request.FromDate.DayNumber - currentDate.DayNumber >= leaveType.DaysCheckMore)
+                                                {
+                                                    return await CheckOne();
+
+                                                }
+                                                else
+                                                {
+                                                    throw new InvalidOperationException($"For more than {leaveType.DaysCheck} {leaveType.TypeName}, leave FromDate should be atleast {leaveType.DaysCheckMore} days before Apply Date. ");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (request.FromDate.DayNumber - currentDate.DayNumber >= leaveType.DaysCheckEqualOrLess)
+                                                {
+                                                    return await CheckOne();
+                                                }
+                                                else
+                                                {
+                                                    throw new InvalidOperationException($"For less than {leaveType.DaysCheck} or {leaveType.DaysCheck} {leaveType.TypeName}, leave should be applied atleast {leaveType.DaysCheckEqualOrLess} days before. ");
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            throw new InvalidOperationException("Days Check Not Assinged");
+                                        }
+                                    }
                                     else
                                     {
-                                        throw new InvalidOperationException("Unexpected");
+                                        throw new InvalidOperationException("Half Day can Only Be Applied For One Day");
                                     }
                                 }
                                 else
                                 {
-                                    throw new InvalidOperationException("Unexpected");
+                                    throw new InvalidOperationException($"Half Day Not Applicable for {leaveType.TypeName}");
                                 }
                             }
-                            else
-                            {
-                                throw new InvalidOperationException($"Half Day Not Applicable for {leaveType.TypeName}");
-                            }
+
                         }
                         else
                         {
-                            throw new InvalidOperationException("Unexpected");
+                            return await Balance(leaveBalance.Balance,leaveType.TypeName);
+                        }
+
+                    }
+                    else if (currentDate.DayNumber >= request.FromDate.DayNumber)
+                    {
+                        if (leaveBalance.Balance >= days && virtualBalance >= days)
+                        {
+                            if(!request.HalfDay.HasValue || request.HalfDay == false) 
+                            {
+                                return await PreviousDayLeaves();
+                            }
+                            else
+                            {
+                                if (leaveType.IsHalfDayAllowed == true)
+                                {
+                                    if (leaveDaysResultDto.DaysCount == 1)
+                                    {
+                                        return await PreviousDayLeaves();
+                                    }
+                                    else
+                                    {
+                                        throw new InvalidOperationException("Half Day can Only Be Applied For One Day");
+                                    }
+                                }
+                                else
+                                {
+                                    throw new InvalidOperationException($"Half Day Not Applicable for {leaveType.TypeName}");
+                                }
+                                 
+                            }
+                            
+
+                        }
+                        else
+                        {
+                            return await Balance(leaveBalance.Balance,leaveType.TypeName);
                         }
 
                     }
                     else
                     {
-                        throw new InvalidOperationException($"No Sufficient Leave for type {leaveType.TypeName}");
+                        throw new InvalidOperationException($"Current Leave Cannot Be Applied for Selected Dates");
                     }
                 }
                 else
                 {
-                    throw new Exception($"{leaveType.TypeName} can not be applied in advance");
+                    if (!employee.Gender.HasValue)
+                    {
+                        throw new InvalidOperationException($"Complete Profile Details Before Applying Leave.Mainly Gender");
+
+                    }
+                    throw new InvalidOperationException($"The Leave You Applied is gender Specific And You Cannot Apply For {leaveType.TypeName}");
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException($"One Of the Date in Applied Dates is Already Applied");
+            }
+
+            
+
+            
+
+            async Task<bool> AddLeave()
+            {
+                if (days > 0) {
+                    LeaveRequest leaveRequest = new LeaveRequest(request.EmpId, request.TypeId, request.HalfDay, request.FromDate, request.ToDate, currentDate, LeaveRequestStatus.Open, request.Description, request.EmpId);
+                    _context.LeaveRequests.Add(leaveRequest);
+                    await _context.SaveChangesAsync(cancellationToken);
+                    AddLeaveRequestDayCommand addLeaveRequestDayCommand = new AddLeaveRequestDayCommand();
+                    addLeaveRequestDayCommand.LeaveRequestId = leaveRequest.Id;
+                    addLeaveRequestDayCommand.Date = dates;
+                    return await _mediator.Send(addLeaveRequestDayCommand, cancellationToken);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Total Leave days are 0");
                 }
                 
+
             }
-            else if (currentDate.DayNumber >= request.FromDate.DayNumber)
+
+            async Task<bool> CheckOne()
             {
-                if (leaveBalance.Balance >= days)
+                if (leaveType.DutyDaysRequired.HasValue)
                 {
-                    if (leaveType.LeaveCategoryId == LeaveCategory.BereavementLeave)
+                    if (employee.JoiningDate.HasValue)
                     {
-                        return await AddLeave();
+                        if (employee.JoiningDate.HasValue && (request.FromDate.DayNumber - employee.JoiningDate.Value.DayNumber >= leaveType.DutyDaysRequired))
+                        {
+                            if (leaveType.LeaveCategoryId.HasValue && (leaveType.LeaveCategoryId == LeaveCategory.RestrictedHoliday))
+                            {
+                                int restrictedHolidayCount = await _context.Holiday.Where(x => x.Type == AttendanceStatus.RestrictedHoliday && x.Date >= request.FromDate && x.Date <= request.ToDate).CountAsync();
+                                if (days == restrictedHolidayCount)
+                                {
+                                    return await AddLeave();
+                                }
+                                else
+                                {
+                                    throw new InvalidOperationException($"Selected Day Do not Contain Restricted Holiday");
+                                }
+                            }
+                            else
+                            {
+                                return await AddLeave();
+                            }
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException($"Minimum Duty Days of {leaveType.DutyDaysRequired} is Required for {leaveType.TypeName} .");
+                        }
                     }
-                    else if (leaveType.LeaveCategoryId == LeaveCategory.PrivilegeLeave || leaveType.LeaveCategoryId == LeaveCategory.CasualLeave)
+                    else
                     {
-                        int leaveId = await _context.LeaveType.Where(x => x.LeaveCategoryId == LeaveCategory.EmergencyLeave).Select(x => x.Id).FirstOrDefaultAsync(cancellationToken);
-                        LeaveBalance leaveBalance2 = await _context.LeaveBalances.FirstOrDefaultAsync(x => x.EmployeeId == request.EmpId && x.TypeId == leaveId, cancellationToken);
-                        if (leaveBalance2.Balance >= days)
+                        throw new InvalidOperationException($"Joining date Not assinged by HR.");
+                    }
+                }
+                else
+                {
+                    if (leaveType.LeaveCategoryId.HasValue && (leaveType.LeaveCategoryId == LeaveCategory.RestrictedHoliday))
+                    {
+                        int restrictedHolidayCount = await _context.Holiday.Where(x => x.Type == AttendanceStatus.RestrictedHoliday && x.Date >= request.FromDate && x.Date <= request.ToDate).CountAsync();
+                        if (days == restrictedHolidayCount)
                         {
                             return await AddLeave();
                         }
                         else
                         {
-                            throw new InvalidOperationException($"No Sufficient Leave for type {LeaveCategory.EmergencyLeave}");
+                            throw new InvalidOperationException($"Selected Day Do not Contain Restricted Holiday");
+                        }
+                    }
+                    else
+                    {
+                        return await AddLeave();
+                    }
+                }
+            }
+
+
+            async Task<bool> WorkFromHomeCheck()
+            {
+                if (leaveType.DutyDaysRequired.HasValue)
+                {
+                    if (employee.JoiningDate.HasValue)
+                    {
+                        if ((request.FromDate.DayNumber - employee.JoiningDate.Value.DayNumber >= leaveType.DutyDaysRequired))
+                        {
+                            return await AddLeave();
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException($"Minimum Duty Days of {leaveType.DutyDaysRequired} is Required for {leaveType.TypeName} .");
                         }
 
                     }
                     else
                     {
-                        throw new InvalidOperationException($"Applying Leave For Previous Day is only Possible for {LeaveCategory.EmergencyLeave} And {LeaveCategory.BereavementLeave} ");
+                        throw new InvalidOperationException($"Joining date Not assinged by HR.");
+                    }
+                }
+                else
+                {
+                    return await AddLeave();
+                }
+            }
+
+
+            
+            async Task<bool> PreviousDayLeaves()
+            {
+                if (leaveType.LeaveCategoryId == LeaveCategory.BereavementLeave)
+                {
+                    return await AddLeave();
+                }
+                else if (leaveType.LeaveCategoryId == LeaveCategory.PrivilegeLeave || leaveType.LeaveCategoryId == LeaveCategory.CasualLeave)
+                {
+                    LeaveType EmergencyLeave = await _context.LeaveType.Where(x => x.LeaveCategoryId == LeaveCategory.EmergencyLeave).FirstOrDefaultAsync(cancellationToken);
+                    LeaveBalance leaveBalance2 = await _context.LeaveBalances.FirstOrDefaultAsync(x => x.EmployeeId == request.EmpId && x.TypeId == EmergencyLeave.Id, cancellationToken);
+                    decimal EmergencyVirtualLeaveCountWithOutHalfDay = await _context.LeaveRequestDays.Where(x => x.LeaveRequest.EmployeeId == request.EmpId && x.LeaveRequest.TypeId == request.TypeId && x.LeaveRequest.LeaveRequestStatusId == LeaveRequestStatus.Open && x.LeaveRequest.ApplyDate >= x.LeaveRequest.FromDate && x.LeaveRequest.HalfDay != true ).CountAsync(cancellationToken);
+                    decimal EmergencyVirtualLeaveCountWithHalfDay = await _context.LeaveRequestDays.Where(x => x.LeaveRequest.EmployeeId == request.EmpId && x.LeaveRequest.TypeId == request.TypeId && x.LeaveRequest.LeaveRequestStatusId == LeaveRequestStatus.Open && x.LeaveRequest.ApplyDate >= x.LeaveRequest.FromDate && x.LeaveRequest.HalfDay == true ).CountAsync(cancellationToken);
+                    decimal EmergencyVirtualBalance = leaveBalance.Balance - (virtualLeaveCountWithoutHalfDay + (virtualLeaveCountWithHalfDay / 2));
+                    if (leaveBalance2.Balance >= days && EmergencyVirtualBalance >= days)
+                    {
+                        return await AddLeave();
+                    }
+                    else
+                    {
+                        return await Balance(leaveBalance2.Balance, EmergencyLeave.TypeName);
                     }
 
                 }
                 else
                 {
-                    throw new InvalidOperationException($"No Sufficient Leave for type {leaveType.TypeName}");
+                    throw new InvalidOperationException($"Applying Leave For Previous Day is only Possible for Emergency  And .Bereavement Leave . And Half Day is not Applicable ");
                 }
-
-            }
-            else
-            {
-                throw new InvalidOperationException($"Unexpected Error");
             }
 
-            async Task<bool> AddLeave()
+            async Task<bool> Balance(decimal balance, string name)
             {
-                LeaveRequest leaveRequest = new LeaveRequest(request.EmpId, request.TypeId, request.HalfDay, request.FromDate, request.ToDate, currentDate, LeaveRequestStatus.Open, request.Description);
-                _context.LeaveRequests.Add(leaveRequest);
-                int saveResult = await _context.SaveChangesAsync(cancellationToken);
-                return saveResult > 0;
+                if (balance < days)
+                {
+                    throw new InvalidOperationException($"No Sufficient Leave for type {name}");
+                }
+                else
+                {
+                    throw new InvalidOperationException($"Revoke or edit existing {name}. All Balances are taken by applied leaves");
+                }
             }
 
         }

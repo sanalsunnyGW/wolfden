@@ -12,8 +12,8 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241120140459_LeaveThirdMigration")]
-    partial class LeaveThirdMigration
+    [Migration("20241125092857_LeaveOne")]
+    partial class LeaveOne
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,9 +76,6 @@ namespace WolfDen.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DailyAttendenceId")
-                        .HasColumnType("int");
-
                     b.Property<int>("DeviceId")
                         .HasColumnType("int");
 
@@ -106,8 +103,6 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DailyAttendenceId");
 
                     b.HasIndex("DeviceId");
 
@@ -464,7 +459,11 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("LOPDays")
+                    b.Property<string>("LOPDays")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LOPDaysCount")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PeriodEnd")
@@ -636,6 +635,9 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<int?>("ProcessedBy")
                         .HasColumnType("int");
 
+                    b.Property<int?>("RequestedBy")
+                        .HasColumnType("int");
+
                     b.Property<DateOnly>("ToDate")
                         .HasColumnType("date");
 
@@ -647,6 +649,8 @@ namespace WolfDen.Infrastructure.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("ProcessedBy");
+
+                    b.HasIndex("RequestedBy");
 
                     b.HasIndex("TypeId");
 
@@ -891,19 +895,11 @@ namespace WolfDen.Infrastructure.Migrations
 
             modelBuilder.Entity("WolfDen.Domain.Entity.AttendenceLog", b =>
                 {
-                    b.HasOne("WolfDen.Domain.Entity.DailyAttendence", "DailyAttendence")
-                        .WithMany()
-                        .HasForeignKey("DailyAttendenceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("WolfDen.Domain.Entity.Device", "Device")
                         .WithMany()
                         .HasForeignKey("DeviceId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("DailyAttendence");
 
                     b.Navigation("Device");
                 });
@@ -971,6 +967,10 @@ namespace WolfDen.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("ProcessedBy");
 
+                    b.HasOne("WolfDen.Domain.Entity.Employee", "Requested")
+                        .WithMany()
+                        .HasForeignKey("RequestedBy");
+
                     b.HasOne("WolfDen.Domain.Entity.LeaveType", "LeaveType")
                         .WithMany()
                         .HasForeignKey("TypeId")
@@ -982,6 +982,8 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Navigation("LeaveType");
 
                     b.Navigation("Manager");
+
+                    b.Navigation("Requested");
                 });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.LeaveRequestDay", b =>
