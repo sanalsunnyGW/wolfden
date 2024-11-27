@@ -637,11 +637,6 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-<<<<<<< HEAD
-                    b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
-
-=======
                     b.Property<int?>("RoleType")
                         .HasColumnType("int");
 
@@ -651,7 +646,6 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
->>>>>>> upstream/main
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");

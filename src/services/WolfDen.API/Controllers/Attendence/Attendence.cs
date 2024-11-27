@@ -10,7 +10,13 @@ using WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary;
 using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
+using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
+using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
 using WolfDen.Application.Requests.Queries.Attendence.WeeklySummary;
+using WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory;
+using WolfDen.Application.Requests.Commands.Attendence.CloseAttendance;
+using WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyReport;
+using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
 
 namespace WolfDen.API.Controllers.Attendence
@@ -21,10 +27,12 @@ namespace WolfDen.API.Controllers.Attendence
     {
         private readonly IMediator _mediator;
         private readonly PdfService _pdfService;
-        public Attendance(IMediator mediator, PdfService pdfService)
+        private readonly MonthlyPdf _monthlyPdf;
+        public Attendance(IMediator mediator,PdfService pdfService, MonthlyPdf monthlyPdf)
         {
             _mediator = mediator;
             _pdfService = pdfService;
+            _monthlyPdf = monthlyPdf;
         }
 
         [HttpGet("daily-attendance")]
@@ -73,6 +81,15 @@ namespace WolfDen.API.Controllers.Attendence
         {
             int closeAttendance = await _mediator.Send(closeAttendanceCommand, cancellationToken);
             return Ok(closeAttendance);
+        }
+
+        [HttpGet("monthly-pdf")]
+        public async Task<IResult> GenerateMonthlyPdf([FromQuery] MonthlyReportQuery monthlyPdf, CancellationToken cancellationToken)
+        {
+            MonthlyReportDTO attendence = await _mediator.Send(monthlyPdf, cancellationToken);
+            var document = _monthlyPdf.CreateMonthlyReportDocument(attendence);
+            var pdf = document.GeneratePdf();
+            return Results.File(pdf, "application/pdf", "MonthlyReport.pdf");
         }
 
         [HttpGet("all-employees-monthly-report")]
