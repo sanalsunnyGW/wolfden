@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <Folder Include="Methods\" />
-    <Folder Include="Requests\Commands\LeaveManagement\LeaveTypes\" />
   </ItemGroup>
 
   <ItemGroup>

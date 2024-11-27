@@ -1,18 +1,13 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WolfDen.Application.DTOs.LeaveManagement;
-using WolfDen.Domain.Entity;
 
 namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetLeaveRequestHistory
 {
-    public class GetLeaveRequestHistoryQuery : IRequest<List<LeaveRequestDto>>
+    public class GetLeaveRequestHistoryQuery : IRequest<LeaveRequestHistoryResponseDto>
     {
-        public int RequestId { get; set; }
-        public int TypeId { get; set; }
+        public int EmployeeId { get; set; }
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
      
     }
 }
