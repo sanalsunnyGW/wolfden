@@ -16,6 +16,7 @@ import { EmployeeService } from '../Service/employee.service';
 })
 export class ProfileComponent {
   userForm!: FormGroup<IProfileForm>;
+  
   inDate = new Date();
   employeeData: Employee = {
     id: 0,
@@ -55,7 +56,8 @@ export class ProfileComponent {
       address: new FormControl('', Validators.required),
       country: new FormControl('', Validators.required),
       state: new FormControl('', Validators.required),
-      photo: new FormControl('')
+      photo: new FormControl(''),
+      password:new FormControl('')
     })
   }
 
@@ -96,7 +98,8 @@ export class ProfileComponent {
       address: this.employeeData.address,
       country: this.employeeData.country,
       state: this.employeeData.state,
-      photo: this.employeeData.photo
+      photo: this.employeeData.photo,
+      password:null
     });
 
   }
@@ -140,7 +143,8 @@ export class ProfileComponent {
         address: formData.address,
         country: formData.country,
         state: formData.state,
-        photo: formData.photo
+        photo: formData.photo,
+        password:formData.password
       }
       this.employeeService.employeeUpdateEmployee(params).subscribe({
         next: (response: any) => {

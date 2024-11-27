@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import mermaid from 'mermaid';
 import { IEmployeeData } from '../Interface/employee-data';
@@ -64,7 +64,8 @@ export class MyTeamComponent {
   ngOnInit(): void {
     this.loadEmployeeHierarchy();
     (window as any).onA = (nodeName: string) => {
-      this.router.navigate(['/employee-display']);
+      console.log(nodeName)
+      this.router.navigate(['/dashboard/employee-display'], { queryParams: { id: nodeName } });
     };
 
     mermaid.initialize({
@@ -161,7 +162,7 @@ export class MyTeamComponent {
   private generateMermaidGraph(employees: any[]): string {
     let graph = 'graph TB;\n';
     const traverse = (emp: any) => {
-      const nodeId = `Node${emp.id}`;
+      const nodeId = `${emp.id}`;
       const nodeLabel = `${emp.firstName || 'No Name'} ${emp.lastName || ''}`.trim();
       graph += `${nodeId}[${nodeLabel}]\n`;
       if (emp.subordinates && Array.isArray(emp.subordinates) && emp.subordinates.length > 0) {
