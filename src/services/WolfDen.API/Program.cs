@@ -9,11 +9,11 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Security.Cryptography.Xml;
 using System.Text;
-using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
-using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
 using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
+using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
+using WolfDen.Application.Helpers;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -97,6 +97,8 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddScoped<WolfDenContext>();
 builder.Services.AddSingleton<PdfService>();
+builder.Services.AddScoped<ManagerEmailFinder>();
+    
 builder.Services.AddScoped<MonthlyPdf>();
 
 QuestPDF.Settings.License = LicenseType.Community;

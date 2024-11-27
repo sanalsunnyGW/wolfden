@@ -1,0 +1,56 @@
+.example-tree-invisible {
+    display: none;
+  }
+  
+  .example-tree ul,
+  .example-tree li {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style-type: none;
+  }
+  
+  .mat-tree-position {
+      position: fixed;
+      top: 5%;
+  }
+  .but{
+    margin-bottom: 20px;
+    background-color:#5A72A0;
+    margin-left: 4px;
+    margin-right: 4px;
+    color:white
+  }
+  .pcard{
+    margin: 15px;   
+  }
+  .name{
+    margin: 10px;
+  }
+  .view{
+    background-color: #5A72A0;
+    color: white;
+  }
+  .ba{
+    margin-top: 300px;
+  }
+  .card {
+    border: 1px solid #ccc; 
+    padding: 11px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    border-radius: 1;
+    width: 20rem; 
+    margin-left: 25rem;
+    background-color: rgb(244, 244, 244);
+    
+  }
+  .card2 {
+    border: 1px solid #ccc; 
+    padding: 11px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 1;
+    height: 150px;
+    background-color: rgb(245, 245, 245);
+    
+  }
+  

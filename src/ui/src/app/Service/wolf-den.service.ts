@@ -9,9 +9,8 @@ import { IEmployeeDirectoryWithPagecount } from '../Interface/iemployee-director
 
 export class WolfDenService {
 
-
-  private baseUrl = environment.apiUrl;
-  public userId: number = 3;
+  private baseUrl=environment.apiUrl;
+  public userId : number=1;
 
   constructor(private http: HttpClient) { }
 

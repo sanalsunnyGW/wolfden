@@ -45,7 +45,8 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                 string incompleteShiftDays = "";
                 for (DateOnly currentDate = monthStart; currentDate <= attendanceClosingDate; currentDate = currentDate.AddDays(1))
                 {
-                    DailyAttendence attendanceRecord = attendanceRecords.FirstOrDefault(x => x.EmployeeId == employee.Id && x.Date == currentDate);
+                    DailyAttendence? attendanceRecord = attendanceRecords.
+                        FirstOrDefault(x => x.EmployeeId == employee.Id && x.Date == currentDate);
                     if (attendanceRecord is not null)
                     {
                         if (attendanceRecord.InsideDuration < minWorkDuration)
@@ -54,33 +55,17 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                             incompleteShiftCount++;
                         }
                     }
-                    else
+                    else 
                     {
-                        Holiday holiday = holidays.FirstOrDefault(x => x.Date == currentDate);
-                        if (holiday is not null)
+                        Holiday? holiday = holidays.FirstOrDefault(x => x.Date == currentDate);
+                        LeaveRequest? leaveRequest = leaveRequests
+                                   .FirstOrDefault(x => x.EmployeeId == employee.Id && x.FromDate <= currentDate && x.ToDate >= currentDate);
+                        if ((holiday is null || holiday.Type is not AttendanceStatus.NormalHoliday) && leaveRequest is null)
                         {
-                            if (holiday.Type is not AttendanceStatus.NormalHoliday)
-                            {
-                                LeaveRequest leaveRequestForHoliday = leaveRequests.FirstOrDefault(x => x.EmployeeId == employee.Id && x.FromDate <= currentDate && x.ToDate >= currentDate);
-
-                                if (leaveRequestForHoliday is null)
-                                {
-                                    lopdays += currentDate.ToString("yyyy-MM-dd") + ",";
-                                    lopCount++;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            LeaveRequest leaveRequest = leaveRequests.FirstOrDefault(x => x.EmployeeId == employee.Id && x.FromDate <= currentDate && x.ToDate >= currentDate);
-                            if (leaveRequest is null)
-                            {
-                                lopdays += currentDate.ToString("yyyy-MM-dd") + ",";
-                                lopCount++;
-                            }
+                            lopdays += currentDate.ToString("yyyy-MM-dd") + ",";
+                            lopCount++;
                         }
                     }
-
                 }
                 LOP lop = new LOP(attendanceClosingDate, employee.Id, lopCount, incompleteShiftCount, lopdays, incompleteShiftDays);
                 await _context.AddAsync(lop);

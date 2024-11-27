@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { DailyAttendance } from '../Interface/idaily-attendance';
 import { environment } from '../../enviornments/environment';
+import { DailyAttendance } from '../Interface/idaily-attendance';
 import { MonthlyReports } from '../Interface/monthly-report';
-import { IAttendanceSummary } from '../Interface/attendance-summary';
-import { IAttendanceData } from '../Interface/attendance-data';
-import { WeeklyAttendance } from '../Interface/iweekly-attendance';
 import { ICheckAttencdanceClose } from '../Interface/check-attendance-close';
+import { IAttendanceSummary } from '../Interface/attendance-summary';
+import { WeeklyAttendance } from '../Interface/iweekly-attendance';
 import { SubordinatesDetails } from '../Interface/subordinates-details';
+import { IAttendanceData } from '../Interface/attendance-data';
 
 @Injectable({
   providedIn: 'root'
@@ -54,7 +54,7 @@ export class AttendanceService {
   }
   getSubOrdinates(employeeId:number)
   {
-    return this.http.get<SubordinatesDetails[]>(`${this.baseUrl}/api/attendance/get-subordinates?EmployeeId=${employeeId}`)
+    return this.http.get<SubordinatesDetails>(`${this.baseUrl}/api/attendance/subordinates?EmployeeId=${employeeId}`)
   }
 }
 
