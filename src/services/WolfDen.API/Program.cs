@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using QuestPDF.Infrastructure;
 using System.Reflection;
+using System.Security.Claims;
 using System.Security.Cryptography.Xml;
 using System.Text;
 using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
@@ -89,6 +90,7 @@ builder.Services.AddAuthentication(x =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!)),
         ValidateIssuer = false,
         ValidateAudience = false,
+        RoleClaimType = ClaimTypes.Role
     };
 });
 
