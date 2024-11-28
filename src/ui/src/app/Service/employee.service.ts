@@ -8,7 +8,7 @@ import { environment } from '../../enviornments/environment';
 export class EmployeeService {
 
   constructor(private http: HttpClient) { }
-  employeeId = 3;
+  employeeId = 1;
   private baseUrl = environment.employeeapiUrl;
 
   decodeToken() {

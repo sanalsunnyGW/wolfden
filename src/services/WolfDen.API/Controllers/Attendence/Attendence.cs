@@ -20,6 +20,7 @@ using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.SubOrdinates;
 using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
 using QuestPDF.Infrastructure;
+using WolfDen.Application.Requests.Commands.Attendence.Email;
 
 
 namespace WolfDen.API.Controllers.Attendence
@@ -121,6 +122,13 @@ namespace WolfDen.API.Controllers.Attendence
         {
             return await _mediator.Send(query, cancellationToken);
         }
+
+        [HttpPost("send-email")]
+        public async Task<bool> SendEmail([FromQuery] SendEmailCommand command, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(command, cancellationToken);
+        }
+
     }
 
 

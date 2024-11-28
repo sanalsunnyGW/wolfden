@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using sib_api_v3_sdk.Api;
+using sib_api_v3_sdk.Client;
 using sib_api_v3_sdk.Model;
 using WolfDen.Application.Helpers;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
+
 
 namespace WolfDen.Application.Requests.Commands.Attendence.Email
 {
@@ -15,12 +17,14 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
         private readonly string _senderEmail;
         private readonly string _senderName;
         private readonly ManagerEmailFinder _emailFinder;
+        private readonly string _apiKey;
         public SendEmailCommandHandler(WolfDenContext context, IConfiguration configuration,ManagerEmailFinder emailFinder)
         {
             _context = context;
             _senderEmail = configuration["BrevoApi:SenderEmail"];
             _senderName = configuration["BrevoApi:SenderName"];
             _emailFinder = emailFinder;
+            _apiKey = configuration["BrevoApi:ApiKey"];
         }
         public async Task<bool> Handle(SendEmailCommand request, CancellationToken cancellationToken)
         {
@@ -35,7 +39,10 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
         }
         private void SendMail(string senderEmail, string senderName, string[] receiverEmails, string message, string subject, string[] ccEmails = null)
         {
-                TransactionalEmailsApi apiInstance = new TransactionalEmailsApi();
+            Configuration configuration = new Configuration();
+            configuration.AddApiKey("api-key", _apiKey);
+
+                TransactionalEmailsApi apiInstance = new TransactionalEmailsApi(configuration);
                 SendSmtpEmailSender sender = new SendSmtpEmailSender
                 {
                     Email = senderEmail,

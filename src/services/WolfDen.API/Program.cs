@@ -1,3 +1,6 @@
+using System.Reflection;
+using System.Security.Claims;
+using System.Text;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -5,15 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using QuestPDF.Infrastructure;
-using System.Reflection;
-using System.Security.Claims;
-using System.Security.Cryptography.Xml;
-using System.Text;
+using WolfDen.Application.Helpers;
+using WolfDen.Application.Requests.Commands.Attendence.Service;
+using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
+using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
 using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
-using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
-using WolfDen.Application.Helpers;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -85,7 +86,6 @@ builder.Services.AddAuthentication(x =>
     x.SaveToken = false;
     x.TokenValidationParameters = new TokenValidationParameters
     {
-
         RequireExpirationTime = true,
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!)),
@@ -98,8 +98,8 @@ builder.Services.AddAuthentication(x =>
 builder.Services.AddScoped<WolfDenContext>();
 builder.Services.AddSingleton<PdfService>();
 builder.Services.AddScoped<ManagerEmailFinder>();
-    
 builder.Services.AddScoped<MonthlyPdf>();
+builder.Services.AddHostedService<DailyAttendancePollerService>();
 
 QuestPDF.Settings.License = LicenseType.Community;
 
