@@ -44,6 +44,7 @@ export class LoginComponent {
           const employee = this.employeeService.decodeToken();
           console.log(employee);
           this.userService.userId=employee.EmployeeId;
+          console.log(this.userService.userId);
           this.userService.firstName=employee.FirstName
           console.log(this.userService.userId);
           

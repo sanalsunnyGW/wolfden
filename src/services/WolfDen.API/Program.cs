@@ -98,7 +98,7 @@ builder.Services.AddScoped<WolfDenContext>();
 builder.Services.AddSingleton<PdfService>();
 builder.Services.AddScoped<ManagerEmailFinder>();
 builder.Services.AddScoped<MonthlyPdf>();
-builder.Services.AddHostedService<DailyAttendancePollerService>();
+//builder.Services.AddHostedService<DailyAttendancePollerService>();
 
 QuestPDF.Settings.License = LicenseType.Community;
 

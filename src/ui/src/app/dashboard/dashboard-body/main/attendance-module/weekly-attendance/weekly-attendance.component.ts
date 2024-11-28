@@ -132,6 +132,7 @@ getStartOfWeek(selectedWeek:string){
       (response: WeeklyAttendance[]) =>{
         if(response){
           this.weeklyData = response.map((item) => {
+            console.log(this.weeklyData)
             const convertedDate = new Date(item.date);
             return { ...item, date: convertedDate };
           });

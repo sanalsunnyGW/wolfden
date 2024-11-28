@@ -39,7 +39,6 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                             SendEmailCommand sendEmailCommand = new SendEmailCommand();
                             sendEmailCommand.EmployeeId = newEntry.EmployeeId;
                             await _mediator.Send(sendEmailCommand, stoppingToken);
-                            Console.WriteLine("send");
                         }
                     }
                     await Task.Delay(86400,stoppingToken);
