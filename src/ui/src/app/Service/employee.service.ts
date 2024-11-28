@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { environment } from '../../enviornments/environment';
 import { WolfDenService } from './wolf-den.service';
 import { LoginComponent } from '../user/login/login.component';
@@ -12,7 +12,7 @@ export class EmployeeService {
   constructor(private http: HttpClient) { }
 
   private baseUrl = environment.employeeapiUrl;
-  public employeeId = 1;
+  public userId = 1;
   decodeToken() {
     const token = localStorage.getItem('token');
 
@@ -44,6 +44,6 @@ export class EmployeeService {
   }
   //to be corrected
   getMyTeamHierarchy(getFullHierarchy: boolean) {
-    return this.http.get(`${this.baseUrl}/team?Id=${this.employeeId}&Hierarchy=${getFullHierarchy}`);
+    return this.http.get(`${this.baseUrl}/team?Id=${this.userId}&Hierarchy=${getFullHierarchy}`);
   }
 }
