@@ -91,7 +91,7 @@ export const routes: Routes = [
             {
                 path:'attendance/calendar',
                 component:CalendarViewComponent,
-                canActivate: [guardsGuard]
+                
             },
             {
                 path: 'leave-dashboard',

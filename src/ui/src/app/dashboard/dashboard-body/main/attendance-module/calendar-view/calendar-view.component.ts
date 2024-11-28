@@ -34,7 +34,7 @@ export class CalendarViewComponent implements OnInit {
   incompleteShift: number = 0;
   wfh: number = 0;
 
-  employeeId: number = 1;
+  employeeId: number = 33;
   currentYear: number = new Date().getFullYear();
   currentMonth: number = new Date().getMonth() + 1;
   selectedYear: number = this.currentYear;
@@ -93,14 +93,12 @@ export class CalendarViewComponent implements OnInit {
         return ['weekend-day'];
       }
 
-      if (status === 1) {
-        return ['present'];
-      } else if (status === 2) {
-        return ['absent'];
-      } else if (status === 3) {
-        return ['incompleteShift'];
-      } else if (status === 4) {
-        return ['wfh'];
+      switch(status)
+      {
+        case 1:return ['present'];
+        case 2:return ['absent'];
+        case 3:return ['incompleteShift'];
+        case 4:return ['wfh'];
       }
     }
 

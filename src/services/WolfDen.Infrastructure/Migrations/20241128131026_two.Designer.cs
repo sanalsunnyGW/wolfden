@@ -12,13 +12,8 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-<<<<<<<< HEAD:src/services/WolfDen.Infrastructure/Migrations/20241128044534_button.Designer.cs
-    [Migration("20241128044534_button")]
-    partial class button
-========
-    [Migration("20241128062047_testing")]
-    partial class testing
->>>>>>>> upstream/main:src/services/WolfDen.Infrastructure/Migrations/20241128062047_testing.Designer.cs
+    [Migration("20241128131026_two")]
+    partial class two
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -409,22 +404,22 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
-                    b.Property<DateTimeOffset>("DepartureTime")
+                    b.Property<DateTimeOffset?>("DepartureTime")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("InsideDuration")
+                    b.Property<int?>("InsideDuration")
                         .HasColumnType("int");
 
                     b.Property<string>("MissedPunch")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OutsideDuration")
+                    b.Property<int?>("OutsideDuration")
                         .HasColumnType("int");
 
-                    b.Property<int>("PantryDuration")
+                    b.Property<int?>("PantryDuration")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PeriodEnd")

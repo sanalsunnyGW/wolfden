@@ -1,4 +1,7 @@
-﻿using System.Data.SqlClient;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.TeamFoundation.Common;
+using System.Data.SqlClient;
+using WolfDen.Application.Constants;
 using WolfDen.Application.Models;
 
 public class QueryBasedSyncService
@@ -7,9 +10,11 @@ public class QueryBasedSyncService
     private readonly string _destinationConnectionString;
     private readonly int _batchSize;
     private readonly int _commandTimeout;
+    private readonly ILogger<QueryBasedSyncService> _logger;
     public QueryBasedSyncService(
         string sourceConnectionString,
         string destinationConnectionString,
+        ILogger<QueryBasedSyncService> logger,
         int batchSize = 10000,
         int commandTimeout = 600)
     {
@@ -17,19 +22,23 @@ public class QueryBasedSyncService
         _destinationConnectionString = destinationConnectionString;
         _batchSize = batchSize;
         _commandTimeout = commandTimeout;
+        _logger = logger;
     }
 
-    public async Task SyncTablesAsync(Dictionary<string, TableSyncConfig> syncConfigs)
+    public async Task SyncTablesAsync()
     {
-        foreach (var configPair in syncConfigs)
+        Dictionary<string, TableSyncConfig> configs = SyncConfigs.GetSyncConfigs();
+        foreach (var configPair in configs)
         {
             try
             {
+                _logger.LogInformation($"Starting sync for: {configPair.Key}");
                 await SyncTableAsync(configPair.Value);
+                _logger.LogInformation($"Completed sync for: {configPair.Key}");
             }
             catch (Exception ex )
             {
-                Console.WriteLine(ex);
+                _logger.LogError(ex, $"Error syncing {configPair.Key}");
 
             }
         }
@@ -92,6 +101,7 @@ public class QueryBasedSyncService
         bulkCopy.SqlRowsCopied += (sender, e) =>
         {
             totalRows = e.RowsCopied;
+            _logger.LogInformation($"Copied {e.RowsCopied:N0} rows to {config.DestinationTable}");
         };
 
         await bulkCopy.WriteToServerAsync(reader);
@@ -100,11 +110,13 @@ public class QueryBasedSyncService
         {
             await ExecuteQueryAsync(destinationConnection, config.PostSyncQuery);
         }
+        _logger.LogInformation($"Total rows copied to {config.DestinationTable}: {totalRows:N0}");
 
     }
 
     private async Task TruncateTableAsync(SqlConnection connection, string tableName)
     {
+        _logger.LogInformation($"Truncating table: {tableName}");
         using var cmd = new SqlCommand($"TRUNCATE TABLE {tableName}", connection);
         await cmd.ExecuteNonQueryAsync();
     }

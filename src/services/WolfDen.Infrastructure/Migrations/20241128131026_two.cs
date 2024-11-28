@@ -1,4 +1,3 @@
-<<<<<<< HEAD:src/services/WolfDen.Infrastructure/Migrations/20241128044534_button.cs
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -7,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WolfDen.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class button : Migration
+    public partial class two : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -104,25 +103,25 @@ namespace WolfDen.Infrastructure.Migrations
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    DepartureTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                    DepartureTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
                         .Annotation("SqlServer:IsTemporal", true)
                         .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    InsideDuration = table.Column<int>(type: "int", nullable: false)
+                    InsideDuration = table.Column<int>(type: "int", nullable: true)
                         .Annotation("SqlServer:IsTemporal", true)
                         .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    OutsideDuration = table.Column<int>(type: "int", nullable: false)
+                    OutsideDuration = table.Column<int>(type: "int", nullable: true)
                         .Annotation("SqlServer:IsTemporal", true)
                         .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    PantryDuration = table.Column<int>(type: "int", nullable: false)
+                    PantryDuration = table.Column<int>(type: "int", nullable: true)
                         .Annotation("SqlServer:IsTemporal", true)
                         .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
@@ -2000,5 +1999,3 @@ namespace WolfDen.Infrastructure.Migrations
         }
     }
 }
-=======
->>>>>>> upstream/main:src/services/WolfDen.Infrastructure/Migrations/20241127121548_first.cs
