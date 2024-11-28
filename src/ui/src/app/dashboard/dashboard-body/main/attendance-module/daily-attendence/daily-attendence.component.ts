@@ -1,10 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { CommonModule, formatDate } from '@angular/common';
-import { AttendanceService } from '../../../../../Service/attendance.service';
-import { DailyAttendance } from '../../../../../Interface/idaily-attendance';
-import { WolfDenService } from '../../../../../Service/wolf-den.service';
-
+import { AttendanceService } from '../../../../../service/attendance.service';
+import { DailyAttendance } from '../../../../../interface/idaily-attendance';
+import { WolfDenService } from '../../../../../service/wolf-den.service';
 
 @Component({
   selector: 'app-daily-attendence',
@@ -27,9 +26,9 @@ export class DailyAttendenceComponent {
   attendanceStatus = [
     { id: 1, viewValue: 'Present' },
     { id: 2, viewValue: 'Absent' },
-    { id: 3, viewValue: 'IncompleteShift' },
-    { id: 4, viewValue: 'RestrictedHoliday' },
-    { id: 5, viewValue: 'NormalHoliday' },
+    { id: 3, viewValue: 'Incomplete Shift' },
+    { id: 4, viewValue: 'Restricted Holiday' },
+    { id: 5, viewValue: 'Normal Holiday' },
     { id: 6, viewValue: 'WFH' },
     { id: 7, viewValue: 'Leave' },
   ];
@@ -66,12 +65,12 @@ export class DailyAttendenceComponent {
   convertToTime(dateStr: string): string {
     if(dateStr)
     {
-    const date = new Date(dateStr); 
-    const hours = date.getHours().toString().padStart(2, '0'); 
-    const minutes = date.getMinutes().toString().padStart(2, '0'); 
-    return `${hours}:${minutes}`; 
+      const date = new Date(dateStr); 
+      const hours = date.getHours().toString().padStart(2, '0'); 
+      const minutes = date.getMinutes().toString().padStart(2, '0'); 
+      return `${hours}:${minutes}`; 
     }
-    return ''
+    return '' 
   }
   downloadDailyReport()
   {

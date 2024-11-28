@@ -3,11 +3,11 @@ import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular
 import { Calendar, CalendarOptions, DatesSetArg, DayCellContentArg } from '@fullcalendar/core/index.js';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-import { AttendanceService } from '../../../../../Service/attendance.service';
-import { IAttendanceSummary } from '../../../../../Interface/attendance-summary';
-import { IAttendanceData } from '../../../../../Interface/attendance-data';
+import { AttendanceService } from '../../../../../service/attendance.service';
+import { IAttendanceSummary } from '../../../../../interface/attendance-summary';
+import { IAttendanceData } from '../../../../../interface/attendance-data';
 import { Router } from '@angular/router';
-import { WolfDenService } from '../../../../../Service/wolf-den.service';
+import { WolfDenService } from '../../../../../service/wolf-den.service';
 
 @Component({
   selector: 'app-calendar-view',
@@ -74,7 +74,6 @@ export class CalendarViewComponent implements OnInit  {
     this.newDate=selectedDate;
     this.router.navigate(['dashboard/attendance/daily', this.newDate]);
   }
-
   getDayCellClassNames(arg: DayCellContentArg): string[] {
     const date = new Date(Date.UTC(
       arg.date.getFullYear(),

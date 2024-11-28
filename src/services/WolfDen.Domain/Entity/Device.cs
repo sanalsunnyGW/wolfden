@@ -8,7 +8,7 @@
         {
             
         }
-        public Device( string name)
+        public Device(string name)
         {
             Name = name;
         }

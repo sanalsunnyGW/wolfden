@@ -5,7 +5,7 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AttendanceService } from '../../../../../Service/attendance.service';
-import { AttendanceHistory } from '../../../../../Interface/attendance-history';
+import { AttendanceHistory } from '../../../../../interface/attendance-history';
 
 @Component({
   selector: 'app-attendance-history',

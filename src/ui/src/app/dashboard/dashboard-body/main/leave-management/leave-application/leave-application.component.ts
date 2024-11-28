@@ -4,8 +4,7 @@ import { ILeaveApplication } from '../../../../../interface/Leave-Application-In
 import { CommonModule } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
-import { LeaveManagementService } from '../../../../../Service/leave-management.service';
-import { takeUntil } from 'rxjs';
+import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
