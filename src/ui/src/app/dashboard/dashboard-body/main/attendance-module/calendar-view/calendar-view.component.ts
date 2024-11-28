@@ -91,15 +91,13 @@ export class CalendarViewComponent implements OnInit  {
       if (arg.date.getDay() === 6 || arg.date.getDay() === 0) {
         return ['weekend-day'];
       }
-
-      if (status === 1) {
-        return ['present'];
-      } else if (status === 2) {
-        return ['absent'];
-      } else if (status === 3) {
-        return ['incompleteShift'];
-      } else if (status === 4) {
-        return ['wfh'];
+      
+      switch(status)
+      {
+        case 1:return ['present'];
+        case 2:return ['absent'];
+        case 3:return ['incompleteShift'];
+        case 4:return ['wfh'];
       }
     }
 
