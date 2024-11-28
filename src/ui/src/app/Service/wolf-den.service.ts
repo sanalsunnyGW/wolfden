@@ -10,14 +10,24 @@ import { EmployeeService } from './employee.service';
 
 export class WolfDenService {
 
+  emp = inject(EmployeeService);
 
-  private baseUrl=environment.apiUrl;
-  public userId : number=0;
-  public role:string="";
-  public firstName:string="Welcome Back";
+  private baseUrl = environment.apiUrl;
+  public userId: number = 0;
+  public role : string = "";
+  public firstName: string = ""; 
 
 
-  constructor(private http: HttpClient, private employeeService: EmployeeService) { }
+  constructor(private http: HttpClient, private employeeService: EmployeeService) {
+    if (localStorage.getItem('token') !== null) {
+      const payload = this.emp.decodeToken();
+      this.userId = parseInt(payload.EmployeeId || 0, 10);
+      this.role = (payload.Role||"");
+      this.firstName = (payload.FirstName || 'welcome back');
+    }
+  }
+
+
 
 
   private createHttpParams(params: { [key: string]: any }): HttpParams {

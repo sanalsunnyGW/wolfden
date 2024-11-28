@@ -3,7 +3,7 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
-import { ILeaveBalanceList } from '../../../../../Interface/leave-balance-list-interface';
+import { ILeaveBalanceList } from '../../../../../interface/leave-balance-list-interface';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 

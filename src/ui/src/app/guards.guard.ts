@@ -4,7 +4,7 @@ import { inject } from '@angular/core';
 
 export const guardsGuard: CanActivateFn = (route, state) => {
   const userService=inject(WolfDenService);
-  const isLoggedIn = (userService.userId !== 0);
+  const isLoggedIn =  !!localStorage.getItem('token');;
   const router = inject(Router); 
   if(!isLoggedIn){
     return router.createUrlTree(['/user/login']);  

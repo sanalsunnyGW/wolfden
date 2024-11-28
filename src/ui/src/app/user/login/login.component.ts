@@ -40,13 +40,13 @@ export class LoginComponent {
     if (this.userForm.valid) {
       this.userService.getEmployeeLogin(this.userForm.value.email, this.userForm.value.password).subscribe({
         next: (response: any) => {
+          // console.log(response);
           localStorage.setItem('token', response.token);
           const employee = this.employeeService.decodeToken();
           console.log(employee);
           this.userService.userId=employee.EmployeeId;
           this.userService.firstName=employee.FirstName
           console.log(this.userService.userId);
-          
           this.toastr.success('Login sucessfull')
           this.router.navigate(['/portal/dashboard']);
         }
