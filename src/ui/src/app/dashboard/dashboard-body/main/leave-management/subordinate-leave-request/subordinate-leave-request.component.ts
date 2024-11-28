@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { LeaveRequestStatus } from '../../../../../enum/leave-request-status-enum';
-import { LeaveManagementService } from '../../../../../Service/leave-management.service';
+import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { ISubordinateLeaveRequest } from '../../../../../interface/subordinate-leave-request';
 import { IApproveRejectLeave } from '../../../../../interface/approve-or-reject-leave-interface';
 

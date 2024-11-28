@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ILeaveUpdate, IUpdateLeaveSettingFormControl } from '../../../../../interface/update-leave-setting';
-import { LeaveManagementService } from '../../../../../Service/leave-management.service';
+import { LeaveManagementService } from '../../../../../service/leave-management.service';
 
 @Component({
   selector: 'app-update-leave-settings',

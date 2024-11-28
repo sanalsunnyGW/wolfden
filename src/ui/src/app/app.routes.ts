@@ -28,8 +28,7 @@ import { AddLeaveByAdminForEmployeesComponent } from './dashboard/dashboard-body
 
 export const routes: Routes = [
     {
-        path: 'profile',
-        component: ProfileComponent},{
+    
         path: 'user', 
         component: UserComponent,
         children:[
@@ -38,42 +37,6 @@ export const routes: Routes = [
             {path: 'login', component: LoginComponent},
         ]
     },
-    {
-        path:'attendance/calendar',
-        component:CalendarViewComponent
-    },
-    {
-        path: 'leave-dashboard',
-        component: LeaveDashboardComponent
-    },
-    {
-        path: 'leave-request-history',
-        component: LeaveHistoryComponent
-    },
-    {
-        path: 'company-hierarchy',
-        component: EmployeeHierarchyTreeComponent
-    },
-    {
-        path: 'employee-display',
-        component: EmloyeeHierarchyDisplayComponent
-    },
-    {
-        path: 'my-team',
-        component: MyTeamComponent
-    },
-
-    {
-        path: 'attendance/calendar',
-        component: CalendarViewComponent
-    },
-    {
-        path: '',
-        component: UserComponent
-
-    },
-   
-
 
     {
         path:'dashboard',
@@ -81,8 +44,6 @@ export const routes: Routes = [
         children:[
             {path:'main-page',component:MainPageComponent},
             {path:'employee-directory',component: EmployeeDirectoryComponent},
-            {path:'leave-dashboard',component:LeaveDashboardComponent},
-            {path:'leave-request-history',component:LeaveHistoryComponent},
             {path:'attendance/daily/:attendanceDate',component:DailyAttendenceComponent},
             {path:'attendance/weekly',component:WeeklyAttendanceComponent},
             {path:'attendance/monthly',component:MonthlyReportComponent},
@@ -155,6 +116,8 @@ export const routes: Routes = [
  
 
 ];
+
+
 
 
 
