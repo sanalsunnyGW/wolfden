@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ILeaveUpdate, IUpdateLeaveSettingFormControl } from '../../../../../interface/update-leave-setting';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-update-leave-settings',
@@ -13,7 +14,7 @@ import { LeaveManagementService } from '../../../../../service/leave-management.
 export class UpdateLeaveSettingsComponent {
   fb = inject(FormBuilder)
   leaveManagement = inject(LeaveManagementService)
-
+  destroyRef= inject(DestroyRef);
   updateLeaveSetting : FormGroup
   leaveSettings : ILeaveUpdate = {} as ILeaveUpdate;
 
@@ -31,7 +32,8 @@ export class UpdateLeaveSettingsComponent {
   onSubmit(){
     if(this.updateLeaveSetting.valid)
       {
-        this.leaveManagement.updateLeaveSettings(this.updateLeaveSetting.value).subscribe({
+        this.leaveManagement.updateLeaveSettings(this.updateLeaveSetting.value)
+        .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
           next:(response : boolean)=>{
             if(response)
             {

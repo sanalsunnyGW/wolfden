@@ -1,4 +1,4 @@
-import { Component, DestroyRef, Inject, inject } from '@angular/core';
+import { Component, DestroyRef, Inject, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormControlName, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import {  ILeaveApplicationFormControl } from '../../../../../interface/leave-application-interface';
 import { NgSelectComponent } from '@ng-select/ng-select';
@@ -14,7 +14,7 @@ import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-
   templateUrl: './leave-application.component.html',
   styleUrl: './leave-application.component.scss'
 })
-export class LeaveApplicationComponent {
+export class LeaveApplicationComponent implements OnInit {
 
   fb = inject(FormBuilder);
   applyLeave : FormGroup
@@ -45,7 +45,8 @@ export class LeaveApplicationComponent {
   onSubmit(){
     if(this.applyLeave.valid){
       console.log(this.applyLeave);
-      this.leaveManagement.applyLeaveRequest(this.applyLeave.value).subscribe({
+      this.leaveManagement.applyLeaveRequest(this.applyLeave.value)
+      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next:(response : boolean)=>{
           if(response)
           {

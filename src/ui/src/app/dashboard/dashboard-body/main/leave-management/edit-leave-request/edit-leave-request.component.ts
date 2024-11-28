@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
 import { IEditleave } from '../../../../../interface/edit-leave-application-interface';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-edit-leave-request',
@@ -12,12 +13,13 @@ import { NgSelectComponent } from '@ng-select/ng-select';
   templateUrl: './edit-leave-request.component.html',
   styleUrl: './edit-leave-request.component.scss'
 })
-export class EditLeaveRequestComponent {
+export class EditLeaveRequestComponent implements OnInit {
 
   fb = inject(FormBuilder);
   editLeave : FormGroup
   leaveManagement = inject(LeaveManagementService)
   leaveType : Array<IGetLeaveTypeIdAndname> = []
+  destroyRef= inject(DestroyRef);
 
   constructor(){
     this.editLeave = this.fb.group<IEditleave>({
@@ -31,7 +33,8 @@ export class EditLeaveRequestComponent {
   }
 
   ngOnInit(){
-    this.leaveManagement.getLeaveTypeIdAndName().subscribe({
+    this.leaveManagement.getLeaveTypeIdAndName()
+    .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next:(response : Array<IGetLeaveTypeIdAndname>) =>{
               this.leaveType = response
       },
@@ -44,7 +47,8 @@ export class EditLeaveRequestComponent {
   onSubmit(){
 
     if(this.editLeave.valid){
-      this.leaveManagement.editLeaveRequest(this.editLeave.value).subscribe({
+      this.leaveManagement.editLeaveRequest(this.editLeave.value)
+      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next:(response : boolean)=>{
           if(response)
           {

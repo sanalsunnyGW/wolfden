@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, NgSelectOption, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IAddNewLeaveTypeFormcontrol } from '../../../../../interface/add-new-leave-type-interface';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
 
@@ -13,9 +14,10 @@ import { LeaveManagementService } from '../../../../../service/leave-management.
   templateUrl: './add-new-leave-type.component.html',
   styleUrl: './add-new-leave-type.component.scss'
 })
-export class AddNewLeaveTypeComponent {
+export class AddNewLeaveTypeComponent{
   fb = inject(FormBuilder)
   leaveManagement = inject(LeaveManagementService)
+  destroyRef= inject(DestroyRef);
 
     addNewLeaveType : FormGroup
     constructor() {
@@ -50,7 +52,8 @@ export class AddNewLeaveTypeComponent {
       {
         if(this.addNewLeaveType.valid)
         {
-          this.leaveManagement.addNewLeaveType(this.addNewLeaveType.value).subscribe({
+          this.leaveManagement.addNewLeaveType(this.addNewLeaveType.value)
+          .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
             next:(response : boolean)=>{
               if(response)
               {
@@ -66,3 +69,5 @@ export class AddNewLeaveTypeComponent {
         }
       }
 }
+
+

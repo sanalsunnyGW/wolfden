@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { LeaveRequestStatus } from '../../../../../enum/leave-request-status-enum';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { ISubordinateLeaveRequest } from '../../../../../interface/subordinate-leave-request';
@@ -11,7 +11,7 @@ import { IApproveRejectLeave } from '../../../../../interface/approve-or-reject-
   templateUrl: './subordinate-leave-request.component.html',
   styleUrl: './subordinate-leave-request.component.scss'
 })
-export class SubordinateLeaveRequestComponent {
+export class SubordinateLeaveRequestComponent implements OnInit{
 
   leavestatus : LeaveRequestStatus= LeaveRequestStatus.Open
   open :  LeaveRequestStatus =LeaveRequestStatus.Open
