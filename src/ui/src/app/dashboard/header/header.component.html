@@ -1,7 +1,7 @@
 <div class="header">
   <div class="logo">Geeky Wolf</div>
   <div class="user">
-    <div class="user-name">Nohan</div>
+    <div class="user-name">{{userService.firstName}}</div>
     <div class="user-menu-container">
       <span class="user-image" (click)="toggleDropdown()">NA</span>
       <ul class="dropdown-menu" [class.show]="isDropdownOpen">

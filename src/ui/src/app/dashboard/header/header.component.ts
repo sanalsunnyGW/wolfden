@@ -14,10 +14,10 @@ import { ToastrService } from 'ngx-toastr';
 export class HeaderComponent {
   constructor(
     private router: Router,
-    private userService: WolfDenService,
+    public userService: WolfDenService,
     private employeeService: EmployeeService,
     private toastr: ToastrService){}
-  isDropdownOpen = false;
+    isDropdownOpen = false;
 
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
@@ -31,7 +31,6 @@ export class HeaderComponent {
       this.isDropdownOpen = false;
     }
   }
-
 
 
 

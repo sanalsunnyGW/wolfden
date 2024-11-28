@@ -14,6 +14,7 @@ using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
 using WolfDen.Application.Helpers;
+using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
 
 
 var builder = WebApplication.CreateBuilder(args);

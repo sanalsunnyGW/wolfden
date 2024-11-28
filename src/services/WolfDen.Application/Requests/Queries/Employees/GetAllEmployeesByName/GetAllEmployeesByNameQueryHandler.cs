@@ -5,16 +5,16 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName
 {
-    public class GetAllEmployeesNameQueryHandler : IRequestHandler<GetAllEmployeesNameQuery, List<EmployeeNameDTO>>
+    public class GetAllEmployeesByNameQueryHandler : IRequestHandler<GetAllEmployeesByNameQuery, List<EmployeeNameDTO>>
     {
         private readonly WolfDenContext _context;
 
-        public GetAllEmployeesNameQueryHandler(WolfDenContext context)
+        public GetAllEmployeesByNameQueryHandler(WolfDenContext context)
         {
             _context = context;
         }
 
-        public async Task<List<EmployeeNameDTO>> Handle(GetAllEmployeesNameQuery query, CancellationToken cancellationToken)
+        public async Task<List<EmployeeNameDTO>> Handle(GetAllEmployeesByNameQuery query, CancellationToken cancellationToken)
         {
             var employeesQuery = _context.Employees.AsNoTracking();
 

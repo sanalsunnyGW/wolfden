@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
 import { ModalDetailsComponent } from '../modal-details/modal-details.component';  
 import { MatDialog } from '@angular/material/dialog';
-import { SubordinatesDetails } from '../../../../../Interface/subordinates-details';
+import { SubordinatesDetails } from '../../../../../interface/subordinates-details';
 
 @Component({
   selector: 'app-tree-node',

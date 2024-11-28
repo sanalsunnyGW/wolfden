@@ -3,10 +3,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
-import { IEmployeeDirectoryDto } from '../../../../interface/iemployee-directory';
 import { WolfDenService } from '../../../../service/wolf-den.service';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { IEmployeeDirectoryWithPagecount } from '../../../../interface/iemployee-directory-with-pagecount';
+import { IEmployeeDirectoryDto } from '../../../../interface/iemployee-directory';
 
 @Component({
   selector: 'app-employee-directory',
@@ -25,7 +25,7 @@ export class EmployeeDirectoryComponent implements OnInit {
   searchTerm: string = '';
   private searchSubject = new Subject<string>();
   isLoading: boolean = false; 
-  pageNumber: number = -1;
+  pageNumber: number = 0;
   pageSize: number = 1; 
   pageSizeOptions: number[] = [1, 2, 3, 4];
   totalRecords: number = 0;
