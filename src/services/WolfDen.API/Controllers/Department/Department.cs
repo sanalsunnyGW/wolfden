@@ -14,7 +14,7 @@ namespace WolfDen.API.Controllers.Department
         private readonly IMediator _mediator=mediator;
 
         
-        [HttpPost("add-department")]
+        [HttpPost]
         public async Task<int> AddDepartment([FromBody] AddDepartmentCommand command,CancellationToken cancellationToken)
         {
             return await _mediator.Send(command,cancellationToken);
