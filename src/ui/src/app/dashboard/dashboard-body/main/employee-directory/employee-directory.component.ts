@@ -3,10 +3,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
-import { IEmployeeDirectoryDto } from '../../../../Interface/iemployee-directory';
+import { IEmployeeDirectoryDto } from '../../../../interface/iemployee-directory';
 import { WolfDenService } from '../../../../service/wolf-den.service';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { IEmployeeDirectoryWithPagecount } from '../../../../Interface/iemployee-directory-with-pagecount';
+import { IEmployeeDirectoryWithPagecount } from '../../../../interface/iemployee-directory-with-pagecount';
 
 @Component({
   selector: 'app-employee-directory',

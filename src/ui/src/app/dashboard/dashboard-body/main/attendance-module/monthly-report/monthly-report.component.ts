@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule, formatDate } from '@angular/common';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { AttendanceService } from '../../../../../service/attendance.service';
-import { allEmployeesMonthlyReports, MonthlyReports } from '../../../../../Interface/monthly-report';
-import { ICheckAttencdanceClose } from '../../../../../Interface/check-attendance-close';
+import { allEmployeesMonthlyReports, MonthlyReports } from '../../../../../interface/monthly-report';
+import { ICheckAttencdanceClose } from '../../../../../interface/check-attendance-close';
 
 @Component({
   selector: 'app-monthly-report',

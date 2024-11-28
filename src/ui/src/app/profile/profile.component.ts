@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { IProfileForm } from '../Interface/iprofile-from';
-import { Employee } from '../Interface/iemployee';
+import { IProfileForm } from '../interface/iprofile-from';
+import { Employee } from '../interface/iemployee';
 import { Gender } from '../enum/gender-enum';
 import { EmploymentType } from '../enum/employment-type-enum';
 import { EmployeeService } from '../service/employee.service';

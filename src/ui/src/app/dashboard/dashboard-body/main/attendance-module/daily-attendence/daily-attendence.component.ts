@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule, formatDate } from '@angular/common';
 import { AttendanceService } from '../../../../../service/attendance.service';
-import { DailyAttendance } from '../../../../../Interface/idaily-attendance';
+import { DailyAttendance } from '../../../../../interface/idaily-attendance';
 
 
 @Component({
