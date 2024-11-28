@@ -1,11 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { LeaveRequestStatus } from '../../../../../enum/leave-request-status-enum';
-import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { IApproveRejectLeave } from '../../../../../interface/approve-or-reject-leave-interface';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ISubordinateLeavePaginationSend } from '../../../../../interface/subordinate-leave-request-pagination-send';
 import { ISubordinateLeavePaginationReceive } from '../../../../../interface/subordinate-leave-request-pagination-receive';
 import { ISubordinateLeaveRequest } from '../../../../../interface/subordinate-leave-request';
+import { LeaveManagementService } from '../../../../../service/leave-management.service';
 
 @Component({
   selector: 'app-subordinate-leave-request',

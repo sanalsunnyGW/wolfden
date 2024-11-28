@@ -6,8 +6,6 @@ import { ILeaveBalanceList } from '../interface/leave-balance-list-interface';
 import { ILeaveRequestHistoryResponse } from '../interface/leave-request-history';
 import { IGetLeaveTypeIdAndname } from '../interface/get-leave-type-interface';
 import { ILeaveApplication } from '../interface/leave-application-interface';
-import { ISubordinateLeaveRequest } from '../interface/subordinate-leave-request';
-import { LeaveRequestStatus } from '../enum/leave-request-status-enum';
 import { IApproveRejectLeave } from '../interface/approve-or-reject-leave-interface';
 import { IEditleave } from '../interface/edit-leave-application-interface';
 import { IAddLeaveByAdminForEmployee } from '../interface/add-leave-by-admin-for-employee';
