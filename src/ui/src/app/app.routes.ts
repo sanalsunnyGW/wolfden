@@ -131,10 +131,6 @@ export const routes: Routes = [
                 component: ProfileComponent,
                 canActivate: [guardsGuard]
             },
-            {
-              
-            }
-            
         ]
     },
 
