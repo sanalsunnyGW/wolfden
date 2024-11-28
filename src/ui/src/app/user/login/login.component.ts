@@ -2,9 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { WolfDenService } from '../../Service/wolf-den.service';
+import { WolfDenService } from '../../service/wolf-den.service';
 import { ILoginForm } from './ilogin-form';
 import { ToastrService } from 'ngx-toastr';
+import { EmployeeService } from '../../service/employee.service';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class LoginComponent {
   constructor(private fb: FormBuilder,
     private router: Router,
     private userService: WolfDenService,
+    private employeeService: EmployeeService,
     private toastr: ToastrService
   ) {
     this.userForm = this.fb.group<ILoginForm>({
@@ -39,8 +41,14 @@ export class LoginComponent {
       this.userService.getEmployeeLogin(this.userForm.value.email, this.userForm.value.password).subscribe({
         next: (response: any) => {
           localStorage.setItem('token', response.token);
+          const employee = this.employeeService.decodeToken();
+          console.log(employee);
+          this.userService.userId=employee.EmployeeId;
+          this.userService.firstName=employee.FirstName
+          console.log(this.userService.userId);
+          
           this.toastr.success('Login sucessfull')
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/portal/dashboard']);
         }
       });
     }

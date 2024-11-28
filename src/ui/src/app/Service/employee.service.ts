@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../enviornments/environment';
+import { WolfDenService } from './wolf-den.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class EmployeeService {
   employeeId = 1;
   private baseUrl = environment.employeeapiUrl;
 
-  decodeToken() {
+   decodeToken() {
     const token = localStorage.getItem('token');
     if (!token) {
       return null;
