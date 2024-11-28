@@ -1,32 +1,36 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
-import { ILeaveBalanceList } from '../../../../../interface/leave-balance-list-interface';
+import { ILeaveBalanceList } from '../../../../../Interface/leave-balance-list-interface';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
 @Component({
   selector: 'app-leave-dashboard',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [FormsModule],
   templateUrl: './leave-dashboard.component.html',
   styleUrl: './leave-dashboard.component.scss'
 })
-export class LeaveDashboardComponent {
-id:number=1; //1-for hr and 2-higher user any number-for all user
+export class LeaveDashboardComponent implements OnInit {
+id:number=1; 
 leaveList:ILeaveBalanceList[]=[];
+destroyRef=inject(DestroyRef);
 
 constructor(private leaveManagementService:LeaveManagementService) {}
 
 ngOnInit()
 {
-  this.leaveManagementService.getLeaveBalance(this.id).subscribe({
-    next: (data) => {
+  this.leaveManagementService.getLeaveBalance(this.id)
+  .pipe(takeUntilDestroyed(this.destroyRef))
+  .subscribe((data)=> {
       this.leaveList= data; 
-        },
-    error: (error) => {
-    }
-  })
+  });
 }
 }
+
+
+
+

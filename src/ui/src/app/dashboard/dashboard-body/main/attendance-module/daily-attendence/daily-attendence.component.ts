@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule, formatDate } from '@angular/common';
-import { AttendanceService } from '../../../../../Service/attendance.service';
-import { DailyAttendance } from '../../../../../Interface/idaily-attendance';
-
+import { AttendanceService } from '../../../../../service/attendance.service';
+import { DailyAttendance } from '../../../../../interface/idaily-attendance';
+import { WolfDenService } from '../../../../../service/wolf-den.service';
 
 @Component({
   selector: 'app-daily-attendence',
@@ -15,7 +15,8 @@ import { DailyAttendance } from '../../../../../Interface/idaily-attendance';
 
 export class DailyAttendenceComponent {
   service=inject(AttendanceService)
-  constructor(private router: Router) {}
+  baseService=inject(WolfDenService)
+  constructor(private router: Router,private route:ActivatedRoute) {}
   attendanceDate!:string
   dailyData!:DailyAttendance
   ngOnInit() {
@@ -25,9 +26,9 @@ export class DailyAttendenceComponent {
   attendanceStatus = [
     { id: 1, viewValue: 'Present' },
     { id: 2, viewValue: 'Absent' },
-    { id: 3, viewValue: 'IncompleteShift' },
-    { id: 4, viewValue: 'RestrictedHoliday' },
-    { id: 5, viewValue: 'NormalHoliday' },
+    { id: 3, viewValue: 'Incomplete Shift' },
+    { id: 4, viewValue: 'Restricted Holiday' },
+    { id: 5, viewValue: 'Normal Holiday' },
     { id: 6, viewValue: 'WFH' },
     { id: 7, viewValue: 'Leave' },
   ];
@@ -37,12 +38,12 @@ export class DailyAttendenceComponent {
     const status = this.attendanceStatus.find(status => status.id === id);
     return status ? status.viewValue : 'Unknown';
   }
-  //this.attendanceDate = this.route.snapshot.paramMap.get('attendanceDate')!;
+  
   getDailyAttendence()
   {
-    //const employeeId=localStorage.getItem('employeeId');
-    const employeeId=1;
-    const selectedDate=new Date('2024-11-11')
+    this.attendanceDate = this.route.snapshot.paramMap.get('attendanceDate')!;
+    const employeeId=this.baseService.userId;
+    const selectedDate=new Date(this.attendanceDate)
     const date=formatDate(selectedDate, 'yyyy-MM-dd', 'en-US');
     this.service.getDailyAttendence(employeeId,date).subscribe(
       (response: DailyAttendance) =>{
@@ -62,16 +63,20 @@ export class DailyAttendenceComponent {
     return `${hours}h ${minutes}m`;
   }
   convertToTime(dateStr: string): string {
-    const date = new Date(dateStr); 
-    const hours = date.getHours().toString().padStart(2, '0'); 
-    const minutes = date.getMinutes().toString().padStart(2, '0'); 
-    return `${hours}:${minutes}`; 
+    if(dateStr)
+    {
+      const date = new Date(dateStr); 
+      const hours = date.getHours().toString().padStart(2, '0'); 
+      const minutes = date.getMinutes().toString().padStart(2, '0'); 
+      return `${hours}:${minutes}`; 
+    }
+    return '' 
   }
   downloadDailyReport()
   {
-    //const employeeId=localStorage.getItem('employeeId');
-    const employeeId=1;
-    const selectedDate=new Date('2024-11-11')
+    this.attendanceDate = this.route.snapshot.paramMap.get('attendanceDate')!;
+    const employeeId=this.baseService.userId;
+    const selectedDate=new Date(this.attendanceDate)
     const selected=formatDate(selectedDate, 'yyyy-MM-dd', 'en-US');
     this.service.downloadDailyReport(employeeId,selected).subscribe(
       (response: any) =>{

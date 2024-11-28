@@ -7,15 +7,17 @@
         public DateOnly LogDate { get; private set; }
         public decimal CurrentBalance { get; private set; }
         public int IncrementValue { get; private set; }
+        public DateOnly LastCreditedMonth { get; private set; }
         public virtual LeaveBalance LeaveBalance { get; private set; }
         private LeaveIncrementLog() {  }
 
-        public LeaveIncrementLog(int leaveBalanceId, DateOnly logDate, decimal currentBalance, int incrementValue)
+        public LeaveIncrementLog(int leaveBalanceId, DateOnly logDate, decimal currentBalance, int incrementValue, DateOnly lastCreditedMonth)
         {
             LeaveBalanceId = leaveBalanceId;
             LogDate = logDate;
             CurrentBalance = currentBalance;
             IncrementValue = incrementValue;
+            LastCreditedMonth = lastCreditedMonth;
         }
     }
 }

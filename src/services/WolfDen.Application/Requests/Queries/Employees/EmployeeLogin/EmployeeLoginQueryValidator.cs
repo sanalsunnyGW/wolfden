@@ -2,12 +2,12 @@
 
 namespace WolfDen.Application.Requests.Queries.Employees.EmployeeLogin
 {
-    public class EmployeeLoginQueryValidator: AbstractValidator<EmployeeLoginQuery>
+    public class EmployeeLoginQueryValidator : AbstractValidator<EmployeeLoginQuery>
     {
         public EmployeeLoginQueryValidator()
         {
-            RuleFor(x=>x.Password).NotEmpty();
-            RuleFor(x=>x.Email).NotEmpty();
+            RuleFor(x => x.Password).NotEmpty();
+            RuleFor(x => x.Email).NotEmpty();
         }
     }
 }

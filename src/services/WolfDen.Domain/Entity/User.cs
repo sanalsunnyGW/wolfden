@@ -14,7 +14,6 @@ namespace WolfDen.Domain.Entity
             get => base.Email;
             private set => base.Email = value;
         }
-       
 
         public User()
         {

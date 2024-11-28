@@ -2,7 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { environment } from '../../enviornments/environment';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IEmployeeDirectoryWithPagecount } from '../Interface/iemployee-directory-with-pagecount';
+import { IEmployeeDirectoryWithPagecount } from '../interface/iemployee-directory-with-pagecount';
+import { EmployeeService } from './employee.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,10 +11,14 @@ import { IEmployeeDirectoryWithPagecount } from '../Interface/iemployee-director
 export class WolfDenService {
 
 
-  private baseUrl = environment.apiUrl;
-  public userId: number = 3;
+  private baseUrl=environment.apiUrl;
+  public userId : number=0;
+  public role:string="";
+  public firstName:string="Welcome Back";
 
-  constructor(private http: HttpClient) { }
+
+  constructor(private http: HttpClient, private employeeService: EmployeeService) { }
+
 
   private createHttpParams(params: { [key: string]: any }): HttpParams {
     let httpParams = new HttpParams();
@@ -51,6 +56,9 @@ export class WolfDenService {
       { headers: this.getHeaders(), params }
 
     );
+  }
+  isLoggedIn(): boolean {
+    return this.userId !== 0;
   }
 
   signIn(data: any): Observable<any> {

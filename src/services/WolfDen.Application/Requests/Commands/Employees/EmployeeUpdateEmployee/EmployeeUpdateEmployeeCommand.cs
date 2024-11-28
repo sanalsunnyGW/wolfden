@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using WolfDen.Domain.Enums;
 using static WolfDen.Domain.Enums.EmployeeEnum;
 
 namespace WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee
@@ -17,8 +16,7 @@ namespace WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee
         public string? Country { get; set; }
         public string? State { get; set; }
         public string? Photo { get; set; }
-        public RoleType RoleType { get; set; }
-        public string? Password {  get; set; }
+        public string Password { get; set; }
 
     }
 }

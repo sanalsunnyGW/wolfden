@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
 import { CommonModule, formatDate } from '@angular/common';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -23,8 +22,9 @@ export class MonthlyReportComponent {
   checkClosedStatus=false
   monthIsSelected=false
   display=false
-  pageNumber=0;
-  pageSize=1
+  pageNumber=-1;
+  pageSize=1;
+  pageSizes=[1,2,3]
   totalPages=0;
   constructor() {}
   monthlyData!:MonthlyReports
@@ -87,7 +87,7 @@ export class MonthlyReportComponent {
    });  
   }
   onPaginateChange(event: PageEvent): void {
-    this.pageNumber = event.pageIndex + 1;  
+    this.pageNumber = event.pageIndex;  
     this.pageSize = event.pageSize;
     this.getMonthlyReport(this.selectedMonth,this.pageNumber,this.pageSize);
   }

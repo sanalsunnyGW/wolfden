@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { WolfDenService } from '../../Service/wolf-den.service';
+import { WolfDenService } from '../../service/wolf-den.service';
 import { ICheckForm } from './iCheckForm';
 import { ToastrService } from 'ngx-toastr';
 
