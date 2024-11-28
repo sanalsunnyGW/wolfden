@@ -123,12 +123,6 @@ namespace WolfDen.API.Controllers.Attendence
             return await _mediator.Send(query, cancellationToken);
         }
 
-        [HttpPost("send-email")]
-        public async Task<bool> SendEmail([FromQuery] SendEmailCommand command, CancellationToken cancellationToken)
-        {
-            return await _mediator.Send(command, cancellationToken);
-        }
-
     }
 
 
