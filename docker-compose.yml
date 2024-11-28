@@ -9,9 +9,8 @@ services:
     environment:
       - ACCEPT_EULA=Y  
       - SA_PASSWORD=pass@123
-    
     volumes:
-      - mssql-data:/var/opt/mssql  
-      
-volumes:
-  mssql-data:
+      - type: 'bind'
+        target: '/var/opt/mssql/data'
+        source: './docker/sqldata/data'
+  
