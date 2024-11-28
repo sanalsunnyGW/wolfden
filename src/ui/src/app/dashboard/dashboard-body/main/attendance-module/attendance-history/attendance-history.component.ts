@@ -4,7 +4,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { AttendanceService } from '../../../../../Service/attendance.service';
+import { AttendanceService } from '../../../../../service/attendance.service';
 import { AttendanceHistory } from '../../../../../interface/attendance-history';
 
 @Component({

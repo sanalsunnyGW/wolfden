@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, FormsModule, NgSelectOption, React
 import { IAddNewLeaveType } from '../../../../../interface/Add-New-Leave-Type-Interface';
 import { CommonModule } from '@angular/common';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { LeaveManagementService } from '../../../../../Service/leave-management.service';
+import { LeaveManagementService } from '../../../../../service/leave-management.service';
 
 
 @Component({
