@@ -14,18 +14,21 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
         {
             int pageNumber = request.PageNumber > 0 ? request.PageNumber : 0;
             int pageSize = request.PageSize > 0 ? request.PageSize : 1;
+           // int totalCount = 0;
 
             int totalCount = await _context.LeaveRequests
-                .Where(x => x.EmployeeId.Equals(request.EmployeeId))
-                .CountAsync(cancellationToken);
+               .Where(x => x.EmployeeId.Equals(request.EmployeeId))
+               .CountAsync(cancellationToken);
 
             int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+            List<LeaveRequestDto> filteredData=new List<LeaveRequestDto> ();
 
             List<LeaveRequestDto> leaveRequestList = await _context.LeaveRequests
                 .Where(x => x.EmployeeId.Equals(request.EmployeeId))
                 .Include(x => x.LeaveType)
                 .Include(x => x.Employee)
-                .Skip((pageNumber) * pageSize)
+               .Skip((pageNumber) * pageSize)
                 .Take(pageSize)
                 .OrderByDescending(x => x.Id)
                 .Select(leaveRequest => new LeaveRequestDto
@@ -42,10 +45,28 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
                 })
                 .ToListAsync(cancellationToken);
 
+           
+            
+            
+            
+            
+            //if (request.LeaveStatusId.HasValue)
+            //{
+            //    filteredData = leaveRequestList.Where(x => x.LeaveRequestStatusId.Equals(request.LeaveStatusId)).ToList();
+            //}
+            //else
+            //{
+            //    filteredData = leaveRequestList;
+            //}
+
+            //totalCount = filteredData.Count;
+
+
+
             return new LeaveRequestHistoryResponseDto
             {
                 LeaveRequests = leaveRequestList,
-                TotalPages = totalPages,
+                TotalPages = totalCount,
             };
         }
     }
