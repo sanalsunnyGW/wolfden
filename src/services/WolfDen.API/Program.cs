@@ -10,11 +10,17 @@ using Microsoft.OpenApi.Models;
 using QuestPDF.Infrastructure;
 using WolfDen.Application.Helpers;
 using WolfDen.Application.Requests.Commands.Attendence.Service;
+using System.Reflection;
+using System.Security.Claims;
+using System.Text;
+using WolfDen.API.BackgroudWorkers;
+using WolfDen.Application.Helpers;
 using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
 using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -108,6 +114,7 @@ builder.Services.AddMediatR(x =>
 
 });
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("WolfDen.Application"));
+builder.Services.AddHostedService<DatabaseSyncBackgroundService>();
 
 var app = builder.Build();
 
