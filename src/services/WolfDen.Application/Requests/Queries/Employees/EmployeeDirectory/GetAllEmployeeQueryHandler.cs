@@ -55,7 +55,6 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
                    IsActive = e.IsActive
                })
             .ToListAsync(cancellationToken);
-            /* int totalpage = employees.Count;*/
             int pageCount = (int)(Math.Ceiling((decimal)totalCount / request.PageSize));
             var emp = employees.ToList();
             var empDirectory = new PaginationResponse
