@@ -3,7 +3,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { TreeNodeComponent } from '../tree-node/tree-node.component';
 import { Component, inject } from '@angular/core';
 import { AttendanceService } from '../../../../../service/attendance.service';
-import { SubordinatesDetails } from '../../../../../Interface/subordinates-details';
+import { SubordinatesDetails } from '../../../../../interface/subordinates-details';
 import { WolfDenService } from '../../../../../service/wolf-den.service';
 
 @Component({

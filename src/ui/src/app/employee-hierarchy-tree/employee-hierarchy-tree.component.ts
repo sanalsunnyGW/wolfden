@@ -1,8 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import mermaid from 'mermaid';
-import { IEmployeeData } from '../Interface/employee-data';
+
 import { EmployeeService } from '../service/employee.service';
+import { IEmployeeData } from '../interface/employee-data';
 
 
 @Component({

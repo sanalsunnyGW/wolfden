@@ -1,3 +1,4 @@
+<<<<<<< HEAD:src/services/WolfDen.Infrastructure/Migrations/20241128044534_button.cs
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -1999,3 +2000,5 @@ namespace WolfDen.Infrastructure.Migrations
         }
     }
 }
+=======
+>>>>>>> upstream/main:src/services/WolfDen.Infrastructure/Migrations/20241127121548_first.cs

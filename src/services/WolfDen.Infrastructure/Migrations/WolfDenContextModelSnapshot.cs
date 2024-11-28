@@ -401,22 +401,22 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
-                    b.Property<DateTimeOffset>("DepartureTime")
+                    b.Property<DateTimeOffset?>("DepartureTime")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("InsideDuration")
+                    b.Property<int?>("InsideDuration")
                         .HasColumnType("int");
 
                     b.Property<string>("MissedPunch")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OutsideDuration")
+                    b.Property<int?>("OutsideDuration")
                         .HasColumnType("int");
 
-                    b.Property<int>("PantryDuration")
+                    b.Property<int?>("PantryDuration")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PeriodEnd")
