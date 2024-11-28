@@ -15,6 +15,9 @@ import { IEditLeaveType } from '../interface/edit-leave-type';
 import { Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { environment } from '../../enviornments/environment';
+import { ISubordinateLeavePaginationSend } from '../interface/subordinate-leave-request-pagination-send';
+import { ISubordinateLeavePaginationReceive } from '../interface/subordinate-leave-request-pagination-receive';
+
 
 @Injectable({
   providedIn: 'root'
@@ -59,8 +62,9 @@ export class LeaveManagementService {
     }
 
     id : number=1;
-    getSubordinateLeaverequest(status :LeaveRequestStatus){
-      return this.http.get<Array<ISubordinateLeaveRequest>>(`${this.baseUrl}/leave-request/subordinate-leave-requets${this.id}/${status}`)
+    getSubordinateLeaverequest(pagination :ISubordinateLeavePaginationSend){
+      pagination.id = this.id
+      return this.http.get<ISubordinateLeavePaginationReceive>(`${this.baseUrl}/leave-request/subordinate-leave-requets?Id=${pagination.id}&StatusId=${pagination.statusId}&PageSize=${pagination.pageSize}&PageNumber=${pagination.pageNumber}`)
     }
     
     approveOrRejectLeave(approveRejectLeave : IApproveRejectLeave){

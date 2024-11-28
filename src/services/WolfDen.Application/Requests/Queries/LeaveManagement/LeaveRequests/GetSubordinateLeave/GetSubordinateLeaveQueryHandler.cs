@@ -8,11 +8,11 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetSubordinateLeave
 {
-    public class GetSubordinateLeaveQueryHandler(WolfDenContext context, IMediator mediator) : IRequestHandler<GetSubordinateLeaveQuery, List<SubordinateLeaveDto>>
+    public class GetSubordinateLeaveQueryHandler(WolfDenContext context, IMediator mediator) : IRequestHandler<GetSubordinateLeaveQuery, SubordinateLeaveRequestPaginationDto>
     {
         private readonly WolfDenContext _context = context;
         private readonly IMediator _mediator = mediator;
-        public async Task<List<SubordinateLeaveDto>> Handle(GetSubordinateLeaveQuery request, CancellationToken cancellationToken)
+        public async Task<SubordinateLeaveRequestPaginationDto> Handle(GetSubordinateLeaveQuery request, CancellationToken cancellationToken)
         {
             List<EmployeeHierarchyDto> employeeHierarchyDto = new List<EmployeeHierarchyDto>();
             GetEmployeeTeamQuery getEmployeeTeamQuery = new GetEmployeeTeamQuery
@@ -29,12 +29,13 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
             }
 
             List<int> listSubordinateEmployeeId = await GetAllChildIds(employeeHierarchyDto);
-            List<SubordinateLeaveDto> subordinateLeaveDtos;
+            List<SubordinateLeaveDto> subordinateLeaveDtosList = new List<SubordinateLeaveDto>();
+            SubordinateLeaveRequestPaginationDto subordinateLeaveRequestPaginationDto = new SubordinateLeaveRequestPaginationDto();
 
             if (request.StatusId == LeaveRequestStatus.Rejected)
             {
-                subordinateLeaveDtos = await _context.LeaveRequests
-                   .Where(x => listSubordinateEmployeeId.Contains(x.EmployeeId) && x.LeaveRequestStatusId == LeaveRequestStatus.Rejected)
+                subordinateLeaveDtosList = await _context.LeaveRequests
+                   .Where(x => listSubordinateEmployeeId.Contains(x.EmployeeId) && x.LeaveRequestStatusId == LeaveRequestStatus.Rejected && x.ProcessedBy == request.Id)
                    .Select(x => new SubordinateLeaveDto
                    {
                        LeaveRequestId = x.Id,
@@ -49,12 +50,18 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
 
 
                    }).OrderByDescending(x => x.LeaveRequestId)
+                   .Skip((request.PageNumber) * request.PageSize)
+                   .Take(request.PageSize)
                    .ToListAsync(cancellationToken);
+                subordinateLeaveRequestPaginationDto.SubordinateLeaveDtosList = subordinateLeaveDtosList;
+                subordinateLeaveRequestPaginationDto.TotalDataCount = await _context.LeaveRequests
+                   .Where(x => listSubordinateEmployeeId.Contains(x.EmployeeId) && x.LeaveRequestStatusId == LeaveRequestStatus.Rejected && x.ProcessedBy == request.Id).CountAsync();
+
             }
             else if (request.StatusId == LeaveRequestStatus.Approved)
             {
-                subordinateLeaveDtos = await _context.LeaveRequests
-                   .Where(x => listSubordinateEmployeeId.Contains(x.EmployeeId) && x.LeaveRequestStatusId == LeaveRequestStatus.Approved)
+                subordinateLeaveDtosList = await _context.LeaveRequests
+                   .Where(x => listSubordinateEmployeeId.Contains(x.EmployeeId) && x.LeaveRequestStatusId == LeaveRequestStatus.Approved && x.ProcessedBy == request.Id)
                    .Select(x => new SubordinateLeaveDto
                    {
                        LeaveRequestId = x.Id,
@@ -69,12 +76,17 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
 
 
                    }).OrderByDescending(x => x.LeaveRequestId)
+                   .Skip((request.PageNumber) * request.PageSize)
+                   .Take(request.PageSize)
                    .ToListAsync(cancellationToken);
+                subordinateLeaveRequestPaginationDto.SubordinateLeaveDtosList = subordinateLeaveDtosList;
+                subordinateLeaveRequestPaginationDto.TotalDataCount = await _context.LeaveRequests
+                   .Where(x => listSubordinateEmployeeId.Contains(x.EmployeeId) && x.LeaveRequestStatusId == LeaveRequestStatus.Approved && x.ProcessedBy == request.Id).CountAsync();
             }
 
             else
             {
-                subordinateLeaveDtos = await _context.LeaveRequests
+                subordinateLeaveDtosList = await _context.LeaveRequests
                    .Where(x => listSubordinateEmployeeId.Contains(x.EmployeeId) && x.LeaveRequestStatusId == LeaveRequestStatus.Open)
                    .Select(x => new SubordinateLeaveDto
                    {
@@ -90,10 +102,15 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
 
 
                    }).OrderByDescending(x => x.LeaveRequestId)
+                   .Skip((request.PageNumber) * request.PageSize)
+                   .Take(request.PageSize)
                    .ToListAsync(cancellationToken);
+                subordinateLeaveRequestPaginationDto.SubordinateLeaveDtosList = subordinateLeaveDtosList;
+                subordinateLeaveRequestPaginationDto.TotalDataCount = await _context.LeaveRequests
+                   .Where(x => listSubordinateEmployeeId.Contains(x.EmployeeId) && x.LeaveRequestStatusId == LeaveRequestStatus.Open ).CountAsync();
             }
 
-            return subordinateLeaveDtos;
+            return subordinateLeaveRequestPaginationDto;
 
 
 

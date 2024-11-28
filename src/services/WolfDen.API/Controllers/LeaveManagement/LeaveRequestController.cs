@@ -36,12 +36,9 @@ namespace WolfDen.API.Controllers.LeaveManagement
             return await _mediator.Send(command, cancellationToken);
         }
 
-        [HttpGet("subordinate-leave-requets{id}/{status}")]
-        public async Task<List<SubordinateLeaveDto>> GetSubordinatesLeaveRequest(int id, LeaveRequestStatus status,CancellationToken cancellationToken)
+        [HttpGet("subordinate-leave-requets")]
+        public async Task<SubordinateLeaveRequestPaginationDto> GetSubordinatesLeaveRequest( [FromQuery] GetSubordinateLeaveQuery query, CancellationToken cancellationToken)
         {
-            GetSubordinateLeaveQuery query= new GetSubordinateLeaveQuery();
-            query.Id =id;
-            query.StatusId = status;
 
             return await _mediator.Send(query,cancellationToken);
         }

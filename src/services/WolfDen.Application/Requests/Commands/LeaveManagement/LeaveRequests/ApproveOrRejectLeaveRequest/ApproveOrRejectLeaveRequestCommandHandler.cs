@@ -36,13 +36,13 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
             {
                 if (request.statusId == LeaveRequestStatus.Rejected )
                 {
-                    leaveRequest.Reject();
+                    leaveRequest.Reject(request.SuperiorId);
                     int result =  await _context.SaveChangesAsync(cancellationToken);
                     return result > 0;
                 }
                 else if (leaveType1.LeaveCategoryId != null && (request.statusId == LeaveRequestStatus.Approved && leaveRequest.LeaveType.LeaveCategoryId != LeaveCategory.WorkFromHome))
                     {
-                    leaveRequest.Approve();
+                    leaveRequest.Approve(request.SuperiorId);
                     LeaveBalance leaveBalance = await _context.LeaveBalances.FirstOrDefaultAsync(x => x.TypeId == leaveRequest.TypeId && x.EmployeeId == leaveRequest.EmployeeId);
 
                     decimal daysCount = await _context.LeaveRequestDays.Where(x => x.LeaveRequestId == request.LeaveRequestId).CountAsync();
@@ -70,7 +70,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
                 }
                 else if(leaveType1.LeaveCategoryId != null && ( leaveRequest.LeaveType.LeaveCategoryId == LeaveCategory.WorkFromHome && request.statusId == LeaveRequestStatus.Approved))  
                 {
-                    leaveRequest.Approve();
+                    leaveRequest.Approve(request.SuperiorId);
                     int result = await _context.SaveChangesAsync(cancellationToken);
                     return result > 0;
                 }

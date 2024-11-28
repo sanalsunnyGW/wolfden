@@ -1,13 +1,16 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { LeaveRequestStatus } from '../../../../../enum/leave-request-status-enum';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
-import { ISubordinateLeaveRequest } from '../../../../../interface/subordinate-leave-request';
 import { IApproveRejectLeave } from '../../../../../interface/approve-or-reject-leave-interface';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { ISubordinateLeavePaginationSend } from '../../../../../interface/subordinate-leave-request-pagination-send';
+import { ISubordinateLeavePaginationReceive } from '../../../../../interface/subordinate-leave-request-pagination-receive';
+import { ISubordinateLeaveRequest } from '../../../../../interface/subordinate-leave-request';
 
 @Component({
   selector: 'app-subordinate-leave-request',
   standalone: true,
-  imports: [],
+  imports: [MatPaginatorModule],
   templateUrl: './subordinate-leave-request.component.html',
   styleUrl: './subordinate-leave-request.component.scss'
 })
@@ -17,25 +20,33 @@ export class SubordinateLeaveRequestComponent implements OnInit{
   open :  LeaveRequestStatus =LeaveRequestStatus.Open
   approved : LeaveRequestStatus = LeaveRequestStatus.Approved
   rejected : LeaveRequestStatus= LeaveRequestStatus.Rejected
-  leaveRequestList: ISubordinateLeaveRequest[] = [];
+  leaveRequestList : ISubordinateLeaveRequest[] = []
+  leaveRequest : ISubordinateLeaveRequest = {} as ISubordinateLeaveRequest
   selectedDescription: string | null = null;
-  approveRejectLeave : IApproveRejectLeave = {
-    superiorId : 0,
-    leaveRequestId : null,
-    statusId : null,
-  };
-  
+  pageNumber= 0;
+  pageSize=3;
+  pageSizes=[3,5,10]
+  totalDataCount : number | null = null
+  indexValue: number = (this.pageNumber * this.pageSize) - this.pageSize + 1;
+  pagination : ISubordinateLeavePaginationSend ={} as ISubordinateLeavePaginationSend
+
+  approveRejectLeave : IApproveRejectLeave = {} as IApproveRejectLeave
+
   leaveManagementService = inject(LeaveManagementService);
 
 
 
-  loadLeaveRequests(filterStatus : LeaveRequestStatus): void {
-    console.log(filterStatus)
-    this.leavestatus = filterStatus
-    this.leaveManagementService.getSubordinateLeaverequest(this.leavestatus).subscribe({
-      next: (data: Array<ISubordinateLeaveRequest>) => {
+  loadLeaveRequests(filterStatus : LeaveRequestStatus, pageNumber : number, pageSize : number): void {
+    this.pagination.statusId = filterStatus
+    this.pagination.pageNumber = pageNumber
+    this.pagination.pageSize = pageSize
+    this.leaveManagementService.getSubordinateLeaverequest(this.pagination).subscribe({
+      next: (data: ISubordinateLeavePaginationReceive) => {
         if(data){
-          this.leaveRequestList = data;
+          console.log(data)
+          this.leaveRequestList = data.subordinateLeaveDtosList;
+          this.totalDataCount = data.totalDataCount
+          this.indexValue = ((this.pageNumber+1 ) * this.pageSize) - this.pageSize + 1;
         }
         
       },
@@ -55,11 +66,12 @@ export class SubordinateLeaveRequestComponent implements OnInit{
 
   onFilterChange(event: Event): void {
     const selectedValue = (event.target as HTMLSelectElement).value;
-    this.loadLeaveRequests(parseInt(selectedValue)); 
+    this.leavestatus = parseInt(selectedValue)
+    this.loadLeaveRequests(parseInt(selectedValue),this.pageNumber,this.pageSize); 
   }
   
   ngOnInit(): void {
-    this.loadLeaveRequests(this.open);
+    this.loadLeaveRequests(this.open,this.pageNumber,this.pageSize);
   }
 
   approve(id :number){
@@ -69,7 +81,7 @@ export class SubordinateLeaveRequestComponent implements OnInit{
       next: (response: boolean) => {
         if(response){
           alert("Leave Approved");
-          this.loadLeaveRequests(this.leavestatus);
+          this.loadLeaveRequests(this.leavestatus,this.pageNumber,this.pageSize);
         }
        
         },
@@ -89,7 +101,7 @@ export class SubordinateLeaveRequestComponent implements OnInit{
       next: (response: boolean) => {
         if(response){
           alert("Leave rejected");
-          this.loadLeaveRequests(this.leavestatus);
+          this.loadLeaveRequests(this.leavestatus,this.pageNumber,this.pageSize);
         }
        
         },
@@ -99,4 +111,11 @@ export class SubordinateLeaveRequestComponent implements OnInit{
       }
     });
   }
+
+  onPaginateChange(event: PageEvent): void {
+    this.pageNumber = event.pageIndex;  
+    this.pageSize = event.pageSize;
+    this.loadLeaveRequests(this.leavestatus,this.pageNumber,this.pageSize);
+  }
+
 }

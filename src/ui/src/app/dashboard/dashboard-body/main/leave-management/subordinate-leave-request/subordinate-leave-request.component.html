@@ -29,7 +29,7 @@
             @for(leaveRequest of leaveRequestList;track leaveRequest;let i = $index)
             {
             <tr>
-                <td>{{i + 1}}</td>
+                <td>{{indexValue + i}}</td>
                 <td>{{leaveRequest.name}}</td>
                 <td>{{leaveRequest.employeeCode}}</td>
                 <td>{{leaveRequest.typeName}}</td>
@@ -53,6 +53,13 @@
         </tbody>
     </table>
 </div>
+
+<div class="w-100">  <mat-paginator [length]="totalDataCount"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizes"
+    (page)="onPaginateChange($event)">
+  </mat-paginator>
+  </div>
 
 @if(selectedDescription)
 {
