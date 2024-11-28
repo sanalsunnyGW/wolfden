@@ -1,5 +1,5 @@
 import { Component, DestroyRef,  OnInit, inject } from '@angular/core';
-import { LeaveManagementService } from '../../../../../Service/leave-management.service';
+import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({

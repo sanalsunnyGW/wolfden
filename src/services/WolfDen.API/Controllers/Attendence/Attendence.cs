@@ -8,7 +8,6 @@ using WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyReport;
 using WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory;
 using WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary;
 using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
-using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
@@ -18,6 +17,10 @@ using WolfDen.Application.Requests.Commands.Attendence.CloseAttendance;
 using WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyReport;
 using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
+using WolfDen.Application.Requests.Queries.Attendence.SubOrdinates;
+using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
+using QuestPDF.Infrastructure;
+
 
 namespace WolfDen.API.Controllers.Attendence
 {
@@ -36,18 +39,18 @@ namespace WolfDen.API.Controllers.Attendence
         }
 
         [HttpGet("daily-attendance")]
-        public async Task<IActionResult> GetAttendenceLog([FromQuery] DailyDetails DailyDetails, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAttendenceLog([FromQuery]DailyDetailsQuery DailyDetails, CancellationToken cancellationToken)
         {
             DailyAttendanceDTO attendance = await _mediator.Send(DailyDetails, cancellationToken);
             return Ok(attendance);
         }
 
         [HttpGet("daily-attendance-pdf")]
-        public async Task<IResult> GeneratePdf([FromQuery] DailyDetailsPdf DailyDetailspdf, CancellationToken cancellationToken)
+        public async Task<IResult> GeneratePdf([FromQuery]DailyDetailsQuery DailyDetails, CancellationToken cancellationToken)
         {
-            DailyAttendanceDTO attendenceList = await _mediator.Send(DailyDetailspdf, cancellationToken);
-            var document = _pdfService.CreateDocument(attendenceList);
-            var pdf = document.GeneratePdf();
+            DailyAttendanceDTO attendenceList = await _mediator.Send(DailyDetails, cancellationToken);
+            IDocument document = _pdfService.CreateDocument(attendenceList);
+            byte[] pdf = document.GeneratePdf();
             return Results.File(pdf, "application/pdf", "DailyReport.pdf");
         }
 
@@ -105,6 +108,14 @@ namespace WolfDen.API.Controllers.Attendence
             CheckAttendanceClosedDTO isClosed = await _mediator.Send(checkAttendanceClosedQuery, cancellationToken);
             return Ok(isClosed);
         }
+
+        [HttpGet("subordinates")]
+        public async Task<IActionResult> getSubOrdinates([FromQuery] SubOrdinatesQuery subOrdinatesQuery, CancellationToken cancellationToken)
+        {
+            SubOrdinateDTO subOrdinates = await _mediator.Send(subOrdinatesQuery, cancellationToken);
+            return Ok(subOrdinates);
+        }
+
         [HttpGet("employee/history")]
         public async Task<AttendanceHistoryDTO> GetHistory([FromQuery] AttendanceHistoryQuery query, CancellationToken cancellationToken)
         {

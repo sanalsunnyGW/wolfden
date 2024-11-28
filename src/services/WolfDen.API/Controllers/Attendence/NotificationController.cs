@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WolfDen.Application.DTOs.Attendence;
 using WolfDen.Application.Requests.Commands.Attendence.SendNotification;
-using WolfDen.Application.Requests.Queries.Attendence.DailyAttendanceReport;
+using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
 using WolfDen.Application.Requests.Queries.Notifications.GetNotification;
 
 namespace WolfDen.API.Controllers.Attendence
