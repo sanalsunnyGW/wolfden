@@ -4,4 +4,5 @@ export interface IEmployeeDirectoryWithPagecount {
 
     employeeDirectoryDTOs: IEmployeeDirectoryDto[];
     totalPages:number;
+    totalRecords:number;
 }

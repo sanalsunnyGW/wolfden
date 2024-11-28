@@ -6,15 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using WolfDen.Application.DTOs.Employees;
 
-namespace WolfDen.Application.Requests.Queries.Employees.ViewEmployee
+namespace WolfDen.Application.Requests.Queries.Designation
 {
-    public  class GetEmployeeQuery : IRequest<EmployeeDTO>
+    public class GetAllDesignationQuery : IRequest<List<DesignationDTO>>
     {
-        public int EmployeeId { get; set; }
-
-        public GetEmployeeQuery()
+        public GetAllDesignationQuery()
         {
+
         }
     }
-
 }
