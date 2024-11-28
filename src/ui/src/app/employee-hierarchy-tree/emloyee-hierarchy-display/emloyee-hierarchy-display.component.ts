@@ -7,6 +7,7 @@ import { EmployeeService } from '../../Service/employee.service';
 import { Gender } from '../../enum/gender-enum';
 import { EmploymentType } from '../../enum/employment-type-enum';
 import { IadminForm } from '../../Interface/iadmin-form';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-emloyee-hierarchy-display',
@@ -45,7 +46,8 @@ export class EmloyeeHierarchyDisplayComponent {
 
 
 
-  constructor(private route: ActivatedRoute, private employeeService: EmployeeService, private fb: FormBuilder) {
+  constructor(private route: ActivatedRoute, private employeeService: EmployeeService, private fb: FormBuilder, private toastr: ToastrService
+  ) {
     this.buildForm();
   }
   employeeId: number = 0;
@@ -99,19 +101,20 @@ export class EmloyeeHierarchyDisplayComponent {
         }
       },
       error: (error) => {
-        alert("An error occurred while  Displaying Profile");
+        this.toastr.error('An error occurred while  Displaying Profile')
+
       }
     })
   }
   loadForm(employeeData: Employee) {
     this.userForm.patchValue({
-      designationId:this.employeeData.designationId,
+      designationId: this.employeeData.designationId,
       departmanetId: this.employeeData.departmentId,
       managerId: this.employeeData.managerId,
       isActive: this.employeeData.isActive,
       joiningDate: this.employeeData.joiningDate,
       employmentType: this.employeeData.employmentType,
-      
+
     });
   }
 
@@ -119,22 +122,24 @@ export class EmloyeeHierarchyDisplayComponent {
     if (this.userForm.valid) {
       const formData = this.userForm.value;
       const params = {
-      id: this.employeeId,
-      designationId:formData.designationId,
-      departmanetId: formData.departmanetId,
-      managerId: formData.managerId,
-      isActive: formData.isActive,
-      joiningDate: formData.joiningDate,
-      employmentType: formData.employmentType,
+        id: this.employeeId,
+        designationId: formData.designationId,
+        departmanetId: formData.departmanetId,
+        managerId: formData.managerId,
+        isActive: formData.isActive,
+        joiningDate: formData.joiningDate,
+        employmentType: formData.employmentType,
       }
       this.employeeService.employeeUpdateEmployee(params).subscribe({
         next: (response: any) => {
           if (response == true) {
-            alert("Profile Updated Successfully")
+            this.toastr.success('Profile Updated Successfully')
+
             this.loadEmployeeData();
           }
           else {
-            alert("Profile Update Failed")
+            this.toastr.error('Profile Update Failed')
+
           }
         }
       })

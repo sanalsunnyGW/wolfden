@@ -19,7 +19,17 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam
             .Include(e => e.Department)
             .Include(e => e.Designation)
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+
+            if (employee == null)
+            {
+                return teamList;
+            }
             if (employee.IsActive == false)
+            {
+                teamList.Add(await service.GetEmployee(employee, false, cancellationToken));
+                return teamList;
+            }
+            if (employee.ManagerId == null)
             {
                 teamList.Add(await service.GetEmployee(employee, false, cancellationToken));
                 return teamList;

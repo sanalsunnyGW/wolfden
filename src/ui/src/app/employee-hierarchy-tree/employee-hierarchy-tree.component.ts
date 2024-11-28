@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import mermaid from 'mermaid';
 import { IEmployeeData } from '../Interface/employee-data';
 import { EmployeeService } from '../Service/employee.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -14,7 +15,7 @@ import { EmployeeService } from '../Service/employee.service';
 })
 export class EmployeeHierarchyTreeComponent implements OnInit {
   @ViewChild('mermaidDiv', { static: true }) mermaidDiv!: ElementRef;
-  constructor(private router: Router, private employeeService: EmployeeService) { }
+  constructor(private router: Router, private employeeService: EmployeeService,private toastr: ToastrService) { }
   inDate = new Date();
   isDataLoaded: boolean = false;
   employeeData: IEmployeeData = {
@@ -84,11 +85,11 @@ export class EmployeeHierarchyTreeComponent implements OnInit {
           this.isDataLoaded = true;
           this.renderMermaidChart();
         } else {
-          alert('No Employee found');
+          this.toastr.error('No Employee found')
         }
       },
       error: (error) => {
-        alert('An error occurred while displaying hierarchy');
+        this.toastr.error('An error occurred while displaying hierarchy')
       },
     });
   }

@@ -6,6 +6,7 @@ import { Employee } from '../Interface/iemployee';
 import { Gender } from '../enum/gender-enum';
 import { EmploymentType } from '../enum/employment-type-enum';
 import { EmployeeService } from '../Service/employee.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-profile',
@@ -16,7 +17,7 @@ import { EmployeeService } from '../Service/employee.service';
 })
 export class ProfileComponent {
   userForm!: FormGroup<IProfileForm>;
-  
+
   inDate = new Date();
   employeeData: Employee = {
     id: 0,
@@ -42,7 +43,8 @@ export class ProfileComponent {
     employmentType: 0,
     photo: ''
   };
-  constructor(private fb: FormBuilder, private employeeService: EmployeeService) {
+  constructor(private fb: FormBuilder, private employeeService: EmployeeService, private toastr: ToastrService
+  ) {
     this.buildForm();
   }
   private buildForm() {
@@ -57,7 +59,7 @@ export class ProfileComponent {
       country: new FormControl('', Validators.required),
       state: new FormControl('', Validators.required),
       photo: new FormControl(''),
-      password:new FormControl('')
+      password: new FormControl('')
     })
   }
 
@@ -99,7 +101,7 @@ export class ProfileComponent {
       country: this.employeeData.country,
       state: this.employeeData.state,
       photo: this.employeeData.photo,
-      password:null
+      password: null
     });
 
   }
@@ -112,7 +114,7 @@ export class ProfileComponent {
         }
       },
       error: (error) => {
-        alert("An error occurred while  Displaying Profile");
+        this.toastr.error('An error occurred while  Displaying Profile')
       }
     })
   }
@@ -144,16 +146,18 @@ export class ProfileComponent {
         country: formData.country,
         state: formData.state,
         photo: formData.photo,
-        password:formData.password
+        password: formData.password
       }
       this.employeeService.employeeUpdateEmployee(params).subscribe({
         next: (response: any) => {
           if (response == true) {
-            alert("Profile Updated Successfully")
+            this.toastr.success('Profile Updated Successfully')
+
             this.loadEmployeeData();
           }
           else {
-            alert("Profile Update Failed")
+            this.toastr.error('Profile Update Failed')
+
           }
         }
       })

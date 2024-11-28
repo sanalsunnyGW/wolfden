@@ -42,4 +42,18 @@ export class EmployeeService {
   getMyTeamHierarchy(getFullHierarchy: boolean) {
     return this.http.get(`${this.baseUrl}/team?Id=${this.employeeId}&Hierarchy=${getFullHierarchy}`);
   }
+  addDepartment(departmentForm:any){
+    return this.http.post(`https://localhost:7015/api/Department`,departmentForm)
+  }
+  addDesignation(designationForm:any){
+    return this.http.post(`https://localhost:7015/api/Designation`,designationForm)
+  }
+  getAllDesignation(){
+    return 
+
+  }
+  getAllDepartment(){
+    return 
+
+  }
 }

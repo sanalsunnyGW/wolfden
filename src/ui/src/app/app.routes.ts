@@ -14,6 +14,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { EmployeeHierarchyTreeComponent } from './employee-hierarchy-tree/employee-hierarchy-tree.component';
 import { EmloyeeHierarchyDisplayComponent } from './employee-hierarchy-tree/emloyee-hierarchy-display/emloyee-hierarchy-display.component';
 import { MyTeamComponent } from './my-team/my-team.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 
 
 
@@ -77,6 +78,10 @@ export const routes: Routes = [
                 path: 'profile',
                 component: ProfileComponent
             },
+            {
+                path:'admin-dashboard',
+                component:AdminDashboardComponent
+            }
             
         ]
     },
