@@ -4,6 +4,7 @@ import { inject } from '@angular/core';
 
 export const guardsGuard: CanActivateFn = (route, state) => {
   const userService=inject(WolfDenService);
+  userService.checkExpiry();
   const isLoggedIn =  !!localStorage.getItem('token');;
   const router = inject(Router); 
   if(!isLoggedIn){
