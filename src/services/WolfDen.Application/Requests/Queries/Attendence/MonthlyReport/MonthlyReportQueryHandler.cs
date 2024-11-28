@@ -53,7 +53,9 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                             x.LeaveRequestStatusId == LeaveRequestStatus.Approved)
                 .ToListAsync(cancellationToken);
 
-            LOP lop =await _context.LOP.Where(x=>x.EmployeeId==request.EmployeeId && x.AttendanceClosedDate.Month==request.Month).FirstOrDefaultAsync(cancellationToken);
+            LOP? lop =await _context.LOP
+                .Where(x=>x.EmployeeId==request.EmployeeId && x.AttendanceClosedDate.Month==request.Month)
+                .FirstOrDefaultAsync(cancellationToken);
             if (lop is not null)
             {
                 summaryDto.IncompleteShiftDays = lop.IncompleteShiftDays;
@@ -65,7 +67,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
 
             for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
-                DailyAttendence attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
+                DailyAttendence? attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (attendanceRecord is not null)
                 {
                     if (attendanceRecord.InsideDuration >= minWorkDuration)
@@ -75,7 +77,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                 }
                 else
                 {
-                    Holiday holiday = holidays.FirstOrDefault(x => x.Date == currentDate);
+                    Holiday? holiday = holidays.FirstOrDefault(x => x.Date == currentDate);
                     if (holiday is not null)
                     {
                         if (holiday.Type is AttendanceStatus.NormalHoliday)
@@ -85,11 +87,12 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                         }
                         else if (holiday.Type is AttendanceStatus.RestrictedHoliday)
                         {
-                            LeaveRequest leaveRequestForHoliday = leaveRequests.FirstOrDefault(x => x.FromDate <= currentDate && x.ToDate >= currentDate);
+                            LeaveRequest? leaveRequestForHoliday = leaveRequests
+                                .FirstOrDefault(x => x.FromDate <= currentDate && x.ToDate >= currentDate);
 
                             if (leaveRequestForHoliday is not null)
                             {
-                                LeaveType leaveType = leaveTypes.FirstOrDefault(x => x.Id == leaveRequestForHoliday.TypeId);
+                                LeaveType? leaveType = leaveTypes.FirstOrDefault(x => x.Id == leaveRequestForHoliday.TypeId);
 
                                 if (leaveType is not null && leaveType.LeaveCategoryId is LeaveCategory.RestrictedHoliday)
                                 {
@@ -101,10 +104,11 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                     }
                     else
                     {
-                        LeaveRequest leaveRequest = leaveRequests.FirstOrDefault(x => x.FromDate <= currentDate && x.ToDate >= currentDate);
+                        LeaveRequest? leaveRequest = leaveRequests
+                            .FirstOrDefault(x => x.FromDate <= currentDate && x.ToDate >= currentDate);
                         if (leaveRequest is not null)
                         {
-                            LeaveType leaveType = leaveTypes.FirstOrDefault(x => x.Id == leaveRequest.TypeId);
+                            LeaveType? leaveType = leaveTypes.FirstOrDefault(x => x.Id == leaveRequest.TypeId);
                             if (leaveType is not null && leaveType.LeaveCategoryId is LeaveCategory.WorkFromHome)
                             {
                                 summaryDto.WFH++;

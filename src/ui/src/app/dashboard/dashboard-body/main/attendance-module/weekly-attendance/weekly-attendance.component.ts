@@ -3,8 +3,9 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { getISOWeek, getYear } from 'date-fns';
 import { Chart,registerables } from 'chart.js';
-import { AttendanceService } from '../../../../../Service/attendance.service';
+import { AttendanceService } from '../../../../../service/attendance.service';
 import { WeeklyAttendance } from '../../../../../Interface/iweekly-attendance';
+import { WolfDenService } from '../../../../../Service/wolf-den.service';
 
 Chart.register(...registerables);
 
@@ -75,7 +76,13 @@ export class WeeklyAttendanceComponent {
             tooltip: {
               callbacks: {
                 label: (context: any) => {
-                  return `${context.label}: ${context.raw} hours`;
+                  if(context.raw==1)
+                  {
+                    return `0 minutes`;
+                  }
+                  return `${context.label}: ${context.raw} minutes`;
+
+                 
                 }
               }
             }
@@ -90,9 +97,10 @@ export class WeeklyAttendanceComponent {
     }
   }
  service=inject(AttendanceService)
+ baseService=inject(WolfDenService)
  selectedWeek!:string;
  offset=0;
- employeeId=1;
+ employeeId=this.baseService.userId;
  weeklyData:WeeklyAttendance[]=[]
  barChart!:Chart;
  status:number[]=[]
@@ -128,8 +136,11 @@ getStartOfWeek(selectedWeek:string){
             return { ...item, date: convertedDate };
           });
           this.barChart.data.labels=this.weeklyData.map((x:WeeklyAttendance)=>x.date.toLocaleDateString())
-          this.barChart.data.datasets[0].data=this.weeklyData.map((x:WeeklyAttendance)=>x.insideDuration)
-          this.status=this.weeklyData.map(x=>x.attendanceStatusId)
+          const maxValue = Math.max(...this.weeklyData.map((x: WeeklyAttendance) => x.insideDuration || 1));
+          this.barChart.data.datasets[0].data = this.weeklyData.map((x: WeeklyAttendance) => 
+              x.insideDuration !== null ? x.insideDuration : maxValue
+          ); 
+          this.barChart.data .datasets[0].hoverBackgroundColor="#fffff"   
           this.barChart.data.datasets[0].backgroundColor,this.barChart.data.datasets[0].borderColor= this.weeklyData.map(x=>{
             if(x.attendanceStatusId===1)
             {

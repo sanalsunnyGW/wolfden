@@ -1,5 +1,4 @@
-﻿using WolfDen.Domain.Enums;
-using static WolfDen.Domain.Enums.EmployeeEnum;
+﻿using static WolfDen.Domain.Enums.EmployeeEnum;
 
 
 namespace WolfDen.Domain.Entity
@@ -29,8 +28,6 @@ namespace WolfDen.Domain.Entity
         public string? State { get; private set; }
         public EmploymentType? EmploymentType { get; private set; }
         public string? Photo { get; private set; }
-        public RoleType? RoleType { get; private set; }
-
         public string? UserId { get; private set; }
         public User? User { get; private set; }
 
@@ -45,7 +42,7 @@ namespace WolfDen.Domain.Entity
             EmployeeCode = employeeCode;
             RFId = rfId;
         }
-        public void EmployeeUpdateEmployee(string? firstName, string? lastName, DateOnly? dateofBirth, string? email, string? phoneNumber, Gender? gender, string? address, string? country, string? state, string? photo,string? userId)
+        public void EmployeeUpdateEmployee(string? firstName, string? lastName, DateOnly? dateofBirth, string? email, string? phoneNumber, Gender? gender, string? address, string? country, string? state, string? photo, string? userId)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -57,7 +54,7 @@ namespace WolfDen.Domain.Entity
             Country = country;
             State = state;
             Photo = photo;
-            UserId=userId;
+            UserId = userId;
 
 
         }
@@ -71,10 +68,7 @@ namespace WolfDen.Domain.Entity
             EmploymentType = employmentType;
 
         }
-        public void SuperAdminUpdateEmployee(RoleType? roleType)
-        {
-            RoleType=roleType;
-        }
+
     }
 }
 

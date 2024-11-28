@@ -2,16 +2,15 @@ import { Injectable, inject } from '@angular/core';
 import { environment } from '../../enviornments/environment';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IEmployeeDirectoryWithPagecount } from '../interface/iemployee-directory-with-pagecount';
+import { IEmployeeDirectoryWithPagecount } from '../Interface/iemployee-directory-with-pagecount';
 @Injectable({
   providedIn: 'root'
 })
 
 export class WolfDenService {
 
-
-  private baseUrl = environment.apiUrl;
-  public userId: number = 3;
+  private baseUrl=environment.apiUrl;
+  public userId : number=1;
 
   constructor(private http: HttpClient) { }
 
