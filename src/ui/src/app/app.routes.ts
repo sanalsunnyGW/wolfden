@@ -33,10 +33,6 @@ export const routes: Routes = [
         ]
     },
     {
-        path:'attendance/calendar',
-        component:CalendarViewComponent
-    },
-    {
         path: 'leave-dashboard',
         component: LeaveDashboardComponent
     },
@@ -56,19 +52,6 @@ export const routes: Routes = [
         path: 'my-team',
         component: MyTeamComponent
     },
-
-    {
-        path: 'attendance/calendar',
-        component: CalendarViewComponent
-    },
-    {
-        path: '',
-        component: UserComponent
-
-    },
-   
-
-
     {
         path:'dashboard',
         component:DashboardComponent,

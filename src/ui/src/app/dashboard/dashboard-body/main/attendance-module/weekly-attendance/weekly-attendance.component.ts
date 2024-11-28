@@ -5,7 +5,7 @@ import { getISOWeek, getYear } from 'date-fns';
 import { Chart,registerables } from 'chart.js';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { WeeklyAttendance } from '../../../../../Interface/iweekly-attendance';
-import { WolfDenService } from '../../../../../Service/wolf-den.service';
+import { WolfDenService } from '../../../../../service/wolf-den.service';
 
 Chart.register(...registerables);
 

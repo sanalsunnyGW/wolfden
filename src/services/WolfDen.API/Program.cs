@@ -1,3 +1,6 @@
+using System.Reflection;
+using System.Security.Claims;
+using System.Text;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -5,15 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using QuestPDF.Infrastructure;
-using System.Reflection;
-using System.Security.Claims;
-using System.Security.Cryptography.Xml;
-using System.Text;
+using WolfDen.Application.Helpers;
+using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
+using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
 using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
-using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
-using WolfDen.Application.Helpers;
 
 
 var builder = WebApplication.CreateBuilder(args);

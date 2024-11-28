@@ -4,7 +4,7 @@ import { TreeNodeComponent } from '../tree-node/tree-node.component';
 import { Component, inject } from '@angular/core';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { SubordinatesDetails } from '../../../../../Interface/subordinates-details';
-import { WolfDenService } from '../../../../../Service/wolf-den.service';
+import { WolfDenService } from '../../../../../service/wolf-den.service';
 
 @Component({
   selector: 'app-subordinates',
