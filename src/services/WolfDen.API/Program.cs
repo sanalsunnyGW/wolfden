@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using QuestPDF.Infrastructure;
+using System.Reflection;
+using System.Security.Claims;
+using System.Text;
+using WolfDen.API.BackgroudWorkers;
 using WolfDen.Application.Helpers;
 using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
@@ -97,8 +101,7 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddScoped<WolfDenContext>();
 builder.Services.AddSingleton<PdfService>();
-builder.Services.AddScoped<ManagerEmailFinder>();
-    
+builder.Services.AddScoped<ManagerEmailFinder>();    
 builder.Services.AddScoped<MonthlyPdf>();
 
 QuestPDF.Settings.License = LicenseType.Community;
@@ -109,6 +112,7 @@ builder.Services.AddMediatR(x =>
 
 });
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("WolfDen.Application"));
+builder.Services.AddHostedService<DatabaseSyncBackgroundService>();
 
 var app = builder.Build();
 
