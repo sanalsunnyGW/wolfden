@@ -1,9 +1,11 @@
 <div class="header">
-  <div class="logo">Geeky Wolf</div>
+  <div class="logo"><img src="geekywolf-white-logo.svg"></div>
   <div class="user">
     <div class="user-name">{{userService.firstName}}</div>
     <div class="user-menu-container">
-      <span class="user-image" (click)="toggleDropdown()">NA</span>
+      <span class="user-image" (click)="toggleDropdown()">
+        {{ userService.firstName ? userService.firstName[0].toUpperCase() : 'NA' }}
+      </span>
       <ul class="dropdown-menu" [class.show]="isDropdownOpen">
         <li><a routerLink="/portal/profile">Profile</a></li>
         <li><a (click)="onLogout()">LogOut</a></li>

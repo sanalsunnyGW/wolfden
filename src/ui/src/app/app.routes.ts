@@ -22,55 +22,15 @@ import { UpdateLeaveBalanceComponent } from './dashboard/dashboard-body/main/lea
 import { ProfileComponent } from './profile/profile.component';
 
 export const routes: Routes = [
-    {
-        path: 'profile',
-        component: ProfileComponent},{
+{
         path: 'user', 
         component: UserComponent,
         children:[
-            { path: '', redirectTo: 'login', pathMatch: 'full' }, 
             {path: 'check-user', component: CheckUserComponent},
             {path: 'sign-in', component: SigninComponent},
             {path: 'login', component: LoginComponent},
         ]
     },
-    {
-        path:'attendance/calendar',
-        component:CalendarViewComponent
-    },
-    {
-        path: 'leave-dashboard',
-        component: LeaveDashboardComponent
-    },
-    {
-        path: 'leave-request-history',
-        component: LeaveHistoryComponent
-    },
-    {
-        path: 'company-hierarchy',
-        component: EmployeeHierarchyTreeComponent
-    },
-    {
-        path: 'employee-display',
-        component: EmloyeeHierarchyDisplayComponent
-    },
-    {
-        path: 'my-team',
-        component: MyTeamComponent
-    },
-
-    {
-        path: 'attendance/calendar',
-        component: CalendarViewComponent
-    },
-    {
-        path: '',
-        component: UserComponent
-
-    },
-   
-
-
     {
         path:'portal',
         component:DashboardComponent,
