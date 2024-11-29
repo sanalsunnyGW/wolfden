@@ -1,32 +1,34 @@
+// employee-directory.component.ts
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
-import { IEmployeeDirectoryDto } from '../../../../Interface/iemployee-directory';
-import { WolfDenService } from '../../../../Service/wolf-den.service';
-import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
-import { IEmployeeDirectoryWithPagecount } from '../../../../Interface/iemployee-directory-with-pagecount';
-
+import { WolfDenService } from '../../../../service/wolf-den.service';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { IEmployeeDirectoryWithPagecount } from '../../../../interface/iemployee-directory-with-pagecount';
+import { IEmployeeDirectoryDto } from '../../../../interface/iemployee-directory';
 
 @Component({
   selector: 'app-employee-directory',
   standalone: true,
-  imports: [CommonModule, FormsModule,MatPaginatorModule],
+  imports: [CommonModule, FormsModule, MatPaginatorModule],
   templateUrl: './employee-directory.component.html',
   styleUrl: './employee-directory.component.scss'
 })
 export class EmployeeDirectoryComponent implements OnInit {
-  employeesPagecount!: IEmployeeDirectoryWithPagecount ;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  employeesPagecount!: IEmployeeDirectoryWithPagecount;
   employees: IEmployeeDirectoryDto[] = [];
   departments: { id: number, name: string }[] = [];
   selectedDepartment: number | null = 0;
   searchTerm: string = '';
   private searchSubject = new Subject<string>();
-  isLoading: boolean = false;
+  isLoading: boolean = false; 
   pageNumber: number = 0;
-  pageSize: number = 2;
-  totalCount?: number = undefined;
+  pageSize: number = 1; 
+  pageSizeOptions: number[] = [1, 2, 3, 4];
+  totalRecords: number = 0;
 
   constructor(private wolfDenService: WolfDenService) {
     this.searchSubject.pipe(
@@ -41,27 +43,34 @@ export class EmployeeDirectoryComponent implements OnInit {
     this.loadEmployees();
   }
 
-  onPaginateChange(event: PageEvent): void {
-    this.pageNumber = event.pageIndex;  
+  onPageChange(event: PageEvent): void {
+    this.pageNumber = event.pageIndex;
+    console.log(this.pageNumber);
     this.pageSize = event.pageSize;
-    this.totalCount = undefined;
     this.loadEmployees();
   }
+
   onSearch(): void {
-    this.totalCount = undefined;
-    this.loadEmployees(); 
-    this.pageNumber = 0;
+    this.pageNumber = 0; 
+    if (this.paginator) {
+      this.paginator.firstPage(); 
+    }
+    this.loadEmployees();
   }
+
   onDepartmentChange(event: Event): void {
-    const target = event.target as HTMLSelectElement | null; 
+    const target = event.target as HTMLSelectElement | null;
     if (target) {
       const value = target.value;
-      this.selectedDepartment = value ? Number(value) : 0; 
-      this.pageNumber=0;
-      this.totalCount = undefined;
-      this.loadEmployees(); 
+      this.selectedDepartment = value ? Number(value) : 0;
+      this.pageNumber = 0;
+      if (this.paginator) {
+        this.paginator.firstPage();
+      }
+      this.loadEmployees();
     }
   }
+
   loadEmployees(): void {
     this.isLoading = true;
     this.wolfDenService.getAllEmployees(
@@ -71,9 +80,9 @@ export class EmployeeDirectoryComponent implements OnInit {
       this.searchTerm || undefined
     ).subscribe({
       next: (data) => {
-        this.isLoading = false; 
-        this.totalCount = data.totalPages;
-        this.employeesPagecount=data      
+        this.isLoading = false;
+        this.employeesPagecount = data;
+        this.totalRecords = data.totalPages;
       },
       error: (error) => {
         console.error('Error loading employees:', error);

@@ -78,6 +78,7 @@ export class MainPageComponent implements OnInit {
     }
   }
 
+  
   getMonthAndYear(): string {
     return this.currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
   }

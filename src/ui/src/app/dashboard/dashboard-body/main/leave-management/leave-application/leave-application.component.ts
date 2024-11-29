@@ -44,7 +44,6 @@ export class LeaveApplicationComponent implements OnInit {
   
   onSubmit(){
     if(this.applyLeave.valid){
-      console.log(this.applyLeave);
       this.leaveManagement.applyLeaveRequest(this.applyLeave.value)
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next:(response : boolean)=>{

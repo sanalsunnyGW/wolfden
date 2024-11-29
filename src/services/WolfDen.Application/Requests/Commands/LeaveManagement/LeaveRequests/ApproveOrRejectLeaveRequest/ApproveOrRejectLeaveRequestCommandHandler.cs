@@ -25,7 +25,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
 
             employeeHierarchyDto = await _mediator.Send(employeeTeamQuery, cancellationToken);
 
-            if (employeeHierarchyDto == null)
+            if (employeeHierarchyDto is null)
             {
                 throw new Exception("No Subordinates");
             }

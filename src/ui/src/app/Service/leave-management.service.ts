@@ -62,16 +62,16 @@ export class LeaveManagementService {
     id : number=1;
     getSubordinateLeaverequest(pagination :ISubordinateLeavePaginationSend){
       pagination.id = this.id
-      return this.http.get<ISubordinateLeavePaginationReceive>(`${this.baseUrl}/leave-request/subordinate-leave-requets?Id=${pagination.id}&StatusId=${pagination.statusId}&PageSize=${pagination.pageSize}&PageNumber=${pagination.pageNumber}`)
+      return this.http.get<ISubordinateLeavePaginationReceive>(`${this.baseUrl}/leave-request/subordinate-leave-requests?Id=${pagination.id}&StatusId=${pagination.statusId}&PageSize=${pagination.pageSize}&PageNumber=${pagination.pageNumber}`)
     }
     
     approveOrRejectLeave(approveRejectLeave : IApproveRejectLeave){
-      return this.http.patch<boolean>(`${this.baseUrl}/leave-request/subordinate-leave-requets/${this.id}`,approveRejectLeave)
+      return this.http.patch<boolean>(`${this.baseUrl}/leave-request/subordinate-leave-requests/${this.id}`,approveRejectLeave)
     }
 
     editLeaveRequest(editleave : IEditleave)
     {
-      return this.http.patch<boolean>(`${this.baseUrl}/leave-request/edit-leave/${this.id}`,editleave)
+      return this.http.put<boolean>(`${this.baseUrl}/leave-request/edit-leave/${this.id}`,editleave)
     }
 
     applyLeaveByAdminforEmployee(leaveByAdminforEmployee : IAddLeaveByAdminForEmployee){

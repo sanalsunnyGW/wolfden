@@ -2,17 +2,51 @@ import { Injectable, inject } from '@angular/core';
 import { environment } from '../../enviornments/environment';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IEmployeeDirectoryWithPagecount } from '../Interface/iemployee-directory-with-pagecount';
+import { IEmployeeDirectoryWithPagecount } from '../interface/iemployee-directory-with-pagecount';
+import { EmployeeService } from './employee.service';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
 
 export class WolfDenService {
 
-  private baseUrl=environment.apiUrl;
-  public userId : number=1;
+  emp = inject(EmployeeService);
+  toastr=inject(ToastrService);
+  router=inject(Router)
 
-  constructor(private http: HttpClient) { }
+  private baseUrl = environment.apiUrl;
+  public userId: number = 0;
+  public role : string = "";
+  public firstName: string = ""; 
+
+
+  constructor(private http: HttpClient, private employeeService: EmployeeService) {
+    if (localStorage.getItem('token') !== null) {
+      const payload = this.emp.decodeToken();
+      this.userId = parseInt(payload.EmployeeId || 0, 10);
+      this.role = (payload.Role||"");
+      this.firstName = (payload.FirstName || 'welcome back');
+    }
+  }
+  checkExpiry() {
+    const payload = this.emp.decodeToken();
+    if (payload) {
+      const expTime = payload.exp; 
+      const now = Date.now() / 1000; 
+      const diff = expTime - (Math.floor(now));
+
+      if (diff <= 0) {
+        localStorage.removeItem('token');
+        this.router.navigate(['/user/login']);
+        this.toastr.error('Please login again', 'Session Timeout')
+       
+      }
+    }
+  }
+
+
 
   private createHttpParams(params: { [key: string]: any }): HttpParams {
     let httpParams = new HttpParams();
@@ -50,6 +84,9 @@ export class WolfDenService {
       { headers: this.getHeaders(), params }
 
     );
+  }
+  isLoggedIn(): boolean {
+    return this.userId !== 0;
   }
 
   signIn(data: any): Observable<any> {

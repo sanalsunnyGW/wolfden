@@ -23,7 +23,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Re
             }
             LeaveRequest leaveRequest = await _context.LeaveRequests.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             decimal leaveRequestDayCount = await _context.LeaveRequestDays.Where(x => x.LeaveRequestId == request.Id).CountAsync();
-            if (leaveRequest == null)
+            if (leaveRequest is null)
             {
                 throw new Exception("No such Leave");
             }

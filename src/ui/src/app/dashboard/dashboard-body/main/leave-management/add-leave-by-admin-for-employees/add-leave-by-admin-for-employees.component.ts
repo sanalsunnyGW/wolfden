@@ -48,15 +48,6 @@ export class AddLeaveByAdminForEmployeesComponent implements OnInit{
   onSubmit(){
     if(this.applyLeave.valid){
 
-      const leaveData: IAddLeaveByAdminForEmployee = {
-        adminId: this.applyLeave.get('adminId')?.value ?? null,
-        employeeCode: this.applyLeave.get('employeeCode')?.value,
-        typeId: this.applyLeave.get('typeId')?.value,
-        halfDay: this.applyLeave.get('halfDay')?.value,
-        fromDate: this.applyLeave.get('fromDate')?.value,
-        toDate: this.applyLeave.get('toDate')?.value,
-        description: this.applyLeave.get('description')?.value,
-      };
       this.leaveManagement.applyLeaveByAdminforEmployee(this.applyLeave.value)
       .pipe(takeUntilDestroyed(this.destroyRef)) .subscribe({
         next:(response : boolean)=>{

@@ -23,7 +23,7 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
 
             employeeHierarchyDto = await _mediator.Send(getEmployeeTeamQuery, cancellationToken);
 
-            if (employeeHierarchyDto == null)
+            if (employeeHierarchyDto is null)
             {
                 throw new Exception("Error");
             }

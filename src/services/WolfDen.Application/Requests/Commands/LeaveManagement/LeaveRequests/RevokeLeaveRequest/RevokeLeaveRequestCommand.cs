@@ -5,5 +5,6 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Re
     public class RevokeLeaveRequestCommand : IRequest<bool>
     {
         public int Id { get; set; }
+        public int EmployeeId { get; set; } 
     }
 }

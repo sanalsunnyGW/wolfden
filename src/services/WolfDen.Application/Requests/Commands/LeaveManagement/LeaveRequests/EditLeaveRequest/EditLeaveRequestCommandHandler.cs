@@ -17,7 +17,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
         public async Task<bool> Handle(EditLeaveRequestCommand request, CancellationToken cancellationToken)
         {
             LeaveRequest leaveRequest = await _context.LeaveRequests.Where(x => x.Id == request.LeaveRequestId && x.RequestedBy == request.EmpId).FirstOrDefaultAsync();
-            if (leaveRequest == null)
+            if (leaveRequest is null)
             {
                 throw new Exception($"No Such Leave Request");
             }
@@ -27,16 +27,16 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                 LeaveBalance leaveBalance = await _context.LeaveBalances.FirstOrDefaultAsync(x => x.EmployeeId == request.EmpId && x.TypeId == request.TypeId, cancellationToken);
                 Employee employee = await _context.Employees.FirstOrDefaultAsync(x => x.Id == request.EmpId, cancellationToken);
                 LeaveType leaveType = await _context.LeaveType.FirstOrDefaultAsync(x => x.Id == request.TypeId);
-                if (leaveType == null)
+                if (leaveType is null)
                 {
                     throw new InvalidOperationException($"No Such Leave Type");
                 }
-                if (employee == null)
+                if (employee is null)
                 {
                     throw new InvalidOperationException($"No Such Employee");
                 }
 
-                if (leaveBalance == null)
+                if (leaveBalance is null)
                 {
                     throw new InvalidOperationException($"Leave balance not found for Employee ID {employee.FirstName} and Type ID {leaveType.TypeName}.");
                 }
