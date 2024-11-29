@@ -20,6 +20,7 @@ export class DailyAttendenceComponent {
   attendanceDate!:string
   dailyData!:DailyAttendance
   ngOnInit() {
+   this.attendanceDate = this.route.snapshot.paramMap.get('attendanceDate')!;
    this.getDailyAttendence();
   }
  
@@ -41,7 +42,7 @@ export class DailyAttendenceComponent {
   
   getDailyAttendence()
   {
-    this.attendanceDate = this.route.snapshot.paramMap.get('attendanceDate')!;
+   
     const employeeId=this.baseService.userId;
     const selectedDate=new Date(this.attendanceDate)
     const date=formatDate(selectedDate, 'yyyy-MM-dd', 'en-US');
@@ -65,12 +66,29 @@ export class DailyAttendenceComponent {
   convertToTime(dateStr: string): string {
     if(dateStr)
     {
-      const date = new Date(dateStr); 
-      const hours = date.getHours().toString().padStart(2, '0'); 
-      const minutes = date.getMinutes().toString().padStart(2, '0'); 
-      return `${hours}:${minutes}`; 
+      const split=dateStr.split('+')[0];
+      const DateRemove=split.split('T')[1];
+      return `${DateRemove}`
     }
-    return '' 
+    return '-' 
+  }
+  convertToDate(dateStr: string)
+  {
+    if(dateStr)
+      {
+        const split=dateStr.split('+')[0];
+        const DateRemove=split.split('T')[0];
+        return `${DateRemove}`
+      }
+      return '-'
+  }
+  isMissed(missPunch:string)
+  {
+    if(missPunch)
+    {
+      return missPunch;
+    }
+    return '-'
   }
   downloadDailyReport()
   {

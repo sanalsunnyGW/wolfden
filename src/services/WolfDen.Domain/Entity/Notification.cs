@@ -15,9 +15,13 @@
         {
             EmployeeId = employeeId;
             Message = message;
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTime.UtcNow;
             IsRead = false;
            
+        }
+        public void MarkAsRead()
+        {
+            IsRead = true;
         }
     }
 }

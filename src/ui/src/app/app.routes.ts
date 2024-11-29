@@ -20,12 +20,7 @@ import { SubordinatesComponent } from './dashboard/dashboard-body/main/attendanc
 import { EditLeaveTypeComponent } from './dashboard/dashboard-body/main/leave-management/edit-leave-type/edit-leave-type.component';
 import { UpdateLeaveBalanceComponent } from './dashboard/dashboard-body/main/leave-management/update-leave-balance/update-leave-balance.component';
 import { ProfileComponent } from './profile/profile.component';
-import { AddNewLeaveTypeComponent } from './dashboard/dashboard-body/main/leave-management/add-new-leave-type/add-new-leave-type.component';
-import { LeaveApplicationComponent } from './dashboard/dashboard-body/main/leave-management/leave-application/leave-application.component';
-import { UpdateLeaveSettingsComponent } from './dashboard/dashboard-body/main/leave-management/update-leave-settings/update-leave-settings.component';
-import { SubordinateLeaveRequestComponent } from './dashboard/dashboard-body/main/leave-management/subordinate-leave-request/subordinate-leave-request.component';
-import { EditLeaveRequestComponent } from './dashboard/dashboard-body/main/leave-management/edit-leave-request/edit-leave-request.component';
-import { AddLeaveByAdminForEmployeesComponent } from './dashboard/dashboard-body/main/leave-management/add-leave-by-admin-for-employees/add-leave-by-admin-for-employees.component';
+import { AttendanceHistoryComponent } from './dashboard/dashboard-body/main/attendance-module/attendance-history/attendance-history.component';
 
 export const routes: Routes = [
 {
@@ -46,10 +41,15 @@ export const routes: Routes = [
             {path:'employee-directory',component: EmployeeDirectoryComponent},
             {path:'main-page',component:MainPageComponent},
             {path:'employee-directory',component: EmployeeDirectoryComponent},
+            {path:'leave-dashboard',component:LeaveDashboardComponent},
+            {path:'leave-request-history',component:LeaveHistoryComponent},
             {path:'attendance/daily/:attendanceDate',component:DailyAttendenceComponent},
             {path:'attendance/weekly',component:WeeklyAttendanceComponent},
             {path:'attendance/monthly',component:MonthlyReportComponent},
             {path:'attendance/subordinates',component:SubordinatesComponent} ,   
+            { path: 'edit-leave-type', component: EditLeaveTypeComponent },
+            { path: 'update-leave-balance', component: UpdateLeaveBalanceComponent },
+            {path:'attendance/attendance-history',component:AttendanceHistoryComponent},
             {
                 path: 'company-hierarchy',
                 component: EmployeeHierarchyTreeComponent,
@@ -85,39 +85,6 @@ export const routes: Routes = [
                 component: ProfileComponent,
                 canActivate: [guardsGuard]
             },
-            {
-                path: 'add-new-leave-type',
-                component: AddNewLeaveTypeComponent
-            },
-            {
-                path: 'leave-application',
-                component: LeaveApplicationComponent
-            },
-            {
-                path: 'update-leave-settings',
-                component: UpdateLeaveSettingsComponent
-            },
-            {
-                path: 'subordinate-leave-request',
-                component: SubordinateLeaveRequestComponent
-            },
-            {
-                path: 'edit-leave-request',
-                component: EditLeaveRequestComponent
-            },
-            {
-                path: 'add-leave-by-admin-for-employees',
-                component: AddLeaveByAdminForEmployeesComponent
-            },
-            {
-                path: 'edit-leave-type',
-                component: EditLeaveTypeComponent
-            },
-            {
-                path: 'update-leave-balance',
-                component: UpdateLeaveBalanceComponent
-            }
-
             
         ]
     },
