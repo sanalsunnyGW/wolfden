@@ -1,3 +1,14 @@
+<div class="d-flex row mb-3">
+  <div class="col-6">
+    <ng-select id="leaveStatusId" name="leaveStatusId" [items]="leaveStatusId" bindLabel="name" bindValue="id"
+      placeholder="Select Leave Request Status" [(ngModel)]="selectedStatus">
+    </ng-select>
+  </div>
+  <div class="col-6">
+    <button class="btn btn-primary " (click)="onApply()">Apply</button>
+  </div>
+</div>
+
 <table class="table container">
   <thead>
     <tr>
@@ -6,7 +17,7 @@
       <th scope="col">Leave Type</th>
       <th scope="col">From Date</th>
       <th scope="col">To Date</th>
-      <th scope="col">Is HalfDay</th>
+      <th scope="col">Is Half Day</th>
       <th scope="col">Description</th>
       <th scope="col">Status</th>
       <th scope="col">Processed By</th>
@@ -25,32 +36,48 @@
       <td>{{leaveRequest.fromDate}}</td>
       <td>{{leaveRequest.toDate}}</td>
       <td>{{leaveRequest.halfDay}}</td>
-      <td>{{leaveRequest.description}}</td>
+      <td><a href="javascript:void()" (click)="viewDescription(leaveRequest.description)">View </a></td>
       <td>{{requestStatus(leaveRequest.leaveRequestStatusId)}}</td>
       <td>{{leaveRequest.processedBy}}</td>
-      <td><button class="btn btn-secondary" (click)="onEdit(leaveRequest.id)">Edit </button></td>
-      <td><button class="btn btn-danger" (click)="onDelete(leaveRequest.id)">Delete</button></td>
+      <td>
+        @if(requestStatus(leaveRequest.leaveRequestStatusId)=='Open' )
+        {
+        <button class="btn btn-secondary" (click)="onEdit(leaveRequest.id)">Edit </button>
+        }
+      </td>
+      <td>
+        @if(requestStatus(leaveRequest.leaveRequestStatusId)=='Approved')
+        {
+        <button class="btn btn-danger" (click)="onDelete(leaveRequest.id)">Delete</button>
+        }
+      </td>
     </tr>
     }
   </tbody>
 </table>
 
-@if(totalPages > 1)
+<div class="w-100">
+  <mat-paginator [length]="totalPages" [pageSize]="pageSize" [pageSizeOptions]="pageSizes"
+    (page)="onPageChangeEvent($event)">
+  </mat-paginator>
+</div>
+
+@if(selectedDescription)
 {
-<div class="d-flex justify-content-center">
-  <button class="btn btn-secondary shadow" type="button" (click)="previousPage()" [disabled]="pageNumber === 1">
-    Previous
-  </button>
-
-  @for( count of leaveRequestCountArray;track count)
-  {
-  <div>
-    <button class="btn shadow" type="button" (click)="countSend(count)">{{ count }}</button>
+<div class="modal" tabindex="-1" style="display: block;" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Description</h5>
+        <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ selectedDescription }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+      </div>
+    </div>
   </div>
-  }
-
-  <button class="btn btn-secondary shadow" type="button" (click)="nextPage()" [disabled]="pageNumber === totalPages">
-    Next
-  </button>
 </div>
 }

@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select'; // Import MatSelectModule
 import { formatDate } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
-import { WolfDenService } from '../../Service/wolf-den.service'
+import { WolfDenService } from '../../service/wolf-den.service'
 
 
 

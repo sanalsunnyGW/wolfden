@@ -105,19 +105,23 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
                 return result;
             }
 
-            async Task<List<int>> GetAllEmployeeIds(EmployeeHierarchyDto employees)
+            async Task<List<int>> GetAllEmployeeIds(EmployeeHierarchyDto employee)
             {
                 List<int> result = new List<int>();
 
-                foreach (EmployeeHierarchyDto employee in employees)
-                {
+              
                     result.Add(employee.Id);
 
                     if (employee.Subordinates.Count > 0)
                     {
-                        result.AddRange(GetAllEmployeeIds(employee.Subordinates));
+                    foreach (EmployeeHierarchyDto subOrdinate in employee.Subordinates)
+                    {
+                        result.Add(subOrdinate.Id);
+                        List<int> childIds = await GetAllEmployeeIds(subOrdinate);
+                        result.AddRange(childIds);
                     }
-                }
+                    }
+                
 
                 return result;
             }
@@ -126,4 +130,6 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
         }
     }
 }
+
+
 
