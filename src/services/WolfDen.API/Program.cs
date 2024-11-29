@@ -1,3 +1,6 @@
+using System.Reflection;
+using System.Security.Claims;
+using System.Text;
 using FluentValidation;
 using Hangfire;
 using Hangfire.SqlServer;
@@ -139,6 +142,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseHangfireDashboard();
 }
+
 app.UseCors(options => options.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowAnyMethod());
 
 app.UseHttpsRedirection();
