@@ -74,8 +74,7 @@ export class LeaveManagementService {
 
     editLeaveRequest(editleave : IEditleave)
     {
-      editleave.empId = this.id
-      return this.http.put<boolean>(`${this.baseUrl}/leave-request/edit-leave`,editleave)
+      return this.http.put<boolean>(`${this.baseUrl}/leave-request/edit-leave/${this.id}`,editleave)
     }
 
     applyLeaveByAdminforEmployee(leaveByAdminforEmployee : IAddLeaveByAdminForEmployee){
