@@ -36,6 +36,7 @@
     "mermaid": "^11.4.0",
     "ng2-charts": "^6.0.1",
     "ngx-toastr": "^19.0.0",
+    "popper.js": "^1.16.1",
     "primeicons": "^7.0.0",
     "primeng": "^17.18.12",
     "rxjs": "~7.8.0",

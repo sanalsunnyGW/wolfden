@@ -1,37 +1,39 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, NgSelectOption, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IAddNewLeaveType } from '../../../../../Interface/Add-New-Leave-Type-Interface';
-import { CommonModule } from '@angular/common';
+import { IAddNewLeaveTypeFormcontrol } from '../../../../../interface/add-new-leave-type-interface';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { LeaveManagementService } from '../../../../../Service/leave-management.service';
+import { LeaveManagementService } from '../../../../../service/leave-management.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 
 
 @Component({
   selector: 'app-add-new-leave-type',
   standalone: true,
-  imports: [ReactiveFormsModule,CommonModule,NgSelectComponent],
+  imports: [ReactiveFormsModule,NgSelectComponent],
   templateUrl: './add-new-leave-type.component.html',
   styleUrl: './add-new-leave-type.component.scss'
 })
-export class AddNewLeaveTypeComponent {
+export class AddNewLeaveTypeComponent{
   fb = inject(FormBuilder)
   leaveManagement = inject(LeaveManagementService)
+  destroyRef= inject(DestroyRef);
 
-    addNewLeaveType : FormGroup<IAddNewLeaveType>
+    addNewLeaveType : FormGroup
     constructor() {
-      this.addNewLeaveType = this.fb.group<IAddNewLeaveType>({
+      this.addNewLeaveType = this.fb.group<IAddNewLeaveTypeFormcontrol>({
+        adminId : new FormControl(null),
         typeName: new FormControl(null,Validators.required),
         maxDays: new FormControl(null),
         isHalfDayAllowed: new FormControl(null),
         incrementCount: new FormControl(null),
-        incrementGap: new FormControl(null),
+        incrementGapId: new FormControl(null),
         carryForward: new FormControl(null),
         carryForwardLimit: new FormControl(null),
         daysCheck: new FormControl(null),
         daysCheckMore: new FormControl(null),
         daysCheckEqualOrLess: new FormControl(null),
         dutyDaysRequired: new FormControl(null),
-        type: new FormControl(null),
         sandwich : new FormControl(null)
       });
   }
@@ -50,7 +52,8 @@ export class AddNewLeaveTypeComponent {
       {
         if(this.addNewLeaveType.valid)
         {
-          this.leaveManagement.addNewLeaveType(this.addNewLeaveType).subscribe({
+          this.leaveManagement.addNewLeaveType(this.addNewLeaveType.value)
+          .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
             next:(response : boolean)=>{
               if(response)
               {
@@ -66,3 +69,5 @@ export class AddNewLeaveTypeComponent {
         }
       }
 }
+
+
