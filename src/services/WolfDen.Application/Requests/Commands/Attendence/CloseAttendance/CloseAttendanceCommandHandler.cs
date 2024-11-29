@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using LanguageExt;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
@@ -41,10 +42,14 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
             {
                 int lopCount = 0;
                 int incompleteShiftCount = 0;
-                string lopdays = "";
+                string lopDays = "";
                 string incompleteShiftDays = "";
                 for (DateOnly currentDate = monthStart; currentDate <= attendanceClosingDate; currentDate = currentDate.AddDays(1))
                 {
+                    if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
+                    {
+                        continue;
+                    }
                     DailyAttendence? attendanceRecord = attendanceRecords.
                         FirstOrDefault(x => x.EmployeeId == employee.Id && x.Date == currentDate);
                     if (attendanceRecord is not null)
@@ -62,12 +67,12 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                                    .FirstOrDefault(x => x.EmployeeId == employee.Id && x.FromDate <= currentDate && x.ToDate >= currentDate);
                         if ((holiday is null || holiday.Type is not AttendanceStatus.NormalHoliday) && leaveRequest is null)
                         {
-                            lopdays += currentDate.ToString("yyyy-MM-dd") + ",";
+                            lopDays += currentDate.ToString("yyyy-MM-dd") + ",";
                             lopCount++;
                         }
                     }
                 }
-                LOP lop = new LOP(attendanceClosingDate, employee.Id, lopCount, incompleteShiftCount, lopdays, incompleteShiftDays);
+                LOP lop = new LOP(attendanceClosingDate, employee.Id, lopCount, incompleteShiftCount, lopDays.Substring(0,lopDays.Length-1), incompleteShiftDays.Substring(0,incompleteShiftDays.Length-1));
                 await _context.AddAsync(lop);
             }
             DateTime date = new DateTime(request.Year, request.Month, 1);

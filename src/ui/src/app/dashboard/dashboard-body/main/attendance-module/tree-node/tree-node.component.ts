@@ -3,6 +3,7 @@ import { Component, inject, Input } from '@angular/core';
 import { ModalDetailsComponent } from '../modal-details/modal-details.component';  
 import { MatDialog } from '@angular/material/dialog';
 import { SubordinatesDetails } from '../../../../../interface/subordinates-details';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tree-node',
@@ -15,7 +16,7 @@ import { SubordinatesDetails } from '../../../../../interface/subordinates-detai
 export class TreeNodeComponent {
   node! : SubordinatesDetails;
   dialogRef = inject(MatDialog);
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog,private router:Router) {}
   @Input()
   set item(node2: SubordinatesDetails) {
     this.node = node2;
@@ -23,6 +24,10 @@ export class TreeNodeComponent {
   expanded = false;
   toggle(): void {
     this.expanded = !this.expanded; 
+  }
+  getAttendance()
+  {
+    this.router.navigate(['portal/attendance/attendance-history'])
   }
   openModal(node:SubordinatesDetails)
   {

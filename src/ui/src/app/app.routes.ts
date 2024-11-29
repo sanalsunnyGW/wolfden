@@ -20,6 +20,7 @@ import { SubordinatesComponent } from './dashboard/dashboard-body/main/attendanc
 import { EditLeaveTypeComponent } from './dashboard/dashboard-body/main/leave-management/edit-leave-type/edit-leave-type.component';
 import { UpdateLeaveBalanceComponent } from './dashboard/dashboard-body/main/leave-management/update-leave-balance/update-leave-balance.component';
 import { ProfileComponent } from './profile/profile.component';
+import { AttendanceHistoryComponent } from './dashboard/dashboard-body/main/attendance-module/attendance-history/attendance-history.component';
 
 export const routes: Routes = [
 {
@@ -48,6 +49,7 @@ export const routes: Routes = [
             {path:'attendance/subordinates',component:SubordinatesComponent} ,   
             { path: 'edit-leave-type', component: EditLeaveTypeComponent },
             { path: 'update-leave-balance', component: UpdateLeaveBalanceComponent },
+            {path:'attendance/attendance-history',component:AttendanceHistoryComponent},
             {
                 path: 'company-hierarchy',
                 component: EmployeeHierarchyTreeComponent,
