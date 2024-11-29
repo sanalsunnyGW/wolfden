@@ -42,8 +42,8 @@ export const routes: Routes = [
         component:DashboardComponent,
         children:[
             { path: '', redirectTo: '/dashboard', pathMatch: 'full' }, 
-            {path:'dashboard',component:MainPageComponent,canActivate: [guardsGuard]},
-            {path:'employee-directory',component: EmployeeDirectoryComponent,canActivate: [guardsGuard]},
+            {path:'dashboard',component:MainPageComponent},
+            {path:'employee-directory',component: EmployeeDirectoryComponent},
             {path:'main-page',component:MainPageComponent},
             {path:'employee-directory',component: EmployeeDirectoryComponent},
             {path:'attendance/daily/:attendanceDate',component:DailyAttendenceComponent},
