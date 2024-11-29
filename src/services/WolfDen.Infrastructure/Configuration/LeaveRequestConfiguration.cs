@@ -13,6 +13,7 @@ namespace WolfDen.Infrastructure.Configuration
             builder.HasOne(x => x.Employee).WithMany().HasForeignKey(x => x.EmployeeId); 
             builder.HasOne(x=>x.LeaveType).WithMany().HasForeignKey(x => x.TypeId);
             builder.HasOne(x => x.Manager).WithMany().HasForeignKey(x => x.ProcessedBy);
+            builder.HasOne(x => x.Requested).WithMany().HasForeignKey(x => x.RequestedBy);
             builder.Property(x => x.HalfDay).HasDefaultValue(false);
         }
     }

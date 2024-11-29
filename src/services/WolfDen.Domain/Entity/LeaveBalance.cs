@@ -10,10 +10,15 @@
         public virtual LeaveType LeaveType { get; private set; }
         private LeaveBalance() { }
 
-        public LeaveBalance( int employeeId, int typeId, int balance)
+        public LeaveBalance( int employeeId, int typeId, decimal balance)
         {
             EmployeeId = employeeId;
             TypeId = typeId;
+            Balance = balance;
+        }
+
+        public void UpdateBalance(decimal balance)
+        {
             Balance = balance;
         }
     }

@@ -21,7 +21,7 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveTypes
                 })
                 .ToListAsync(cancellationToken);
 
-            if (leaveTypeDtoList == null)
+            if (leaveTypeDtoList is null)
             {
                 throw new KeyNotFoundException("LeaveType records not found.");
             }
