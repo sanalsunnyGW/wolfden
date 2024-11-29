@@ -17,27 +17,27 @@ export class WolfDenService {
   router=inject(Router)
 
   private baseUrl = environment.apiUrl;
-  public userId: number = 0;
+  public userId: number = 1;
   public role : string = "";
   public firstName: string = ""; 
 
 
   constructor(private http: HttpClient, private employeeService: EmployeeService) {
-    if (localStorage.getItem('token') !== null) {
-      const payload = this.emp.decodeToken();
-      if(payload){
-      this.userId = parseInt(payload.EmployeeId || 0, 10);
-      this.role = (payload.Role||"");
-      this.firstName = (payload.FirstName || 'welcome back');
-      }else {
-        this.toastr.error('Invalid or expired token', 'Error');
-        this.router.navigate(['/user/login']); 
-      }
-    }
-    else{
-      this.toastr.error('No token found', 'Error');
-      this.router.navigate(['/user/login']); 
-    }
+    // if (localStorage.getItem('token') !== null) {
+    //   const payload = this.emp.decodeToken();
+    //   if(payload){
+    //   this.userId = parseInt(payload.EmployeeId || 0, 10);
+    //   this.role = (payload.Role||"");
+    //   this.firstName = (payload.FirstName || 'welcome back');
+    //   }else {
+    //     this.toastr.error('Invalid or expired token', 'Error');
+    //     this.router.navigate(['/user/login']); 
+    //   }
+    // }
+    // else{
+    //   this.toastr.error('No token found', 'Error');
+    //   this.router.navigate(['/user/login']); 
+    // }
   }
   checkExpiry() {
     const payload = this.emp.decodeToken();

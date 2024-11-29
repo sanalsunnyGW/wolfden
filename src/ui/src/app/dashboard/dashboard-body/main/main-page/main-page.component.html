@@ -17,7 +17,7 @@
     <div class="card col margin10">
       <div class="card-header">
         <i class="fas fa-clock"></i>
-        <h3>{{leaveBalance2}} Remaining</h3>
+        <h3>{{leaveType2}} Remaining</h3>
       </div>
       <div class="card-content">
         <div class="metric-value">{{ leaveBalance2 }}</div>
@@ -28,7 +28,7 @@
     <div class="card col margin10">
       <div class="card-header">
         <i class="fas fa-calendar"></i>
-        <h3>{{leaveBalance3}} Remaining</h3>
+        <h3>{{leaveType3}} Remaining</h3>
       </div>
       <div class="card-content">
         <div class="metric-value">{{ leaveBalance3 }}</div>
@@ -44,32 +44,34 @@
 
   <div class="row">
     <!--- Absences Card -->
-    <div class="card col margin10 ">
-      <div class="card-header ">
-        <i class="fas fa-user-minus "></i>
+    <div class="card col margin10">
+      <div class="card-header">
+        <i class="fas fa-user-minus"></i>
         <h3>Today's Absences</h3>
       </div>
-      <div class="card-content absences-list">
-        @for(absence of todaysAbsences; track absence){
-        <div class="absence-item">
-          <div class="absence-name">{{ absence.name }}</div>
-          <div class="absence-details">
-            {{ absence.department }} • {{ absence.reason }}
+      <div class="card-content">
+        <div class="absences-list">
+          @for(absence of todaysAbsences; track absence){
+          <div class="absence-item">
+            <div class="absence-name">{{ absence.name }}</div>
+            <div class="absence-details">
+              {{ absence.department }} • {{ absence.reason }}
+            </div>
           </div>
+          }
         </div>
-        }
       </div>
     </div>
-
+  
     <!--- any chart -->
 
     <div class="card col margin10">
       <div class="card-header">
         <i class="fas fa-calendar"></i>
-        <h3>Weekly Attendance</h3>
+        <h3 style="max-height: 400px;">Weekly Attendance</h3>
       </div>
       <div class="card-content">
-
+          <app-weekly-attendance></app-weekly-attendance>
       </div>
     </div>
   </div>

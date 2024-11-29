@@ -5,6 +5,7 @@ import { LeaveManagementService } from '../../../../service/leave-management.ser
 import { WolfDenService } from '../../../../service/wolf-den.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ILeaveBalanceList } from '../../../../interface/leave-balance-list-interface';
+import { WeeklyAttendanceComponent } from "../attendance-module/weekly-attendance/weekly-attendance.component";
 
 interface Absence {
   name: string;
@@ -26,7 +27,7 @@ interface CalendarDay {
 @Component({
   selector: 'app-main-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, WeeklyAttendanceComponent],
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.scss']
 })

@@ -6,6 +6,7 @@ import { Chart,registerables } from 'chart.js';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { WeeklyAttendance } from '../../../../../interface/iweekly-attendance';
 import { WolfDenService } from '../../../../../service/wolf-den.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 Chart.register(...registerables);
 
@@ -17,7 +18,10 @@ Chart.register(...registerables);
   styleUrl: './weekly-attendance.component.scss'
 })
 export class WeeklyAttendanceComponent {
-  constructor() {}
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
+  public currentRoute: string | undefined;
+
   createChart() {
     {
       if (this.barChart) {
@@ -106,10 +110,13 @@ export class WeeklyAttendanceComponent {
  status:number[]=[]
  statusColor=["#72BF78","#AE445A","#FCF596","#AB886D","#536493","#9B7EBD"]
  ngOnInit(){
+  this.currentRoute = this.router.url;
+  console.log(this.currentRoute)
   const today=new Date();
   const year = getYear(today);
   const weekNumber = getISOWeek(today);
-  this.selectedWeek=`${weekNumber},${year}`;
+  this.selectedWeek=`${year}-W${weekNumber}`;
+  this.getStartOfWeek(this.selectedWeek);
  }
 getStartOfWeek(selectedWeek:string){
   if (selectedWeek) {
