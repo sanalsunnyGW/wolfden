@@ -81,7 +81,7 @@ export class EmployeeDirectoryComponent implements OnInit {
       next: (data) => {
         this.isLoading = false;
         this.employeesPagecount = data;
-        this.totalRecords = data.totalRecords;
+        this.totalRecords = data.totalPages;
       },
       error: (error) => {
         console.error('Error loading employees:', error);

@@ -7,6 +7,7 @@ import { AttendanceService } from '../../../../../service/attendance.service';
 import { IAttendanceSummary } from '../../../../../interface/attendance-summary';
 import { IAttendanceData } from '../../../../../interface/attendance-data';
 import { Router } from '@angular/router';
+import { WolfDenService } from '../../../../../service/wolf-den.service';
 
 @Component({
   selector: 'app-calendar-view',
@@ -18,6 +19,7 @@ import { Router } from '@angular/router';
 export class CalendarViewComponent implements OnInit {
   @ViewChild(FullCalendarComponent) calendarComponent!: FullCalendarComponent;
   service = inject(AttendanceService);
+  baseService=inject(WolfDenService);
 
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
@@ -34,7 +36,7 @@ export class CalendarViewComponent implements OnInit {
   incompleteShift: number = 0;
   wfh: number = 0;
 
-  employeeId: number = 33;
+  employeeId=this.baseService.userId;
   currentYear: number = new Date().getFullYear();
   currentMonth: number = new Date().getMonth() + 1;
   selectedYear: number = this.currentYear;
