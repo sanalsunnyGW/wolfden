@@ -10,23 +10,24 @@ h5.card-title {
 }
 .arrival
 {
-  background:#9EDF9C;
+  background:#55679C;
+  color: white;
 }
 .dep{
-  background: #DA7297;
+  background: #55679C;
 }
 .ins{
-  background: #F87A53;
+  background: #55679C;
 }
 .out{
   
-  background: #608BC1;
+  background: #55679C;
 }
 .miss{
-  background: #7776B3;
+  background: #55679C;
 }
 .pun{
-  background: #EE4E4E;
+  background: #55679C;
 }
 table {
   font-size: 0.875rem;
@@ -66,4 +67,9 @@ table th {
 }
 .tab{
   background: #F5F7F8;
+}
+.status{
+  background: #55679C;
+  
+  
 }

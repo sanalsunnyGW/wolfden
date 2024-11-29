@@ -109,7 +109,8 @@ export class WeeklyAttendanceComponent {
   const today=new Date();
   const year = getYear(today);
   const weekNumber = getISOWeek(today);
-  this.selectedWeek=`${weekNumber},${year}`;
+  this.selectedWeek=`${year}-W${weekNumber}`;
+  this.getStartOfWeek(this.selectedWeek)
  }
 getStartOfWeek(selectedWeek:string){
   if (selectedWeek) {

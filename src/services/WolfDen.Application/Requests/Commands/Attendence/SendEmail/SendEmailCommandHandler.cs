@@ -41,8 +41,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
                .Where(a => a.Date == DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1) && a.EmployeeId == employee.Id).FirstOrDefaultAsync(cancellationToken);
                 attendence.EmailSent = true;
                 _context.Update(attendence);
-                await _context.SaveChangesAsync(cancellationToken);
-                return true;
+                return await _context.SaveChangesAsync(cancellationToken) > 0;
             }
             return false;
         }
