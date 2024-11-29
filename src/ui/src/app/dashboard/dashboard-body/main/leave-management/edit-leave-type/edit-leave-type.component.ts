@@ -2,10 +2,10 @@ import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgSelectComponent } from '@ng-select/ng-select';
 
-import { IEditLeaveType } from '../../../../../Interface/edit-leave-type';
+import { IEditLeaveType } from '../../../../../interface/edit-leave-type';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
-import { IGetLeaveTypeIdAndname } from '../../../../../Interface/get-leave-type-interface';
+import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
 
 @Component({
   selector: 'app-edit-leave-type',

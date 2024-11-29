@@ -1,15 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-
-import { IAddNewLeaveType } from '../Interface/add-new-leave-type-interface';
-import { ILeaveBalanceList } from '../Interface/leave-balance-list-interface';
-
-import { IGetLeaveTypeIdAndname } from '../Interface/get-leave-type-interface';
-import { ILeaveUpdate, IUpdateLeaveSetting } from '../Interface/update-leave-setting';
+import { IAddNewLeaveType } from '../interface/add-new-leave-type-interface';
+import { ILeaveBalanceList } from '../interface/leave-balance-list-interface';
+import { ILeaveRequestHistory, ILeaveRequestHistoryResponse } from '../interface/leave-request-history';
+import { IGetLeaveTypeIdAndname } from '../interface/get-leave-type-interface';
+import { ILeaveUpdate, IUpdateLeaveSetting } from '../interface/update-leave-setting';
 import { Observable } from 'rxjs';
-import { IEditLeaveType } from '../Interface/edit-leave-type'
-import { ILeaveRequestHistoryResponse } from '../Interface/leave-request-history';
+import { IEditLeaveType } from '../interface/edit-leave-type'
 
 
 
