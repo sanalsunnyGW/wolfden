@@ -39,40 +39,6 @@ export const routes: Routes = [
             { path: 'login', component: LoginComponent },
         ]
     },
-    {
-        path: 'attendance/calendar',
-        component: CalendarViewComponent
-    },
-    {
-        path: 'leave-dashboard',
-        component: LeaveDashboardComponent
-    },
-    {
-        path: 'leave-request-history',
-        component: LeaveHistoryComponent
-    },
-    {
-        path: 'company-hierarchy',
-        component: EmployeeHierarchyTreeComponent
-    },
-    {
-        path: 'employee-display',
-        component: EmloyeeHierarchyDisplayComponent
-    },
-    {
-        path: 'my-team',
-        component: MyTeamComponent
-    },
-
-    {
-        path: 'attendance/calendar',
-        component: CalendarViewComponent
-    },
-    {
-        path: '',
-        component: UserComponent
-
-    },
 
 
 
@@ -156,9 +122,3 @@ export const routes: Routes = [
 
 
 ];
-
-
-
-
-
-

@@ -7,9 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Methods\**" />
+    <EmbeddedResource Remove="Methods\**" />
+    <None Remove="Methods\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.10.0" />
     <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
     <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Microsoft.AspNet.SignalR" Version="2.4.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
@@ -19,19 +26,6 @@
     <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="19.225.1" />
     <PackageReference Include="QuestPDF" Version="2024.10.3" />
     <PackageReference Include="sib_api_v3_sdk" Version="4.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Methods\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Methods\" />
-  </ItemGroup>
-
-  <ItemGroup>
-
-    <Folder Include="Methods\" />
   </ItemGroup>
 
   <ItemGroup>

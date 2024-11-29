@@ -4,20 +4,43 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { IEmployeeDirectoryWithPagecount } from '../interface/iemployee-directory-with-pagecount';
 import { EmployeeService } from './employee.service';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
 
 export class WolfDenService {
 
+  emp = inject(EmployeeService);
+  toastr=inject(ToastrService);
+  router=inject(Router)
 
-  private baseUrl=environment.apiUrl;
-  public userId : number=0;
-  public role:string="";
-  public firstName:string="Welcome Back";
+  private baseUrl = environment.apiUrl;
+  public userId: number = 5;
+  public role : string = "";
+  public firstName: string = ""; 
 
 
-  constructor(private http: HttpClient, private employeeService: EmployeeService) { }
+  constructor(private http: HttpClient, private employeeService: EmployeeService) {
+
+  }
+  checkExpiry() {
+    const payload = this.emp.decodeToken();
+    if (payload) {
+      const expTime = payload.exp; 
+      const now = Date.now() / 1000; 
+      const diff = expTime - (Math.floor(now));
+
+      if (diff <= 0) {
+        localStorage.removeItem('token');
+        this.router.navigate(['/user/login']);
+        this.toastr.error('Please login again', 'Session Timeout')
+       
+      }
+    }
+  }
+
 
 
   private createHttpParams(params: { [key: string]: any }): HttpParams {

@@ -8,7 +8,9 @@
         EmergencyLeave,
         RestrictedHoliday,
         WorkFromHome,
-        Custom
+        Custom,
+        Maternity,
+        Paternity
 
     }
 }

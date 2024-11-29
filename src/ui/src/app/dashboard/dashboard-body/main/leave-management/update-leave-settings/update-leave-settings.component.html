@@ -1,17 +1,17 @@
 <div class="patientForm">
     <form [formGroup]="updateLeaveSetting" class="pForm" (ngSubmit)="onSubmit()" >
   
-      <div class="form-group">
+      <div class="form-group mb-3">
         <label for="minDaysForLeaveCreditJoining">Enter minimum days required for leave credit on joining</label>
         <input type="number" class="form-control" id="minDaysForLeaveCreditJoining" [placeholder]="leaveSettings.minDaysForLeaveCreditJoining"  formControlName="minDaysForLeaveCreditJoining">
       </div>
 
-      <div class="form-group">
+      <div class="form-group mb-3">
         <label for="maxNegativeBalanceLimit">Enter maximum negative balance limit for a leave</label>
         <input type="number" class="form-control" id="maxNegativeBalanceLimit" [placeholder]="leaveSettings.maxNegativeBalanceLimit" formControlName="maxNegativeBalanceLimit">
       </div>
  
-      <button type="submit">Submit</button>
+      <button class="btn btn-primary" type="submit">Submit</button>
     </form>
   </div>
   

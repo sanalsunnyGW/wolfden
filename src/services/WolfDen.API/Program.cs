@@ -1,25 +1,24 @@
+using System.Reflection;
+using System.Security.Claims;
+using System.Text;
 using FluentValidation;
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using QuestPDF.Infrastructure;
-using System.Reflection;
-using System.Security.Claims;
-using System.Security.Cryptography.Xml;
-using System.Text;
+using WolfDen.Application.Helpers;
+using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
+using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
 using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
-using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
-using WolfDen.Application.Helpers;
-using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
 
 
 var builder = WebApplication.CreateBuilder(args);
-// Add services to the container.
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x =>
@@ -98,8 +97,7 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddScoped<WolfDenContext>();
 builder.Services.AddSingleton<PdfService>();
-builder.Services.AddScoped<ManagerEmailFinder>();
-    
+builder.Services.AddScoped<ManagerEmailFinder>();    
 builder.Services.AddScoped<MonthlyPdf>();
 
 QuestPDF.Settings.License = LicenseType.Community;
@@ -110,7 +108,26 @@ builder.Services.AddMediatR(x =>
 
 });
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("WolfDen.Application"));
-
+builder.Services.AddHangfire(configuration => configuration
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(connectionString, new SqlServerStorageOptions
+        {
+            CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+            SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+            QueuePollInterval = TimeSpan.Zero,
+            UseRecommendedIsolationLevel = true,
+            DisableGlobalLocks = true
+        }));
+builder.Services.AddHangfireServer();
+builder.Services.AddScoped(sp =>
+            new QueryBasedSyncService(
+                builder.Configuration.GetConnectionString("BioMetricDatabase"),
+                connectionString,
+                sp.GetRequiredService<ILogger<QueryBasedSyncService>>()
+            ));
+builder.Services.AddControllers();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -118,7 +135,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseHangfireDashboard();
 }
+
 app.UseCors(options => options.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowAnyMethod());
 
 app.UseHttpsRedirection();
@@ -127,5 +146,16 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var syncService = scope.ServiceProvider.GetRequiredService<QueryBasedSyncService>();
+
+    RecurringJob.AddOrUpdate(
+        "sync-tables-job",
+        () => syncService.SyncTablesAsync(),
+        "*/5 * * * *"  // Cron expression for every 5 minutes
+    );
+}
 
 app.Run();

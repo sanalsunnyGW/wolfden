@@ -5,11 +5,12 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLe
 {
     public class AddLeaveTypeCommand : IRequest<bool>
     {
+        public int AdminId { get; set; }
         public string TypeName { get; set; }
         public int? MaxDays { get; set; }
         public bool? IsHalfDayAllowed { get; set; }
         public int? IncrementCount { get; set; }
-        public LeaveIncrementGapMonth? IncrementGap { get; set; }
+        public LeaveIncrementGapMonth? IncrementGapId { get; set; }
         public bool? CarryForward { get; set; }
         public int? CarryForwardLimit { get; set; }
         public int? DaysCheck { get; set; }
