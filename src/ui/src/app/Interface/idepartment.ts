@@ -1,4 +1,4 @@
-export interface Idepartment {
+export interface IDepartment {
     id: number;
     departmentName: string;
 }

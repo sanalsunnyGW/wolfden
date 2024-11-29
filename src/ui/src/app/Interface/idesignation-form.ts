@@ -1,5 +1,5 @@
 import { FormControl } from "@angular/forms";
 
-export interface IdesignationForm {
+export interface IDesignationForm {
     designationName: FormControl<string | null>;
 }

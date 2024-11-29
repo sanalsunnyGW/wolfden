@@ -4,7 +4,7 @@ export const userInterceptor: HttpInterceptorFn = (req, next) => {
   const token=localStorage.getItem('token');
   const cloneRequest=req.clone({
     setHeaders:{
-      Authorization:`Beare ${token}`
+      Authorization:`Bearer ${token}`
     }
   })
   return next(cloneRequest);

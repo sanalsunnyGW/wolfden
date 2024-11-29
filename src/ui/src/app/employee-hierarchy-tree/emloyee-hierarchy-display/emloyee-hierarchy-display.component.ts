@@ -8,12 +8,11 @@ import { Gender } from '../../enum/gender-enum';
 import { EmploymentType } from '../../enum/employment-type-enum';
 import { IadminForm } from '../../interface/iadmin-form';
 import { ToastrService } from 'ngx-toastr';
-import { log } from 'mermaid/dist/logger.js';
-import { Idesignation } from '../../interface/idesignation';
-import { Idepartment } from '../../interface/idepartment';
 import { ImanagerData } from '../../interface/imanager-data';
 import { CommonModule } from '@angular/common';
 import { ImanagerForm } from '../../interface/imanager-form';
+import { IDepartment } from '../../interface/idepartment';
+import { IDesignation } from '../../interface/idesignation';
 
 @Component({
   selector: 'app-emloyee-hierarchy-display',
@@ -61,11 +60,11 @@ export class EmloyeeHierarchyDisplayComponent {
   }]
 
   loginRole: string = '';
-  departmentData: Idepartment[] = [{
+  departmentData: IDepartment[] = [{
     id: 0,
     departmentName: ''
   }];
-  designationData: Idesignation[] = [{
+  designationData: IDesignation[] = [{
     id: 0,
     designationName: ''
   }];

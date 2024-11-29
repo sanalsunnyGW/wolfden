@@ -36,35 +36,35 @@ export class EmployeeService {
     return this.http.get(`${this.baseUrl}/hierarchy`);
   }
   getEmployeeProfile(employeeId: number) {
-    return this.http.get(`${this.baseUrl}/by-Id?EmployeeId=${employeeId}`);
+    return this.http.get(`${this.baseUrl}/Employee/by-Id?EmployeeId=${employeeId}`);
   }
   employeeUpdateEmployee(userForm: any) {
-    return this.http.put(`${this.baseUrl}/employee-update-employee`, userForm);
+    return this.http.put(`${this.baseUrl}/Employee/employee-update-employee`, userForm);
   }
   getMyTeamHierarchy(getFullHierarchy: boolean, employeeId: number) {
-    return this.http.get(`${this.baseUrl}/team?Id=${employeeId}&Hierarchy=${getFullHierarchy}`);
+    return this.http.get(`${this.baseUrl}/Employee/team?Id=${employeeId}&Hierarchy=${getFullHierarchy}`);
   }
   addDepartment(departmentForm: any) {
-    return this.http.post(`https://localhost:7015/api/Department`, departmentForm);
+    return this.http.post(`${this.baseUrl}/Department`, departmentForm);
   }
   addDesignation(designationForm: any) {
-    return this.http.post(`https://localhost:7015/api/Designation`, designationForm);
+    return this.http.post(`${this.baseUrl}/Designation`, designationForm);
   }
   getAllDesignation() {
-    return this.http.get(`https://localhost:7015/api/Designation`);
+    return this.http.get(`${this.baseUrl}/Designation`);
 
   }
   getAllDepartment() {
-    return this.http.get(`https://localhost:7015/api/Department`);
+    return this.http.get(`${this.baseUrl}/Department`);
 
   }
   getEmployeeByName(firstName: any, lastName?: any) {
-    return this.http.get(`https://localhost:7015/api/Employee/get-all-by-name?FirstName=${firstName}&LastName=${lastName}`)
+    return this.http.get(`${this.baseUrl}/Employee/get-all-by-name?FirstName=${firstName}&LastName=${lastName}`)
   }
   adminUpdateEmployee(userForm: any) {
-    return this.http.put(`https://localhost:7015/api/Employee/admin`, userForm)
+    return this.http.put(`${this.baseUrl}/Employee/admin`, userForm)
   }
   roleChange(roleForm: any) {
-    return this.http.put(`https://localhost:7015/api/Employee/super-admin`, roleForm)
+    return this.http.put(`${this.baseUrl}/Employee/super-admin`, roleForm)
   }
 }

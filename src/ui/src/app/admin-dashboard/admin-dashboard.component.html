@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-end">
     <button type="button" class="btn btn-primary custom-btn" data-toggle="tooltip" data-placement="top"
-    title="Click to Edit Employee Role " routerLink="/portal/employee-role">Edit Employee Role
-</button>
+        title="Click to Edit Employee Role " routerLink="/portal/employee-role">Edit Employee Role
+    </button>
 </div>
 
 <div class="container mt-3">
@@ -80,7 +80,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form [formGroup]="departmentForm" (ngSubmit)="onSubmit()">
+                <form [formGroup]="departmentForm" (ngSubmit)="onSubmitDepartment()">
                     <input class="form-control" type="text" placeholder="Department Name" aria-label="Department Name"
                         formControlName="departmentName">
                     @if(departmentForm.get('name')?.invalid ) {
@@ -111,7 +111,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form [formGroup]="designationForm" (ngSubmit)="onSubmit()">
+                <form [formGroup]="designationForm" (ngSubmit)="onSubmitDesignation()">
                     <input class="form-control" type="text" placeholder="Designation Name" aria-label="Designation Name"
                         formControlName="designationName">
                     @if(designationForm.get('name')?.invalid ) {

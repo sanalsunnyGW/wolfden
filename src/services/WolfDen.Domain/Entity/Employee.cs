@@ -44,6 +44,11 @@ namespace WolfDen.Domain.Entity
             UserId = userId;
 
         }
+        public void UpdateUserId(string userId)
+        {
+            UserId = userId;
+        }
+
         public void EmployeeUpdateEmployee(string? firstName, string? lastName, DateOnly? dateofBirth, string? email, string? phoneNumber, Gender? gender, string? address, string? country, string? state, string? photo)
         {
             FirstName = firstName;

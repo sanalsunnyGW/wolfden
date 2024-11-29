@@ -1,32 +1,32 @@
 import { Component } from '@angular/core';
-import { Idepartment } from '../interface/idepartment';
-import { Idesignation } from '../interface/idesignation';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IdepartmentForm } from '../interface/idepartment-form';
-import { IdesignationForm } from '../interface/idesignation-form';
 import { ToastrService } from 'ngx-toastr';
 import { EmployeeService } from '../service/employee.service';
 import { RouterLink } from '@angular/router';
+import { IDepartment } from '../interface/idepartment';
+import { IDesignation } from '../interface/idesignation';
+import { IDepartmentForm } from '../interface/idepartment-form';
+import { IDesignationForm } from '../interface/idesignation-form';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [ReactiveFormsModule,RouterLink],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss'
 })
 export class AdminDashboardComponent {
 
-  departmentData: Idepartment[] = [{
+  departmentData: IDepartment[] = [{
     id: 0,
     departmentName: ''
   }];
-  designationData: Idesignation[] = [{
+  designationData: IDesignation[] = [{
     id: 0,
     designationName: ''
   }];
-  departmentForm!: FormGroup<IdepartmentForm>;
-  designationForm!: FormGroup<IdesignationForm>;
+  departmentForm!: FormGroup<IDepartmentForm>;
+  designationForm!: FormGroup<IDesignationForm>;
 
   constructor(private employeeService: EmployeeService, private fb: FormBuilder, private toastr: ToastrService) {
     this.buildForm();
@@ -74,7 +74,7 @@ export class AdminDashboardComponent {
       })
   }
 
-  onSubmit() {
+  onSubmitDepartment() {
     if (this.departmentForm.valid) {
       const formData = this.departmentForm.value;
       const params = {
@@ -94,7 +94,8 @@ export class AdminDashboardComponent {
         }
       })
     }
-
+  }
+  onSubmitDesignation() {
     if (this.designationForm.valid) {
       const formData = this.designationForm.value;
       const params = {

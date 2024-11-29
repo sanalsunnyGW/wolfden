@@ -20,7 +20,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam
             .Include(e => e.Designation)
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
-            if (employee == null)
+            if (employee is null)
             {
                 return teamList;
             }
@@ -29,11 +29,11 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam
                 teamList.Add(await service.GetEmployee(employee, false, cancellationToken));
                 return teamList;
             }
-           
+
             List<Employee> myTeam = await _context.Employees.Where(x => x.ManagerId == request.Id && x.IsActive == true).ToListAsync();
             if (myTeam.Count == 0)
             {
-                if (employee.ManagerId == null)
+                if (employee.ManagerId is null) 
                 {
                     teamList.Add(await service.GetEmployee(employee, false, cancellationToken));
                     return teamList;
