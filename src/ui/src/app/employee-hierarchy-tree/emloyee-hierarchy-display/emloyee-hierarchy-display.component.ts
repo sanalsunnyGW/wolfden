@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { IProfileForm } from '../../Interface/iprofile-from';
+import { IProfileForm } from '../../interface/iprofile-from';
 
 @Component({
   selector: 'app-emloyee-hierarchy-display',

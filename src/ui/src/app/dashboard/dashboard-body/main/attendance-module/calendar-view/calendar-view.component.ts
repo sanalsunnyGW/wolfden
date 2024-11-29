@@ -3,8 +3,6 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions, DatesSetArg, DayCellContentArg } from '@fullcalendar/core/index.js';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-
-
 import { Router } from '@angular/router';
 import { data } from 'jquery';
 import { AttendanceService } from '../../../../../service/attendance.service';
