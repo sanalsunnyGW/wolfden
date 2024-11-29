@@ -30,13 +30,14 @@ namespace WolfDen.API.Controllers.LeaveManagement
             return await _mediator.Send(command, cancellationToken);
         }
 
-        [HttpPatch("revove-leave")]
-        public async Task<bool> RevokeLeave([FromBody] RevokeLeaveRequestCommand command,CancellationToken cancellationToken)
+        [HttpPatch("revoke-leave/{id}")]
+        public async Task<bool> RevokeLeave(int id ,[FromBody] RevokeLeaveRequestCommand command,CancellationToken cancellationToken)
         {
+            command.EmployeeId = id;
             return await _mediator.Send(command, cancellationToken);
         }
 
-        [HttpGet("subordinate-leave-requets{id}/{status}")]
+        [HttpGet("subordinate-leave-requests/{id}/{status}")]
         public async Task<List<SubordinateLeaveDto>> GetSubordinatesLeaveRequest(int id, LeaveRequestStatus status,CancellationToken cancellationToken)
         {
             GetSubordinateLeaveQuery query= new GetSubordinateLeaveQuery();
@@ -46,14 +47,14 @@ namespace WolfDen.API.Controllers.LeaveManagement
             return await _mediator.Send(query,cancellationToken);
         }
 
-        [HttpPatch("subordinate-leave-requets/{id}")]
+        [HttpPatch("subordinate-leave-requests/{id}")]
         public async Task<bool> ApproveOrRejectLeave(int id , [FromBody] ApproveOrRejectLeaveRequestCommand command,CancellationToken cancellationToken)
         {
             command.SuperiorId = id;   
             return await _mediator.Send(command,cancellationToken);
         }
 
-        [HttpPatch("edit-leave/{id}")]
+        [HttpPut("edit-leave/{id}")]
         public async Task<bool> EditLeave(int id, [FromBody] EditLeaveRequestCommand command,CancellationToken cancellationToken)
         {
             command.EmpId = id;

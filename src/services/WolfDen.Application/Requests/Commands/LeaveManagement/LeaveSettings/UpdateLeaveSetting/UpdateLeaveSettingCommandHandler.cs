@@ -27,7 +27,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveSettings.Up
             }
 
             LeaveSetting leaveSetting = await _context.LeaveSettings.FirstOrDefaultAsync(cancellationToken);
-            if (leaveSetting == null)
+            if (leaveSetting is null)
             {
                 throw new KeyNotFoundException("LeaveSetting record not found.");
             }

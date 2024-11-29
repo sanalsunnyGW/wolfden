@@ -20,7 +20,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Re
                 throw new ValidationException($"Validation failed: {errors}");
             }
             LeaveRequest leaveRequest = await _context.LeaveRequests.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-            if (leaveRequest == null)
+            if (leaveRequest is null)
             {
                 throw new Exception("No such Leave");
             }

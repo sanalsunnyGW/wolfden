@@ -16,8 +16,8 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequestDays
                 _context.Add(leaveRequestDay);
 
             }
-            int result = await _context.SaveChangesAsync(cancellationToken);
-            return result > 0;
+            return await _context.SaveChangesAsync(cancellationToken) > 0;
+
         }
     }
 }

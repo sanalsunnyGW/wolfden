@@ -60,16 +60,16 @@ export class LeaveManagementService {
 
     id : number=1;
     getSubordinateLeaverequest(status :LeaveRequestStatus){
-      return this.http.get<Array<ISubordinateLeaveRequest>>(`${this.baseUrl}/leave-request/subordinate-leave-requets${this.id}/${status}`)
+      return this.http.get<Array<ISubordinateLeaveRequest>>(`${this.baseUrl}/leave-request/subordinate-leave-requests/${this.id}/${status}`)
     }
     
     approveOrRejectLeave(approveRejectLeave : IApproveRejectLeave){
-      return this.http.patch<boolean>(`${this.baseUrl}/leave-request/subordinate-leave-requets/${this.id}`,approveRejectLeave)
+      return this.http.patch<boolean>(`${this.baseUrl}/leave-request/subordinate-leave-requests/${this.id}`,approveRejectLeave)
     }
 
     editLeaveRequest(editleave : IEditleave)
     {
-      return this.http.patch<boolean>(`${this.baseUrl}/leave-request/edit-leave/${this.id}`,editleave)
+      return this.http.put<boolean>(`${this.baseUrl}/leave-request/edit-leave/${this.id}`,editleave)
     }
 
     applyLeaveByAdminforEmployee(leaveByAdminforEmployee : IAddLeaveByAdminForEmployee){

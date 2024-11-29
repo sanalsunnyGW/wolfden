@@ -1,8 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, Inject, inject, OnInit } from '@angular/core';
 import { LeaveRequestStatus } from '../../../../../enum/leave-request-status-enum';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { ISubordinateLeaveRequest } from '../../../../../interface/subordinate-leave-request';
 import { IApproveRejectLeave } from '../../../../../interface/approve-or-reject-leave-interface';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-subordinate-leave-request',
@@ -24,15 +25,15 @@ export class SubordinateLeaveRequestComponent implements OnInit{
     leaveRequestId : null,
     statusId : null,
   };
-  
+  destroyRef= inject(DestroyRef);
   leaveManagementService = inject(LeaveManagementService);
 
 
 
   loadLeaveRequests(filterStatus : LeaveRequestStatus): void {
-    console.log(filterStatus)
     this.leavestatus = filterStatus
-    this.leaveManagementService.getSubordinateLeaverequest(this.leavestatus).subscribe({
+    this.leaveManagementService.getSubordinateLeaverequest(this.leavestatus)
+    .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data: Array<ISubordinateLeaveRequest>) => {
         if(data){
           this.leaveRequestList = data;
@@ -65,7 +66,8 @@ export class SubordinateLeaveRequestComponent implements OnInit{
   approve(id :number){
     this.approveRejectLeave.leaveRequestId = id;
     this.approveRejectLeave.statusId = LeaveRequestStatus.Approved;
-    this.leaveManagementService.approveOrRejectLeave(this.approveRejectLeave).subscribe({
+    this.leaveManagementService.approveOrRejectLeave(this.approveRejectLeave)
+    .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (response: boolean) => {
         if(response){
           alert("Leave Approved");
@@ -82,10 +84,10 @@ export class SubordinateLeaveRequestComponent implements OnInit{
   }
 
   reject(id :number){
-    console.log(id);
     this.approveRejectLeave.leaveRequestId = id;
     this.approveRejectLeave.statusId = LeaveRequestStatus.Rejected;
-    this.leaveManagementService.approveOrRejectLeave(this.approveRejectLeave).subscribe({
+    this.leaveManagementService.approveOrRejectLeave(this.approveRejectLeave)
+    .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (response: boolean) => {
         if(response){
           alert("Leave rejected");
