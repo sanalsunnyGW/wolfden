@@ -1,11 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { ILeaveUpdate, IUpdateLeaveSetting } from '../interface/update-leave-setting';
-
 import { ILeaveBalanceList } from '../interface/leave-balance-list-interface';
 import { ILeaveRequestHistoryResponse } from '../interface/leave-request-history';
 import { IGetLeaveTypeIdAndname } from '../interface/get-leave-type-interface';
-
 import { ISubordinateLeaveRequest } from '../interface/subordinate-leave-request';
 import { LeaveRequestStatus } from '../enum/leave-request-status-enum';
 import { IApproveRejectLeave } from '../interface/approve-or-reject-leave-interface';

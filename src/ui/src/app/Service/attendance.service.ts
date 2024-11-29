@@ -4,10 +4,11 @@ import { DailyAttendance } from '../interface/idaily-attendance';
 import { environment } from '../../enviornments/environment';
 import { MonthlyReports } from '../interface/monthly-report';
 import { IAttendanceSummary } from '../interface/attendance-summary';
-import { IAttendanceData } from '../interface/attendance-data';
 import { WeeklyAttendance } from '../interface/iweekly-attendance';
 import { ICheckAttencdanceClose } from '../interface/check-attendance-close';
 import { SubordinatesDetails } from '../interface/subordinates-details';
+import { IAttendanceData } from '../interface/attendance-data';
+import { AttendanceHistory } from '../interface/attendance-history';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +60,14 @@ export class AttendanceService {
   getMonthlyData(employeeId: number, year: number, month: number)
   {
     return this.http.get(`${this.baseUrl}/api/attendance/monthly-pdf?Month=${month}&Year=${year}&EmployeeId=${employeeId}`,{observe:'response',responseType:'blob'})
+  }
+  getMonthlyHistoryByStatus(employeeId: number, year: number, month: number, attendanceStatusId: number, pageNumber: number, pageSize: number) {
+    let url = `${this.baseUrl}/api/attendance/employee/history?EmployeeId=${employeeId}&Year=${year}&Month=${month}&PageNumber=${pageNumber}&PageSize=${pageSize}`;
+
+    if (attendanceStatusId !== 0) {
+      url += `&AttendanceStatusId=${attendanceStatusId}`;
+    }
+    return this.http.get<AttendanceHistory>(url);
   }
 }
 

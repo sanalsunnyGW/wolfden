@@ -36,10 +36,8 @@ export const routes: Routes = [
         component:DashboardComponent,
         children:[
             { path: '', redirectTo: '/dashboard', pathMatch: 'full' }, 
-            {path:'dashboard',component:MainPageComponent,canActivate: [guardsGuard]},
-            {path:'employee-directory',component: EmployeeDirectoryComponent,canActivate: [guardsGuard]},
-            {path:'leave-dashboard',component:LeaveDashboardComponent,canActivate: [guardsGuard]},
-            {path:'leave-request-history',component:LeaveHistoryComponent,canActivate: [guardsGuard]},
+            {path:'dashboard',component:MainPageComponent},
+            {path:'employee-directory',component: EmployeeDirectoryComponent},
             {path:'main-page',component:MainPageComponent},
             {path:'employee-directory',component: EmployeeDirectoryComponent},
             {path:'leave-dashboard',component:LeaveDashboardComponent},
@@ -96,6 +94,4 @@ export const routes: Routes = [
     },
 
     { path: '', redirectTo: '/portal/dashboard', pathMatch: 'full' }, 
-
-
 ];

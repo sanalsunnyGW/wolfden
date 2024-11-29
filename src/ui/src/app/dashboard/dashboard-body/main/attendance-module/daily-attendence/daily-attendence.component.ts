@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { CommonModule, formatDate } from '@angular/common';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { DailyAttendance } from '../../../../../interface/idaily-attendance';
@@ -20,7 +20,7 @@ export class DailyAttendenceComponent {
   attendanceDate!:string
   dailyData!:DailyAttendance
   ngOnInit() {
-    this.getDailyAttendence()
+   this.getDailyAttendence();
   }
  
   attendanceStatus = [

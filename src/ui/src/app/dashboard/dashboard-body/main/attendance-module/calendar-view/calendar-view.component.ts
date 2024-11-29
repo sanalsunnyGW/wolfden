@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, viewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild} from '@angular/core';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions, DatesSetArg, DayCellContentArg } from '@fullcalendar/core/index.js';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -16,10 +16,12 @@ import { WolfDenService } from '../../../../../service/wolf-den.service';
   templateUrl: './calendar-view.component.html',
   styleUrl: './calendar-view.component.scss'
 })
-export class CalendarViewComponent implements OnInit {
+export class CalendarViewComponent implements OnInit  {
+
   @ViewChild(FullCalendarComponent) calendarComponent!: FullCalendarComponent;
+
   service = inject(AttendanceService);
-  baseService=inject(WolfDenService);
+  baseService=inject(WolfDenService)
 
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
@@ -36,7 +38,6 @@ export class CalendarViewComponent implements OnInit {
   incompleteShift: number = 0;
   wfh: number = 0;
 
-  employeeId=this.baseService.userId;
   currentYear: number = new Date().getFullYear();
   currentMonth: number = new Date().getMonth() + 1;
   selectedYear: number = this.currentYear;
@@ -44,7 +45,6 @@ export class CalendarViewComponent implements OnInit {
   attendanceData: { [date: string]: number } = {};
 
   constructor(private router:Router) {
-    this.attendanceData = {};
   }
 
   ngOnInit(): void {
@@ -53,7 +53,7 @@ export class CalendarViewComponent implements OnInit {
   }
 
   fetchAttendanceData(year: number, month: number): void {
-    this.service.getAttendanceSummary(this.employeeId, year, month).subscribe((data: IAttendanceSummary) => {
+    this.service.getAttendanceSummary(this.baseService.userId, year, month).subscribe((data: IAttendanceSummary) => {
       this.present = data.present;
       this.absent = data.absent;
       this.incompleteShift = data.incompleteShift;
@@ -62,7 +62,7 @@ export class CalendarViewComponent implements OnInit {
   }
 
   getStatusData(year: number, month: number) {
-    this.service.getDailyStatus(this.employeeId, year, month).subscribe((data: IAttendanceData[]) => {
+    this.service.getDailyStatus(this.baseService.userId, year, month).subscribe((data: IAttendanceData[]) => {
       data.forEach((item: IAttendanceData) => {
         this.attendanceData[item.date] = item.attendanceStatusId;
       });
@@ -70,11 +70,11 @@ export class CalendarViewComponent implements OnInit {
     });
   }
 
-  newDate!:string;
+  newDate!:string
   handleDateClick(arg: DateClickArg) {
-    const selectedDate=arg.dateStr;
+    const selectedDate = arg.dateStr;
     this.newDate=selectedDate;
-    this.router.navigate(['dashboard/attendance/daily',this.newDate])
+    this.router.navigate(['dashboard/attendance/daily', this.newDate]);
   }
 
   getDayCellClassNames(arg: DayCellContentArg): string[] {
@@ -94,7 +94,7 @@ export class CalendarViewComponent implements OnInit {
       if (arg.date.getDay() === 6 || arg.date.getDay() === 0) {
         return ['weekend-day'];
       }
-
+      
       switch(status)
       {
         case 1:return ['present'];
@@ -119,7 +119,7 @@ export class CalendarViewComponent implements OnInit {
   {
     const year = this.selectedYear;
     const month = this.selectedMonth;
-    this.service.getMonthlyData(this.employeeId,year,month).subscribe(
+    this.service.getMonthlyData(this.baseService.userId,year,month).subscribe(
       (response: any) =>{
         let blob:Blob=response.body as Blob;
         let url=window.URL.createObjectURL(blob);
