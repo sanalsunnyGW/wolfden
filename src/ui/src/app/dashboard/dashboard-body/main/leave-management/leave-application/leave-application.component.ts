@@ -6,8 +6,6 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-
-
 @Component({
   selector: 'app-leave-application',
   standalone: true,
@@ -40,7 +38,6 @@ export class LeaveApplicationComponent implements OnInit {
     .subscribe((response : Array<IGetLeaveTypeIdAndname>) => {
               this.leaveType = response;
       });
-
   }
   
   onSubmit(){
@@ -57,13 +54,7 @@ export class LeaveApplicationComponent implements OnInit {
             alert(error)
             }
        }
-       
        );
-
     }
-
   }
-
-
-
 }

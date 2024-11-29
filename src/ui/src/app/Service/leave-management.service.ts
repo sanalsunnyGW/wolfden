@@ -1,8 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-
-import { IAddNewLeaveType } from '../interface/Add-New-Leave-Type-Interface';
 import { ILeaveBalanceList } from '../interface/leave-balance-list-interface';
 import { ILeaveRequestHistory, ILeaveRequestHistoryResponse } from '../interface/leave-request-history';
 import { IGetLeaveTypeIdAndname } from '../interface/get-leave-type-interface';
@@ -16,6 +14,7 @@ import { ISubordinateLeaveRequest } from '../interface/subordinate-leave-request
 import { LeaveRequestStatus } from '../enum/leave-request-status-enum';
 import { ILeaveApplication } from '../interface/Leave-Application-Interface';
 import { environment } from '../../enviornments/environment';
+import { IAddNewLeaveType } from '../interface/Add-New-Leave-Type-Interface';
 
 @Injectable({
   providedIn: 'root'

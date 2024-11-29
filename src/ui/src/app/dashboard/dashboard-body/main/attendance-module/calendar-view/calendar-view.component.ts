@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild} from '@angular/core';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
-import { Calendar, CalendarOptions, DatesSetArg, DayCellContentArg } from '@fullcalendar/core/index.js';
+import { CalendarOptions, DatesSetArg, DayCellContentArg } from '@fullcalendar/core/index.js';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { AttendanceService } from '../../../../../service/attendance.service';
@@ -40,6 +40,8 @@ export class CalendarViewComponent implements OnInit  {
 
   currentYear: number = new Date().getFullYear();
   currentMonth: number = new Date().getMonth() + 1;
+  selectedYear: number = this.currentYear;
+  selectedMonth: number = this.currentMonth;
   attendanceData: { [date: string]: number } = {};
 
   constructor(private router:Router) {
@@ -74,6 +76,7 @@ export class CalendarViewComponent implements OnInit  {
     this.newDate=selectedDate;
     this.router.navigate(['portal/attendance/daily', this.newDate]);
   }
+
   getDayCellClassNames(arg: DayCellContentArg): string[] {
     const date = new Date(Date.UTC(
       arg.date.getFullYear(),
@@ -106,9 +109,22 @@ export class CalendarViewComponent implements OnInit  {
 
   onCalendarMonthChange(arg: DatesSetArg): void {
     const currentDate = arg.view.currentStart;
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth() + 1;
-    this.getStatusData(year, month);
-    this.fetchAttendanceData(year, month);
+    this.selectedYear = currentDate.getFullYear();
+    this.selectedMonth = currentDate.getMonth() + 1;
+    this.fetchAttendanceData(this.selectedYear, this.selectedMonth);
+    this.getStatusData(this.selectedYear, this.selectedMonth);
+  }
+
+  onDownload()
+  {
+    const year = this.selectedYear;
+    const month = this.selectedMonth;
+    this.service.getMonthlyData(this.baseService.userId,year,month).subscribe(
+      (response: any) =>{
+        let blob:Blob=response.body as Blob;
+        let url=window.URL.createObjectURL(blob);
+        window.open(url); 
+      }     
+    )
   }
 }

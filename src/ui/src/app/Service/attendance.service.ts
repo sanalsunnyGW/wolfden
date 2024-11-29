@@ -57,7 +57,10 @@ export class AttendanceService {
   {
     return this.http.get<SubordinatesDetails>(`${this.baseUrl}/api/attendance/subordinates?EmployeeId=${employeeId}`)
   }
-
+  getMonthlyData(employeeId: number, year: number, month: number)
+  {
+    return this.http.get(`${this.baseUrl}/api/attendance/monthly-pdf?Month=${month}&Year=${year}&EmployeeId=${employeeId}`,{observe:'response',responseType:'blob'})
+  }
   getMonthlyHistoryByStatus(employeeId: number, year: number, month: number, attendanceStatusId: number, pageNumber: number, pageSize: number) {
     let url = `${this.baseUrl}/api/attendance/employee/history?EmployeeId=${employeeId}&Year=${year}&Month=${month}&PageNumber=${pageNumber}&PageSize=${pageSize}`;
 
