@@ -4,7 +4,7 @@ namespace WolfDen.Application.Constants
 {
     public static class SyncConfigs
     {
-        public static Dictionary<string, TableSyncConfig> InitializeSyncConfigs() => new()
+        public static Dictionary<string, TableSyncConfig> GetSyncConfigs() => new()
         {
             ["Employee"] = new TableSyncConfig
             {
