@@ -1,10 +1,10 @@
 import { Component, DestroyRef, Inject, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
 import { IAddLeaveByAdminForEmployee, IAddLeaveByAdminForEmployeeFormControl } from '../../../../../interface/add-leave-by-admin-for-employee';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { LeaveManagementService } from '../../../../../service/leave-management.service';
 
 @Component({
   selector: 'app-add-leave-by-admin-for-employees',
