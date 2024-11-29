@@ -51,7 +51,7 @@ export class EmployeeService {
     return this.http.post(`https://localhost:7015/api/Designation`, designationForm);
   }
   getAllDesignation() {
-    return this.http.get(`https://localhost:7015/api/Designation/all`);
+    return this.http.get(`https://localhost:7015/api/Designation`);
 
   }
   getAllDepartment() {

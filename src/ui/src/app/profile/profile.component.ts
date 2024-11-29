@@ -148,22 +148,20 @@ export class ProfileComponent {
         photo: formData.photo,
         password: formData.password
       }
+      
+      this.toastr.error('An error occurred while  Updating Profile')
+
       this.employeeService.employeeUpdateEmployee(params).subscribe({
         next: (response: any) => {
           if (response == true) {
             this.toastr.success('Profile Updated Successfully')
-
             this.loadEmployeeData();
           }
-          else {
-            this.toastr.error('Profile Update Failed')
-
-          }
+        },
+        error: (error) => {
+          this.toastr.error('An error occurred while  Updating Profile')
         }
       })
-    } else {
     }
-
   }
-
 }
