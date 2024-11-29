@@ -34,26 +34,19 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                     Employee? employee = await _context.Employees
                         .Where(e => e.Id == newEntry.EmployeeId).FirstOrDefaultAsync();
 
-                    if (newEntry.InsideDuration < min)
+                    IMediator _mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
+                    SendEmailCommand sendEmailCommand = new SendEmailCommand
                     {
-                        IMediator _mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-                        SendEmailCommand sendEmailCommand = new SendEmailCommand();
-                        sendEmailCommand.EmployeeId = newEntry.EmployeeId;
-                        sendEmailCommand.Subject = "Incomplete Shift";
-                        sendEmailCommand.Email = employee.Email;
-                        sendEmailCommand.Message = $"{employee.FirstName}'s shift on {newEntry.Date} is marked as incomplete due to insufficient hours; please review and address the issue.";
-                        await _mediator.Send(sendEmailCommand);
-                    }
-                    else
-                    {
-                        IMediator _mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-                        SendEmailCommand sendEmailCommand = new SendEmailCommand();
-                        sendEmailCommand.EmployeeId = newEntry.EmployeeId;
-                        sendEmailCommand.Subject = "Overtime Acknowledgement";
-                        sendEmailCommand.Email = employee.Email;
-                        sendEmailCommand.Message = $"Great job {employee.FirstName}! Your extra hours on {newEntry.Date} are appreciated";
-                        await _mediator.Send(sendEmailCommand);
-                    }
+                        EmployeeId = newEntry.EmployeeId,
+                        Email = employee.Email,
+                        Message = newEntry.InsideDuration < min
+                            ? $"{employee.FirstName}'s shift on {newEntry.Date} is marked as incomplete due to insufficient hours; please review and address the issue."
+                            : $"Great job {employee.FirstName}! Your extra hours on {newEntry.Date} are appreciated",
+                        Subject = newEntry.InsideDuration < min ? "Incomplete Shift" : "Overtime Acknowledgement"
+                    };
+
+                    await _mediator.Send(sendEmailCommand);
                 }
             }
         }

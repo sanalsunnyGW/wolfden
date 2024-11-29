@@ -70,7 +70,7 @@ export class DailyAttendenceComponent {
       const DateRemove=split.split('T')[1];
       return `${DateRemove}`
     }
-    return 'N/A' 
+    return '-' 
   }
   convertToDate(dateStr: string)
   {
@@ -80,7 +80,7 @@ export class DailyAttendenceComponent {
         const DateRemove=split.split('T')[0];
         return `${DateRemove}`
       }
-      return 'N/A'
+      return '-'
   }
   isMissed(missPunch:string)
   {
@@ -88,7 +88,7 @@ export class DailyAttendenceComponent {
     {
       return missPunch;
     }
-    return 'N/A'
+    return '-'
   }
   downloadDailyReport()
   {
