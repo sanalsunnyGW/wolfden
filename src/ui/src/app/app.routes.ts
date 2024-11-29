@@ -42,8 +42,7 @@ export const routes: Routes = [
         component:DashboardComponent,
         children:[
             { path: '', redirectTo: '/dashboard', pathMatch: 'full' }, 
-            {path:'dashboard',component:MainPageComponent,canActivate: [guardsGuard]},
-            {path:'employee-directory',component: EmployeeDirectoryComponent,canActivate: [guardsGuard]},
+            {path:'dashboard',component:MainPageComponent},
             {path:'main-page',component:MainPageComponent},
             {path:'employee-directory',component: EmployeeDirectoryComponent},
             {path:'attendance/daily/:attendanceDate',component:DailyAttendenceComponent},
@@ -68,7 +67,7 @@ export const routes: Routes = [
             {
                 path:'attendance/calendar',
                 component:CalendarViewComponent,
-                canActivate: [guardsGuard]
+                
             },
             {
                 path: 'leave-dashboard',
@@ -78,7 +77,7 @@ export const routes: Routes = [
             {
                 path: 'leave-request-history',
                 component: LeaveHistoryComponent,
-                
+                canActivate: [guardsGuard]
             },
             {
                 path: '',
@@ -129,14 +128,4 @@ export const routes: Routes = [
     },
 
     { path: '', redirectTo: '/portal/dashboard', pathMatch: 'full' }, 
-
-
 ];
-
-
-
-
-
-
-
-

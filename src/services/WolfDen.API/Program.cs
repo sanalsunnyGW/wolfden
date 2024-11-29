@@ -1,3 +1,6 @@
+using System.Reflection;
+using System.Security.Claims;
+using System.Text;
 using FluentValidation;
 using Hangfire;
 using Hangfire.SqlServer;
@@ -6,12 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Microsoft.TeamFoundation.TestManagement.WebApi;
 using QuestPDF.Infrastructure;
-using System.Configuration;
-using System.Reflection;
-using System.Security.Claims;
-using System.Text;
 using WolfDen.Application.Helpers;
 using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
@@ -139,6 +137,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseHangfireDashboard();
 }
+
 app.UseCors(options => options.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowAnyMethod());
 
 app.UseHttpsRedirection();

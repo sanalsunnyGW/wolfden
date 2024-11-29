@@ -1,8 +1,9 @@
 import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import mermaid from 'mermaid';
-import { IEmployeeData } from '../interface/employee-data';
+
 import { EmployeeService } from '../service/employee.service';
+import { IEmployeeData } from '../interface/employee-data';
 
 @Component({
   selector: 'app-my-team',

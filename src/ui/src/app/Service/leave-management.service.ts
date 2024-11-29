@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { ILeaveUpdate, IUpdateLeaveSetting } from '../interface/update-leave-setting';
-import { IAddNewLeaveType } from '../interface/add-new-leave-type-interface';
 import { ILeaveBalanceList } from '../interface/leave-balance-list-interface';
 import { ILeaveRequestHistoryResponse } from '../interface/leave-request-history';
 import { IGetLeaveTypeIdAndname } from '../interface/get-leave-type-interface';
@@ -17,6 +16,8 @@ import { ISubordinateLeavePaginationSend } from '../interface/subordinate-leave-
 import { ISubordinateLeavePaginationReceive } from '../interface/subordinate-leave-request-pagination-receive';
 import { WolfDenService } from './wolf-den.service';
 import { IRevokeLeave } from '../interface/revoke-leave';
+import { IAddNewLeaveType } from '../interface/add-new-leave-type-interface';
+
 
 
 @Injectable({
