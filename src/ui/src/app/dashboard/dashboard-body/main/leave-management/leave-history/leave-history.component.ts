@@ -1,7 +1,5 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
-
 import { LeaveRequestStatus } from '../../../../../enum/leave-request-status-enum';
-
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ILeaveRequestHistory, ILeaveRequestHistoryResponse } from '../../../../../interface/leave-request-history';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
@@ -10,8 +8,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IRevokeLeave } from '../../../../../interface/revoke-leave';
-
-
+import { WolfDenService } from '../../../../../service/wolf-den.service';
 
 
 @Component({
@@ -24,7 +21,7 @@ import { IRevokeLeave } from '../../../../../interface/revoke-leave';
 
 export class LeaveHistoryComponent implements OnInit {
 
-  id: number = 19;
+  userService = inject(WolfDenService);
   leaveRequestList: ILeaveRequestHistory[] = [];
   leaveManagementService = inject(LeaveManagementService);
   pageNumber: number = 0;
@@ -44,7 +41,7 @@ export class LeaveHistoryComponent implements OnInit {
       { id: 3, name: 'Rejected' },
       { id: 4, name: 'Deleted' }
     ];
-  revokeLeave : IRevokeLeave = {} as IRevokeLeave
+  revokeLeave: IRevokeLeave = {} as IRevokeLeave
 
   constructor() { }
 
@@ -77,7 +74,7 @@ export class LeaveHistoryComponent implements OnInit {
   }
 
   loadLeaveRequests(): void {
-    this.leaveManagementService.getLeaveRequestHistory(this.id, this.pageNumber, this.pageSize, this.selectedStatus)
+    this.leaveManagementService.getLeaveRequestHistory(this.userService.userId, this.pageNumber, this.pageSize, this.selectedStatus)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((data: ILeaveRequestHistoryResponse) => {
         this.indexValue = ((this.pageNumber + 1) * this.pageSize) - this.pageSize + 1;
@@ -104,16 +101,16 @@ export class LeaveHistoryComponent implements OnInit {
   onDelete(i: number) {
     this.revokeLeave.leaveRequestId = i;
     this.leaveManagementService.revokeLeaveRequest(this.revokeLeave)
-    .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next:(response : boolean) =>{
-        if(response){
-          alert("Leave Revoked")
-        }
-          },
-          error:(error) => {
-            alert(error)
+      .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        next: (response: boolean) => {
+          if (response) {
+            alert("Leave Revoked")
           }
-    })
+        },
+        error: (error) => {
+          alert(error)
+        }
+      })
     this.loadLeaveRequests();
 
   }

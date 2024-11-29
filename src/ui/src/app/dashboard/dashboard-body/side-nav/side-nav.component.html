@@ -20,21 +20,20 @@
     <ul class="dropdown-menu" aria-labelledby="leaveDropdown">
       <li><a class="dropdown-item" [routerLink]="'/portal/leave-dashboard'">Leave Dashboard</a></li>
       <li><a class="dropdown-item" [routerLink]="'/portal/leave-application'">Apply Leave</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/portal/add-leave-by-admin-for-employees'">Apply Leave For Employee</a></li>
       <li><a class="dropdown-item" [routerLink]="'/portal/leave-request-history'">Leave Request History</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/portal/leave-application'">Apply Leave</a></li>
-@if(userService.role=='Admin')
-{
-  @if(employeeService.getMyTeamHierarchy==null) 
-    {
+      @if(userService.role=='Admin')
+      {
+      @if(employeeService.getMyTeamHierarchy==null)
+      {
       <li><a class="dropdown-item" [routerLink]="'/portal/subordinate-leave-request'">Subordinate Leaves</a></li>
-    }
+      }
       <li><a class="dropdown-item" [routerLink]="'/portal/update-leave-balance'">Update Leave Balance</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/portal/add-leave-by-admin-for-employees'">Apply Leave For Employee</a></li>
+      <li><a class="dropdown-item" [routerLink]="'/portal/add-leave-by-admin-for-employees'">Apply Leave For
+          Employee</a></li>
       <li><a class="dropdown-item" [routerLink]="'/portal/edit-leave-type'">Edit Existing Leave Type</a></li>
       <li><a class="dropdown-item" [routerLink]="'/portal/add-new-leave-type'">Add New Leave Type</a></li>
       <li><a class="dropdown-item" [routerLink]="'/portal/update-leave-settings'">Update Leave Settings</a></li>
-}
+      }
     </ul>
   </div>
 

@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { ILeaveBalanceList } from '../interface/leave-balance-list-interface';
 import { ILeaveRequestHistoryResponse } from '../interface/leave-request-history';
 import { IGetLeaveTypeIdAndname } from '../interface/get-leave-type-interface';
@@ -13,7 +12,6 @@ import { ISubordinateLeavePaginationReceive } from '../interface/subordinate-lea
 import { WolfDenService } from './wolf-den.service';
 import { IRevokeLeave } from '../interface/revoke-leave';
 import { IAddNewLeaveType } from '../interface/add-new-leave-type-interface';
-import { Observable } from 'rxjs';
 import { ILeaveUpdate, IUpdateLeaveSetting } from '../interface/update-leave-setting';
 import { IAddLeaveByAdminForEmployee } from '../interface/add-leave-by-admin-for-employee';
 import { IEditLeaveType} from '../interface/edit-leave-type';
@@ -27,8 +25,9 @@ export class LeaveManagementService {
   constructor() { }
   private http = inject(HttpClient);
   private userService= inject(WolfDenService);
-  id= this.userService.userId
+  id= this.userService.userId;
   private baseUrl = environment.leave;
+  
   getLeaveBalance(id: number) {
     return this.http.get<Array<ILeaveBalanceList>>(`${this.baseUrl}/leave-balance?EmployeeId=${id}`);
   }
