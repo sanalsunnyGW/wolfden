@@ -11,8 +11,7 @@ import { LeaveRequestStatus } from '../enum/leave-request-status-enum';
 import { IApproveRejectLeave } from '../interface/approve-or-reject-leave-interface';
 import { IEditleave } from '../interface/edit-leave-application-interface';
 import { IAddLeaveByAdminForEmployee } from '../interface/add-leave-by-admin-for-employee';
-import { IEditLeaveType } from '../interface/edit-leave-type';
-import { FormGroup } from '@angular/forms';
+import { IEditLeaveType} from '../interface/edit-leave-type';
 import { environment } from '../../enviornments/environment';
 
 @Injectable({
@@ -56,7 +55,6 @@ export class LeaveManagementService {
       return this.http.get<Array<IGetLeaveTypeIdAndname>>(`${this.baseUrl}/leave-type`)
     }
 
- 
     applyLeaveRequest(leaveApplication : ILeaveApplication){
       leaveApplication.empId = this.id;
       return this.http.post<boolean>(`${this.baseUrl}/leave-request`,leaveApplication)
@@ -81,9 +79,8 @@ export class LeaveManagementService {
       return this.http.post<boolean>(`${this.baseUrl}/leave-request/leave-for-employee-by-admin`,leaveByAdminforEmployee)
     } 
     
-
-    editLeaveType(editLeaveType: FormGroup<IEditLeaveType>) {
-      return this.http.put(`${this.baseUrl}/leave-type`, editLeaveType.value);
+    editLeaveType(editLeaveType: IEditLeaveType) {
+      return this.http.put(`${this.baseUrl}/leave-type`, editLeaveType);
     }
 
     updateLeaveBalance() {

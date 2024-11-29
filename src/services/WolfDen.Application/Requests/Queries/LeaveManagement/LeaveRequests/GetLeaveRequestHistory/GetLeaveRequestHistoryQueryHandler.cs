@@ -16,12 +16,6 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
             int pageSize = request.PageSize > 0 ? request.PageSize : 1;
            int totalCount = 0;
 
-           // int totalCount = await _context.LeaveRequests
-           // .Where(x => x.EmployeeId.Equals(request.EmployeeId))
-            //.CountAsync(cancellationToken);
-
-          //  int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
-
             List<LeaveRequestDto> filteredData=new List<LeaveRequestDto> ();
 
             List<LeaveRequestDto> leaveRequestList = await _context.LeaveRequests
@@ -38,7 +32,7 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
                     TypeName = leaveRequest.LeaveType.TypeName,
                     HalfDay = leaveRequest.HalfDay,
                     Description = leaveRequest.Description,
-                    ProcessedBy = leaveRequest.Employee.FirstName,
+                    ProcessedBy =  leaveRequest.Manager.FirstName,
                     LeaveRequestStatusId = leaveRequest.LeaveRequestStatusId
                 })
                 .ToListAsync(cancellationToken);
