@@ -28,18 +28,15 @@ import { EditLeaveRequestComponent } from './dashboard/dashboard-body/main/leave
 import { AddLeaveByAdminForEmployeesComponent } from './dashboard/dashboard-body/main/leave-management/add-leave-by-admin-for-employees/add-leave-by-admin-for-employees.component';
 
 export const routes: Routes = [
-    {
-    
+{
         path: 'user', 
         component: UserComponent,
         children:[
-            { path: '', redirectTo: 'login', pathMatch: 'full' }, 
             {path: 'check-user', component: CheckUserComponent},
             {path: 'sign-in', component: SigninComponent},
             {path: 'login', component: LoginComponent},
         ]
     },
-
     {
         path:'portal',
         component:DashboardComponent,
@@ -47,16 +44,12 @@ export const routes: Routes = [
             { path: '', redirectTo: '/dashboard', pathMatch: 'full' }, 
             {path:'dashboard',component:MainPageComponent,canActivate: [guardsGuard]},
             {path:'employee-directory',component: EmployeeDirectoryComponent,canActivate: [guardsGuard]},
-            {path:'leave-dashboard',component:LeaveDashboardComponent,canActivate: [guardsGuard]},
-            {path:'leave-request-history',component:LeaveHistoryComponent,canActivate: [guardsGuard]},
             {path:'main-page',component:MainPageComponent},
             {path:'employee-directory',component: EmployeeDirectoryComponent},
             {path:'attendance/daily/:attendanceDate',component:DailyAttendenceComponent},
             {path:'attendance/weekly',component:WeeklyAttendanceComponent},
             {path:'attendance/monthly',component:MonthlyReportComponent},
             {path:'attendance/subordinates',component:SubordinatesComponent} ,   
-            { path: 'edit-leave-type', component: EditLeaveTypeComponent },
-            { path: 'update-leave-balance', component: UpdateLeaveBalanceComponent },
             {
                 path: 'company-hierarchy',
                 component: EmployeeHierarchyTreeComponent,
@@ -121,6 +114,14 @@ export const routes: Routes = [
             {
                 path: 'add-leave-by-admin-for-employees',
                 component: AddLeaveByAdminForEmployeesComponent
+            },
+            {
+                path: 'edit-leave-type',
+                component: EditLeaveTypeComponent
+            },
+            {
+                path: 'update-leave-balance',
+                component: UpdateLeaveBalanceComponent
             }
 
             
