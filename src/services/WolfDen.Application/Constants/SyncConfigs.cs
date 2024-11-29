@@ -123,7 +123,9 @@ namespace WolfDen.Application.Constants
                         InsideDuration, 
                         OutsideDuration, 
                         PantryDuration, 
-                        MissedPunch
+                        MissedPunch,
+                        CreatedAt,
+                        EmailSent  
                     )
                     VALUES (
                         Source.EmployeeId, 
@@ -133,7 +135,9 @@ namespace WolfDen.Application.Constants
                         Source.InsideOfficeHrs, 
                         Source.OutOff, 
                         Source.Pantry, 
-                        Source.MissedPunches
+                        Source.MissedPunches,
+                        GETDATE(),
+                        0
                     );
 
                     "

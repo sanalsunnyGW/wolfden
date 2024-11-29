@@ -26,6 +26,7 @@ import { UpdateLeaveSettingsComponent } from './dashboard/dashboard-body/main/le
 import { SubordinateLeaveRequestComponent } from './dashboard/dashboard-body/main/leave-management/subordinate-leave-request/subordinate-leave-request.component';
 import { EditLeaveRequestComponent } from './dashboard/dashboard-body/main/leave-management/edit-leave-request/edit-leave-request.component';
 import { AddLeaveByAdminForEmployeesComponent } from './dashboard/dashboard-body/main/leave-management/add-leave-by-admin-for-employees/add-leave-by-admin-for-employees.component';
+import { AttendanceHistoryComponent } from './dashboard/dashboard-body/main/attendance-module/attendance-history/attendance-history.component';
 
 export const routes: Routes = [
 {
@@ -49,6 +50,7 @@ export const routes: Routes = [
             {path:'attendance/weekly',component:WeeklyAttendanceComponent},
             {path:'attendance/monthly',component:MonthlyReportComponent},
             {path:'attendance/subordinates',component:SubordinatesComponent} ,   
+            {path:'attendance/attendance-history',component:AttendanceHistoryComponent},
             {
                 path: 'company-hierarchy',
                 component: EmployeeHierarchyTreeComponent,
