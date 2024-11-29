@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-<<<<<<< HEAD
 import { FormGroup } from '@angular/forms';
 
 import { IAddNewLeaveType } from '../interface/Add-New-Leave-Type-Interface';
@@ -10,26 +9,13 @@ import { IGetLeaveTypeIdAndname } from '../interface/get-leave-type-interface';
 import { ILeaveUpdate, IUpdateLeaveSetting } from '../interface/update-leave-setting';
 import { Observable } from 'rxjs';
 import { IEditLeaveType } from '../interface/edit-leave-type'
-
-
-
-=======
-import { ILeaveUpdate, IUpdateLeaveSetting } from '../interface/update-leave-setting';
-import { IAddNewLeaveType } from '../interface/Add-New-Leave-Type-Interface';
-import { ILeaveBalanceList } from '../interface/leave-balance-list-interface';
-import { ILeaveRequestHistoryResponse } from '../interface/leave-request-history';
-import { IGetLeaveTypeIdAndname } from '../interface/get-leave-type-interface';
-import { ILeaveApplication } from '../interface/Leave-Application-Interface';
-import { ISubordinateLeaveRequest } from '../interface/subordinate-leave-request';
-import { LeaveRequestStatus } from '../enum/leave-request-status-enum';
+import { IAddLeaveByAdminForEmployee } from '../interface/add-leave-by-admin-for-employee';
 import { IApproveRejectLeave } from '../interface/approve-or-reject-leave-interface';
 import { IEditleave } from '../interface/edit-leave-application-interface';
-import { IAddLeaveByAdminForEmployee } from '../interface/add-leave-by-admin-for-employee';
-import { IEditLeaveType } from '../interface/edit-leave-type';
-import { Observable } from 'rxjs';
-import { FormGroup } from '@angular/forms';
+import { ISubordinateLeaveRequest } from '../interface/subordinate-leave-request';
+import { LeaveRequestStatus } from '../enum/leave-request-status-enum';
+import { ILeaveApplication } from '../interface/Leave-Application-Interface';
 import { environment } from '../../enviornments/environment';
->>>>>>> upstream/main
 
 @Injectable({
   providedIn: 'root'

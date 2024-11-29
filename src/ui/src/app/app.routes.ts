@@ -91,8 +91,6 @@ export const routes: Routes = [
                 component: ProfileComponent,
                 canActivate: [guardsGuard]
             },
-<<<<<<< HEAD
-=======
             {
                 path: 'add-new-leave-type',
                 component: AddNewLeaveTypeComponent
@@ -127,7 +125,6 @@ export const routes: Routes = [
             }
 
             
->>>>>>> upstream/main
         ]
     },
 

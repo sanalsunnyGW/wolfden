@@ -10,11 +10,6 @@ import { LoginComponent } from '../user/login/login.component';
 export class EmployeeService {
 
   constructor(private http: HttpClient) { }
-<<<<<<< HEAD
-  employeeId = 1;
-  private baseUrl = environment.employeeapiUrl;
-=======
->>>>>>> upstream/main
 
   private baseUrl = environment.employeeapiUrl;
   public userId = 1;
