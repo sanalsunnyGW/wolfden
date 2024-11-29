@@ -78,7 +78,7 @@ export const routes: Routes = [
             {
                 path: 'leave-request-history',
                 component: LeaveHistoryComponent,
-                canActivate: [guardsGuard]
+                
             },
             {
                 path: '',
@@ -108,7 +108,7 @@ export const routes: Routes = [
                 component: SubordinateLeaveRequestComponent
             },
             {
-                path: 'edit-leave-request',
+                path: 'edit-leave-request/:leaveRequestId',
                 component: EditLeaveRequestComponent
             },
             {

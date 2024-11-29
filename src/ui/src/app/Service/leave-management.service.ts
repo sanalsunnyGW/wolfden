@@ -15,6 +15,8 @@ import { FormGroup } from '@angular/forms';
 import { environment } from '../../enviornments/environment';
 import { ISubordinateLeavePaginationSend } from '../interface/subordinate-leave-request-pagination-send';
 import { ISubordinateLeavePaginationReceive } from '../interface/subordinate-leave-request-pagination-receive';
+import { WolfDenService } from './wolf-den.service';
+import { IRevokeLeave } from '../interface/revoke-leave';
 
 
 @Injectable({
@@ -25,6 +27,8 @@ export class LeaveManagementService {
 
   constructor() { }
   private http = inject(HttpClient);
+  private userService= inject(WolfDenService);
+  id=1
   private baseUrl = environment.leave;
   getLeaveBalance(id: number) {
     return this.http.get<Array<ILeaveBalanceList>>(`${this.baseUrl}/leave-balance?EmployeeId=${id}`);
@@ -35,7 +39,6 @@ export class LeaveManagementService {
   }
 
     addNewLeaveType(newType : IAddNewLeaveType) {
-      newType.adminId = this.id;
       return this.http.post<boolean>(`${this.baseUrl}/leave-type`,newType)
     }
 
@@ -59,7 +62,6 @@ export class LeaveManagementService {
       return this.http.post<boolean>(`${this.baseUrl}/leave-request`,leaveApplication)
     }
 
-    id : number=1;
     getSubordinateLeaverequest(pagination :ISubordinateLeavePaginationSend){
       pagination.id = this.id
       return this.http.get<ISubordinateLeavePaginationReceive>(`${this.baseUrl}/leave-request/subordinate-leave-requests?Id=${pagination.id}&StatusId=${pagination.statusId}&PageSize=${pagination.pageSize}&PageNumber=${pagination.pageNumber}`)
@@ -71,7 +73,8 @@ export class LeaveManagementService {
 
     editLeaveRequest(editleave : IEditleave)
     {
-      return this.http.put<boolean>(`${this.baseUrl}/leave-request/edit-leave/${this.id}`,editleave)
+      editleave.empId = this.id
+      return this.http.put<boolean>(`${this.baseUrl}/leave-request/edit-leave`,editleave)
     }
 
     applyLeaveByAdminforEmployee(leaveByAdminforEmployee : IAddLeaveByAdminForEmployee){
@@ -86,5 +89,9 @@ export class LeaveManagementService {
 
     updateLeaveBalance() {
       return this.http.put<boolean>(`${this.baseUrl}/leave-balance`, null);
+    }
+
+    revokeLeaveRequest(leaveRequestId : IRevokeLeave){
+      return this.http.patch<boolean>(`${this.baseUrl}/leave-request/revoke-leave/${this.id}`,leaveRequestId)
     }
 }

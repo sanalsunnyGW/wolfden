@@ -51,10 +51,9 @@ namespace WolfDen.API.Controllers.LeaveManagement
             return await _mediator.Send(command,cancellationToken);
         }
 
-        [HttpPut("edit-leave/{id}")]
-        public async Task<bool> EditLeave(int id, [FromBody] EditLeaveRequestCommand command,CancellationToken cancellationToken)
+        [HttpPut("edit-leave")]
+        public async Task<bool> EditLeave([FromBody] EditLeaveRequestCommand command,CancellationToken cancellationToken)
         {
-            command.EmpId = id;
             return await _mediator.Send(command,cancellationToken) ;
         }
 
