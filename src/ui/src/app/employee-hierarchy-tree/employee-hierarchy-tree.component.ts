@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import mermaid from 'mermaid';
-import { IEmployeeData } from '../Interface/employee-data';
-import { EmployeeService } from '../Service/employee.service';
+import { IEmployeeData } from '../interface/employee-data';
+import { EmployeeService } from '../service/employee.service';
 import { ToastrService } from 'ngx-toastr';
 
 
@@ -44,7 +44,8 @@ export class EmployeeHierarchyTreeComponent implements OnInit {
   ngOnInit(): void {
     this.loadEmployeeHierarchy();
     (window as any).onA = (nodeName: string) => {
-      this.router.navigate(['/employee-display']);
+      const nodeId=nodeName.slice(4)
+      this.router.navigate(['/portal/employee-display'], { queryParams: { id: nodeId } });
     };
 
     mermaid.initialize({
@@ -83,6 +84,7 @@ export class EmployeeHierarchyTreeComponent implements OnInit {
         if (response) {
           this.employeeData = response;
           this.isDataLoaded = true;
+          console.log('data',this.employeeData)
           this.renderMermaidChart();
         } else {
           this.toastr.error('No Employee found')

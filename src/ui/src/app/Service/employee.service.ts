@@ -9,10 +9,10 @@ import { WolfDenService } from './wolf-den.service';
 export class EmployeeService {
 
   constructor(private http: HttpClient) { }
-  employeeId=1
+  employeeId = 1
   private baseUrl = environment.employeeapiUrl;
 
-   decodeToken() {
+  decodeToken() {
     const token = localStorage.getItem('token');
     if (!token) {
       return null;
@@ -38,23 +38,32 @@ export class EmployeeService {
     return this.http.get(`${this.baseUrl}/by-Id?EmployeeId=${employeeId}`);
   }
   employeeUpdateEmployee(userForm: any) {
-    return this.http.put(`${this.baseUrl}/employee-update-employee`, userForm)
+    return this.http.put(`${this.baseUrl}/employee-update-employee`, userForm);
   }
-  getMyTeamHierarchy(getFullHierarchy: boolean) {
-    return this.http.get(`${this.baseUrl}/team?Id=${this.employeeId}&Hierarchy=${getFullHierarchy}`);
+  getMyTeamHierarchy(getFullHierarchy: boolean, employeeId: number) {
+    return this.http.get(`${this.baseUrl}/team?Id=${employeeId}&Hierarchy=${getFullHierarchy}`);
   }
-  addDepartment(departmentForm:any){
-    return this.http.post(`https://localhost:7015/api/Department`,departmentForm)
+  addDepartment(departmentForm: any) {
+    return this.http.post(`https://localhost:7015/api/Department`, departmentForm);
   }
-  addDesignation(designationForm:any){
-    return this.http.post(`https://localhost:7015/api/Designation`,designationForm)
+  addDesignation(designationForm: any) {
+    return this.http.post(`https://localhost:7015/api/Designation`, designationForm);
   }
-  getAllDesignation(){
-    return 
+  getAllDesignation() {
+    return this.http.get(`https://localhost:7015/api/Designation/all`);
 
   }
-  getAllDepartment(){
-    return 
+  getAllDepartment() {
+    return this.http.get(`https://localhost:7015/api/Department`);
 
+  }
+  getEmployeeByName(firstName: any, lastName?: any) {
+    return this.http.get(`https://localhost:7015/api/Employee/get-all-by-name?FirstName=${firstName}&LastName=${lastName}`)
+  }
+  adminUpdateEmployee(userForm: any) {
+    return this.http.put(`https://localhost:7015/api/Employee/admin`, userForm)
+  }
+  roleChange(roleForm: any) {
+    return this.http.put(`https://localhost:7015/api/Employee/super-admin`, roleForm)
   }
 }

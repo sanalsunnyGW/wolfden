@@ -1,33 +1,34 @@
 import { Component } from '@angular/core';
-import { Idepartment } from '../Interface/idepartment';
-import { Idesignation } from '../Interface/idesignation';
+import { Idepartment } from '../interface/idepartment';
+import { Idesignation } from '../interface/idesignation';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IdepartmentForm } from '../Interface/idepartment-form';
-import { IdesignationForm } from '../Interface/idesignation-form';
-import { EmployeeService } from '../Service/employee.service';
+import { IdepartmentForm } from '../interface/idepartment-form';
+import { IdesignationForm } from '../interface/idesignation-form';
 import { ToastrService } from 'ngx-toastr';
+import { EmployeeService } from '../service/employee.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,RouterLink],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss'
 })
 export class AdminDashboardComponent {
 
-  depatmentData: Idepartment = {
+  departmentData: Idepartment[] = [{
     id: 0,
     departmentName: ''
-  }
-  designationData: Idesignation = {
+  }];
+  designationData: Idesignation[] = [{
     id: 0,
     designationName: ''
-  }
-  departmentForm!: FormGroup<IdepartmentForm>
-  designationForm!: FormGroup<IdesignationForm>
+  }];
+  departmentForm!: FormGroup<IdepartmentForm>;
+  designationForm!: FormGroup<IdesignationForm>;
 
-  constructor(private employeeService: EmployeeService, private fb: FormBuilder,private toastr: ToastrService) {
+  constructor(private employeeService: EmployeeService, private fb: FormBuilder, private toastr: ToastrService) {
     this.buildForm();
   }
   employeeId: number = 0;
@@ -42,36 +43,36 @@ export class AdminDashboardComponent {
   }
 
   ngOnInit() {
-
-    // this.loadEmployeeData();
+    this.loadEmployeeData();
   }
 
 
-  // loadEmployeeData() {
-  //   this.employeeService.getAllDepartment().subscribe({
-  //     next: (response: any) => {
-  //       if (response) {
-  //         this.depatmentData=response;
+  loadEmployeeData() {
+    this.employeeService.getAllDepartment().subscribe({
+      next: (response: any) => {
+        if (response) {
+          this.departmentData = response
 
-  //       }
-  //     },
-  //     error: (error) => {
-        //this.toastr.error('An error occurred while Displaying Departments')
 
-  //     }
-  //   }),
-  //   this.employeeService.getAllDesignation().subscribe({
-  //     next: (response: any) => {
-  //       if (response) {
-  //         this.designationData=response;
-  //       }
-  //     },
-  //     error: (error) => {
-    //this.toastr.error('An error occurred while Displaying Designations')
+        }
+      },
+      error: (error) => {
+        this.toastr.error('An error occurred while Displaying Departments')
 
-  //     }
-  //   })
-  // }
+      }
+    }),
+      this.employeeService.getAllDesignation().subscribe({
+        next: (response: any) => {
+          if (response) {
+            this.designationData = response;
+          }
+        },
+        error: (error) => {
+          this.toastr.error('An error occurred while Displaying Designations')
+
+        }
+      })
+  }
 
   onSubmit() {
     if (this.departmentForm.valid) {
@@ -83,7 +84,7 @@ export class AdminDashboardComponent {
         next: (response: any) => {
           if (response > 0) {
             this.toastr.success('Department added Successfully')
-           // this.loadEmployeeData();
+            this.loadEmployeeData();
           }
         },
         error: (error) => {
@@ -103,7 +104,7 @@ export class AdminDashboardComponent {
         next: (response: any) => {
           if (response > 0) {
             this.toastr.success('Designation added Successfully')
-            // this.loadEmployeeData();
+            this.loadEmployeeData();
           }
         },
         error: (error) => {

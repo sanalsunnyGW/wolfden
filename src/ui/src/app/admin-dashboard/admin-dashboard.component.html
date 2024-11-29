@@ -1,30 +1,38 @@
+<div class="d-flex justify-content-end">
+    <button type="button" class="btn btn-primary custom-btn" data-toggle="tooltip" data-placement="top"
+    title="Click to Edit Employee Role " routerLink="/portal/employee-role">Edit Employee Role
+</button>
+</div>
+
 <div class="container mt-3">
     <h3><b><u>Departments</u></b></h3>
     <table class="table table-striped table-hover ">
         <thead>
             <tr>
                 <th scope="col" colspan="1">
-                    Department ID 
+                    Department ID
                 </th>
                 <th scope="col" colspan="1">
                     <div class="d-flex justify-content-between align-items-center">
                         Department Name
-                    <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal"
-                    data-bs-target="#department" data-toggle="tooltip" data-placement="top"
-                    title="Click to Add New Department ">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </button>
+                        <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal"
+                            data-bs-target="#department" data-toggle="tooltip" data-placement="top"
+                            title="Click to Add New Department ">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
                     </div>
                 </th>
-                
+
             </tr>
         </thead>
         <tbody class="table-group-divider">
+            @for(item of departmentData;track item)
+            {
             <tr>
-                <th scope="row">{{depatmentData.id}}</th>
-                <td>de{{depatmentData.id}}</td>
-            </tr>
-           
+                <th scope="row">{{item.id}}</th>
+                <td>{{item.departmentName}}</td>
+            </tr>}
+
         </tbody>
     </table>
 </div>
@@ -36,25 +44,27 @@
         <thead>
             <tr>
                 <th scope="col" colspan="1">
-                    Designation ID 
+                    Designation ID
                 </th>
                 <th scope="col" colspan="2">
                     <div class="d-flex justify-content-between align-items-center">
                         Designation Name
-                    <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal"
-                    data-bs-target="#designation" data-toggle="tooltip" data-placement="top"
-                    title="Click to Add New Designation ">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </button>
+                        <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal"
+                            data-bs-target="#designation" data-toggle="tooltip" data-placement="top"
+                            title="Click to Add New Designation ">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
                     </div>
                 </th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
+            @for(item of designationData;track item)
+            {
             <tr>
-                <th scope="row">{{designationData.id}} </th>
-                <td>de{{designationData.designationName}}</td>
-            </tr>
+                <th scope="row">{{item.id}} </th>
+                <td>{{item.designationName}}</td>
+            </tr>}
         </tbody>
     </table>
 </div>
@@ -71,12 +81,13 @@
             </div>
             <div class="modal-body">
                 <form [formGroup]="departmentForm" (ngSubmit)="onSubmit()">
-                    <input class="form-control" type="text" placeholder="Department Name" aria-label="Department Name" formControlName="departmentName">                        
+                    <input class="form-control" type="text" placeholder="Department Name" aria-label="Department Name"
+                        formControlName="departmentName">
                     @if(departmentForm.get('name')?.invalid ) {
-                        <div class="text-danger">
-                            Department Name is required.
-                        </div>
-                        }
+                    <div class="text-danger">
+                        Department Name is required.
+                    </div>
+                    }
                     <div class="d-flex justify-content-end gap-2 pt-3">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary custom-btn" data-bs-dismiss="modal"
@@ -101,12 +112,13 @@
             </div>
             <div class="modal-body">
                 <form [formGroup]="designationForm" (ngSubmit)="onSubmit()">
-                    <input class="form-control" type="text" placeholder="Designation Name" aria-label="Designation Name" formControlName="designationName">                        
+                    <input class="form-control" type="text" placeholder="Designation Name" aria-label="Designation Name"
+                        formControlName="designationName">
                     @if(designationForm.get('name')?.invalid ) {
-                        <div class="text-danger">
-                            Designation Name is required.
-                        </div>
-                        }
+                    <div class="text-danger">
+                        Designation Name is required.
+                    </div>
+                    }
                     <div class="d-flex justify-content-end gap-2 pt-3">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary custom-btn" data-bs-dismiss="modal"
@@ -119,5 +131,3 @@
         </div>
     </div>
 </div>
-
-

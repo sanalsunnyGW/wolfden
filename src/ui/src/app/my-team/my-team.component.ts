@@ -1,9 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import mermaid from 'mermaid';
-import { IEmployeeData } from '../Interface/employee-data';
-import { EmployeeService } from '../Service/employee.service';
+import { IEmployeeData } from '../interface/employee-data';
 import { ToastrService } from 'ngx-toastr';
+import { EmployeeService } from '../service/employee.service';
 
 @Component({
   selector: 'app-my-team',
@@ -66,8 +66,8 @@ export class MyTeamComponent {
   ngOnInit(): void {
     this.loadEmployeeHierarchy();
     (window as any).onA = (nodeName: string) => {
-      console.log(nodeName)
-      this.router.navigate(['/dashboard/employee-display'], { queryParams: { id: nodeName } });
+      const nodeId=nodeName.slice(4)
+      this.router.navigate(['/portal/employee-display'], { queryParams: { id: nodeId } });
     };
 
     mermaid.initialize({
@@ -103,7 +103,8 @@ export class MyTeamComponent {
 
   }
   viewTeamHierarchy() {
-    this.employeeService.getMyTeamHierarchy(true).subscribe({
+    const employee = this.employeeService.decodeToken();
+    this.employeeService.getMyTeamHierarchy(true,employee.EmployeeId).subscribe({
       next: (response: any) => {
         if (response) {
           this.employeeDataModal = response;
@@ -122,7 +123,8 @@ export class MyTeamComponent {
   }
 
   loadEmployeeHierarchy() {
-    this.employeeService.getMyTeamHierarchy(false).subscribe({
+    const employee = this.employeeService.decodeToken();
+    this.employeeService.getMyTeamHierarchy(false,employee.EmployeeId).subscribe({
       next: (response: any) => {
         if (response) {
           console.log(response)
@@ -164,7 +166,7 @@ export class MyTeamComponent {
   private generateMermaidGraph(employees: any[]): string {
     let graph = 'graph TB;\n';
     const traverse = (emp: any) => {
-      const nodeId = `${emp.id}`;
+      const nodeId = `Node${emp.id}`;
       const nodeLabel = `${emp.firstName || 'No Name'} ${emp.lastName || ''}`.trim();
       graph += `${nodeId}[${nodeLabel}]\n`;
       if (emp.subordinates && Array.isArray(emp.subordinates) && emp.subordinates.length > 0) {

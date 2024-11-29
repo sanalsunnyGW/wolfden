@@ -23,23 +23,25 @@ import { SubordinatesComponent } from './dashboard/dashboard-body/main/attendanc
 import { EditLeaveTypeComponent } from './dashboard/dashboard-body/main/leave-management/edit-leave-type/edit-leave-type.component';
 import { UpdateLeaveBalanceComponent } from './dashboard/dashboard-body/main/leave-management/update-leave-balance/update-leave-balance.component';
 import { ProfileComponent } from './profile/profile.component';
+import { EditRoleComponent } from './edit-role/edit-role.component';
 
 export const routes: Routes = [
     {
         path: 'profile',
-        component: ProfileComponent},{
-        path: 'user', 
+        component: ProfileComponent
+    }, {
+        path: 'user',
         component: UserComponent,
-        children:[
-            { path: '', redirectTo: 'login', pathMatch: 'full' }, 
-            {path: 'check-user', component: CheckUserComponent},
-            {path: 'sign-in', component: SigninComponent},
-            {path: 'login', component: LoginComponent},
+        children: [
+            { path: '', redirectTo: 'login', pathMatch: 'full' },
+            { path: 'check-user', component: CheckUserComponent },
+            { path: 'sign-in', component: SigninComponent },
+            { path: 'login', component: LoginComponent },
         ]
     },
     {
-        path:'attendance/calendar',
-        component:CalendarViewComponent
+        path: 'attendance/calendar',
+        component: CalendarViewComponent
     },
     {
         path: 'leave-dashboard',
@@ -71,26 +73,26 @@ export const routes: Routes = [
         component: UserComponent
 
     },
-   
+
 
 
     {
-        path:'portal',
-        component:DashboardComponent,
-        children:[
-            { path: '', redirectTo: '/dashboard', pathMatch: 'full' }, 
-            {path:'dashboard',component:MainPageComponent,canActivate: [guardsGuard]},
-            {path:'employee-directory',component: EmployeeDirectoryComponent,canActivate: [guardsGuard]},
-            {path:'leave-dashboard',component:LeaveDashboardComponent,canActivate: [guardsGuard]},
+        path: 'portal',
+        component: DashboardComponent,
+        children: [
+            { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+             {path:'dashboard',component:MainPageComponent,canActivate: [guardsGuard]},
+             {path:'employee-directory',component: EmployeeDirectoryComponent,canActivate: [guardsGuard]},
+             {path:'leave-dashboard',component:LeaveDashboardComponent,canActivate: [guardsGuard]},
             {path:'leave-request-history',component:LeaveHistoryComponent,canActivate: [guardsGuard]},
-            {path:'main-page',component:MainPageComponent},
-            {path:'employee-directory',component: EmployeeDirectoryComponent},
-            {path:'leave-dashboard',component:LeaveDashboardComponent},
-            {path:'leave-request-history',component:LeaveHistoryComponent},
-            {path:'attendance/daily/:attendanceDate',component:DailyAttendenceComponent},
-            {path:'attendance/weekly',component:WeeklyAttendanceComponent},
-            {path:'attendance/monthly',component:MonthlyReportComponent},
-            {path:'attendance/subordinates',component:SubordinatesComponent} ,   
+            { path: 'main-page', component: MainPageComponent },
+            { path: 'employee-directory', component: EmployeeDirectoryComponent },
+            { path: 'leave-dashboard', component: LeaveDashboardComponent },
+            { path: 'leave-request-history', component: LeaveHistoryComponent },
+            { path: 'attendance/daily/:attendanceDate', component: DailyAttendenceComponent },
+            { path: 'attendance/weekly', component: WeeklyAttendanceComponent },
+            { path: 'attendance/monthly', component: MonthlyReportComponent },
+            { path: 'attendance/subordinates', component: SubordinatesComponent },
             { path: 'edit-leave-type', component: EditLeaveTypeComponent },
             { path: 'update-leave-balance', component: UpdateLeaveBalanceComponent },
             {
@@ -109,8 +111,8 @@ export const routes: Routes = [
                 canActivate: [guardsGuard]
             },
             {
-                path:'attendance/calendar',
-                component:CalendarViewComponent,
+                path: 'attendance/calendar',
+                component: CalendarViewComponent,
                 canActivate: [guardsGuard]
             },
             {
@@ -127,7 +129,7 @@ export const routes: Routes = [
                 path: '',
                 component: UserComponent,
                 canActivate: [guardsGuard]
-        
+
             },
             {
                 path: 'profile',
@@ -135,14 +137,22 @@ export const routes: Routes = [
                 canActivate: [guardsGuard]
             },
             {
-                path:'admin-dashboard',
-                component:AdminDashboardComponent
+                path: 'admin-dashboard',
+                component: AdminDashboardComponent,
+                canActivate: [guardsGuard]
+
+            },
+            {
+                path: 'employee-role',
+                component: EditRoleComponent,
+                canActivate: [guardsGuard]
+
             }
-            
+
         ]
     },
 
-    { path: '', redirectTo: '/portal/dashboard', pathMatch: 'full' }, 
+    { path: '', redirectTo: '/portal/dashboard', pathMatch: 'full' },
 
 
 ];

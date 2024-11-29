@@ -1,24 +1,34 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IProfileForm } from '../../Interface/iprofile-from';
+import { IProfileForm } from '../../interface/iprofile-from';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Employee } from '../../Interface/iemployee';
-import { EmployeeService } from '../../Service/employee.service';
+import { Employee } from '../../interface/iemployee';
+import { EmployeeService } from '../../service/employee.service';
 import { Gender } from '../../enum/gender-enum';
 import { EmploymentType } from '../../enum/employment-type-enum';
-import { IadminForm } from '../../Interface/iadmin-form';
+import { IadminForm } from '../../interface/iadmin-form';
 import { ToastrService } from 'ngx-toastr';
+import { log } from 'mermaid/dist/logger.js';
+import { Idesignation } from '../../interface/idesignation';
+import { Idepartment } from '../../interface/idepartment';
+import { ImanagerData } from '../../interface/imanager-data';
+import { CommonModule } from '@angular/common';
+import { ImanagerForm } from '../../interface/imanager-form';
 
 @Component({
   selector: 'app-emloyee-hierarchy-display',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './emloyee-hierarchy-display.component.html',
   styleUrl: './emloyee-hierarchy-display.component.scss'
 })
 export class EmloyeeHierarchyDisplayComponent {
   inDate = new Date();
-  userForm!: FormGroup<IadminForm>
+  userForm!: FormGroup<IadminForm>;
+  managerForm!: FormGroup<ImanagerForm>;
+  isDataLoaded: boolean = false;
+  isDataClicked: boolean = false;
+  employeeIdClicked: number = 0;
   employeeData: Employee = {
     id: 0,
     rfId: '',
@@ -43,9 +53,22 @@ export class EmloyeeHierarchyDisplayComponent {
     employmentType: 0,
     photo: ''
   };
+  managerData: ImanagerData[] = [{
+    id: 0,
+    firstName: '',
+    lastName: '',
+    role: ''
+  }]
 
-
-
+  loginRole: string = '';
+  departmentData: Idepartment[] = [{
+    id: 0,
+    departmentName: ''
+  }];
+  designationData: Idesignation[] = [{
+    id: 0,
+    designationName: ''
+  }];
   constructor(private route: ActivatedRoute, private employeeService: EmployeeService, private fb: FormBuilder, private toastr: ToastrService
   ) {
     this.buildForm();
@@ -54,13 +77,25 @@ export class EmloyeeHierarchyDisplayComponent {
   private buildForm() {
     this.userForm = this.fb.group({
       designationId: new FormControl<number | null>(null, Validators.required),
-      departmanetId: new FormControl<number | null>(null, Validators.required),
-      managerId: new FormControl<number | null>(null, Validators.required),
+      departmentId: new FormControl<number | null>(null, Validators.required),
+      managerId: new FormControl<number | null>(null),
       isActive: new FormControl<boolean | null>(null),
       joiningDate: new FormControl(this.inDate, Validators.required),
       employmentType: new FormControl<number | null>(null, Validators.required),
 
-    })
+    }),
+      this.managerForm = this.fb.group({
+        firstName: new FormControl('', Validators.required),
+        lastName: new FormControl(''),
+
+      })
+  }
+  selectEmployee(employeeId: number): void {
+    this.employeeIdClicked = employeeId;
+    this.userForm.patchValue({
+      managerId: employeeId
+    });
+    this.isDataClicked = true;
   }
 
   ngOnInit() {
@@ -68,6 +103,8 @@ export class EmloyeeHierarchyDisplayComponent {
       this.employeeId = params['id'];
       if (this.employeeId) {
         this.loadEmployeeData();
+        const login = this.employeeService.decodeToken()
+        this.loginRole = login.role;
       }
     });
   }
@@ -89,6 +126,8 @@ export class EmloyeeHierarchyDisplayComponent {
         return "Contract";
       case EmploymentType.Permanent:
         return "Permanent";
+      case EmploymentType.Other:
+        return "Other"
       default:
         return "Unknown"
     }
@@ -109,14 +148,58 @@ export class EmloyeeHierarchyDisplayComponent {
   loadForm(employeeData: Employee) {
     this.userForm.patchValue({
       designationId: this.employeeData.designationId,
-      departmanetId: this.employeeData.departmentId,
+      departmentId: this.employeeData.departmentId,
       managerId: this.employeeData.managerId,
       isActive: this.employeeData.isActive,
       joiningDate: this.employeeData.joiningDate,
       employmentType: this.employeeData.employmentType,
 
-    });
+    }),
+      this.employeeService.getAllDepartment().subscribe({
+        next: (response: any) => {
+          if (response) {
+            this.departmentData = response
+          }
+        },
+        error: (error) => {
+          this.toastr.error('An error occurred while Displaying Departments')
+
+        }
+      }),
+      this.employeeService.getAllDesignation().subscribe({
+        next: (response: any) => {
+          if (response) {
+            this.designationData = response;
+          }
+        },
+        error: (error) => {
+          this.toastr.error('An error occurred while Displaying Designations')
+
+        }
+      })
   }
+
+  onSubmitManager() {
+    if (this.managerForm.valid) {
+      const formData = this.managerForm.value;
+      const params = {
+        firstName: formData.firstName,
+        lastName: formData.lastName
+      }
+      this.employeeService.getEmployeeByName(params.firstName, params.lastName).subscribe({
+        next: (response: any) => {
+          this.managerData = response;
+          this.isDataLoaded = true;
+          this.managerForm.get('firstName')?.setValue('');
+          this.managerForm.get('lastName')?.setValue('');
+        },
+        error: (err) => {
+          this.toastr.error('Error fetching managers');
+        }
+      });
+    }
+  }
+
 
   onSubmit() {
     if (this.userForm.valid) {
@@ -124,13 +207,13 @@ export class EmloyeeHierarchyDisplayComponent {
       const params = {
         id: this.employeeId,
         designationId: formData.designationId,
-        departmanetId: formData.departmanetId,
+        departmentId: formData.departmentId,
         managerId: formData.managerId,
         isActive: formData.isActive,
         joiningDate: formData.joiningDate,
         employmentType: formData.employmentType,
       }
-      this.employeeService.employeeUpdateEmployee(params).subscribe({
+      this.employeeService.adminUpdateEmployee(params).subscribe({
         next: (response: any) => {
           if (response == true) {
             this.toastr.success('Profile Updated Successfully')

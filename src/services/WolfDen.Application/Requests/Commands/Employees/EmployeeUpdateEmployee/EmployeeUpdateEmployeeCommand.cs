@@ -16,7 +16,7 @@ namespace WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee
         public string? Country { get; set; }
         public string? State { get; set; }
         public string? Photo { get; set; }
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
     }
 }

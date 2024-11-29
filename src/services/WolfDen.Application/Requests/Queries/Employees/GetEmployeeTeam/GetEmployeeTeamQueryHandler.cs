@@ -29,14 +29,15 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam
                 teamList.Add(await service.GetEmployee(employee, false, cancellationToken));
                 return teamList;
             }
-            if (employee.ManagerId == null)
-            {
-                teamList.Add(await service.GetEmployee(employee, false, cancellationToken));
-                return teamList;
-            }
+           
             List<Employee> myTeam = await _context.Employees.Where(x => x.ManagerId == request.Id && x.IsActive == true).ToListAsync();
             if (myTeam.Count == 0)
             {
+                if (employee.ManagerId == null)
+                {
+                    teamList.Add(await service.GetEmployee(employee, false, cancellationToken));
+                    return teamList;
+                }
                 List<Employee> teamMates = await _context.Employees.Where(x => x.ManagerId == employee.ManagerId && x.IsActive == true).ToListAsync();
 
                 foreach (Employee teamMate in teamMates)

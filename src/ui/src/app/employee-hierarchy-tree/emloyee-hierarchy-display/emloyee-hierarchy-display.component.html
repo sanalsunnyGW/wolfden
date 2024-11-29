@@ -93,12 +93,14 @@
             <tr>
                 <th scope="col" colspan="2">
                     <div class="d-flex justify-content-between align-items-center">
-                    Employment Details
-                    <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal"
-                    data-bs-target="#employment" data-toggle="tooltip" data-placement="top"
-                    title="Click to Update Employment Details" (click)="loadForm(employeeData)">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </button>
+                        Employment Details
+                        @if(loginRole=="SuperAdmin"||loginRole=="Admin"){
+                        <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal"
+                            data-bs-target="#employment" data-toggle="tooltip" data-placement="top"
+                            title="Click to Update Employment Details" (click)="loadForm(employeeData)">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                    }
                     </div>
                 </th>
             </tr>
@@ -140,11 +142,11 @@
                     <div class="mb-3">
                         <label for="designationName" class="form-label">Designation</label>
                         <div>
-                            <select id="designationName" formControlName="designationName">
+                            <select id="designationName" formControlName="designationId">
                                 <option value="" disabled selected>Select Designation</option>
-                                <option value=1>Male</option>
-                                <option value=2>Female</option>
-                                <option value=3>Other</option>
+                                @for(item of designationData;track item){
+                                <option value={{item.id}}>{{item.designationName}}</option>
+                                }
                             </select>
                         </div>
                         @if(userForm.get('designationName')?.invalid ) {
@@ -157,11 +159,11 @@
                     <div class="mb-3">
                         <label for="departmentName" class="form-label">Department</label>
                         <div>
-                            <select id="departmentName" formControlName="departmentName">
+                            <select id="departmentName" formControlName="departmentId">
                                 <option value="" disabled selected>Select Department</option>
-                                <option value=1>Male</option>
-                                <option value=2>Female</option>
-                                <option value=3>Other</option>
+                                @for(item of departmentData;track item){
+                                <option value={{item.id}}>{{item.departmentName}}</option>
+                                }
                             </select>
                         </div>
                         @if(userForm.get('departmentName')?.invalid ) {
@@ -170,36 +172,73 @@
                         </div>
                         }
                     </div>
+                    <div>
+                        <form [formGroup]="managerForm" (ngSubmit)="onSubmitManager()">
 
-                    <div class="mb-3">
-                        <label for="managerName" class="form-label">Manager Name</label>
-                        <div>
-                            <select id="managerName" formControlName="managerName">
-                                <option value="" disabled selected>Select Manager</option>
-                                <option value=1>Male</option>
-                                <option value=2>Female</option>
-                                <option value=3>Other</option>
-                            </select>
-                        </div>
-                        @if(userForm.get('managerName')?.invalid ) {
-                        <div class="text-danger">
-                            Manager Name is required.
-                        </div>
-                        }
+                            <label for="managerName" class="form-label">Manager Name</label>
+                            <div class="input-group mb-3 ">
+                                <input type="text" aria-label="First name" class="form-control"
+                                    placeholder="First Name " formControlName="firstName">
+                                <input type="text" aria-label="Last name" class="form-control" placeholder="Last Name "
+                                    formControlName="lastName">
+                                    <button type="submit" class="btn btn-primary custom-btn" data-toggle="tooltip"
+                                    data-placement="top" title="Click to Search Employees"> 
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                            </button>
+                            </div>
+                        </form>
                     </div>
+                    @if(isDataLoaded && managerData.length>0)
+                    {
+                    <div class="table-container">
+                        <table class="table table-hover table-container">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Employee Id</th>
+                                    <th scope="col">Employee Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for(manager of managerData;track manager){
+                                <tr (click)="selectEmployee(manager.id)">
+                                    <th scope="row">{{manager.id}}</th>
+                                    <td>{{manager.firstName}}  {{manager.lastName}}</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    }
+
+                    @if(isDataLoaded && managerData.length===0){
+                    <p>No manager data available.</p>
+                    }
+                    @if(userForm.get('managerName')?.invalid ) {
+                    <div class="text-danger">
+                        Manager Name is required.
+                    </div>
+                    }
+                    @if(isDataClicked){
+                        <div class="mb-3 mt-3">
+                            <label for="designationName" class="form-label">Selected EmployeeID</label>
+                            <div>
+                        <input class="form-control" type="text" value="{{employeeIdClicked}}" aria-label="readonly input example" readonly>
+                            </div>
+                        </div>
+                    }
 
                     <div class="mb-3">
                         <label for="joiningDate" class="form-label">Joining Date</label>
                         <input type="date" class="form-control" id="joiningDate" formControlName="joiningDate">
-                       
+
                     </div>
                     <div class="mb-3">
                         <label for="employmentType" class="form-label">Employment Type</label>
                         <div>
                             <select id="employmentType" formControlName="employmentType">
                                 <option value="" disabled selected>Select Employment Type</option>
-                                <option value=1>Male</option>
-                                <option value=2>Female</option>
+                                <option value=1>Contract</option>
+                                <option value=2>Permanent</option>
                                 <option value=3>Other</option>
                             </select>
                         </div>
@@ -221,4 +260,3 @@
         </div>
     </div>
 </div>
-
