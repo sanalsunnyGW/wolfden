@@ -26,6 +26,7 @@ import { UpdateLeaveSettingsComponent } from './dashboard/dashboard-body/main/le
 import { SubordinateLeaveRequestComponent } from './dashboard/dashboard-body/main/leave-management/subordinate-leave-request/subordinate-leave-request.component';
 import { EditLeaveRequestComponent } from './dashboard/dashboard-body/main/leave-management/edit-leave-request/edit-leave-request.component';
 import { AddLeaveByAdminForEmployeesComponent } from './dashboard/dashboard-body/main/leave-management/add-leave-by-admin-for-employees/add-leave-by-admin-for-employees.component';
+import { AttendanceHistoryComponent } from './dashboard/dashboard-body/main/attendance-module/attendance-history/attendance-history.component';
 
 export const routes: Routes = [
 {
@@ -42,14 +43,14 @@ export const routes: Routes = [
         component:DashboardComponent,
         children:[
             { path: '', redirectTo: '/dashboard', pathMatch: 'full' }, 
-            {path:'dashboard',component:MainPageComponent,canActivate: [guardsGuard]},
-            {path:'employee-directory',component: EmployeeDirectoryComponent,canActivate: [guardsGuard]},
+            {path:'dashboard',component:MainPageComponent},
             {path:'main-page',component:MainPageComponent},
             {path:'employee-directory',component: EmployeeDirectoryComponent},
             {path:'attendance/daily/:attendanceDate',component:DailyAttendenceComponent},
             {path:'attendance/weekly',component:WeeklyAttendanceComponent},
             {path:'attendance/monthly',component:MonthlyReportComponent},
             {path:'attendance/subordinates',component:SubordinatesComponent} ,   
+            {path:'attendance/attendance-history',component:AttendanceHistoryComponent},
             {
                 path: 'company-hierarchy',
                 component: EmployeeHierarchyTreeComponent,
@@ -68,7 +69,7 @@ export const routes: Routes = [
             {
                 path:'attendance/calendar',
                 component:CalendarViewComponent,
-                canActivate: [guardsGuard]
+                
             },
             {
                 path: 'leave-dashboard',
@@ -78,7 +79,7 @@ export const routes: Routes = [
             {
                 path: 'leave-request-history',
                 component: LeaveHistoryComponent,
-                canActivate: [guardsGuard]
+    
             },
             {
                 path: '',
@@ -108,7 +109,7 @@ export const routes: Routes = [
                 component: SubordinateLeaveRequestComponent
             },
             {
-                path: 'edit-leave-request',
+                path: 'edit-leave-request/:leaveRequestId',
                 component: EditLeaveRequestComponent
             },
             {
@@ -129,14 +130,4 @@ export const routes: Routes = [
     },
 
     { path: '', redirectTo: '/portal/dashboard', pathMatch: 'full' }, 
-
-
 ];
-
-
-
-
-
-
-
-

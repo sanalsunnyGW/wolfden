@@ -1,3 +1,6 @@
+using System.Reflection;
+using System.Security.Claims;
+using System.Text;
 using FluentValidation;
 using Hangfire;
 using Hangfire.SqlServer;
@@ -6,8 +9,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Microsoft.TeamFoundation.TestManagement.WebApi;
 using QuestPDF.Infrastructure;
+using WolfDen.Application.Helpers;
+using WolfDen.Application.Requests.Commands.Attendence.Service;
 using System.Configuration;
 using System.Reflection;
 using System.Security.Claims;
@@ -87,7 +91,6 @@ builder.Services.AddAuthentication(x =>
     x.SaveToken = false;
     x.TokenValidationParameters = new TokenValidationParameters
     {
-
         RequireExpirationTime = true,
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!)),
@@ -100,8 +103,8 @@ builder.Services.AddAuthentication(x =>
 builder.Services.AddScoped<WolfDenContext>();
 builder.Services.AddSingleton<PdfService>();
 builder.Services.AddScoped<ManagerEmailFinder>();
-
 builder.Services.AddScoped<MonthlyPdf>();
+//builder.Services.AddHostedService<DailyAttendancePollerService>();
 
 QuestPDF.Settings.License = LicenseType.Community;
 
@@ -130,6 +133,8 @@ builder.Services.AddScoped(sp =>
                 connectionString,
                 sp.GetRequiredService<ILogger<QueryBasedSyncService>>()
             ));
+builder.Services.AddScoped<DailyAttendancePollerService>();
+
 builder.Services.AddControllers();
 var app = builder.Build();
 
@@ -152,12 +157,19 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var syncService = scope.ServiceProvider.GetRequiredService<QueryBasedSyncService>();
+    var emailService = scope.ServiceProvider.GetRequiredService<DailyAttendancePollerService>();
 
     RecurringJob.AddOrUpdate(
         "sync-tables-job",
         () => syncService.SyncTablesAsync(),
         "*/5 * * * *"  // Cron expression for every 5 minutes
     );
+    RecurringJob.AddOrUpdate(
+       "send-emails-job",
+       () => emailService.SendEmail(),
+       "0 0 * * 2-6"
+
+   );
 }
 
 app.Run();

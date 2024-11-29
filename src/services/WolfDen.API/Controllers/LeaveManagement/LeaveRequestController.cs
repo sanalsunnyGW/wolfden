@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WolfDen.Application.DTOs.LeaveManagement;
 using WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestForEmployeeByAdmin;
@@ -9,7 +10,6 @@ using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Revoke
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetLeaveRequestHistory;
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetApprovedNextWeekLeaves;
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetSubordinateLeave;
-using WolfDen.Domain.Enums;
 
 namespace WolfDen.API.Controllers.LeaveManagement
 {
@@ -43,12 +43,9 @@ namespace WolfDen.API.Controllers.LeaveManagement
             return await _mediator.Send(command, cancellationToken);
         }
 
-        [HttpGet("subordinate-leave-requests/{id}/{status}")]
-        public async Task<List<SubordinateLeaveDto>> GetSubordinatesLeaveRequest(int id, LeaveRequestStatus status,CancellationToken cancellationToken)
+        [HttpGet("subordinate-leave-requests")]
+        public async Task<SubordinateLeaveRequestPaginationDto> GetSubordinatesLeaveRequest( [FromQuery] GetSubordinateLeaveQuery query, CancellationToken cancellationToken)
         {
-            GetSubordinateLeaveQuery query= new GetSubordinateLeaveQuery();
-            query.Id =id;
-            query.StatusId = status;
 
             return await _mediator.Send(query,cancellationToken);
         }
@@ -59,14 +56,16 @@ namespace WolfDen.API.Controllers.LeaveManagement
             command.SuperiorId = id;   
             return await _mediator.Send(command,cancellationToken);
         }
+        
 
         [HttpPut("edit-leave/{id}")]
-        public async Task<bool> EditLeave(int id, [FromBody] EditLeaveRequestCommand command,CancellationToken cancellationToken)
+        public async Task<bool> EditLeave(int id ,[FromBody] EditLeaveRequestCommand command,CancellationToken cancellationToken)
         {
             command.EmpId = id;
             return await _mediator.Send(command,cancellationToken) ;
         }
 
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPost("leave-for-employee-by-admin")]
 
         public async Task<bool> AddLeaveForSubordinates([FromBody] AddLeaveRequestForEmployeeByAdmin command,CancellationToken cancellationToken)

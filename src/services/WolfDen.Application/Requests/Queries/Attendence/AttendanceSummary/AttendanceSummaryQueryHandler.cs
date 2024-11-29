@@ -48,7 +48,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
 
             for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
-                if (currentDate > today)
+                if (currentDate > today) 
                 {
                     break;
                 }

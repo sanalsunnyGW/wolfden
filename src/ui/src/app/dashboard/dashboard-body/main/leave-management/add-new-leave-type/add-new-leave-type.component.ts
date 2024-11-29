@@ -22,7 +22,6 @@ export class AddNewLeaveTypeComponent{
     addNewLeaveType : FormGroup
     constructor() {
       this.addNewLeaveType = this.fb.group<IAddNewLeaveTypeFormcontrol>({
-        adminId : new FormControl(null),
         typeName: new FormControl(null,Validators.required),
         maxDays: new FormControl(null),
         isHalfDayAllowed: new FormControl(null),
@@ -43,10 +42,6 @@ export class AddNewLeaveTypeComponent{
     { type: 2, viewValue: 'Quarterly Increment' },
     { type: 3, viewValue: 'Half-Yearly Increment' },
     ];
-
-
-
-      
 
       onSubmit()
       {

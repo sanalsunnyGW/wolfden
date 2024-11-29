@@ -8,6 +8,11 @@ import { LeaveManagementService } from '../../../../../service/leave-management.
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { IRevokeLeave } from '../../../../../interface/revoke-leave';
+
+
+
 
 @Component({
   selector: 'app-leave-history',
@@ -25,6 +30,7 @@ export class LeaveHistoryComponent implements OnInit {
   pageNumber: number = 0;
   pageSize: number = 2;
   pageSizes: number[] = [2, 3, 5, 10, 20, 50];
+  router = inject(Router)
   totalPages: number = 1;
   destroyRef = inject(DestroyRef);
   indexValue: number = (this.pageNumber * this.pageSize) - this.pageSize + 1;
@@ -38,6 +44,7 @@ export class LeaveHistoryComponent implements OnInit {
       { id: 3, name: 'Rejected' },
       { id: 4, name: 'Deleted' }
     ];
+  revokeLeave : IRevokeLeave = {} as IRevokeLeave
 
   constructor() { }
 
@@ -91,10 +98,23 @@ export class LeaveHistoryComponent implements OnInit {
   }
 
   onEdit(i: number) {
-
+    this.router.navigate(['portal/edit-leave-request', i]);
   }
 
   onDelete(i: number) {
+    this.revokeLeave.leaveRequestId = i;
+    this.leaveManagementService.revokeLeaveRequest(this.revokeLeave)
+    .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next:(response : boolean) =>{
+        if(response){
+          alert("Leave Revoked")
+        }
+          },
+          error:(error) => {
+            alert(error)
+          }
+    })
+    this.loadLeaveRequests();
 
   }
 

@@ -19,6 +19,8 @@
     </span>
     <ul class="dropdown-menu" aria-labelledby="leaveDropdown">
       <li><a class="dropdown-item" [routerLink]="'/portal/leave-dashboard'">Leave Dashboard</a></li>
+      <li><a class="dropdown-item" [routerLink]="'/portal/leave-application'">Apply Leave</a></li>
+      <li><a class="dropdown-item" [routerLink]="'/portal/add-leave-by-admin-for-employees'">Apply Leave For Employee</a></li>
       <li><a class="dropdown-item" [routerLink]="'/portal/leave-request-history'">Leave Request History</a></li>
       <li><a class="dropdown-item" [routerLink]="'/portal/leave-application'">Apply Leave</a></li>
 @if(userService.role=='Admin')
@@ -45,7 +47,7 @@
       Attendance
     </span>
     <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
-      <li><a class="dropdown-item" [routerLink]="'/portal/attendance/summary'">Attendance Dashboard</a></li>
+      <li><a class="dropdown-item" [routerLink]="'/portal/attendance/calendar'">Attendance Dashboard</a></li>
       <li><a class="dropdown-item" [routerLink]="'/portal/attendance/details'">Attendance Summary</a></li>
       <li><a class="dropdown-item" [routerLink]="'/portal/attendance/monthly'">Attendance Reports</a></li>
       <li><a class="dropdown-item" [routerLink]="'/portal/attendance/subordinates'">Team Attendance </a></li>

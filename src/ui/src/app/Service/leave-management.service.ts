@@ -1,18 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { ILeaveUpdate, IUpdateLeaveSetting } from '../interface/update-leave-setting';
-import { IAddNewLeaveType } from '../interface/add-new-leave-type-interface';
+import { FormGroup } from '@angular/forms';
 import { ILeaveBalanceList } from '../interface/leave-balance-list-interface';
 import { ILeaveRequestHistoryResponse } from '../interface/leave-request-history';
 import { IGetLeaveTypeIdAndname } from '../interface/get-leave-type-interface';
 import { ILeaveApplication } from '../interface/leave-application-interface';
-import { ISubordinateLeaveRequest } from '../interface/subordinate-leave-request';
-import { LeaveRequestStatus } from '../enum/leave-request-status-enum';
 import { IApproveRejectLeave } from '../interface/approve-or-reject-leave-interface';
 import { IEditleave } from '../interface/edit-leave-application-interface';
+import { environment } from '../../enviornments/environment';
+import { ISubordinateLeavePaginationSend } from '../interface/subordinate-leave-request-pagination-send';
+import { ISubordinateLeavePaginationReceive } from '../interface/subordinate-leave-request-pagination-receive';
+import { WolfDenService } from './wolf-den.service';
+import { IRevokeLeave } from '../interface/revoke-leave';
+import { IAddNewLeaveType } from '../interface/add-new-leave-type-interface';
+import { Observable } from 'rxjs';
+import { ILeaveUpdate, IUpdateLeaveSetting } from '../interface/update-leave-setting';
 import { IAddLeaveByAdminForEmployee } from '../interface/add-leave-by-admin-for-employee';
 import { IEditLeaveType} from '../interface/edit-leave-type';
-import { environment } from '../../enviornments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +26,8 @@ export class LeaveManagementService {
 
   constructor() { }
   private http = inject(HttpClient);
+  private userService= inject(WolfDenService);
+  id= this.userService.userId
   private baseUrl = environment.leave;
   getLeaveBalance(id: number) {
     return this.http.get<Array<ILeaveBalanceList>>(`${this.baseUrl}/leave-balance?EmployeeId=${id}`);
@@ -37,7 +43,6 @@ export class LeaveManagementService {
   }
 
     addNewLeaveType(newType : IAddNewLeaveType) {
-      newType.adminId = this.id;
       return this.http.post<boolean>(`${this.baseUrl}/leave-type`,newType)
     }
 
@@ -47,7 +52,7 @@ export class LeaveManagementService {
 
 
     updateLeaveSettings(updateLeaveSettings : IUpdateLeaveSetting){
-      updateLeaveSettings.adminId=this.id;
+      updateLeaveSettings.adminId = this.id;
       return this.http.put<boolean>(`${this.baseUrl}/leave-setting`,updateLeaveSettings)
     }
 
@@ -60,9 +65,9 @@ export class LeaveManagementService {
       return this.http.post<boolean>(`${this.baseUrl}/leave-request`,leaveApplication)
     }
 
-    id : number=1;
-    getSubordinateLeaverequest(status :LeaveRequestStatus){
-      return this.http.get<Array<ISubordinateLeaveRequest>>(`${this.baseUrl}/leave-request/subordinate-leave-requests/${this.id}/${status}`)
+    getSubordinateLeaverequest(pagination :ISubordinateLeavePaginationSend){
+      pagination.id = this.id
+      return this.http.get<ISubordinateLeavePaginationReceive>(`${this.baseUrl}/leave-request/subordinate-leave-requests?Id=${pagination.id}&StatusId=${pagination.statusId}&PageSize=${pagination.pageSize}&PageNumber=${pagination.pageNumber}`)
     }
     
     approveOrRejectLeave(approveRejectLeave : IApproveRejectLeave){
@@ -85,5 +90,9 @@ export class LeaveManagementService {
 
     updateLeaveBalance() {
       return this.http.put<boolean>(`${this.baseUrl}/leave-balance`, null);
+    }
+
+    revokeLeaveRequest(leaveRequestId : IRevokeLeave){
+      return this.http.patch<boolean>(`${this.baseUrl}/leave-request/revoke-leave/${this.id}`,leaveRequestId)
     }
 }

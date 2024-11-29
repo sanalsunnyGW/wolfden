@@ -32,7 +32,7 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
                     TypeName = leaveRequest.LeaveType.TypeName,
                     HalfDay = leaveRequest.HalfDay,
                     Description = leaveRequest.Description,
-                    ProcessedBy =  leaveRequest.Manager.FirstName,
+                    ProcessedBy = leaveRequest.Manager.FirstName,
                     LeaveRequestStatusId = leaveRequest.LeaveRequestStatusId
                 })
                 .ToListAsync(cancellationToken);
