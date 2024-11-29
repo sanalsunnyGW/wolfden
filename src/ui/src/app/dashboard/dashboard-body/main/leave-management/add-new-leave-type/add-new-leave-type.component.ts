@@ -44,10 +44,6 @@ export class AddNewLeaveTypeComponent{
     { type: 3, viewValue: 'Half-Yearly Increment' },
     ];
 
-
-
-      
-
       onSubmit()
       {
         if(this.addNewLeaveType.valid)

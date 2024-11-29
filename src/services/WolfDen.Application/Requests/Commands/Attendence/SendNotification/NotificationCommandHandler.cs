@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using WolfDen.Application.DTOs.Attendence;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 

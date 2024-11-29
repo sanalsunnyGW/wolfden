@@ -1,15 +1,10 @@
 import { Component, DestroyRef, Inject, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormControlName, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ILeaveApplication } from '../../../../../interface/Leave-Application-Interface';
-import { CommonModule } from '@angular/common';
-
 import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
 import {  ILeaveApplicationFormControl } from '../../../../../interface/Leave-Application-Interface';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
-
 
 @Component({
   selector: 'app-leave-application',
@@ -43,7 +38,6 @@ export class LeaveApplicationComponent implements OnInit {
     .subscribe((response : Array<IGetLeaveTypeIdAndname>) => {
               this.leaveType = response;
       });
-
   }
   
   onSubmit(){
@@ -60,13 +54,7 @@ export class LeaveApplicationComponent implements OnInit {
             alert(error)
             }
        }
-       
        );
-
     }
-
   }
-
-
-
 }
