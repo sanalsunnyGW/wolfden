@@ -15,7 +15,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.UpdateNotification
                 .Where(x => x.Id == request.NotificationId)
                 .FirstOrDefaultAsync(cancellationToken);
             
-            if (notification == null)
+            if (notification is null)
             {
                 return 0;
             }
