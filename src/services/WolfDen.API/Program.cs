@@ -162,6 +162,12 @@ using (var scope = app.Services.CreateScope())
         () => syncService.SyncTablesAsync(),
         "*/5 * * * *"  // Cron expression for every 5 minutes
     );
+    RecurringJob.AddOrUpdate(
+       "send-emails-job",
+       () => emailService.SendEmail(),
+       "0 0 * * 2-6"
+
+   );
 }
 
 app.Run();

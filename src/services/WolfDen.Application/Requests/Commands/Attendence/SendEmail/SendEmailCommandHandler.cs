@@ -11,14 +11,14 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Commands.Attendence.Email
 {
-    public class SendEmailCommandHandler: IRequestHandler<SendEmailCommand, bool>
+    public class SendEmailCommandHandler : IRequestHandler<SendEmailCommand, bool>
     {
         private readonly WolfDenContext _context;
         private readonly string _senderEmail;
         private readonly string _senderName;
         private readonly ManagerEmailFinder _emailFinder;
         private readonly string _apiKey;
-        public SendEmailCommandHandler(WolfDenContext context, IConfiguration configuration,ManagerEmailFinder emailFinder)
+        public SendEmailCommandHandler(WolfDenContext context, IConfiguration configuration, ManagerEmailFinder emailFinder)
         {
             _context = context;
             _senderEmail = configuration["BrevoApi:SenderEmail"];
@@ -32,15 +32,26 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
               .Where(e => e.Id == request.EmployeeId).FirstOrDefaultAsync(cancellationToken);
             string[] receiverEmails = { employee.Email };
             List<string> managerEmails = await _emailFinder.FindManagerEmailsAsync(employee.ManagerId, cancellationToken);
-            string subject = "Attendance Low Warning";
-            string message = $"{employee.FirstName} {employee.LastName}'s working hours are below the required threshold.";
-            SendMail(_senderEmail, _senderName, receiverEmails, message, subject, managerEmails.ToArray());
-            return true;
+            string subject = request.Subject;
+            string message = request.Message;
+            bool status = SendMail(_senderEmail, _senderName, receiverEmails, message, subject, managerEmails.ToArray());
+            if (status)
+            {
+                DailyAttendence? attendence = await _context.DailyAttendence
+               .Where(a => a.Date == DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1) && a.EmployeeId == employee.Id).FirstOrDefaultAsync(cancellationToken);
+                attendence.EmailSent = true;
+                _context.Update(attendence);
+                await _context.SaveChangesAsync(cancellationToken);
+                return true;
+            }
+            return false;
         }
-        private void SendMail(string senderEmail, string senderName, string[] receiverEmails, string message, string subject, string[] ccEmails = null)
+        private bool SendMail(string senderEmail, string senderName, string[] receiverEmails, string message, string subject, string[] ccEmails = null)
         {
-            Configuration configuration = new Configuration();
-            configuration.AddApiKey("api-key", _apiKey);
+            try
+            {
+                Configuration configuration = new Configuration();
+                configuration.AddApiKey("api-key", _apiKey);
 
                 TransactionalEmailsApi apiInstance = new TransactionalEmailsApi(configuration);
                 SendSmtpEmailSender sender = new SendSmtpEmailSender
@@ -52,6 +63,12 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
                 List<SendSmtpEmailCc> ccList = ccEmails?.Select(email => new SendSmtpEmailCc(email)).ToList() ?? new List<SendSmtpEmailCc>();
                 SendSmtpEmail sendSmtpEmail = new SendSmtpEmail(sender, toList, null, ccList, null, message, subject);
                 CreateSmtpEmail result = apiInstance.SendTransacEmail(sendSmtpEmail);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

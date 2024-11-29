@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WolfDen.Application.Requests.Commands.Attendence.Email;
 using WolfDen.Domain.Entity;
@@ -9,7 +8,7 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Commands.Attendence.Service
 {
-    public class DailyAttendancePollerService : BackgroundService
+    public class DailyAttendancePollerService
     {
         private readonly ILogger<DailyAttendancePollerService> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
@@ -18,30 +17,43 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
             _logger = logger;
             _serviceScopeFactory = serviceScopeFactory;
         }
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        public async Task SendEmail()
         {
-            while (!stoppingToken.IsCancellationRequested)
+            int min = 360;
+            using (IServiceScope scope = _serviceScopeFactory.CreateScope())
             {
-                using (IServiceScope scope = _serviceScopeFactory.CreateScope())
+                WolfDenContext _context = scope.ServiceProvider.GetRequiredService<WolfDenContext>();
+
+                _logger.LogInformation("Background service is running at: {time}", DateTimeOffset.Now);
+
+                List<DailyAttendence> newEntries = await _context.DailyAttendence
+                .Where(a =>a.Date == DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1) && a.EmailSent==false).ToListAsync();
+
+                foreach (DailyAttendence newEntry in newEntries)
                 {
-                    WolfDenContext _context = scope.ServiceProvider.GetRequiredService<WolfDenContext>();
+                    Employee? employee = await _context.Employees
+                        .Where(e => e.Id == newEntry.EmployeeId).FirstOrDefaultAsync();
 
-                    _logger.LogInformation("Background service is running at: {time}", DateTimeOffset.Now);
-
-                    List<DailyAttendence> newEntries = await _context.DailyAttendence
-                    .Where(a => a.CreatedAt > DateTime.UtcNow.AddHours(24)).ToListAsync(stoppingToken);
-
-                    foreach (DailyAttendence newEntry in newEntries)
+                    if (newEntry.InsideDuration < min)
                     {
-                        if (newEntry.InsideDuration < 360)
-                        {
-                            IMediator _mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-                            SendEmailCommand sendEmailCommand = new SendEmailCommand();
-                            sendEmailCommand.EmployeeId = newEntry.EmployeeId;
-                            await _mediator.Send(sendEmailCommand, stoppingToken);
-                        }
+                        IMediator _mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                        SendEmailCommand sendEmailCommand = new SendEmailCommand();
+                        sendEmailCommand.EmployeeId = newEntry.EmployeeId;
+                        sendEmailCommand.Subject = "Incomplete Shift";
+                        sendEmailCommand.Email = employee.Email;
+                        sendEmailCommand.Message = $"{employee.FirstName}'s shift on {newEntry.Date} is marked as incomplete due to insufficient hours; please review and address the issue.";
+                        await _mediator.Send(sendEmailCommand);
                     }
-                    await Task.Delay(86400,stoppingToken);
+                    else
+                    {
+                        IMediator _mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                        SendEmailCommand sendEmailCommand = new SendEmailCommand();
+                        sendEmailCommand.EmployeeId = newEntry.EmployeeId;
+                        sendEmailCommand.Subject = "Overtime Acknowledgement";
+                        sendEmailCommand.Email = employee.Email;
+                        sendEmailCommand.Message = $"Great job {employee.FirstName}! Your extra hours on {newEntry.Date} are appreciated";
+                        await _mediator.Send(sendEmailCommand);
+                    }
                 }
             }
         }

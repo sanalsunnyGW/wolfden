@@ -1,4 +1,4 @@
-<<<<<<<< HEAD:src/services/WolfDen.Infrastructure/Migrations/20241128124026_Init.cs
+
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -4008,4 +4008,4 @@ namespace WolfDen.Infrastructure.Migrations
         }
     }
 }
->>>>>>>> 2015d0e (email sending modified):src/services/WolfDen.Infrastructure/Migrations/20241129070408_init.cs
+
