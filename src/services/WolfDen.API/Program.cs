@@ -134,6 +134,8 @@ builder.Services.AddScoped(sp =>
                 connectionString,
                 sp.GetRequiredService<ILogger<QueryBasedSyncService>>()
             ));
+builder.Services.AddScoped<DailyAttendancePollerService>();
+
 builder.Services.AddControllers();
 var app = builder.Build();
 
@@ -144,7 +146,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseHangfireDashboard();
 }
-
 app.UseCors(options => options.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowAnyMethod());
 
 app.UseHttpsRedirection();
@@ -157,6 +158,7 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var syncService = scope.ServiceProvider.GetRequiredService<QueryBasedSyncService>();
+    var emailService = scope.ServiceProvider.GetRequiredService<DailyAttendancePollerService>();
 
     RecurringJob.AddOrUpdate(
         "sync-tables-job",

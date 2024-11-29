@@ -12,8 +12,8 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241128072011_createdattt")]
-    partial class createdattt
+    [Migration("20241129074427_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -398,28 +398,31 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("ArrivalTime")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
-                    b.Property<DateTimeOffset>("DepartureTime")
+                    b.Property<DateTimeOffset?>("DepartureTime")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<bool?>("EmailSent")
+                        .HasColumnType("bit");
 
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("InsideDuration")
+                    b.Property<int?>("InsideDuration")
                         .HasColumnType("int");
 
                     b.Property<string>("MissedPunch")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OutsideDuration")
+                    b.Property<int?>("OutsideDuration")
                         .HasColumnType("int");
 
-                    b.Property<int>("PantryDuration")
+                    b.Property<int?>("PantryDuration")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PeriodEnd")
@@ -923,7 +926,10 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("PeriodStart");
 
-                    b.Property<int>("ProcessedBy")
+                    b.Property<int?>("ProcessedBy")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RequestedBy")
                         .HasColumnType("int");
 
                     b.Property<DateOnly>("ToDate")
@@ -937,6 +943,8 @@ namespace WolfDen.Infrastructure.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("ProcessedBy");
+
+                    b.HasIndex("RequestedBy");
 
                     b.HasIndex("TypeId");
 
@@ -1056,13 +1064,19 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("DaysCheck")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<int?>("DaysCheckEqualOrLess")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<int?>("DaysCheckMore")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<int?>("DutyDaysRequired")
                         .HasColumnType("int");
@@ -1397,9 +1411,11 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasOne("WolfDen.Domain.Entity.Employee", "Manager")
                         .WithMany()
-                        .HasForeignKey("ProcessedBy")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ProcessedBy");
+
+                    b.HasOne("WolfDen.Domain.Entity.Employee", "Requested")
+                        .WithMany()
+                        .HasForeignKey("RequestedBy");
 
                     b.HasOne("WolfDen.Domain.Entity.LeaveType", "LeaveType")
                         .WithMany()
@@ -1412,6 +1428,8 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Navigation("LeaveType");
 
                     b.Navigation("Manager");
+
+                    b.Navigation("Requested");
                 });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.LeaveRequestDay", b =>
