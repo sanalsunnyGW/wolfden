@@ -16,7 +16,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.SendNotification
 
             Notification notification = new Notification(request.EmployeeId, request.Message);
 
-            await _context.Notification.AddAsync(notification);
+            await _context.Notifications.AddAsync(notification);
             return await _context.SaveChangesAsync(cancellationToken);
         }
     }
