@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace WolfDen.Application.Requests.Commands.Employees.AddEmployee
 {
@@ -19,7 +18,7 @@ namespace WolfDen.Application.Requests.Commands.Employees.AddEmployee
             var result = await _validator.ValidateAsync(request, cancellationToken);
             if (!result.IsValid)
             {
-                var errors = string.Join(", ", result.Errors.Select(e => e.ErrorMessage));
+                string errors = string.Join(", ", result.Errors.Select(e => e.ErrorMessage));
                 throw new ValidationException($"Validation failed: {errors}");
             }
             User user = new User(request.RFId);
@@ -27,12 +26,13 @@ namespace WolfDen.Application.Requests.Commands.Employees.AddEmployee
             try
             {
                 var creationResult = await _userManager.CreateAsync(user);
+                await _userManager.AddToRoleAsync(user, "Employee");
                 if (!creationResult.Succeeded)
                 {
                     throw new Exception("User creation failed: " + string.Join(", ", creationResult.Errors.Select(e => e.Description)));
                 }
 
-                Employee employee = new Employee(request.EmployeeCode, request.RFId);
+                Employee employee = new Employee(request.EmployeeCode, request.RFId, user.Id);
                 _context.Employees.Add(employee);
                 await transaction.CommitAsync(cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
