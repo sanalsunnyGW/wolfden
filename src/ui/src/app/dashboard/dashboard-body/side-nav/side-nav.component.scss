@@ -24,6 +24,7 @@
     span {
       display: inline;
       font-weight: 600;
+      white-space: nowrap;
 
       @media only screen and (max-width: 1300px) {
         display: inline-block;
@@ -50,6 +51,7 @@
       .dropdown-menu {
         position: absolute;
         top: 100%;
+        width: 100%;
         left: 0;
         min-width: 250px;
         text-align: left;
@@ -92,7 +94,6 @@
       display: inline-block; 
     }
     .nav-item {
-      overflow: hidden;
       padding: 15px 20px;
       text-align: center;
       width: auto;

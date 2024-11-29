@@ -1,5 +1,11 @@
 <div class="header">
   <div class="logo"><img src="geekywolf-white-logo.svg"></div>
+  <div class="notification">
+    <span class="icon">
+      <i class="bi bi-bell-fill"></i>
+      <span class="badge">{{ unreadNotifications }}</span>
+    </span>
+  </div>
   <div class="user">
     <div class="user-name">{{userService.firstName}}</div>
     <div class="user-menu-container">

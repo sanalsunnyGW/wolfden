@@ -81,12 +81,6 @@ export const routes: Routes = [
                 canActivate: [guardsGuard]
             },
             {
-                path: '',
-                component: UserComponent,
-                canActivate: [guardsGuard]
-        
-            },
-            {
                 path: 'profile',
                 component: ProfileComponent,
                 canActivate: [guardsGuard]
@@ -99,8 +93,6 @@ export const routes: Routes = [
 
 
 ];
-
-
 
 
 

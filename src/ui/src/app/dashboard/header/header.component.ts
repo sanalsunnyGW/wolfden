@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+unreadNotifications:number=10;
   constructor(
     private router: Router,
     public userService: WolfDenService,
