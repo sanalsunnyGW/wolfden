@@ -1,4 +1,4 @@
-import { Component, DestroyRef, Inject, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormControlName, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import {  ILeaveApplicationFormControl } from '../../../../../interface/leave-application-interface';
 import { NgSelectComponent } from '@ng-select/ng-select';
@@ -20,7 +20,7 @@ export class LeaveApplicationComponent implements OnInit {
   applyLeave : FormGroup
   leaveManagement = inject(LeaveManagementService)
   leaveType : Array<IGetLeaveTypeIdAndname> = []
-  destroyRef= Inject(DestroyRef);
+  destroyRef= inject(DestroyRef);
 
   constructor(){
     this.applyLeave = this.fb.group<ILeaveApplicationFormControl>({

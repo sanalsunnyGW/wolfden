@@ -1,4 +1,4 @@
-import { Component, DestroyRef, Inject, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { LeaveRequestStatus } from '../../../../../enum/leave-request-status-enum';
 import { IApproveRejectLeave } from '../../../../../interface/approve-or-reject-leave-interface';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -7,7 +7,6 @@ import { ISubordinateLeavePaginationReceive } from '../../../../../interface/sub
 import { ISubordinateLeaveRequest } from '../../../../../interface/subordinate-leave-request';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { pipe } from 'rxjs';
 
 @Component({
   selector: 'app-subordinate-leave-request',
@@ -35,7 +34,7 @@ export class SubordinateLeaveRequestComponent implements OnInit{
   approveRejectLeave : IApproveRejectLeave = {} as IApproveRejectLeave
 
   leaveManagementService = inject(LeaveManagementService);
-  destroyRef= Inject(DestroyRef);
+  destroyRef= inject(DestroyRef);
 
 
   loadLeaveRequests(filterStatus : LeaveRequestStatus, pageNumber : number, pageSize : number): void {
