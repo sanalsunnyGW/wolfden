@@ -14,7 +14,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.UpdateNotification
             Notification? notification = await _context.Notifications
                 .Where(x => x.Id == request.NotificationId)
                 .FirstOrDefaultAsync(cancellationToken);
-            Console.WriteLine(notification);
+            
             if (notification == null)
             {
                 return 0;
