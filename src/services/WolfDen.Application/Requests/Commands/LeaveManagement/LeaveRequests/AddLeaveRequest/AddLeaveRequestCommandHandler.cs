@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.LeaveManagement;
-using WolfDen.Application.Methods.LeaveManagement;
+using WolfDen.Application.Method.LeaveManagement;
 using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequestDays;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
