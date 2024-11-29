@@ -1,9 +1,9 @@
 <div class="container">  
   <div class="row row-cols-1 row-cols-md-4 g-4">
     <div class="col">
-      <div class="card shadow-sm arrival">
+      <div class="card shadow-sm cardStyle">
         <div class="card-body">
-          <h5 class="card-title text-white">
+          <h5 class="card-title  heading">
             <i class="fa-regular fa-calendar-days"></i> Date
           </h5>
           <p class="card-text">{{attendanceDate}}</p>
@@ -12,9 +12,9 @@
     </div>
 
     <div class="col">
-      <div class="card shadow-sm dep text-white">
+      <div class="card shadow-sm cardStyle">
         <div class="card-body">
-          <h5 class="card-title">
+          <h5 class="card-title heading">
             <i class="fas fa-clock"></i> Arrival Time
           </h5>
           <p class="card-text">{{convertToTime(dailyData.arrivalTime) }}</p>
@@ -23,9 +23,9 @@
     </div>
 
     <div class="col">
-      <div class="card shadow-sm ins text-white">
+      <div class="card shadow-sm cardStyle">
         <div class="card-body">
-          <h5 class="card-title">
+          <h5 class="card-title heading">
             <i class="fas fa-sign-out-alt"></i> Departure
           </h5>
           <p class="card-text">{{convertToTime(dailyData.departureTime)  }}</p>
@@ -34,9 +34,9 @@
     </div>
 
     <div class="col">
-      <div class="card shadow-sm out text-white">
+      <div class="card shadow-sm cardStyle">
         <div class="card-body">
-          <h5 class="card-title">
+          <h5 class="card-title heading">
             <i class="fas fa-hourglass-half"></i> Inside Hours
           </h5>
           <p class="card-text">{{NumToTime(dailyData.insideHours) }}</p>
@@ -47,9 +47,9 @@
 
   <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
     <div class="col">
-      <div class="card shadow-sm miss text-white">
+      <div class="card shadow-sm cardStyle">
         <div class="card-body">
-          <h5 class="card-title">
+          <h5 class="card-title heading">
             <i class="fas fa-external-link-alt"></i> Outside Hours 
           </h5>
           <p class="card-text">{{NumToTime(dailyData.outsideHours) }}</p>
@@ -58,9 +58,9 @@
     </div>
 
     <div class="col">
-      <div class="card shadow-sm pun text-white">
+      <div class="card shadow-sm cardStyle">
         <div class="card-body">
-          <h5 class="card-title">
+          <h5 class="card-title heading">
             <i class="fas fa-times-circle"></i> Missed Punch
           </h5>
           <p class="card-text">{{isMissed(dailyData.missedPunch)}}</p>
@@ -68,9 +68,9 @@
       </div>
     </div>
     <div class="col">
-      <div class="card shadow-sm status text-white">
+      <div class="card shadow-sm cardStyle">
         <div class="card-body">
-          <h5 class="card-title">
+          <h5 class="card-title heading">
             <i class="fas fa-clipboard-check"></i> Status
           </h5>
           <p class="card-text">{{getAttendanceStatus(dailyData.attendanceStatusId)}}</p>

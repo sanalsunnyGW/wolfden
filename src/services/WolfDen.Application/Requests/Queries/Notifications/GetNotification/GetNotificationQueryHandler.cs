@@ -14,6 +14,7 @@ namespace WolfDen.Application.Requests.Queries.Notifications.GetNotification
                 .Where(x => x.EmployeeId == request.EmployeeId && x.IsRead == false)
                 .Select(x=>new NotificationDTO
                 {
+                    NotificationId=x.Id,
                     Message=x.Message,
                     CreatedAt=x.CreatedAt
                 })

@@ -12,7 +12,7 @@
         public int? PantryDuration { get; private set; }
         public string? MissedPunch { get; private set; }
         public DateTime? CreatedAt { get; private set; }
-        public bool? EmailSent { get; set; }
+        public bool? EmailSent { get;private set; }
 
 
         private DailyAttendence()
@@ -31,6 +31,10 @@
             CreatedAt = DateTime.Now;
             EmailSent = emailSent;
 
+        }
+        public void Update()
+        {
+            EmailSent = true;
         }
     }
 }
