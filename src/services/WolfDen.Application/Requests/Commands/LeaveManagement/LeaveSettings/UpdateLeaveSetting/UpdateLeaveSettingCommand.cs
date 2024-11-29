@@ -4,6 +4,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveSettings.Up
 {
     public class UpdateLeaveSettingCommand:IRequest<bool>
     {
+        public int AdminId { get; set; }
         public int MinDaysForLeaveCreditJoining {  get; set; }
         public int MaxNegativeBalanceLimit { get; set; }
 

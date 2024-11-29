@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../enviornments/environment';
 import { WolfDenService } from './wolf-den.service';
+import { LoginComponent } from '../user/login/login.component';
 
 @Injectable({
   providedIn: 'root'
@@ -9,11 +10,17 @@ import { WolfDenService } from './wolf-den.service';
 export class EmployeeService {
 
   constructor(private http: HttpClient) { }
+<<<<<<< HEAD
   employeeId = 1;
   private baseUrl = environment.employeeapiUrl;
+=======
+>>>>>>> upstream/main
 
-   decodeToken() {
+  private baseUrl = environment.employeeapiUrl;
+  public userId = 1;
+  decodeToken() {
     const token = localStorage.getItem('token');
+
     if (!token) {
       return null;
     }
@@ -40,7 +47,8 @@ export class EmployeeService {
   employeeUpdateEmployee(userForm: any) {
     return this.http.put(`${this.baseUrl}/employee-update-employee`, userForm)
   }
+  //to be corrected
   getMyTeamHierarchy(getFullHierarchy: boolean) {
-    return this.http.get(`${this.baseUrl}/team?Id=${this.employeeId}&Hierarchy=${getFullHierarchy}`);
+    return this.http.get(`${this.baseUrl}/team?Id=${this.userId}&Hierarchy=${getFullHierarchy}`);
   }
 }

@@ -1,16 +1,13 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions, DatesSetArg, DayCellContentArg } from '@fullcalendar/core/index.js';
+import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
+import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
+import { Calendar, CalendarOptions, DatesSetArg, DayCellContentArg } from '@fullcalendar/core/index.js';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { IAttendanceSummary } from '../../../../../interface/attendance-summary';
 import { IAttendanceData } from '../../../../../interface/attendance-data';
 import { Router } from '@angular/router';
-import { data } from 'jquery';
-
-
-
+import { WolfDenService } from '../../../../../service/wolf-den.service';
 
 @Component({
   selector: 'app-calendar-view',
@@ -19,9 +16,12 @@ import { data } from 'jquery';
   templateUrl: './calendar-view.component.html',
   styleUrl: './calendar-view.component.scss'
 })
-export class CalendarViewComponent implements OnInit {
+export class CalendarViewComponent implements OnInit  {
+
+  @ViewChild(FullCalendarComponent) calendarComponent!: FullCalendarComponent;
 
   service = inject(AttendanceService);
+  baseService=inject(WolfDenService)
 
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
@@ -38,13 +38,11 @@ export class CalendarViewComponent implements OnInit {
   incompleteShift: number = 0;
   wfh: number = 0;
 
-  employeeId: number = 1;
   currentYear: number = new Date().getFullYear();
   currentMonth: number = new Date().getMonth() + 1;
   attendanceData: { [date: string]: number } = {};
 
   constructor(private router:Router) {
-    this.attendanceData = {};
   }
 
   ngOnInit(): void {
@@ -52,52 +50,57 @@ export class CalendarViewComponent implements OnInit {
     this.getStatusData(this.currentYear, this.currentMonth);
   }
 
-
   fetchAttendanceData(year: number, month: number): void {
-    this.service.getAttendanceSummary(this.employeeId, year, month).subscribe((data: IAttendanceSummary) => {
+    this.service.getAttendanceSummary(this.baseService.userId, year, month).subscribe((data: IAttendanceSummary) => {
       this.present = data.present;
       this.absent = data.absent;
       this.incompleteShift = data.incompleteShift;
       this.wfh = data.wfh;
-
     });
-    console.log(data)
   }
 
   getStatusData(year: number, month: number) {
-    this.service.getDailyStatus(this.employeeId, year, month).subscribe((data: IAttendanceData[]) => {
+    this.service.getDailyStatus(this.baseService.userId, year, month).subscribe((data: IAttendanceData[]) => {
       data.forEach((item: IAttendanceData) => {
         this.attendanceData[item.date] = item.attendanceStatusId;
       });
+      this.calendarComponent.getApi().render(); 
     });
   }
-  newDate!:string;
+
+  newDate!:string
   handleDateClick(arg: DateClickArg) {
-    const selectedDate=arg.dateStr;
+    const selectedDate = arg.dateStr;
     this.newDate=selectedDate;
-    this.router.navigate(['dashboard/attendance/daily',this.newDate])
+    this.router.navigate(['dashboard/attendance/daily', this.newDate]);
   }
   getDayCellClassNames(arg: DayCellContentArg): string[] {
-    const date = new Date(arg.date);
-    date.setDate(date.getDate() + 1);
-    const dateStr = date.toISOString().split('T')[0];
-    const status = this.attendanceData[dateStr];
+    const date = new Date(Date.UTC(
+      arg.date.getFullYear(),
+      arg.date.getMonth(),
+      arg.date.getDate()
+    ));
+    const currentDate = arg.view.currentStart; 
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth(); 
 
-    if (arg.date.getDay() === 6 || arg.date.getDay() === 0) {
-      return ['weekend-day'];
+    if (date.getFullYear() === currentYear && date.getMonth() === currentMonth) {
+      const dateStr = date.toISOString().split('T')[0];
+      const status = this.attendanceData[dateStr];
+
+      if (arg.date.getDay() === 6 || arg.date.getDay() === 0) {
+        return ['weekend-day'];
+      }
+      
+      switch(status)
+      {
+        case 1:return ['present'];
+        case 2:return ['absent'];
+        case 3:return ['incompleteShift'];
+        case 4:return ['wfh'];
+      }
     }
 
-    
-
-    if (status === 1) {
-      return ['present'];
-    } else if (status === 2) {
-      return ['absent'];
-    } else if (status === 3) {
-      return ['incompleteShift'];
-    } else if (status === 4) {
-      return ['wfh'];
-    }
     return [];
   }
 
@@ -105,8 +108,7 @@ export class CalendarViewComponent implements OnInit {
     const currentDate = arg.view.currentStart;
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
-    this.fetchAttendanceData(year, month);
     this.getStatusData(year, month);
+    this.fetchAttendanceData(year, month);
   }
-
 }

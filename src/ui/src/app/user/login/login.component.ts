@@ -47,7 +47,6 @@ export class LoginComponent {
           console.log(this.userService.userId);
           this.userService.firstName=employee.FirstName
           console.log(this.userService.userId);
-          
           this.toastr.success('Login sucessfull')
           this.router.navigate(['/portal/dashboard']);
         }

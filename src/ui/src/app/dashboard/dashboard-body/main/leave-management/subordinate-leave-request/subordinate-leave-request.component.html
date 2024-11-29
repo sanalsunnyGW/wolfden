@@ -1,0 +1,85 @@
+<div class="col-3 mb-3">
+    <select class="form-select p-2 border rounded" name="leaveRequestFilter" (change)="onFilterChange($event)">
+        <option [value]="open">Open Leave Requests</option>
+        <option [value]="approved">Approved Leave Requests</option>
+        <option [value]="rejected">Rejected Leave Requests</option>
+    </select>
+</div>
+
+<div class="container mt-4">
+    <table class="table table-bordered table-hover table-striped text-center">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">S.no.</th>
+                <th scope="col">Name</th>
+                <th scope="col"> Code</th>
+                <th scope="col">Leave Type</th>
+                <th scope="col">Half Day</th>
+                <th scope="col">Apply Date</th>
+                <th scope="col">From Date</th>
+                <th scope="col">To Date</th>
+                <th scope="col">Description</th>
+                @if(leavestatus === open){
+                <th scope="col">Approve Leave</th>
+                <th scope="col">Reject Leave</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for(leaveRequest of leaveRequestList;track leaveRequest;let i = $index)
+            {
+            <tr>
+                <td>{{i + 1}}</td>
+                <td>{{leaveRequest.name}}</td>
+                <td>{{leaveRequest.employeeCode}}</td>
+                <td>{{leaveRequest.typeName}}</td>
+                <td>{{leaveRequest.halfDay}}</td>
+                <td>{{leaveRequest.applyDate}}</td>
+                <td>{{leaveRequest.fromDate}}</td>
+                <td>{{leaveRequest.toDate}}</td>
+                <td><a href="javascript:void(0)" (click)="viewDescription(leaveRequest.description)">
+                    View </a>
+                </td>
+                @if(leavestatus === open){
+                <td>
+                    <button class="btn btn-success btn-sm" (click)="approve(leaveRequest.leaveRequestId)">Approve</button>
+                </td>
+                <td>
+                    <button class="btn btn-danger btn-sm" (click)="reject(leaveRequest.leaveRequestId)">Reject</button>
+                </td>
+                }
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if(selectedDescription)
+{
+    <div  class="modal" tabindex="-1" style="display: block;" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Description</h5>
+                    <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ selectedDescription }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+
+
+
+
+
+
