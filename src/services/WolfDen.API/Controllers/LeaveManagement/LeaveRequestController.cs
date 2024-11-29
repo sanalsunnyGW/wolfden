@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WolfDen.Application.DTOs.LeaveManagement;
 using WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestForEmployeeByAdmin;
@@ -8,7 +9,6 @@ using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.EditLe
 using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.RevokeLeaveRequest;
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetLeaveRequestHistory;
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetSubordinateLeave;
-using WolfDen.Domain.Enums;
 
 namespace WolfDen.API.Controllers.LeaveManagement
 {
@@ -50,6 +50,7 @@ namespace WolfDen.API.Controllers.LeaveManagement
             command.SuperiorId = id;   
             return await _mediator.Send(command,cancellationToken);
         }
+        
 
         [HttpPut("edit-leave")]
         public async Task<bool> EditLeave([FromBody] EditLeaveRequestCommand command,CancellationToken cancellationToken)
@@ -57,6 +58,7 @@ namespace WolfDen.API.Controllers.LeaveManagement
             return await _mediator.Send(command,cancellationToken) ;
         }
 
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPost("leave-for-employee-by-admin")]
 
         public async Task<bool> AddLeaveForSubordinates([FromBody] AddLeaveRequestForEmployeeByAdmin command,CancellationToken cancellationToken)

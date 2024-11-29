@@ -29,7 +29,7 @@ export class LeaveManagementService {
   constructor() { }
   private http = inject(HttpClient);
   private userService= inject(WolfDenService);
-  id=1
+  id= this.userService.userId
   private baseUrl = environment.leave;
   getLeaveBalance(id: number) {
     return this.http.get<Array<ILeaveBalanceList>>(`${this.baseUrl}/leave-balance?EmployeeId=${id}`);
@@ -49,7 +49,7 @@ export class LeaveManagementService {
 
 
     updateLeaveSettings(updateLeaveSettings : IUpdateLeaveSetting){
-      updateLeaveSettings.adminId=this.id;
+      updateLeaveSettings.adminId = this.id;
       return this.http.put<boolean>(`${this.baseUrl}/leave-setting`,updateLeaveSettings)
     }
 
