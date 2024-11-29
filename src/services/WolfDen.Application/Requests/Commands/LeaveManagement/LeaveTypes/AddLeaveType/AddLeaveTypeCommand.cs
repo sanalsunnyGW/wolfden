@@ -5,7 +5,6 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLe
 {
     public class AddLeaveTypeCommand : IRequest<bool>
     {
-        public int AdminId { get; set; }
         public string TypeName { get; set; }
         public int? MaxDays { get; set; }
         public bool? IsHalfDayAllowed { get; set; }

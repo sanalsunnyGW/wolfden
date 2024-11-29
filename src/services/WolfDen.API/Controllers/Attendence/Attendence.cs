@@ -21,6 +21,7 @@ using WolfDen.Application.Requests.Queries.Attendence.WeeklySummary;
 using WolfDen.Application.Requests.Queries.Attendence.SubOrdinates;
 using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
 using QuestPDF.Infrastructure;
+using WolfDen.Application.Requests.Commands.Attendence.Email;
 
 
 namespace WolfDen.API.Controllers.Attendence
@@ -122,6 +123,7 @@ namespace WolfDen.API.Controllers.Attendence
         {
             return await _mediator.Send(query, cancellationToken);
         }
+
     }
 
 

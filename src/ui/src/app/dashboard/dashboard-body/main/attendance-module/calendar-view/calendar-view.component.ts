@@ -74,7 +74,7 @@ export class CalendarViewComponent implements OnInit  {
   handleDateClick(arg: DateClickArg) {
     const selectedDate = arg.dateStr;
     this.newDate=selectedDate;
-    this.router.navigate(['dashboard/attendance/daily', this.newDate]);
+    this.router.navigate(['portal/attendance/daily', this.newDate]);
   }
 
   getDayCellClassNames(arg: DayCellContentArg): string[] {

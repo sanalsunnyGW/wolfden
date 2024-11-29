@@ -23,8 +23,8 @@ export class MonthlyReportComponent {
   monthIsSelected=false
   display=false
   pageNumber=-1;
-  pageSize=1;
-  pageSizes=[1,2,3]
+  pageSize=5;
+  pageSizes=[5,10,15,20]
   totalPages=0;
   constructor() {}
   monthlyData!:MonthlyReports

@@ -4,6 +4,7 @@ import { ILeaveUpdate, IUpdateLeaveSettingFormControl } from '../../../../../int
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+
 @Component({
   selector: 'app-update-leave-settings',
   standalone: true,
@@ -27,7 +28,21 @@ export class UpdateLeaveSettingsComponent {
   }
 
     
-
+ngOnInit(){
+  this.leaveManagement.getLeaveSetting()
+  .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    next:(response : ILeaveUpdate) =>{
+      this.leaveSettings = response;
+      this.updateLeaveSetting.patchValue({
+        minDaysForLeaveCreditJoining : this.leaveSettings.minDaysForLeaveCreditJoining,
+        maxNegativeBalanceLimit : this.leaveSettings.maxNegativeBalanceLimit   
+               });
+    },
+    error:(error) =>{
+      alert(error)
+    }
+  })
+}
 
   onSubmit(){
     if(this.updateLeaveSetting.valid)
@@ -51,3 +66,4 @@ export class UpdateLeaveSettingsComponent {
 
 
 }
+

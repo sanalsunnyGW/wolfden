@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WolfDen.Application.DTOs.LeaveManagement;
@@ -20,6 +21,7 @@ namespace WolfDen.API.Controllers.LeaveManagement
             return await _mediator.Send(getLeaveSettingQuery);  
         }
 
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPut]
 
         public async Task<bool> UpdateLeaveSetting([FromBody] UpdateLeaveSettingCommand command, CancellationToken cancellationToken)
