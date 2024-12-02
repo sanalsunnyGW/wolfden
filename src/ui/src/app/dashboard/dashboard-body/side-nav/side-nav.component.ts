@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { WolfDenService } from '../../../service/wolf-den.service';
+import { EmployeeService } from '../../../service/employee.service';
 
 @Component({
   selector: 'app-side-nav',
@@ -9,5 +11,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './side-nav.component.scss'
 })
 export class SideNavComponent {
+  userService=inject(WolfDenService)
+  employeeService=inject(EmployeeService)
 
 }

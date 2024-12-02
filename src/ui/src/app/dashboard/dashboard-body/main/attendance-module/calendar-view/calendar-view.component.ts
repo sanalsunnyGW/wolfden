@@ -3,10 +3,10 @@ import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular
 import { CalendarOptions, DatesSetArg, DayCellContentArg } from '@fullcalendar/core/index.js';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-import { AttendanceService } from '../../../../../service/attendance.service';
-import { IAttendanceSummary } from '../../../../../interface/attendance-summary';
-import { IAttendanceData } from '../../../../../interface/attendance-data';
 import { Router } from '@angular/router';
+import { AttendanceService } from '../../../../../service/attendance.service';
+import { IAttendanceData } from '../../../../../interface/attendance-data';
+import { IAttendanceSummary } from '../../../../../interface/attendance-summary';
 import { WolfDenService } from '../../../../../service/wolf-den.service';
 
 @Component({

@@ -32,11 +32,15 @@ export class DailyAttendenceComponent {
     { id: 5, viewValue: 'Normal Holiday' },
     { id: 6, viewValue: 'WFH' },
     { id: 7, viewValue: 'Leave' },
+    { id: 8, viewValue: 'OnGoing Shift' },
+
   ];
 
   getAttendanceStatus(id:number)
   {
     const status = this.attendanceStatus.find(status => status.id === id);
+    if(status?.id==4 || status?.id==5)
+      status.viewValue="Holiday";
     return status ? status.viewValue : 'Unknown';
   }
   

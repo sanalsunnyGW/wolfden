@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+
 interface Absence {
   name: string;
   department: string;
@@ -50,6 +51,7 @@ export class MainPageComponent implements OnInit {
     {date : '2024-11-15',name: 'National Holiday'},
   ];
 
+  
   ngOnInit() {
     this.generateCalendar();
   }

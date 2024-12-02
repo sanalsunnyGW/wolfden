@@ -12,11 +12,6 @@ using Microsoft.OpenApi.Models;
 using QuestPDF.Infrastructure;
 using WolfDen.Application.Helpers;
 using WolfDen.Application.Requests.Commands.Attendence.Service;
-using System.Configuration;
-using System.Reflection;
-using System.Security.Claims;
-using System.Text;
-using WolfDen.Application.Helpers;
 using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
 using WolfDen.Domain.ConfigurationModel;
@@ -158,6 +153,7 @@ using (var scope = app.Services.CreateScope())
 {
     var syncService = scope.ServiceProvider.GetRequiredService<QueryBasedSyncService>();
     var emailService = scope.ServiceProvider.GetRequiredService<DailyAttendancePollerService>();
+    var notificationService = scope.ServiceProvider.GetRequiredService<DailyNotificationService>();
 
     RecurringJob.AddOrUpdate(
         "sync-tables-job",
@@ -168,8 +164,12 @@ using (var scope = app.Services.CreateScope())
        "send-emails-job",
        () => emailService.SendEmail(),
        "0 0 * * 2-6"
-
-   );
+    );
+    RecurringJob.AddOrUpdate(
+       "send-emails-job",
+       () => notificationService.SendNotification(),
+       "0 0 * * 2-6"
+    );
 }
 
 app.Run();
