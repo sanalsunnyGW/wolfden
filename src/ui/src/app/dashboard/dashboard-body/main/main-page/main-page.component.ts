@@ -6,12 +6,8 @@ import { WolfDenService } from '../../../../service/wolf-den.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ILeaveBalanceList } from '../../../../interface/leave-balance-list-interface';
 import { WeeklyAttendanceComponent } from "../attendance-module/weekly-attendance/weekly-attendance.component";
+import { ItodaysAbsense } from '../../../../interface/itodays-absense';
 
-interface Absence {
-  name: string;
-  department: string;
-  reason: string;
-}
 
 interface Holiday {
   date: string;
@@ -38,16 +34,6 @@ export class MainPageComponent implements OnInit {
   weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   calendarDays: CalendarDay[] = [];
   day = this.calendarDays;
-
-  todaysAbsences: Absence[] = [
-    { name: 'Eldo P Joy', department: 'Developer', reason: 'Sick Leave' },
-    { name: 'Aravind', department: 'Developer', reason: 'Vacation' },
-    { name: 'Siva Prakash', department: 'QA', reason: 'Personal Leave' },
-    { name: 'Irfan', department: 'Developer', reason: 'Work from Home' },
-    { name: 'Prem', department: 'Finance', reason: 'Sick Leave' }
-  ];
-  absence = this.todaysAbsences;
-
   holidays: Holiday[] = [
     { date: '2024-01-26', name: 'Republic Day' },
     { date: '2024-08-15', name: 'Independence Day' },
@@ -60,6 +46,7 @@ export class MainPageComponent implements OnInit {
   userService = inject(WolfDenService)
   destroyRef = inject(DestroyRef)
   leaveList: ILeaveBalanceList[] = [];
+  todaysAbsences: ItodaysAbsense[]=[];
   leaveType1: string = '';
 leaveBalance1: number = 0;
 
@@ -70,6 +57,10 @@ leaveType3: string = '';
 leaveBalance3: number = 0;
   ngOnInit() {
     this.generateCalendar();
+    //todays absence
+    this.userService.getTodaysAbsence().subscribe((data)=>{
+      this.todaysAbsences=data;
+    })
 
     this.leaveManagementService.getLeaveBalance(this.userService.userId)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -77,23 +68,20 @@ leaveBalance3: number = 0;
         this.leaveList = data;
         console.log(this.leaveList);
         if (this.leaveList.length > 2) {
-          // Leave type 1
-          if (this.leaveList[0]) {
+          // Leave type 1        
             this.leaveType1 = this.leaveList[0].name;
             this.leaveBalance1 = this.leaveList[0].balance;
-          }
+          
   
-          // Leave type 2
-          if (this.leaveList[1]) {
+          // Leave type 2         
             this.leaveType2 = this.leaveList[1].name;
             this.leaveBalance2 = this.leaveList[1].balance;
-          }
+          
   
-          // Leave type 3
-          if (this.leaveList[2]) {
+          // Leave type 3          
             this.leaveType3 = this.leaveList[2].name;
             this.leaveBalance3 = this.leaveList[2].balance;
-          }
+          
         }
       });
   }

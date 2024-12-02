@@ -53,10 +53,7 @@
         <div class="absences-list">
           @for(absence of todaysAbsences; track absence){
           <div class="absence-item">
-            <div class="absence-name">{{ absence.name }}</div>
-            <div class="absence-details">
-              {{ absence.department }} • {{ absence.reason }}
-            </div>
+            <div class="absence-name">{{ absence.employeeName }}</div>
           </div>
           }
         </div>

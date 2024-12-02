@@ -6,6 +6,9 @@ import { IEmployeeDirectoryWithPagecount } from '../interface/iemployee-director
 import { EmployeeService } from './employee.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { INotificationForm } from '../interface/i-notification-form';
+import { MarkAsReadResponse } from '../interface/imark-as-read-response';
+import { ItodaysAbsense } from '../interface/itodays-absense';
 @Injectable({
   providedIn: 'root'
 })
@@ -114,4 +117,34 @@ export class WolfDenService {
       { headers: this.getHeaders(), params }
     );
   }
+
+//notification
+  getNotification(employeeId: number): Observable<INotificationForm[]> {
+    const params = this.createHttpParams({
+
+      EmployeeId:employeeId
+    });
+    return this.http.get<INotificationForm[]>(
+      `${this.baseUrl}/api/Notification/employee`,
+      { headers: this.getHeaders(), params }
+    );
+  }
+  getTodaysAbsence():Observable<ItodaysAbsense[]>{
+    const params= this.createHttpParams({});
+    return this.http.get<ItodaysAbsense[]>(
+      `${this.baseUrl}/api/LeaveRequestDay/leaves-on-current-day`,
+      { headers: this.getHeaders(), params }
+    );
+  }
+  markAsRead(notificationId: number): Observable<MarkAsReadResponse> {
+    const url = `${this.baseUrl}/api/Notification/read`;
+    const payload = { notificationId }; 
+
+    return this.http.patch<MarkAsReadResponse>(url, payload, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    });
+  }
+
 }

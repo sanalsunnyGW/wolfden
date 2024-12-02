@@ -4,13 +4,13 @@
   </div>
   <div class="user">
     <div class="notification">
-      <span class="icon">
+      <span class="icon" (click)="toggleNotifications()">
         <i class="bi bi-bell-fill"></i>
         <span class="badge">{{ unreadNotifications }}</span>
       </span>
     </div>
     <div class="user-name">{{userService.firstName}}</div>
-   
+    
     <div class="user-menu-container">
       <span class="user-image" (click)="toggleDropdown()">
         {{ userService.firstName ? userService.firstName[0].toUpperCase() : 'NA' }}
@@ -22,3 +22,11 @@
     </div>
   </div>
 </div>
+
+<app-notification-modal
+  *ngIf="showNotifications"
+  [notifications]="notifications"
+  [onClose]="closeNotifications"
+></app-notification-modal>
+
+
