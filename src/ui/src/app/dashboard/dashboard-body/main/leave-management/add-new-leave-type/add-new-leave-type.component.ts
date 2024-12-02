@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, NgSelectOption, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IAddNewLeaveTypeFormcontrol } from '../../../../../interface/add-new-leave-type-interface';
+import { IAddNewLeaveTypeFormcontrol } from '../../../../../interface/Add-New-Leave-Type-Interface';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

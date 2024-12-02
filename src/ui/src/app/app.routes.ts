@@ -34,9 +34,6 @@ import { AttendanceHistoryComponent } from './dashboard/dashboard-body/main/atte
 
 export const routes: Routes = [
     {
-        path: 'profile',
-        component: ProfileComponent
-    }, {
         path: 'user',
         component: UserComponent,
         children: [

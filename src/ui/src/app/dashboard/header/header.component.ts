@@ -21,7 +21,7 @@ export class HeaderComponent {
     private employeeService: EmployeeService,
     private toastr: ToastrService) {
     const login = employeeService.decodeToken();
-    this.loginRole = login.role;
+    
   }
   isDropdownOpen = false;
 
