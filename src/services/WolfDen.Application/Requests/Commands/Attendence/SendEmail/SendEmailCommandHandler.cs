@@ -7,6 +7,7 @@ using sib_api_v3_sdk.Model;
 using WolfDen.Application.Helpers;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
+using WolfDen.Infrastructure.Migrations;
 
 
 namespace WolfDen.Application.Requests.Commands.Attendence.Email
@@ -39,7 +40,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
             {
                 DailyAttendence? attendence = await _context.DailyAttendence
                .Where(a => a.Date == DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1) && a.EmployeeId == employee.Id).FirstOrDefaultAsync(cancellationToken);
-                attendence.EmailSent = true;
+                attendence.Update();
                 _context.Update(attendence);
                 return await _context.SaveChangesAsync(cancellationToken) > 0;
             }

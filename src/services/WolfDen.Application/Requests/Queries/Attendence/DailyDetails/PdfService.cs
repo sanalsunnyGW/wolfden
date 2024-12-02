@@ -73,6 +73,9 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyDetails
                                       case AttendanceStatus.WFH:
                                           status = "Work FRom Home";
                                           break;
+                                      case AttendanceStatus.OngoingShift:
+                                          status = "OnGoing Shift";
+                                          break;
                                       default:
                                           status = "leave";
                                           break;
