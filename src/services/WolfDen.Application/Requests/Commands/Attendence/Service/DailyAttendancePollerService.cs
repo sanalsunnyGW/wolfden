@@ -36,7 +36,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                     SendEmailCommand sendEmailCommand = new SendEmailCommand
                     {
                         EmployeeId = newEntry.EmployeeId,
-                        Email = employee.Email,
+                        Email = newEntry.Employee.Email,
                         Message = newEntry.InsideDuration < min
                             ? $"{newEntry.Employee.FirstName}'s shift on {newEntry.Date} is marked as incomplete due to insufficient hours; please review and address the issue."
                             : $"Great job {newEntry.Employee.FirstName}! Your extra hours on {newEntry.Date} are appreciated",

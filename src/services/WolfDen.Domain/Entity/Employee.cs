@@ -10,7 +10,7 @@ namespace WolfDen.Domain.Entity
         public string? RFId { get; private set; }
         public string? FirstName { get; private set; }
         public string? LastName { get; private set; }
-        public string? Id { get; private set; }
+        public string? Email { get; private set; }
         public string? PhoneNumber { get; private set; }
         public DateOnly? DateofBirth { get; private set; }
 
@@ -54,7 +54,7 @@ namespace WolfDen.Domain.Entity
             FirstName = firstName;
             LastName = lastName;
             DateofBirth = dateofBirth;
-            Id = email;
+            Email = email;
             PhoneNumber = phoneNumber;
             Gender = gender;
             Address = address;
@@ -77,4 +77,3 @@ namespace WolfDen.Domain.Entity
 
     }
 }
-
