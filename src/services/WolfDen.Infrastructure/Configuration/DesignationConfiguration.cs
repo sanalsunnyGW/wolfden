@@ -9,7 +9,7 @@ namespace WolfDen.Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<Designation> builder)
         {
             builder.Property(x => x.Name).HasMaxLength(256);
-
+            builder.HasIndex(x => x.Name).IsUnique();
         }
     }
 }

@@ -10,9 +10,8 @@ import { LoginComponent } from '../user/login/login.component';
 export class EmployeeService {
 
   constructor(private http: HttpClient) { }
-
   private baseUrl = environment.employeeapiUrl;
-  public userId = 1;
+
   decodeToken() {
     const token = localStorage.getItem('token');
 
@@ -37,12 +36,35 @@ export class EmployeeService {
     return this.http.get(`${this.baseUrl}/hierarchy`);
   }
   getEmployeeProfile(employeeId: number) {
-    return this.http.get(`${this.baseUrl}/by-Id?EmployeeId=${employeeId}`);
+    return this.http.get(`${this.baseUrl}/Employee/by-Id?EmployeeId=${employeeId}`);
   }
   employeeUpdateEmployee(userForm: any) {
-    return this.http.put(`${this.baseUrl}/employee-update-employee`, userForm)
+    return this.http.put(`${this.baseUrl}/Employee/employee-update-employee`, userForm);
   }
-  getMyTeamHierarchy(getFullHierarchy: boolean) {
-    return this.http.get(`${this.baseUrl}/team?Id=${this.userId}&Hierarchy=${getFullHierarchy}`);
+  getMyTeamHierarchy(getFullHierarchy: boolean, employeeId: number) {
+    return this.http.get(`${this.baseUrl}/Employee/team?Id=${employeeId}&Hierarchy=${getFullHierarchy}`);
+  }
+  addDepartment(departmentForm: any) {
+    return this.http.post(`${this.baseUrl}/Department`, departmentForm);
+  }
+  addDesignation(designationForm: any) {
+    return this.http.post(`${this.baseUrl}/Designation`, designationForm);
+  }
+  getAllDesignation() {
+    return this.http.get(`${this.baseUrl}/Designation`);
+
+  }
+  getAllDepartment() {
+    return this.http.get(`${this.baseUrl}/Department`);
+
+  }
+  getEmployeeByName(firstName: any, lastName?: any) {
+    return this.http.get(`${this.baseUrl}/Employee/get-all-by-name?FirstName=${firstName}&LastName=${lastName}`)
+  }
+  adminUpdateEmployee(userForm: any) {
+    return this.http.put(`${this.baseUrl}/Employee/admin`, userForm)
+  }
+  roleChange(roleForm: any) {
+    return this.http.put(`${this.baseUrl}/Employee/super-admin`, roleForm)
   }
 }

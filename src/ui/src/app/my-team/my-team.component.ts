@@ -1,7 +1,7 @@
-import { Component, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import mermaid from 'mermaid';
-
+import { ToastrService } from 'ngx-toastr';
 import { EmployeeService } from '../service/employee.service';
 import { IEmployeeData } from '../interface/employee-data';
 
@@ -15,7 +15,8 @@ import { IEmployeeData } from '../interface/employee-data';
 export class MyTeamComponent {
 
   @ViewChild('mermaidDiv', { static: false }) mermaidDiv!: ElementRef;
-  constructor(private router: Router, private employeeService: EmployeeService) { }
+  constructor(private router: Router, private employeeService: EmployeeService, private toastr: ToastrService
+  ) { }
   inDate = new Date();
   isDataLoaded: boolean = false;
   employeeData: IEmployeeData[] = [{
@@ -65,7 +66,8 @@ export class MyTeamComponent {
   ngOnInit(): void {
     this.loadEmployeeHierarchy();
     (window as any).onA = (nodeName: string) => {
-      this.router.navigate(['/employee-display']);
+      const nodeId=nodeName.slice(4)
+      this.router.navigate(['/portal/employee-display'], { queryParams: { id: nodeId } });
     };
 
     mermaid.initialize({
@@ -101,25 +103,28 @@ export class MyTeamComponent {
 
   }
   viewTeamHierarchy() {
-    this.employeeService.getMyTeamHierarchy(true).subscribe({
+    const employee = this.employeeService.decodeToken();
+    this.employeeService.getMyTeamHierarchy(true,employee.EmployeeId).subscribe({
       next: (response: any) => {
         if (response) {
           this.employeeDataModal = response;
           this.isDataLoaded = true;
           this.renderMermaidChart();
         } else {
-          alert('No Employee found');
+          this.toastr.error('No Employee found')
+
         }
       },
       error: (error) => {
-        console.error('Error Displaying Hierarchy:', error);
-        alert('An error occurred while displaying hierarchy');
+        this.toastr.error('An error occurred while displaying hierarchy')
+
       },
     });
   }
 
   loadEmployeeHierarchy() {
-    this.employeeService.getMyTeamHierarchy(false).subscribe({
+    const employee = this.employeeService.decodeToken();
+    this.employeeService.getMyTeamHierarchy(false,employee.EmployeeId).subscribe({
       next: (response: any) => {
         if (response) {
           console.log(response)
@@ -127,12 +132,11 @@ export class MyTeamComponent {
           this.isDataLoaded = true;
           this.renderMermaidChart();
         } else {
-          alert('No Employee found');
+          this.toastr.error('No Employee found')
         }
       },
       error: (error) => {
-        console.error('Error Displaying Hierarchy:', error);
-        alert('An error occurred while displaying hierarchy');
+        this.toastr.error('An error occurred while displaying hierarchy')
       },
     });
 

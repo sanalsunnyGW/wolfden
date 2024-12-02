@@ -42,6 +42,7 @@ export class MonthlyReportComponent {
     const year = parseInt(selectedMonth.split('-')[0], 10);
     const month = parseInt(selectedMonth.split('-')[1], 10);
     this.monthNumber=Number(month);
+    console.log(this.monthNumber)
     this.yearNumber=Number(year);
     this.service.checkAttendanceClose(this.monthNumber,this.yearNumber).subscribe(
       (response: ICheckAttencdanceClose) =>{
@@ -49,7 +50,13 @@ export class MonthlyReportComponent {
           this.checkStatus=true;
       }
       else{
+        const currentDate=new Date()
+        const month=currentDate.getMonth();
+        console.log(month)
+        if(month+1==this.monthNumber)
         this.checkClosedStatus=true;
+        else
+        alert(`Sorry,you cant close the attendance of ${this.monthNames[this.monthNumber-1]} on ${this.monthNames[month]}`)
       }
   });  
   }

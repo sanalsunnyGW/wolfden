@@ -11,6 +11,9 @@ namespace WolfDen.Infrastructure.Configuration
             builder.Property(x => x.Id).ValueGeneratedOnAdd().HasColumnName("DailyId");
           
             builder.Property(x=>x.MissedPunch).IsRequired(false);
+
+            builder.HasOne(x => x.Employee).WithMany().HasForeignKey(x => x.EmployeeId);
+
         }
     }
 }

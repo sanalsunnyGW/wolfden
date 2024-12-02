@@ -20,7 +20,7 @@ namespace WolfDen.Application.Requests.Commands.Employees.SuperAdminUpdateEmploy
             using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
             try
             {
-                var user = await _userManager.FindByIdAsync(employee.UserId);
+                User user = await _userManager.FindByIdAsync(employee.UserId);
                 var currentRoles = await _userManager.GetRolesAsync(user);
                 if (currentRoles != null)
                 {

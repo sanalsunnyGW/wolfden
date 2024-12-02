@@ -1,0 +1,23 @@
+
+.custom-btn{
+    background-color: #1e507f;
+    border:none;
+
+
+  }
+  .custom-btn:hover{
+    background-color: darken(#1e507f, 13%);
+    border:none;
+  }
+  .table-container {
+    max-height: 200px; 
+    overflow-y: auto; 
+    overflow-x: hidden; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+  }
+  
+  .table {
+    margin-bottom: 0; 
+  }
+  
