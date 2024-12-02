@@ -46,6 +46,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
 
             for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
+                AttendanceStatus statusId = AttendanceStatus.Absent;
+
                 if (currentDate > today)
                 {
                     break;
@@ -60,6 +62,17 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
 
                 AttendanceStatus statusId = AttendanceStatus.Absent;
 
+                if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    statusId = AttendanceStatus.Weekend;
+                    attendanceHistory.Add(new WeeklySummaryDTO
+                    {
+                        Date = currentDate,
+                        AttendanceStatusId = statusId
+                    });
+                    continue;
+                }
+                
                 DailyAttendence? attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (attendanceRecord is not null)
                 {
@@ -77,6 +90,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
                     else
                     {
                         statusId = AttendanceStatus.IncompleteShift;
+
                     }
                 }
                 else
