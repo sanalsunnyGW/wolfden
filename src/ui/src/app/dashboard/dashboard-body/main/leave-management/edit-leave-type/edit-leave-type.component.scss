@@ -1,0 +1,60 @@
+.editLeaveForm {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  .pForm {
+    display: flex;
+   flex-direction: column;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .form-group label {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #333;
+  }
+  
+  .form-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .form-check-input {
+    width: 50px;
+    height: 20px;
+  }
+  
+  .error {
+    color: red;
+    font-size: 0.9rem;
+  }
+  
+  pre {
+    background-color: #f0f0f0;
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  button {
+    padding: 12px 20px;
+    background-color: #95bce5;
+    color: white;
+    font-size: 1.2rem;
+    justify-content: center;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  

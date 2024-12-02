@@ -8,6 +8,7 @@ using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Approv
 using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.EditLeaveRequest;
 using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.RevokeLeaveRequest;
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetLeaveRequestHistory;
+using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetApprovedNextWeekLeaves;
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetSubordinateLeave;
 
 namespace WolfDen.API.Controllers.LeaveManagement
@@ -24,6 +25,11 @@ namespace WolfDen.API.Controllers.LeaveManagement
             return await _mediator.Send(query,cancellationToken); 
         }
 
+        [HttpGet("next-week/approved")]
+        public async Task<List<LeaveRequestDto>> GetNextWeekApprovedLeaves([FromQuery] GetNextWeekApprovedLeaveQuery query, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(query, cancellationToken);
+        }
         [HttpPost]
         public async Task<bool> ApplyLeaveRequest( [FromBody] AddLeaveRequestCommand command,CancellationToken cancellationToken)
         {
