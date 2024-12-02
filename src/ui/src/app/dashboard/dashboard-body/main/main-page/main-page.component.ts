@@ -1,13 +1,13 @@
 // main-page.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LeaveManagementService } from '../../../../service/leave-management.service';
+import { WolfDenService } from '../../../../service/wolf-den.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ILeaveBalanceList } from '../../../../interface/leave-balance-list-interface';
+import { WeeklyAttendanceComponent } from "../attendance-module/weekly-attendance/weekly-attendance.component";
+import { ItodaysAbsense } from '../../../../interface/itodays-absense';
 
-
-interface Absence {
-  name: string;
-  department: string;
-  reason: string;
-}
 
 interface Holiday {
   date: string;
@@ -52,6 +52,20 @@ export class MainPageComponent implements OnInit {
   ];
 
   
+  //leave balance 
+  leaveManagementService = inject(LeaveManagementService)
+  userService = inject(WolfDenService)
+  destroyRef = inject(DestroyRef)
+  leaveList: ILeaveBalanceList[] = [];
+  todaysAbsences: ItodaysAbsense[]=[];
+  leaveType1: string = '';
+leaveBalance1: number = 0;
+
+leaveType2: string = '';
+leaveBalance2: number = 0;
+
+leaveType3: string = '';
+leaveBalance3: number = 0;
   ngOnInit() {
     this.generateCalendar();
   }

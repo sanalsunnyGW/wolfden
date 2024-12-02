@@ -31,7 +31,7 @@ namespace WolfDen.Application.Requests.Commands.Employees.ResetPassword
                 throw new KeyNotFoundException("Employee not found.");
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == employee.Id, cancellationToken);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == employee.Email, cancellationToken);
             if (user == null)
             {
                 throw new KeyNotFoundException("User not found for the associated employee.");

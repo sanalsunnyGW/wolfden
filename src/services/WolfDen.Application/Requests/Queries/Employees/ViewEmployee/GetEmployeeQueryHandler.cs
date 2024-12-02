@@ -32,7 +32,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.ViewEmployee
                 RFId = employee.RFId,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
-                Email = employee.Id,
+                Email = employee.Email,
                 PhoneNumber = employee.PhoneNumber,
                 DateofBirth = employee.DateofBirth,
                 JoiningDate = employee.JoiningDate,
