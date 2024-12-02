@@ -11,10 +11,10 @@ namespace WolfDen.Application.Requests.Queries.Notifications.GetNotification
         public async Task<List<NotificationDTO>> Handle(GetNotificationQuery request, CancellationToken cancellationToken)
         {
             List<NotificationDTO> notification = await _context.Notifications
-                .Where(x => x.EmployeeId == request.EmployeeId && x.IsRead == false)
+                .Where(x => x.EmployeeId == request.EmployeeId && !x.IsRead)
                 .Select(x=>new NotificationDTO
                 {
-                    NotificationId = x.Id,
+                    NotificationId=x.Id,
                     Message=x.Message,
                     CreatedAt=x.CreatedAt
                 })

@@ -8,7 +8,7 @@
         RestrictedHoliday,
         NormalHoliday,
         WFH,
-        Leave
-        
+        Leave,
+        OngoingShift
     }
 }

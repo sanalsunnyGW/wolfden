@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WolfDen.Application.DTOs.LeaveManagement;
 //using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.InitializeLeaveBalance;
-//using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.UpdateLeaveBalance;
+using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.UpdateLeaveBalance;
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveBalances.GetLeaveBalance;
 
 namespace WolfDen.API.Controllers.LeaveManagement
@@ -19,12 +19,12 @@ namespace WolfDen.API.Controllers.LeaveManagement
             return await _mediator.Send(query, cancellationToken);
         }
 
-        //[HttpPut]
-        //public async Task<bool> UpdateLeaveBalance(CancellationToken cancellationToken)
-        //{
-        //    UpdateLeaveBalanceCommand command = new UpdateLeaveBalanceCommand();
-        //    return await _mediator.Send(command, cancellationToken);
-        //}
+        [HttpPut]
+        public async Task<bool> UpdateLeaveBalance(CancellationToken cancellationToken)
+        {
+            UpdateLeaveBalanceCommand command = new UpdateLeaveBalanceCommand();
+            return await _mediator.Send(command, cancellationToken);
+        }
 
         //[HttpPost]
         //public async Task<bool> InitializeLeaveBalance(int requestId, CancellationToken cancellationToken)

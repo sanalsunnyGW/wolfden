@@ -18,7 +18,6 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
         public async Task<int> Handle(CloseAttendanceCommand request, CancellationToken cancellationToken)
         {
             int minWorkDuration = 360;
-            List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
             List<Employee> employees = await _context.Employees.ToListAsync(cancellationToken);
             DateOnly monthStart = new DateOnly(request.Year, request.Month, 1);
             DateTime currentDat = DateTime.Now;
@@ -52,13 +51,10 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                     }
                     DailyAttendence? attendanceRecord = attendanceRecords.
                         FirstOrDefault(x => x.EmployeeId == employee.Id && x.Date == currentDate);
-                    if (attendanceRecord is not null)
+                    if (attendanceRecord is not null && attendanceRecord.InsideDuration < minWorkDuration)
                     {
-                        if (attendanceRecord.InsideDuration < minWorkDuration)
-                        {
-                            incompleteShiftDays += currentDate.ToString("yyyy-MM-dd") + ",";
-                            incompleteShiftCount++;
-                        }
+                        incompleteShiftDays += currentDate.ToString("yyyy-MM-dd") + ",";
+                        incompleteShiftCount++;
                     }
                     else 
                     {
@@ -72,7 +68,8 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                         }
                     }
                 }
-                LOP lop = new LOP(attendanceClosingDate, employee.Id, lopCount, incompleteShiftCount, lopDays.Substring(0,lopDays.Length-1), incompleteShiftDays.Substring(0,incompleteShiftDays.Length-1));
+                LOP lop = new LOP(attendanceClosingDate, employee.Id, lopCount, incompleteShiftCount, lopDays.Substring(0,lopDays.Length-1),
+                    incompleteShiftDays.Substring(0,incompleteShiftDays.Length-1));
                 await _context.AddAsync(lop);
             }
             DateTime date = new DateTime(request.Year, request.Month, 1);
