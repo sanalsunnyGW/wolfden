@@ -53,6 +53,12 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
                     break;
                 }
 
+                if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    continue; 
+                }
+
+
                 DailyAttendence attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (attendanceRecord is not null)
                 {
