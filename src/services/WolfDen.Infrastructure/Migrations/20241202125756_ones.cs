@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WolfDen.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class holiday : Migration
+    public partial class ones : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
