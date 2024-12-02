@@ -22,7 +22,7 @@ namespace WolfDen.Application.Helpers
                 .FirstOrDefaultAsync(cancellationToken);
             if (manager is not null)
             {
-                managerEmails.Add(manager.Email);
+                managerEmails.Add(manager.Id);
                 List<string> higherManagerEmails = await FindManagerEmailsAsync(manager.ManagerId, cancellationToken);
                 managerEmails.AddRange(higherManagerEmails);
             }

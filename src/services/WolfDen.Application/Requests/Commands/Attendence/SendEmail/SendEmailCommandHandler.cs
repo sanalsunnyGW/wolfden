@@ -31,7 +31,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
         {
             Employee? employee = await _context.Employees
               .Where(e => e.Id == request.EmployeeId).FirstOrDefaultAsync(cancellationToken);
-            string[] receiverEmails = { employee.Email };
+            string[] receiverEmails = { employee.Id };
             List<string> managerEmails = await _emailFinder.FindManagerEmailsAsync(employee.ManagerId, cancellationToken);
             string subject = request.Subject;
             string message = request.Message;

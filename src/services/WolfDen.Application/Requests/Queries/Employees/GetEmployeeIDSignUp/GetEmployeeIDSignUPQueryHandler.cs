@@ -22,7 +22,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeIDSignUp
                 result.status = false;
                 return result;
             }
-            if (employee.Email != null)
+            if (employee.Id != null)
             {
 
                 result.Id = employee.Id;

@@ -22,7 +22,7 @@ namespace WolfDen.Application.Requests.Services
                 employeeDto.Id = employee.Id;
                 employeeDto.EmployeeCode = employee.EmployeeCode;
                 employeeDto.Name = employee.FirstName + " " + employee.LastName;
-                employeeDto.Email = employee.Email;
+                employeeDto.Email = employee.Id;
                 employeeDto.Photo = employee.Photo;
                 employeeDto.Department = employee.Department?.Name;
                 employeeDto.Designation = employee.Designation?.Name;
