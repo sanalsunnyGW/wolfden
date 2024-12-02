@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WolfDen.Application.DTOs.Employees;
-using WolfDen.Application.Requests.Queries.Employees.GetAllDepartment;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Designation
@@ -26,7 +25,7 @@ namespace WolfDen.Application.Requests.Queries.Designation
               .Select(designation => new DesignationDTO
               {
                   Id = designation.Id,
-                  Name = designation.Name
+                  DesignationName = designation.Name
               })
               .ToListAsync(cancellationToken);
 

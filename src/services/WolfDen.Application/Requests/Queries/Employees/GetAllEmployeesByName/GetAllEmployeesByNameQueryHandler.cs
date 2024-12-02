@@ -1,6 +1,8 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.Employees;
+using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName
@@ -8,10 +10,12 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName
     public class GetAllEmployeesByNameQueryHandler : IRequestHandler<GetAllEmployeesByNameQuery, List<EmployeeNameDTO>>
     {
         private readonly WolfDenContext _context;
+        private readonly UserManager<Domain.Entity.User> _userManager;
 
-        public GetAllEmployeesByNameQueryHandler(WolfDenContext context)
+        public GetAllEmployeesByNameQueryHandler(WolfDenContext context, UserManager<Domain.Entity.User> usermanager)
         {
             _context = context;
+            _userManager = usermanager;
         }
 
         public async Task<List<EmployeeNameDTO>> Handle(GetAllEmployeesByNameQuery query, CancellationToken cancellationToken)
@@ -27,17 +31,24 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName
             {
                 employeesQuery = employeesQuery.Where(e => e.LastName.Contains(query.LastName));
             }
+            List<Employee> employees = await employeesQuery.ToListAsync(cancellationToken);
+            List<EmployeeNameDTO> employeeNameDTOs = new List<EmployeeNameDTO>();
 
-            var employees = await employeesQuery
-                .Select(e => new EmployeeNameDTO
+            foreach (var employee in employees)
+            {
+                var user = await _userManager.FindByIdAsync(employee.UserId);
+                var userRole = await _userManager.GetRolesAsync(user);
+                EmployeeNameDTO employeeNameDTO = new EmployeeNameDTO()
                 {
-                    Id = e.Id,
-                    FirstName = e.FirstName,
-                    LastName = e.LastName
-                })
-                .ToListAsync(cancellationToken);
+                    Id = employee.Id,
+                    FirstName = employee.FirstName,
+                    LastName = employee.LastName,
+                    Role = string.Join(", ", userRole)
+                };
+                employeeNameDTOs.Add(employeeNameDTO);
 
-            return employees;
+            }
+            return employeeNameDTOs;
         }
     }
 }

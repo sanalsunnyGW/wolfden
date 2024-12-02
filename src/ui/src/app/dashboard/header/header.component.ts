@@ -16,6 +16,9 @@ import { INotificationForm } from '../../interface/i-notification-form';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+  loginRole: string = '';
+
+
   constructor(
     private router: Router,
     public userService: WolfDenService,
