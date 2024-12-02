@@ -8,7 +8,8 @@
         RestrictedHoliday,
         NormalHoliday,
         WFH,
-        Leave
+        Leave,
+        Weekend
         
     }
 }
