@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.Drawing.Text;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.Attendence;
 using WolfDen.Domain.Entity;
@@ -16,6 +17,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
         }
         public async Task<MonthlyReportDTO> Handle(MonthlyReportQuery request, CancellationToken cancellationToken)
         {
+            
             int minWorkDuration = 360;
 
             DateOnly monthStart = new DateOnly(request.Year, request.Month, 1);
@@ -50,29 +52,30 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
             List<LeaveRequest> leaveRequests = await _context.LeaveRequests
                 .Where(x => x.EmployeeId == request.EmployeeId &&
                             x.FromDate <= monthEnd && x.ToDate >= monthStart &&
-                            x.LeaveRequestStatusId == LeaveRequestStatus.Approved)
+                            x.LeaveRequestStatusId == LeaveRequestStatus.Approved).Include(x=>x.LeaveType)
                 .ToListAsync(cancellationToken);
-
-            LOP? lop =await _context.LOP
-                .Where(x=>x.EmployeeId==request.EmployeeId && x.AttendanceClosedDate.Month==request.Month)
-                .FirstOrDefaultAsync(cancellationToken);
-            if (lop is not null)
-            {
-                summaryDto.IncompleteShiftDays = lop.IncompleteShiftDays;
-                summaryDto.IncompleteShift = lop.NoOfIncompleteShiftDays;
-                summaryDto.Absent = lop.LOPDaysCount;
-                summaryDto.AbsentDays = lop.LOPDays;
-            }
-            List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
 
             for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
+                if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    continue;
+                }
+                if (currentDate >= today)
+                {
+                    break;
+                }
                 DailyAttendence? attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (attendanceRecord is not null)
                 {
                     if (attendanceRecord.InsideDuration >= minWorkDuration)
                     {
                         summaryDto.Present++;
+                    }
+                    else
+                    {
+                        summaryDto.IncompleteShift++;
+                        summaryDto.IncompleteShiftDays += currentDate.ToString("yyyy-MM-dd") + ",";
                     }
                 }
                 else
@@ -90,15 +93,10 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                             LeaveRequest? leaveRequestForHoliday = leaveRequests
                                 .FirstOrDefault(x => x.FromDate <= currentDate && x.ToDate >= currentDate);
 
-                            if (leaveRequestForHoliday is not null)
+                            if (leaveRequestForHoliday is not null && leaveRequestForHoliday.LeaveType.LeaveCategoryId is LeaveCategory.RestrictedHoliday)
                             {
-                                LeaveType? leaveType = leaveTypes.FirstOrDefault(x => x.Id == leaveRequestForHoliday.TypeId);
-
-                                if (leaveType is not null && leaveType.LeaveCategoryId is LeaveCategory.RestrictedHoliday)
-                                {
-                                    summaryDto.Holiday++;
-                                    summaryDto.RestrictedHolidays += currentDate.ToString("yyyy-MM-dd") + ",";
-                                }
+                                summaryDto.Holiday++;
+                                summaryDto.RestrictedHolidays += currentDate.ToString("yyyy-MM-dd") + ",";
                             }
                         }
                     }
@@ -106,25 +104,34 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                     {
                         LeaveRequest? leaveRequest = leaveRequests
                             .FirstOrDefault(x => x.FromDate <= currentDate && x.ToDate >= currentDate);
-                        if (leaveRequest is not null)
+                        if (leaveRequest is not null && leaveRequest.LeaveType.LeaveCategoryId is LeaveCategory.WorkFromHome)
                         {
-                            LeaveType? leaveType = leaveTypes.FirstOrDefault(x => x.Id == leaveRequest.TypeId);
-                            if (leaveType is not null && leaveType.LeaveCategoryId is LeaveCategory.WorkFromHome)
-                            {
-                                summaryDto.WFH++;
-                                summaryDto.WFHDays += currentDate.ToString("yyyy-MM-dd") + ",";
-                            }
-                            else
-                            {
-                                summaryDto.Leave++;
-                                summaryDto.LeaveDays += currentDate.ToString("yyyy-MM-dd") + ",";
-                            }
+                            summaryDto.WFH++;
+                            summaryDto.WFHDays += currentDate.ToString("yyyy-MM-dd") + ",";
                         }
-                        
+                        else if(leaveRequest is not null)
+                        {
+                            summaryDto.Leave++;
+                            summaryDto.LeaveDays += currentDate.ToString("yyyy-MM-dd") + ",";
+                        }
+                        else
+                        {
+                            summaryDto.Absent++;
+                            summaryDto.AbsentDays += currentDate.ToString("yyyy-MM-dd") + ",";
+                        }
                     }
                 }
             }
+            summaryDto.AbsentDays = update(summaryDto.AbsentDays);
+            summaryDto.IncompleteShiftDays = update(summaryDto.IncompleteShiftDays);
+            summaryDto.LeaveDays = update(summaryDto.LeaveDays);
+            summaryDto.WFHDays = update(summaryDto.WFHDays);
             return summaryDto;
+        }
+        private string update(string days)
+        {
+            string updatedDays = days.Length > 0 ? days.Substring(0, days.Length - 1)  : " ";
+            return updatedDays;
         }
     }
 }

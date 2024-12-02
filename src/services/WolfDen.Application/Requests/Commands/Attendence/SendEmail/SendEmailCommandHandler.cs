@@ -7,6 +7,7 @@ using sib_api_v3_sdk.Model;
 using WolfDen.Application.Helpers;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
+using WolfDen.Infrastructure.Migrations;
 
 
 namespace WolfDen.Application.Requests.Commands.Attendence.Email

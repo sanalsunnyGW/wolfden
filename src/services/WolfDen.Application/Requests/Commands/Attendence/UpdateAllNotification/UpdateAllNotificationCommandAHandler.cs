@@ -11,7 +11,8 @@ namespace WolfDen.Application.Requests.Commands.Attendence.UpdateAllNotification
         public async Task<bool> Handle(UpdateAllNotificationCommand request, CancellationToken cancellationToken)
         {
             List<Notification> notifications = await _context.Notifications
-                .Where(x => x.EmployeeId == request.EmployeeId && x.IsRead==false).ToListAsync(cancellationToken);
+                .Where(x => x.EmployeeId == request.EmployeeId && !x.IsRead)
+                .ToListAsync(cancellationToken);
 
             foreach (Notification notification in notifications)
             {

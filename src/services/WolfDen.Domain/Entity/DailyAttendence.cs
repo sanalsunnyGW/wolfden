@@ -13,13 +13,12 @@
         public string? MissedPunch { get; private set; }
         public DateTime? CreatedAt { get; private set; }
         public bool? EmailSent { get;private set; }
-
-
+        public virtual Employee Employee { get; private set; }
         private DailyAttendence()
         {
 
         }
-        public DailyAttendence(int employeeId, DateOnly date, DateTimeOffset arrivalTime, DateTimeOffset departureTime, int insideDuration, int outsideDuration, string missedPunch, bool emailSent)
+        public DailyAttendence(int employeeId, DateOnly date, DateTimeOffset arrivalTime, DateTimeOffset departureTime, int insideDuration, int outsideDuration, string missedPunch,Employee employee)
         {
             EmployeeId = employeeId;
             Date = date;
@@ -29,8 +28,7 @@
             OutsideDuration = outsideDuration;
             MissedPunch = missedPunch;
             CreatedAt = DateTime.Now;
-            EmailSent = emailSent;
-
+            Employee = employee;
         }
         public void Update()
         {
