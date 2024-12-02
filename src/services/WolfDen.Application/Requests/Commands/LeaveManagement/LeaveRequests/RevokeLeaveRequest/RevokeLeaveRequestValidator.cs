@@ -6,7 +6,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Re
     {
         public RevokeLeaveRequestValidator()
         {
-            RuleFor(x => x.Id).NotEmpty().WithMessage("Leave Request Id required");
+            RuleFor(x => x.LeaveRequestId).NotEmpty().WithMessage("Leave Request Id required");
         }
     }
 }

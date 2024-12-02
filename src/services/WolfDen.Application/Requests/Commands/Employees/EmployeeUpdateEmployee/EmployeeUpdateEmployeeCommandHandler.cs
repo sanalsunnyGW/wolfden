@@ -26,10 +26,10 @@ namespace WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee
             var result = await _validator.ValidateAsync(request, cancellationToken);
             if (!result.IsValid)
             {
-                var errors = string.Join(", ", result.Errors.Select(e => e.ErrorMessage));
+                string errors = string.Join(", ", result.Errors.Select(e => e.ErrorMessage));
                 throw new ValidationException($"Validation failed: {errors}");
             }
-            var employee = await _context.Employees.FindAsync(request.Id, cancellationToken);
+            Employee employee = await _context.Employees.FindAsync(request.Id, cancellationToken);
             if (employee == null)
             {
                 return false;
@@ -38,10 +38,10 @@ namespace WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee
             using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
             try
             {
-                var user = await _userManager.FindByNameAsync(employee.RFId);
+                User user = await _userManager.FindByNameAsync(employee.RFId);
                 user.SetEmailPassword(request.Email, request.Password, _passwordHasher);
                 var updateResult = await _userManager.UpdateAsync(user);
-                employee.EmployeeUpdateEmployee(request.FirstName, request.LastName, request.DateofBirth, request.Email, request.PhoneNumber, request.Gender, request.Address, request.Country, request.State, request.Photo, user.Id);
+                employee.EmployeeUpdateEmployee(request.FirstName, request.LastName, request.DateofBirth, request.Email, request.PhoneNumber, request.Gender, request.Address, request.Country, request.State, request.Photo);
                 _context.Employees.Update(employee);
                 await transaction.CommitAsync(cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);

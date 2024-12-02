@@ -2,9 +2,10 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
-import { IEditleave } from '../../../../../interface/edit-leave-application-interface';
+import {  IEditleaveFormControl } from '../../../../../interface/edit-leave-application-interface';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-edit-leave-request',
@@ -20,10 +21,13 @@ export class EditLeaveRequestComponent implements OnInit {
   leaveManagement = inject(LeaveManagementService)
   leaveType : Array<IGetLeaveTypeIdAndname> = []
   destroyRef= inject(DestroyRef);
+  router = inject(ActivatedRoute)
+  id =  this.router.snapshot.paramMap.get('leaveRequestId')
+  leaveRequestId = this.id ? Number(this.id) : null;
 
   constructor(){
-    this.editLeave = this.fb.group<IEditleave>({
-      leaveRequestId : new FormControl(2),
+    this.editLeave = this.fb.group<IEditleaveFormControl>({
+      leaveRequestId : new FormControl(this.leaveRequestId),
       typeId : new FormControl(null,Validators.required),
       halfDay : new FormControl(null),
       fromDate : new FormControl(null,Validators.required),
