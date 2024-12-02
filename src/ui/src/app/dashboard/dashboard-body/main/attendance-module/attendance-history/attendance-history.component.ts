@@ -66,7 +66,7 @@ status = [
   { id: 5, name: 'Normal Holiday' },
   { id: 6, name: 'WFH' },
   { id: 7, name: 'Leave' },
-  { id: 8, name:'Weekend'}
+  { id: 9, name:'Weekend'}
 ];
 
 fetchHistory(){
@@ -98,7 +98,7 @@ getStatusClass(statusId: number): string {
     case 5: return 'status-normal-holiday';
     case 6: return 'status-wfh';
     case 7: return 'status-leave';
-    case 8: return 'status-weekend';
+    case 9: return 'status-weekend';
     default: return 'status-unknown';
   }
 }

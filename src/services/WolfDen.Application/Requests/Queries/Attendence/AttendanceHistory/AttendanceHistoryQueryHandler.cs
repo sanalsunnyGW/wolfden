@@ -38,7 +38,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
 
             List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
 
-            for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
+            for (DateOnly currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
                 AttendanceStatus statusId = AttendanceStatus.Absent;
 
@@ -60,16 +60,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
                 DailyAttendence? attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (attendanceRecord is not null)
                 {
-
-                    if (attendanceRecord.InsideDuration >= minWorkDuration)
-                    {
-                        statusId = AttendanceStatus.Present;
-                    }
-                    else
-                    {
-                        statusId = AttendanceStatus.IncompleteShift;
-
-                    }
+                    statusId = attendanceRecord.InsideDuration >= minWorkDuration ? AttendanceStatus.Present: AttendanceStatus.IncompleteShift;
                 }
                 else
                 {

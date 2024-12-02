@@ -9,7 +9,7 @@
         NormalHoliday,
         WFH,
         Leave,
+        OngoingShift,
         Weekend
-        
     }
 }

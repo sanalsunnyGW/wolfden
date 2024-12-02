@@ -46,7 +46,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
 
             List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
 
-            for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
+            for (DateOnly currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
                 if (currentDate > today) 
                 {
