@@ -20,7 +20,7 @@ namespace WolfDen.Application.Requests.Services
                     EmployeeCode = employee.EmployeeCode,
                     FirstName = employee.FirstName,
                     LastName = employee.LastName,
-                    Email = employee.Email,
+                    Email = employee.Id,
                     PhoneNumber = employee.PhoneNumber,
                     DateofBirth = employee.DateofBirth,
                     DepartmentId = employee.DepartmentId,

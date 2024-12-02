@@ -39,7 +39,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
                    EmployeeCode = e.EmployeeCode,
                    FirstName = e.FirstName,
                    LastName = e.LastName,
-                   Email = e.Email,
+                   Email = e.Id,
                    PhoneNumber = e.PhoneNumber,
                    DateofBirth = e.DateofBirth,
                    JoiningDate = e.JoiningDate,

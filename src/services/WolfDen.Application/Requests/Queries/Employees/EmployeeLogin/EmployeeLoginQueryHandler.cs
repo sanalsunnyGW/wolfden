@@ -36,7 +36,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeLogin
                     {
                         new Claim("EmployeeId",employee.Id.ToString()),
                         new Claim(ClaimTypes.Role, rolesString),
-                        new Claim("Email",employee.Email.ToString()),
+                        new Claim("Email",employee.Id.ToString()),
                         new Claim("FirstName",employee.FirstName.ToString())
 
                     }),

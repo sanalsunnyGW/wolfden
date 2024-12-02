@@ -15,6 +15,9 @@ using WolfDen.Infrastructure.Data;
 using WolfDen.Application.Requests.Commands.Employees.SuperAdminUpdateEmployee;
 using WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName;
 using WolfDen.Application.Requests.Commands.Employees.SyncEmployee;
+using Microsoft.AspNetCore.Identity.Data;
+using WolfDen.Application.Requests.Commands.Employees.ResetPassword;
+using System.ComponentModel.DataAnnotations;
 
 namespace WolfDen.API.Controllers.Employee
 {
@@ -31,8 +34,6 @@ namespace WolfDen.API.Controllers.Employee
         {
             return await _mediator.Send(new SyncEmployeeCommand());
         }
-
-
 
         [HttpPost]
         public async Task<int> AddEmployee([FromBody] AddEmployeecommand command, CancellationToken cancellationToken)
@@ -148,5 +149,10 @@ namespace WolfDen.API.Controllers.Employee
 
         }
 
+        [HttpPatch("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
+        {
+            return Ok(await _mediator.Send(command));
+        }
     }
 }
