@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { ILeaveBalanceList } from '../interface/leave-balance-list-interface';
 import { ILeaveRequestHistoryResponse } from '../interface/leave-request-history';
 import { IGetLeaveTypeIdAndname } from '../interface/get-leave-type-interface';
@@ -13,12 +12,9 @@ import { ISubordinateLeavePaginationReceive } from '../interface/subordinate-lea
 import { WolfDenService } from './wolf-den.service';
 import { IRevokeLeave } from '../interface/revoke-leave';
 import { IAddNewLeaveType } from '../interface/Add-New-Leave-Type-Interface';
-import { Observable } from 'rxjs';
 import { ILeaveUpdate, IUpdateLeaveSetting } from '../interface/update-leave-setting';
 import { IAddLeaveByAdminForEmployee } from '../interface/add-leave-by-admin-for-employee';
-import { IEditLeaveType } from '../interface/edit-leave-type';
-
-
+import { IEditLeaveType} from '../interface/edit-leave-type';
 
 @Injectable({
   providedIn: 'root'
@@ -29,14 +25,20 @@ export class LeaveManagementService {
   constructor() { }
   private http = inject(HttpClient);
   private userService= inject(WolfDenService);
-  id= this.userService.userId
+  id= this.userService.userId;
   private baseUrl = environment.leave;
+  
   getLeaveBalance(id: number) {
     return this.http.get<Array<ILeaveBalanceList>>(`${this.baseUrl}/leave-balance?EmployeeId=${id}`);
   }
 
-  getLeaveRequestHistory(id: number, pageNumber: number, pageSize: number): Observable<ILeaveRequestHistoryResponse> {
-    return this.http.get<ILeaveRequestHistoryResponse>(`${this.baseUrl}/leave-request?EmployeeId=${id}&PageNumber=${pageNumber}&PageSize=${pageSize}`); 
+  getLeaveRequestHistory(id: number, pageNumber: number, pageSize: number, selectedStatus: number|null) {
+    if (selectedStatus!=null) {
+      return this.http.get<ILeaveRequestHistoryResponse>(`${this.baseUrl}/leave-request?EmployeeId=${id}&PageNumber=${pageNumber}&PageSize=${pageSize}&LeaveStatusId=${selectedStatus}`);
+    }
+    else {
+      return this.http.get<ILeaveRequestHistoryResponse>(`${this.baseUrl}/leave-request?EmployeeId=${id}&PageNumber=${pageNumber}&PageSize=${pageSize}`);
+    }
   }
 
     addNewLeaveType(newType : IAddNewLeaveType) {
@@ -57,7 +59,6 @@ export class LeaveManagementService {
       return this.http.get<Array<IGetLeaveTypeIdAndname>>(`${this.baseUrl}/leave-type`)
     }
 
- 
     applyLeaveRequest(leaveApplication : ILeaveApplication){
       leaveApplication.empId = this.id;
       return this.http.post<boolean>(`${this.baseUrl}/leave-request`,leaveApplication)
@@ -82,9 +83,8 @@ export class LeaveManagementService {
       return this.http.post<boolean>(`${this.baseUrl}/leave-request/leave-for-employee-by-admin`,leaveByAdminforEmployee)
     } 
     
-
-    editLeaveType(editLeaveType: FormGroup<IEditLeaveType>) {
-      return this.http.put(`${this.baseUrl}/leave-type`, editLeaveType.value);
+    editLeaveType(editLeaveType: IEditLeaveType) {
+      return this.http.put(`${this.baseUrl}/leave-type`, editLeaveType);
     }
 
     updateLeaveBalance() {

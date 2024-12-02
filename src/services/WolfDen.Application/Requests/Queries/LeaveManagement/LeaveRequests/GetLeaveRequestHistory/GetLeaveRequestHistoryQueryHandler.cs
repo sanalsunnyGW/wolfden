@@ -14,19 +14,12 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
         {
             int pageNumber = request.PageNumber > 0 ? request.PageNumber : 0;
             int pageSize = request.PageSize > 0 ? request.PageSize : 1;
-
-            int totalCount = await _context.LeaveRequests
-                .Where(x => x.EmployeeId.Equals(request.EmployeeId))
-                .CountAsync(cancellationToken);
-
-            int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+           int totalCount = 0;
 
             List<LeaveRequestDto> leaveRequestList = await _context.LeaveRequests
                 .Where(x => x.EmployeeId.Equals(request.EmployeeId))
                 .Include(x => x.LeaveType)
                 .Include(x => x.Employee)
-                .Skip((pageNumber) * pageSize)
-                .Take(pageSize)
                 .OrderByDescending(x => x.Id)
                 .Select(leaveRequest => new LeaveRequestDto
                 {
@@ -42,10 +35,23 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
                 })
                 .ToListAsync(cancellationToken);
 
+
+            if (request.LeaveStatusId.HasValue)
+            {
+                leaveRequestList = leaveRequestList.Where(x => x.LeaveRequestStatusId.Equals(request.LeaveStatusId)).ToList();
+            }
+
+            totalCount = leaveRequestList.Count();
+
+
+            List<LeaveRequestDto> leaveRequestListDisplay= leaveRequestList
+                                                                .Skip(pageNumber * pageSize)
+                                                                .Take(pageSize).ToList();
+
             return new LeaveRequestHistoryResponseDto
             {
-                LeaveRequests = leaveRequestList,
-                TotalPages = totalPages,
+                LeaveRequests = leaveRequestListDisplay,
+                TotalPages = totalCount,
             };
         }
     }
