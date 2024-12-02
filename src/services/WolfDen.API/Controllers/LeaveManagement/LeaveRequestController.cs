@@ -25,8 +25,8 @@ namespace WolfDen.API.Controllers.LeaveManagement
             return await _mediator.Send(query,cancellationToken); 
         }
 
-        [HttpGet("on-leave")]
-        public async Task<List<LeaveRequestDto>> GetApprovedLeaves([FromQuery] GetNextWeekApprovedLeaveQuery query, CancellationToken cancellationToken)
+        [HttpGet("next-week/approved")]
+        public async Task<List<LeaveRequestDto>> GetNextWeekApprovedLeaves([FromQuery] GetNextWeekApprovedLeaveQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
         }

@@ -32,8 +32,8 @@ export class LeaveManagementService {
     return this.http.get<Array<ILeaveBalanceList>>(`${this.baseUrl}/leave-balance?EmployeeId=${id}`);
   }
 
-  getLeaveRequestHistory(id: number, pageNumber: number, pageSize: number, selectedStatus: number) {
-    if (selectedStatus > 0) {
+  getLeaveRequestHistory(id: number, pageNumber: number, pageSize: number, selectedStatus: number|null) {
+    if (selectedStatus!=null) {
       return this.http.get<ILeaveRequestHistoryResponse>(`${this.baseUrl}/leave-request?EmployeeId=${id}&PageNumber=${pageNumber}&PageSize=${pageSize}&LeaveStatusId=${selectedStatus}`);
     }
     else {

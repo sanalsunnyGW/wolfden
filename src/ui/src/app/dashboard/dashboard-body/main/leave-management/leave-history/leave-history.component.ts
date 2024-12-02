@@ -22,6 +22,7 @@ import { WolfDenService } from '../../../../../service/wolf-den.service';
 export class LeaveHistoryComponent implements OnInit {
 
   userService = inject(WolfDenService);
+  userId=1;
   leaveRequestList: ILeaveRequestHistory[] = [];
   leaveManagementService = inject(LeaveManagementService);
   pageNumber: number = 0;
@@ -32,7 +33,8 @@ export class LeaveHistoryComponent implements OnInit {
   destroyRef = inject(DestroyRef);
   indexValue: number = (this.pageNumber * this.pageSize) - this.pageSize + 1;
   selectedDescription: string | null = null;
-  selectedStatus: number = 0;
+  selectedStatus: number|null = null;
+  revokeLeave: IRevokeLeave = {} as IRevokeLeave
 
   leaveStatusId =
     [
@@ -41,7 +43,6 @@ export class LeaveHistoryComponent implements OnInit {
       { id: 3, name: 'Rejected' },
       { id: 4, name: 'Deleted' }
     ];
-  revokeLeave: IRevokeLeave = {} as IRevokeLeave
 
   constructor() { }
 

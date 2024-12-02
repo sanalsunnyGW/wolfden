@@ -16,8 +16,6 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
             int pageSize = request.PageSize > 0 ? request.PageSize : 1;
            int totalCount = 0;
 
-            List<LeaveRequestDto> filteredData=new List<LeaveRequestDto> ();
-
             List<LeaveRequestDto> leaveRequestList = await _context.LeaveRequests
                 .Where(x => x.EmployeeId.Equals(request.EmployeeId))
                 .Include(x => x.LeaveType)
@@ -40,17 +38,13 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
 
             if (request.LeaveStatusId.HasValue)
             {
-                filteredData = leaveRequestList.Where(x => x.LeaveRequestStatusId.Equals(request.LeaveStatusId)).ToList();
-            }
-            else
-            {
-                filteredData = leaveRequestList;
+                leaveRequestList = leaveRequestList.Where(x => x.LeaveRequestStatusId.Equals(request.LeaveStatusId)).ToList();
             }
 
-            totalCount = filteredData.Count();
+            totalCount = leaveRequestList.Count();
 
 
-            List<LeaveRequestDto> leaveRequestListDisplay= filteredData
+            List<LeaveRequestDto> leaveRequestListDisplay= leaveRequestList
                                                                 .Skip(pageNumber * pageSize)
                                                                 .Take(pageSize).ToList();
 
