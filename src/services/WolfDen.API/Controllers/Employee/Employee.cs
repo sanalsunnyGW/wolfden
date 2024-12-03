@@ -102,7 +102,6 @@ namespace WolfDen.API.Controllers.Employee
 
 
         }
-        [AllowAnonymous]
         [HttpGet("check-password")]
         public async Task<ActionResult<bool>> CheckPassword([FromQuery] CheckEmployeePasswordQuery query, CancellationToken cancellationToken)
         {
