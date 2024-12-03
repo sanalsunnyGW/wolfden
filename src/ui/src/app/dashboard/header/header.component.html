@@ -18,7 +18,8 @@
       <ul class="dropdown-menu" [class.show]="isDropdownOpen">
         <li><a routerLink="/portal/profile">Profile</a></li>
         <li><a (click)="onLogout()">LogOut</a></li>
-        @if(loginRole == "SuperAdmin")
+        <li><a routerLink="/user/reset-password">Reset Password</a></li>
+        @if(userService.role == "SuperAdmin")
         {
         <li><a routerLink="/portal/admin-dashboard">Settings</a></li>
         }

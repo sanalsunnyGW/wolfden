@@ -19,7 +19,7 @@ export class WolfDenService {
   router=inject(Router)
 
   private baseUrl = environment.apiUrl;
-  public userId: number = 5;
+  public userId: number = 0;
   public role : string = "";
   public firstName: string = ""; 
 
@@ -29,6 +29,7 @@ export class WolfDenService {
       const payload = this.emp.decodeToken();
       if(payload){
       this.userId = parseInt(payload.EmployeeId || 0, 10);
+      console.log(this.userId)
       this.role = (payload.Role||"");
       this.firstName = (payload.FirstName || 'welcome back');
       }else {
@@ -37,7 +38,7 @@ export class WolfDenService {
       }
     }
     else{
-      this.toastr.error('No token found', 'Error');
+      this.toastr.error('login');
       this.router.navigate(['/user/login']); 
     }
   }
@@ -71,7 +72,6 @@ export class WolfDenService {
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({ 'Content-Type': 'application/json' });
-
   }
 
   getEmployeeSignUp(employeeCode: number, rfId: string): Observable<{ id: number, status: boolean }> {
@@ -137,6 +137,16 @@ export class WolfDenService {
     const url = `${this.baseUrl}/api/Notification/read`;
     const payload = { notificationId }; 
     return this.http.patch<any>(url, payload, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    });
+  }
+
+  resetPassword(id: number, password:string): Observable<boolean> {
+    const url = `${this.baseUrl}/api/Employee/reset-password`;
+    const payload = { id,password }; 
+    return this.http.patch<boolean>(url, payload, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),

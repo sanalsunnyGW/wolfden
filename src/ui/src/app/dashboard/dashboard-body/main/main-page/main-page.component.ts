@@ -6,7 +6,7 @@ import { WolfDenService } from '../../../../service/wolf-den.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ILeaveBalanceList } from '../../../../interface/leave-balance-list-interface';
 import { WeeklyAttendanceComponent } from "../attendance-module/weekly-attendance/weekly-attendance.component";
-import { ItodaysAbsense } from '../../../../interface/itodays-absense';
+import { ItodaysAbsence } from '../../../../interface/itodays-absense';
 
 
 interface Holiday {
@@ -46,7 +46,7 @@ export class MainPageComponent implements OnInit {
   userService = inject(WolfDenService)
   destroyRef = inject(DestroyRef)
   leaveList: ILeaveBalanceList[] = [];
-  todaysAbsences: ItodaysAbsense[]=[];
+  todaysAbsences: ItodaysAbsence[]=[];
   leaveType1: string = '';
 leaveBalance1: number = 0;
 
@@ -66,7 +66,6 @@ leaveBalance3: number = 0;
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((data) => {
         this.leaveList = data;
-        console.log(this.leaveList);
         if (this.leaveList.length > 2) {
           // Leave type 1        
             this.leaveType1 = this.leaveList[0].name;

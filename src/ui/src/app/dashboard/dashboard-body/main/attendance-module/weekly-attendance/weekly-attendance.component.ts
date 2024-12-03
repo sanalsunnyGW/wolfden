@@ -18,12 +18,9 @@ Chart.register(...registerables);
   styleUrl: './weekly-attendance.component.scss'
 })
 export class WeeklyAttendanceComponent {
-  isDashboardRoute = false;
-
+  currentRoute: string;
   constructor(private router: Router) {
-    this.router.events.subscribe(() => {
-      this.isDashboardRoute = this.router.url === '/portal/dashboard';
-    });
+    this.currentRoute = this.router.url;
   }
   createChart() {
     {

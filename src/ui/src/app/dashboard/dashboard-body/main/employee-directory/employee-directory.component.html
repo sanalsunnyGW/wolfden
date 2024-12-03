@@ -52,28 +52,31 @@
       <!-- Employee List -->
       @if(!isLoading){
         <div class="grid flex gap-4">
-          <div *ngFor="let employee of employeesPagecount.employeeDirectoryDTOs" 
-               class="card border-dark mb-3"
-               style="max-width: 40rem;">
-            <div class="card-header">
-              <strong>Employee Code:</strong> {{employee.employeeCode || 'N/A'}}
-            </div>
-            <div class="card-body text-dark">
-              <h5 class="card-title">{{employee.firstName}} {{employee.lastName}}</h5>
-              <p class="card-text">
-                <strong>Designation:</strong> {{employee.designationName}}
-              </p>
-              <p class="card-text">
-                <strong>Department:</strong> {{employee.departmentName}}
-              </p>
-              <p class="card-text">
-                <strong>Email:</strong> {{employee.email}}
-              </p>
-              <p class="card-text">
-                <strong>Contact:</strong> {{employee.phoneNumber}}
-              </p>
-            </div>
-          </div>
+          @for(employee of employeesPagecount.employeeDirectoryDTOs; track employee){
+            <div 
+            class="card border-dark mb-3"
+            style="max-width: 40rem;">
+         <div class="card-header">
+           <strong>Employee Code:</strong> {{employee.employeeCode || 'N/A'}}
+         </div>
+         <div class="card-body text-dark">
+           <h5 class="card-title">{{employee.firstName}} {{employee.lastName}}</h5>
+           <p class="card-text">
+             <strong>Designation:</strong> {{employee.designationName}}
+           </p>
+           <p class="card-text">
+             <strong>Department:</strong> {{employee.departmentName}}
+           </p>
+           <p class="card-text">
+             <strong>Email:</strong> {{employee.email}}
+           </p>
+           <p class="card-text">
+             <strong>Contact:</strong> {{employee.phoneNumber}}
+           </p>
+         </div>
+       </div>
+          }
+
         </div>
 
         <!-- Empty State -->

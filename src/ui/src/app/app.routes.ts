@@ -31,6 +31,7 @@ import { SubordinateLeaveRequestComponent } from './dashboard/dashboard-body/mai
 import { EditLeaveRequestComponent } from './dashboard/dashboard-body/main/leave-management/edit-leave-request/edit-leave-request.component';
 import { AddLeaveByAdminForEmployeesComponent } from './dashboard/dashboard-body/main/leave-management/add-leave-by-admin-for-employees/add-leave-by-admin-for-employees.component';
 import { AttendanceHistoryComponent } from './dashboard/dashboard-body/main/attendance-module/attendance-history/attendance-history.component';
+import { ResetPasswordComponent } from './user/reset-password/reset-password.component';
 
 export const routes: Routes = [
     {
@@ -44,6 +45,7 @@ export const routes: Routes = [
             { path: 'check-user', component: CheckUserComponent },
             { path: 'sign-in', component: SigninComponent },
             { path: 'login', component: LoginComponent },
+            {path:'reset-password',component:ResetPasswordComponent}
         ]
     },
 
@@ -58,7 +60,6 @@ export const routes: Routes = [
              {path:'employee-directory',component: EmployeeDirectoryComponent,canActivate: [guardsGuard]},
              {path:'leave-dashboard',component:LeaveDashboardComponent,canActivate: [guardsGuard]},
             {path:'leave-request-history',component:LeaveHistoryComponent,canActivate: [guardsGuard]},
-            { path: 'main-page', component: MainPageComponent },
             { path: 'employee-directory', component: EmployeeDirectoryComponent },
             { path: 'leave-dashboard', component: LeaveDashboardComponent },
             { path: 'leave-request-history', component: LeaveHistoryComponent },

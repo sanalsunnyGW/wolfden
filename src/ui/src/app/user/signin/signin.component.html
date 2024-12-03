@@ -4,7 +4,7 @@
                 <input class="form-control bg-body-secondary" placeholder="First Name" formControlName="firstName">
 
                 @if (hasDisplayableError('firstName') && userForm.controls['firstName'].hasError('required')) {
-                    <div class="error-feedback">
+                    <div class="error-feedback text-danger">
                     Please enter your first name
                     </div>
                 }
@@ -13,7 +13,7 @@
                 <input class="form-control bg-body-secondary" placeholder="Last Name" formControlName="lastName">
 
                 @if (hasDisplayableError('lastName') && userForm.controls['lastName'].hasError('required')) {
-                <div class="error-feedback">
+                <div class="error-feedback text-danger">
                     Please enter your last name
                 </div>
                 }
@@ -23,7 +23,7 @@
                 <input class="form-control bg-body-secondary" placeholder="Email" formControlName="email">
         
                 @if (hasDisplayableError('email') && userForm.controls['email'].hasError('required')) {
-                <div class="error-feedback">
+                <div class="error-feedback text-danger">
                     Please enter your email
                 </div>
                 }
@@ -33,7 +33,7 @@
                 <input type="password" class="form-control bg-body-secondary" placeholder="Password" formControlName="password">
         
                 @if (hasDisplayableError('password')) {
-                <div class="error-feedback">
+                <div class="error-feedback text-danger">
         
                     @if (userForm.controls['password'].hasError('required')) {
                     <div>
@@ -62,7 +62,7 @@
                     formControlName="confirmPassword">
         
                 @if (hasDisplayableError('confirmPassword') && userForm.controls['confirmPassword'].hasError('passwordMismatch')) {
-                <div class="error-feedback">
+                <div class="error-feedback text-danger">
                     Password doesn't match
                 </div>
                 }
@@ -73,11 +73,27 @@
                 <input class="form-control bg-body-secondary" placeholder="Mobile no" formControlName="phoneNumber">
         
                 @if (hasDisplayableError('phoneNumber') && userForm.controls['phoneNumber'].hasError('required')) {
-                <div class="error-feedback">
+                <div class="error-feedback text-danger">
                     Please enter your mobile number
                 </div>
                 }
             </div>
+            
+            <!-- address -->
+            <div class="mb-3 ">
+                <input class="form-control bg-body-secondary" placeholder="Adress" formControlName="address">            
+            </div>
+            <div class="row">
+                <div class="mb-3 col-6">
+                    <input class="form-control bg-body-secondary" placeholder="State" formControlName="state">            
+                </div>
+
+                <div class="mb-3 col-6">
+                    <input class="form-control bg-body-secondary" placeholder="Country" formControlName="country">            
+                </div>
+            </div>
+
+
             <div class="row">
                 <div class="mb-3 col-6">
                     <mat-form-field appearance="fill" class="w-100">
@@ -98,12 +114,16 @@
                       </mat-select>
                     </mat-form-field>
                     @if (hasDisplayableError('gender') && userForm.controls['email'].hasError('required')) {
-                        <div>
+                        <div text-danger>
                             Please select your gender
                           </div>
                     }
                  
                   </div>
+            </div>
+            
+            <div class="mb-3">
+                <input class="form-control" type="file" formControlName="photo"  placeholder="Upload Profile image" id="formFile" (change)="onImageUpload($event)">
             </div>
        
         
