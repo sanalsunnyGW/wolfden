@@ -2,10 +2,12 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using sib_api_v3_sdk.Model;
 using WolfDen.Application.DTOs.LeaveManagement;
 using WolfDen.Application.Helper.LeaveManagement;
 using WolfDen.Application.Helpers;
 using WolfDen.Application.Method.LeaveManagement;
+using WolfDen.Application.Requests.Commands.Attendence.SendNotification;
 using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequestDays;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
@@ -314,7 +316,19 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ad
                                     </body>
                                     </html>";
 
-                    bool emailStatus =  _email.SendMail(_senderEmail, _senderName, immediateManagerMail, message, subject, SuperiorsMails.ToArray());
+                     _email.SendMail(_senderEmail, _senderName, immediateManagerMail, message, subject, SuperiorsMails.ToArray());
+                    List<int> managerIds = await FindManagerIdsAsync(employee.ManagerId, cancellationToken);
+                    string notificationMessage = $" Leave {leaveRequest.FromDate} to {leaveRequest.ToDate} is Applied by {employee.FirstName} {employee.LastName} [Employee Code :{employee.EmployeeCode}]";
+                    foreach(int managerId in managerIds)
+                    {
+                        NotificationCommand command = new NotificationCommand
+                        {
+                            EmployeeId = managerId,
+                            Message = notificationMessage,
+                        };
+                        await _mediator.Send(command, cancellationToken);
+                    }
+                    
                     return await _mediator.Send(addLeaveRequestDayCommand, cancellationToken);
                 }
                 else
@@ -451,6 +465,24 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ad
                     throw new InvalidOperationException($"Revoke or edit existing {name}. All Balances are taken by applied leaves");
                 }
             }
+
+             async Task<List<int>> FindManagerIdsAsync(int? managerId, CancellationToken cancellationToken)
+            {
+                List<int> managerIds = new List<int>();
+                if (managerId is null)
+                    return managerIds;
+                Employee? manager = await _context.Employees
+                    .Where(m => m.Id == managerId)
+                    .FirstOrDefaultAsync(cancellationToken);
+                if (manager is not null)
+                {
+                    managerIds.Add(manager.Id);
+                    List<int> higherManagerIds = await FindManagerIdsAsync(manager.ManagerId, cancellationToken);
+                    managerIds.AddRange(higherManagerIds);
+                }
+                return managerIds;
+            }
+
 
         }
     }

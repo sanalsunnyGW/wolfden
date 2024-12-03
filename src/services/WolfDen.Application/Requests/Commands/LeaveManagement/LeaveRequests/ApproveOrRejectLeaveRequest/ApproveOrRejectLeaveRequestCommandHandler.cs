@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WolfDen.Application.DTOs.Employees;
 using WolfDen.Application.Helper.LeaveManagement;
+using WolfDen.Application.Requests.Commands.Attendence.SendNotification;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
@@ -49,7 +50,14 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
                     string[] receiver = { employee.Email };
                     string subject = $"Leave Rejected  {leaveRequest.FromDate} to {leaveRequest.ToDate}";
                     string statusMessage = $"Your Following Leave is {(request.statusId == LeaveRequestStatus.Approved ? "Approved" : "Rejected")}.";
-                    bool mailresult = await Mail(receiver, subject, statusMessage);
+                    await Mail(receiver, subject, statusMessage);
+                    string message = $"Your Leave {leaveRequest.FromDate} to {leaveRequest.ToDate} is Rejected By {manager.FirstName} {manager.LastName} [Manager Code : {manager.EmployeeCode}]";
+                    NotificationCommand command = new NotificationCommand
+                    {
+                        EmployeeId = employee.Id,
+                        Message = message,
+                    };
+                    await _mediator.Send(command, cancellationToken);
                     return  result > 0;
                 }
                 else if (leaveType1.LeaveCategoryId != null && (request.statusId == LeaveRequestStatus.Approved && leaveRequest.LeaveType.LeaveCategoryId != LeaveCategory.WorkFromHome))
@@ -82,6 +90,13 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
                     string subject = $"Leave Approved  {leaveRequest.FromDate} to {leaveRequest.ToDate}";
                     string statusMessage = $"Your Following Leave is {(request.statusId == LeaveRequestStatus.Approved ? "Approved" : "Rejected")}.";
                     await Mail(receiver, subject, statusMessage);
+                    string message = $"Your Leave {leaveRequest.FromDate} to {leaveRequest.ToDate} is Approved By {manager.FirstName} {manager.LastName} [Manager Code : {manager.EmployeeCode}]";
+                    NotificationCommand command = new NotificationCommand
+                    {
+                        EmployeeId = employee.Id,
+                        Message = message,
+                    };
+                    await _mediator.Send(command, cancellationToken);
                     return result > 0;
                 }
                 else if(leaveType1.LeaveCategoryId != null && ( leaveRequest.LeaveType.LeaveCategoryId == LeaveCategory.WorkFromHome && request.statusId == LeaveRequestStatus.Approved))  
@@ -92,6 +107,13 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
                     string subject = $"Leave Approved  {leaveRequest.FromDate} to {leaveRequest.ToDate}";
                     string statusMessage = $"Your Following Leave is {(request.statusId == LeaveRequestStatus.Approved ? "Approved" : "Rejected")}.";
                     await Mail(receiver, subject, statusMessage);
+                    string message = $"Your Leave {leaveRequest.FromDate} to {leaveRequest.ToDate} is Approved By {manager.FirstName} {manager.LastName} [Manager Code : {manager.EmployeeCode}]";
+                    NotificationCommand command = new NotificationCommand
+                    {
+                        EmployeeId = employee.Id,
+                        Message = message,
+                    };
+                    await _mediator.Send(command, cancellationToken);
                     return result > 0;
                 }
                 else
