@@ -16,6 +16,7 @@ using WolfDen.Application.Requests.Commands.Employees.SuperAdminUpdateEmployee;
 using WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName;
 using WolfDen.Application.Requests.Commands.Employees.SyncEmployee;
 using WolfDen.Application.Requests.Commands.Employees.AddSuperAdmin;
+using WolfDen.Application.Requests.Queries.Employees.EmployeePasswordCheck;
 
 namespace WolfDen.API.Controllers.Employee
 {
@@ -99,6 +100,13 @@ namespace WolfDen.API.Controllers.Employee
         {
             return await _mediator.Send(query, cancellationToken);
 
+
+        }
+        [AllowAnonymous]
+        [HttpGet("check-password")]
+        public async Task<ActionResult<bool>> CheckPassword([FromQuery] CheckEmployeePasswordQuery query, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(query, cancellationToken);
 
         }
 

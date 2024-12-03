@@ -73,4 +73,7 @@ export class EmployeeService {
   syncEmployee(){
     return this.http.patch(`${this.baseUrl}/Employee/employee-sync`,null)
   }
+  myTeamLeave(employeeId:number){
+    return this.http.get(`${this.baseUrl}/leave-request/next-week/approved?EmployeeId=${employeeId}`)
+  }
 }
