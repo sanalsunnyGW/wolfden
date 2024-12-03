@@ -23,7 +23,6 @@ import { ToastrService } from 'ngx-toastr';
 export class LeaveHistoryComponent implements OnInit {
 
   userService = inject(WolfDenService);
-  userId=1;
   leaveRequestList: ILeaveRequestHistory[] = [];
   leaveManagementService = inject(LeaveManagementService);
   pageNumber: number = 0;

@@ -25,7 +25,7 @@
       {
       <li><a class="dropdown-item" [routerLink]="'/portal/subordinate-leave-request'">Subordinate Leaves</a></li>
       }
-      @if(userService.role=='Admin')
+      @if(userService.role=='Admin'|| userService.role=='SuperAdmin')
       {
       <li><a class="dropdown-item" [routerLink]="'/portal/update-leave-balance'">Update Leave Balance</a></li>
       <li><a class="dropdown-item" [routerLink]="'/portal/add-leave-by-admin-for-employees'">Apply Leave For Employee</a></li>
