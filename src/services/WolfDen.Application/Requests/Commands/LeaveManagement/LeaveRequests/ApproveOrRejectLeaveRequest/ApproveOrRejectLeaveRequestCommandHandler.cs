@@ -49,7 +49,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
                     string[] receiver = { employee.Email };
                     string subject = $"Leave Rejected  {leaveRequest.FromDate} to {leaveRequest.ToDate}";
                     string statusMessage = $"Your Following Leave is {(request.statusId == LeaveRequestStatus.Approved ? "Approved" : "Rejected")}.";
-                    bool mailresult = await Mail(receiver, subject, statusMessage);
+                    await Mail(receiver, subject, statusMessage);
                     return  result > 0;
                 }
                 else if (leaveType1.LeaveCategoryId != null && (request.statusId == LeaveRequestStatus.Approved && leaveRequest.LeaveType.LeaveCategoryId != LeaveCategory.WorkFromHome))

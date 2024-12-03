@@ -314,7 +314,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ad
                                     </body>
                                     </html>";
 
-                    bool emailStatus =  _email.SendMail(_senderEmail, _senderName, immediateManagerMail, message, subject, SuperiorsMails.ToArray());
+                     _email.SendMail(_senderEmail, _senderName, immediateManagerMail, message, subject, SuperiorsMails.ToArray());
                     return await _mediator.Send(addLeaveRequestDayCommand, cancellationToken);
                 }
                 else
