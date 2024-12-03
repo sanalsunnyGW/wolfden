@@ -15,7 +15,7 @@ import { MyTeamComponent } from './my-team/my-team.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 
 
-import { guardsGuard } from './guards.guard';
+import { authGuard } from './authGuard';
 import { WeeklyAttendanceComponent } from './dashboard/dashboard-body/main/attendance-module/weekly-attendance/weekly-attendance.component';
 import { DailyAttendenceComponent } from './dashboard/dashboard-body/main/attendance-module/daily-attendence/daily-attendence.component';
 import { MonthlyReportComponent } from './dashboard/dashboard-body/main/attendance-module/monthly-report/monthly-report.component';
@@ -56,10 +56,10 @@ export const routes: Routes = [
         component: DashboardComponent,
         children: [
             { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-             {path:'dashboard',component:MainPageComponent,canActivate: [guardsGuard]},
-             {path:'employee-directory',component: EmployeeDirectoryComponent,canActivate: [guardsGuard]},
-             {path:'leave-dashboard',component:LeaveDashboardComponent,canActivate: [guardsGuard]},
-            {path:'leave-request-history',component:LeaveHistoryComponent,canActivate: [guardsGuard]},
+             {path:'dashboard',component:MainPageComponent,canActivate: [authGuard]},
+             {path:'employee-directory',component: EmployeeDirectoryComponent,canActivate: [authGuard]},
+             {path:'leave-dashboard',component:LeaveDashboardComponent,canActivate: [authGuard]},
+            {path:'leave-request-history',component:LeaveHistoryComponent,canActivate: [authGuard]},
             { path: 'employee-directory', component: EmployeeDirectoryComponent },
             { path: 'leave-dashboard', component: LeaveDashboardComponent },
             { path: 'leave-request-history', component: LeaveHistoryComponent },
@@ -74,27 +74,27 @@ export const routes: Routes = [
             {
                 path: 'company-hierarchy',
                 component: EmployeeHierarchyTreeComponent,
-                canActivate: [guardsGuard]
+                canActivate: [authGuard]
             },
             {
                 path: 'employee-display',
                 component: EmloyeeHierarchyDisplayComponent,
-                canActivate: [guardsGuard]
+                canActivate: [authGuard]
             },
             {
                 path: 'my-team',
                 component: MyTeamComponent,
-                canActivate: [guardsGuard]
+                canActivate: [authGuard]
             },
             {
                 path: 'attendance/calendar',
                 component: CalendarViewComponent,
-                canActivate: [guardsGuard]
+                canActivate: [authGuard]
             },
             {
                 path: 'leave-dashboard',
                 component: LeaveDashboardComponent,
-                canActivate: [guardsGuard]
+                canActivate: [authGuard]
             },
             {
                 path: 'leave-request-history',
@@ -102,26 +102,20 @@ export const routes: Routes = [
     
             },
             {
-                path: '',
-                component: UserComponent,
-                canActivate: [guardsGuard]
-
-            },
-            {
                 path: 'profile',
                 component: ProfileComponent,
-                canActivate: [guardsGuard]
+                canActivate: [authGuard]
             },
             {
                 path: 'admin-dashboard',
                 component: AdminDashboardComponent,
-                canActivate: [guardsGuard]
+                canActivate: [authGuard]
 
             },
             {
                 path: 'employee-role',
                 component: EditRoleComponent,
-                canActivate: [guardsGuard]
+                canActivate: [authGuard]
 
             },
             {

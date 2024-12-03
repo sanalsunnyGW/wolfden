@@ -30,7 +30,7 @@ export class WolfDenService {
       if(payload){
       this.userId = parseInt(payload.EmployeeId || 0, 10);
       console.log(this.userId)
-      this.role = (payload.Role||"");
+      this.role = (payload.role||"");
       this.firstName = (payload.FirstName || 'welcome back');
       }else {
         this.toastr.error('Invalid or expired token', 'Error');
