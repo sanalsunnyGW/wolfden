@@ -5,8 +5,6 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-
-
 @Component({
   selector: 'app-add-new-leave-type',
   standalone: true,
@@ -33,7 +31,8 @@ export class AddNewLeaveTypeComponent{
         daysCheckMore: new FormControl(null),
         daysCheckEqualOrLess: new FormControl(null),
         dutyDaysRequired: new FormControl(null),
-        sandwich : new FormControl(null)
+        sandwich: new FormControl(null),
+      
       });
   }
   selectedType : number|null =null
@@ -59,7 +58,6 @@ export class AddNewLeaveTypeComponent{
                 alert(error)
                 }
            }
-           
            );
         }
       }

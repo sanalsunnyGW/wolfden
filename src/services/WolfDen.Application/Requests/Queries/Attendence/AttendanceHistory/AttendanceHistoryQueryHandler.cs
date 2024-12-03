@@ -38,27 +38,29 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
 
             List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
 
-            for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
+            for (DateOnly currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
+                AttendanceStatus statusId = AttendanceStatus.Absent;
+
                 if (currentDate > today)
                 {
                     break;
                 }
-
-                AttendanceStatus statusId = AttendanceStatus.Absent;
-
+                if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    statusId = AttendanceStatus.Weekend;
+                    attendanceHistory.Add(new WeeklySummaryDTO
+                    {
+                        Date = currentDate,
+                        AttendanceStatusId = statusId
+                    });
+                    continue;
+                }
+                
                 DailyAttendence? attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (attendanceRecord is not null)
                 {
-
-                    if (attendanceRecord.InsideDuration >= minWorkDuration)
-                    {
-                        statusId = AttendanceStatus.Present;
-                    }
-                    else
-                    {
-                        statusId = AttendanceStatus.IncompleteShift;
-                    }
+                    statusId = attendanceRecord.InsideDuration >= minWorkDuration ? AttendanceStatus.Present: AttendanceStatus.IncompleteShift;
                 }
                 else
                 {
