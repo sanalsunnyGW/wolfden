@@ -12,8 +12,8 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241202120040_final")]
-    partial class final
+    [Migration("20241129130314_notif")]
+    partial class notif
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -476,9 +476,6 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.ToTable("Department", "wolfden");
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
@@ -517,9 +514,6 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnName("PeriodStart");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("Designation", "wolfden");
 

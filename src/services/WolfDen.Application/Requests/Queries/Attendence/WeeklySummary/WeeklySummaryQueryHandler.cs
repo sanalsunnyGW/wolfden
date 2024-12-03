@@ -16,7 +16,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
             List<WeeklySummaryDTO> weeklySummary = new List<WeeklySummaryDTO>();
             DateTime startDate = DateTime.Parse(request.WeekStart);
             DateTime endDate = DateTime.Parse(request.WeekEnd);
-            DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+            DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
             DateOnly weekStart = DateOnly.FromDateTime(startDate);
             DateOnly weekEnd = DateOnly.FromDateTime(endDate);
             List<DailyAttendence> attendanceRecords = await _context.DailyAttendence
@@ -38,6 +38,17 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
                     break;
                 }
                 AttendanceStatus statusId = AttendanceStatus.Absent;
+
+                if (currentDate == today)
+                {
+                    statusId = AttendanceStatus.OngoingShift;
+                    weeklySummary.Add(new WeeklySummaryDTO
+                    {
+                        Date = currentDate,
+                        AttendanceStatusId = statusId
+                    });
+                    return weeklySummary;
+                }
                 DailyAttendence attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (attendanceRecord is not null)
                 {
