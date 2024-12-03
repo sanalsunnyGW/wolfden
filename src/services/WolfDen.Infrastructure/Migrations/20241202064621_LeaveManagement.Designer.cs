@@ -12,8 +12,8 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241129122739_new")]
-    partial class @new
+    [Migration("20241202064621_LeaveManagement")]
+    partial class LeaveManagement
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -398,14 +398,17 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("ArrivalTime")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("AttendanceStatusId")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
                     b.Property<DateTimeOffset?>("DepartureTime")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<bool?>("EmailSent")
+                        .HasColumnType("bit");
 
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
