@@ -27,6 +27,13 @@
     .user-name {
       font-weight: 500;
     }
+    .btn-outline-secondary{
+      color: #fff;
+      &:hover {
+        background-color: darken(#102c46, 5%);
+      }
+
+    }
 
     .notification {
       display: flex;

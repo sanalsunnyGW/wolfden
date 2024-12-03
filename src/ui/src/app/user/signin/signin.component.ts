@@ -104,18 +104,32 @@ export class SigninComponent {
         photo:this.userForm.value.photo??'',
         password:this.userForm.value.password??''
 
-
+        // "id": 2,
+        // "firstName": "Anju",
+        // "lastName": "S",
+        // "email": "anju@gmail.com",
+        // "phoneNumber": "8921275104",
+        // "dateofBirth": "1999-12-03",
+        // "gender": 2,
+        // "address": "Kulathur",
+        // "country": "India",
+        // "state": "Kerala",
+        // "photo":  null,
+        // "password": "Example@123"
       }
   
 
       this.userService.signIn(userData).subscribe({
-        next: (response: any) => {
-          // console.log('User registered successfully:', response);
-          // alert("User registered successfully");
-          this.toastr.success('New user created!','Registration Successful')
-
-
-          this.router.navigate(['user/login']);
+        next: (response) => {
+          console.log(response)
+          if(response===true){
+            this.toastr.success('New user created!','Registration Successful')
+            this.router.navigate(['user/login']);
+          }
+          else{
+            this.toastr.error("form invalid")
+          }
+         
         },
         error: (error: any) => {
           // console.error('Error during registration:', error);

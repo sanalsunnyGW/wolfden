@@ -36,6 +36,7 @@ export class CheckUserComponent {
       this.userService.getEmployeeSignUp(this.userForm.value.employeeCode,this.userForm.value.rfId).subscribe({
         next: (response) => {
           if(response.status){
+            this.userService.userId=response.id;
             this.toastr.success('Sucess')
             this.router.navigate(['/user/sign-in'])
         

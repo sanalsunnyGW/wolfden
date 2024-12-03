@@ -44,20 +44,43 @@
 
   <div class="row">
     <!--- Absences Card -->
-    <div class="card col margin10">
-      <div class="card-header">
-        <i class="fas fa-user-minus"></i>
-        <h3>Today's Absences</h3>
-      </div>
-      <div class="card-content">
-        <div class="absences-list">
-          @for(absence of todaysAbsences; track absence){
-          <div class="absence-item">
-            <div class="absence-name">{{ absence.employeeName }}</div>
+    <div class=" col" >
+      <div class="row card  margin10" style="min-height: 300px;">
+        <div class="card-header">
+          <i class="fas fa-user-minus"></i>
+          <h3>Today's Absences</h3>
+        </div>
+        <div class="card-content">
+          <div class="absences-list">
+            @for(absence of todaysAbsences; track absence){
+            <div class="absence-item">
+              <div class="absence-name">{{ absence.employeeName }}</div>
+            </div>
+            }
           </div>
-          }
         </div>
       </div>
+      <div class="row card  margin10">
+        <div class="card-header">
+          <i class="fas fa-calendar-days"></i>
+          <h3>Upcoming Holidays <br> {{ getMonthAndYear() }}</h3>
+        </div>
+        <div class="card-content">
+          <div class="calendar ">
+            <div class="calendar-header">
+              <div class="weekday" *ngFor="let day of weekDays">{{ day }}</div>
+            </div>
+            <div class="calendar-body">
+              @for(day of calendarDays; track day){
+              <div class="calendar-day" [class.holiday]="day.isHoliday" [title]="day.holidayName">
+                {{ day.date }}
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      
     </div>
   
     <!--- any chart -->
@@ -65,7 +88,7 @@
     <div class="card col margin10">
       <div class="card-header">
         <i class="fas fa-calendar"></i>
-        <h3 style="max-height: 400px;">Weekly Attendance</h3>
+        <h3 >Weekly Attendance</h3>
       </div>
       <div class="card-content">
           <app-weekly-attendance></app-weekly-attendance>
@@ -76,25 +99,5 @@
 
 
 
-  <!-- Calendar Card -->
-  <div class="card  margin10">
-    <div class="card-header">
-      <i class="fas fa-calendar-days"></i>
-      <h3>Upcoming Holidays <br> {{ getMonthAndYear() }}</h3>
-    </div>
-    <div class="card-content">
-      <div class="calendar ">
-        <div class="calendar-header">
-          <div class="weekday" *ngFor="let day of weekDays">{{ day }}</div>
-        </div>
-        <div class="calendar-body">
-          @for(day of calendarDays; track day){
-          <div class="calendar-day" [class.holiday]="day.isHoliday" [title]="day.holidayName">
-            {{ day.date }}
-          </div>
-          }
-        </div>
-      </div>
-    </div>
-  </div>
+  
 </div>

@@ -26,7 +26,7 @@ export class EmployeeDirectoryComponent implements OnInit {
   isLoading: boolean = false; 
   pageNumber: number = 0;
   pageSize: number = 1; 
-  pageSizeOptions: number[] = [1, 2, 3, 4];
+  pageSizeOptions: number[] = [1, 5, 10, 20];
   totalRecords: number = 0;
 
   constructor(private wolfDenService: WolfDenService) {

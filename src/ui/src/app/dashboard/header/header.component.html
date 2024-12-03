@@ -3,6 +3,10 @@
     <img src="geekywolf-white-logo.svg">
   </div>
   <div class="user">
+    @if(userService.role == "Admin"){
+      <div><button type="button" class="btn btn-outline-secondary" (click)="updateLeaveBalance()">Update Leave Balance</button></div>
+
+    }
     <div class="notification">
       <span class="icon" (click)="toggleNotifications()">
         <i class="bi bi-bell-fill"></i>
