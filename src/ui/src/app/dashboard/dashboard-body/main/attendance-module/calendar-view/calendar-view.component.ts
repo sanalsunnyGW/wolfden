@@ -109,7 +109,10 @@ export class CalendarViewComponent implements OnInit  {
         case 1:return ['present'];
         case 2:return ['absent'];
         case 3:return ['incompleteShift'];
-        case 4:return ['wfh'];
+        case 5:return ['holiday'];
+        case 6:return ['wfh'];
+        case 7:return ['leave'];
+        case 9:return ['halfDay'];
       }
     }
 

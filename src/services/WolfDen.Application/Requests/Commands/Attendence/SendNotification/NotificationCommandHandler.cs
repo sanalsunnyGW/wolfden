@@ -20,9 +20,9 @@ namespace WolfDen.Application.Requests.Commands.Attendence.SendNotification
                 throw new ValidationException(validationResult.Errors);
             }
 
-            Employee? employee = await _context.Employees
-                .Where(x=>x.Id == request.EmployeeId)
-                .FirstOrDefaultAsync();
+            //Employee? employee = await _context.Employees
+            //    .Where(x=>x.Id == request.EmployeeId)
+            //    .FirstOrDefaultAsync();
 
             Notification notification = new Notification(request.EmployeeId, request.Message);
 

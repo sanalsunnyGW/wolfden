@@ -25,7 +25,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
                 RestrictedHoliday = 0,
                 NormalHoliday = 0,
                 WFH = 0,
-                Leave = 0
+                Leave = 0,
+                HalfDay=0
             };
 
             DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -52,6 +53,12 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
                 {
                     break;
                 }
+
+                if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    continue; 
+                }
+
 
                 DailyAttendence attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (attendanceRecord is not null)
@@ -105,7 +112,10 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
                             }
                             else
                             {
-                                summaryDto.Leave++;
+                                if (leaveRequest.HalfDay == true)
+                                    summaryDto.HalfDay++;
+                                else
+                                    summaryDto.Leave++;
                             }
                         }
                         else

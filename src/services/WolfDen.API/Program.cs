@@ -129,6 +129,8 @@ builder.Services.AddScoped(sp =>
                 sp.GetRequiredService<ILogger<QueryBasedSyncService>>()
             ));
 builder.Services.AddScoped<DailyAttendancePollerService>();
+builder.Services.AddScoped<DailyNotificationService>();
+
 
 builder.Services.AddControllers();
 var app = builder.Build();
@@ -166,8 +168,8 @@ using (var scope = app.Services.CreateScope())
        "0 0 * * 2-6"
     );
     RecurringJob.AddOrUpdate(
-       "send-emails-job",
-       () => notificationService.SendNotification(),
+       "send-notification-job",
+       () => notificationService.SendNotificationsAsync(),
        "0 0 * * 2-6"
     );
 }

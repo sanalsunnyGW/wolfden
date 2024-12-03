@@ -17,7 +17,7 @@ export class WolfDenService {
   router=inject(Router)
 
   private baseUrl = environment.apiUrl;
-  public userId: number = 5;
+  public userId: number = 6;
   public role : string = "";
   public firstName: string = ""; 
 
