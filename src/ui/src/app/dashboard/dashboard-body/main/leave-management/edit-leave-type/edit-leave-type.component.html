@@ -1,5 +1,5 @@
-<div class="editLeaveForm container">
-  <form [formGroup]="editLeaveType" class="pForm" (ngSubmit)="onSubmit()">
+<h2>Edit Leave Type</h2><div class="editLeaveForm container">
+  <form [formGroup]="editLeaveTypeForm" class="pForm" (ngSubmit)="onSubmit()">
 
     <div class="form-group">
       <div clas="mb-2">
@@ -9,7 +9,7 @@
         </ng-select>
       </div>
       <div class="error mb-3">
-        @if(editLeaveType.get('id')?.invalid && editLeaveType.get('id')?.touched){
+        @if(editLeaveTypeForm.get('id')?.invalid && editLeaveTypeForm.get('id')?.touched){
         Select Type Name !!
         }
       </div>
@@ -19,26 +19,26 @@
       <label for="maxDays">Max Days</label>
       <input type="number" class="form-control" id="maxDays" placeholder="Enter Max Days" formControlName="maxDays">
     </div>
-    <pre><b>Hint :</b>Enter max days to which a leave can sum up to
+    <pre><b>(Hint :</b>Enter max days to which a leave can sum up to
         Eg: 12 for casual Leave in a year
-            2 for Emergency Leave in a year
+            2 for Emergency Leave in a year)
      </pre>
     <div class="form-group mb-3">
       <label for="halfDay" class="form-label">Select if Half Day</label>
       <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" id="halfDay" [value]="true" formControlName="halfDay">
+        <input class="form-check-input" type="checkbox" id="halfDay" [value]="true" formControlName="isHalfDayAllowed">
         <label class="form-check-label" for="halfDay">Half Day</label>
       </div>
     </div>
 
-    <div>
+    <div class="form-group">
       <label>Select increment Type if there is increment </label>
       <ng-select [items]="increments" class="option mb-2" bindLabel="viewValue" bindValue="type"
         placeholder="select Increment Type" formControlName="incrementGapId">
       </ng-select>
     </div>
 
-    <div class="form-group mb-2">
+    <div class="form-group mb-3">
       <label for="incrementCount">Increment Count Value</label>
       <input type="number" class="form-control" id="incrementCount" placeholder="Enter Increment Count"
         formControlName="incrementCount">
@@ -58,17 +58,15 @@
         formControlName="carryForwardLimit">
     </div>
 
-
     <div class="form-group mb-2">
       <label for="daysCheck">Days Check Count</label>
       <input type="number" class="form-control" id="daysCheck" placeholder="Enter Days Check Count"
         formControlName="daysCheck">
     </div>
     <p>
-      <b>Hint:</b>
-      Days Check
+      <b>(Hint:</b>
+      Days Check)
     </p>
-
 
     <div class="form-group mb-2">
       <label for="daysCheckEqualOrLess">Enter daysCheckEqualOrLess Count</label>
@@ -76,10 +74,9 @@
         formControlName="daysCheckEqualOrLess">
     </div>
     <p>
-      <b>Hint:</b>
-      Enter Days Check Count
+      <b>(Hint:</b>
+      Enter Days Check Count)
     </p>
-
 
     <div class="form-group mb-2">
       <label for="daysCheckMore">Enter daysCheckMore Count</label>
@@ -87,11 +84,11 @@
         formControlName="daysCheckMore">
     </div>
     <p>
-      <b>Hint:</b>
-      DaysCheckMore
+      <b>(Hint:</b>
+      DaysCheckMore)
     </p>
 
-    <div class="form-group mb-2">
+    <div class="form-group mb-3">
       <label for="dutyDaysRequired">Enter Min. Duty Days Required</label>
       <input type="number" class="form-control" id="dutyDaysRequired" placeholder="Enter dutyDaysRequired Count"
         formControlName="dutyDaysRequired">

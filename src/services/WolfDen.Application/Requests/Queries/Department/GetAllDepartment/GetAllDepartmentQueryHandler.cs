@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.Employees;
 using WolfDen.Infrastructure.Data;
 
-namespace WolfDen.Application.Requests.Queries.Employees.GetAllDepartment
+namespace WolfDen.Application.Requests.Queries.Department.GetAllDepartment
 {
-    public class GetAllDepartmentQueryHandler:IRequestHandler<GetAllDepartmentQuery,List<DepartmentDTO>>
+    public class GetAllDepartmentQueryHandler : IRequestHandler<GetAllDepartmentQuery, List<DepartmentDTO>>
     {
         private readonly WolfDenContext _context;
 
@@ -20,12 +20,12 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetAllDepartment
               .Select(department => new DepartmentDTO
               {
                   Id = department.Id,
-                  Name = department.Name
+                  DepartmentName = department.Name
               })
               .ToListAsync(cancellationToken);
 
             return departments;
 
         }
-    } 
+    }
 }

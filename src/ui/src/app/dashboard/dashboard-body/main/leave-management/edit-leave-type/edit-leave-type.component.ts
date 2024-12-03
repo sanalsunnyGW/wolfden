@@ -1,8 +1,7 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgSelectComponent } from '@ng-select/ng-select';
-
-import { IEditLeaveType } from '../../../../../interface/edit-leave-type';
+import { IEditLeaveType, IEditLeaveTypeFormControl } from '../../../../../interface/edit-leave-type';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
@@ -17,13 +16,13 @@ import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-
 export class EditLeaveTypeComponent implements OnInit{
   fb = inject(FormBuilder);
   leaveManagement = inject(LeaveManagementService);
-  editLeaveType: FormGroup<IEditLeaveType>;
+  editLeaveTypeForm: FormGroup<IEditLeaveTypeFormControl>
   leaveType: Array<IGetLeaveTypeIdAndname> = [];
   destroyRef=inject(DestroyRef);
 
   constructor() {
 
-    this.editLeaveType = this.fb.group<IEditLeaveType>({
+    this.editLeaveTypeForm = this.fb.group<IEditLeaveTypeFormControl>({
       id: new FormControl(null, Validators.required),
       maxDays: new FormControl(null),
       isHalfDayAllowed: new FormControl(null),
@@ -55,13 +54,13 @@ export class EditLeaveTypeComponent implements OnInit{
   }
 
   onSubmit() {
-    if (this.editLeaveType.valid) {
-      this.leaveManagement.editLeaveType(this.editLeaveType)
+    if (this.editLeaveTypeForm.valid) {
+      this.leaveManagement.editLeaveType(this.editLeaveTypeForm.value as IEditLeaveType)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((response) => {
           if (response) {
             alert("Leave Type Updated");
-            this.editLeaveType.reset();
+            this.editLeaveTypeForm.reset();
           }
         });
     }

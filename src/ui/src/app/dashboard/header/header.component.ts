@@ -12,12 +12,18 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+  loginRole: string = '';
+
+
   constructor(
     private router: Router,
     public userService: WolfDenService,
     private employeeService: EmployeeService,
-    private toastr: ToastrService){}
-    isDropdownOpen = false;
+    private toastr: ToastrService) {
+    const login = employeeService.decodeToken();
+    this.loginRole = login.role;
+  }
+  isDropdownOpen = false;
 
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
@@ -34,12 +40,12 @@ export class HeaderComponent {
 
 
 
-onLogout(){
-  this.userService.userId=0;
-  //destroy local stored tocken
-  localStorage.removeItem('token');
-  this.router.navigate(['/user/login']);
-  this.toastr.success("Logged out")
-}
+  onLogout() {
+    this.userService.userId = 0;
+    //destroy local stored tocken
+    localStorage.removeItem('token');
+    this.router.navigate(['/user/login']);
+    this.toastr.success("Logged out")
+  }
 
 }

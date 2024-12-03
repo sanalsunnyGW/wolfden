@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using WolfDen.Infrastructure.Data;
 using WolfDen.Application.Requests.Commands.Employees.SuperAdminUpdateEmployee;
 using WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName;
+using WolfDen.Application.Requests.Commands.Employees.SyncEmployee;
 
 namespace WolfDen.API.Controllers.Employee
 {
@@ -23,6 +24,15 @@ namespace WolfDen.API.Controllers.Employee
     public class Employee(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+
+
+        [HttpPatch("employee-sync")]
+        public async Task<bool> SyncEmployee()
+        {
+            return await _mediator.Send(new SyncEmployeeCommand());
+        }
+
+
 
         [HttpPost]
         public async Task<int> AddEmployee([FromBody] AddEmployeecommand command, CancellationToken cancellationToken)
@@ -135,7 +145,7 @@ namespace WolfDen.API.Controllers.Employee
         {
             return await _mediator.Send(query, cancellationToken);
 
-          
+
         }
 
     }

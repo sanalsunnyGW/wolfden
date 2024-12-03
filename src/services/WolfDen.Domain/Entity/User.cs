@@ -23,10 +23,13 @@ namespace WolfDen.Domain.Entity
         {
             UserName = rfId;
         }
-        public void SetEmailPassword(string email, string password, IPasswordHasher<User> passwordHasher)
+        public void SetEmailPassword(string email, string? password, IPasswordHasher<User> passwordHasher)
         {
             Email = email;
-            PasswordHash = passwordHasher.HashPassword(this, password);
+            if (password != null)
+            {
+                PasswordHash = passwordHasher.HashPassword(this, password);
+            }
         }
 
     }

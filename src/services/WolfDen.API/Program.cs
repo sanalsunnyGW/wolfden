@@ -23,6 +23,7 @@ using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 using WolfDen.Application.Requests.Commands.Attendence.Email;
+using WolfDen.Application.Helper.LeaveManagement;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -105,6 +106,7 @@ builder.Services.AddScoped<WolfDenContext>();
 builder.Services.AddSingleton<PdfService>();
 builder.Services.AddScoped<ManagerEmailFinder>();
 builder.Services.AddScoped<MonthlyPdf>();
+builder.Services.AddScoped<Email>();
 //builder.Services.AddHostedService<DailyAttendancePollerService>();
 
 QuestPDF.Settings.License = LicenseType.Community;
@@ -116,17 +118,9 @@ builder.Services.AddMediatR(x =>
 });
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("WolfDen.Application"));
 builder.Services.AddHangfire(configuration => configuration
-        .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
         .UseSimpleAssemblyNameTypeSerializer()
         .UseRecommendedSerializerSettings()
-        .UseSqlServerStorage(connectionString, new SqlServerStorageOptions
-        {
-            CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-            SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-            QueuePollInterval = TimeSpan.Zero,
-            UseRecommendedIsolationLevel = true,
-            DisableGlobalLocks = true
-        }));
+        .UseInMemoryStorage());
 builder.Services.AddHangfireServer();
 builder.Services.AddScoped(sp =>
             new QueryBasedSyncService(

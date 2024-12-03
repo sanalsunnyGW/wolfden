@@ -2,7 +2,6 @@ import { FormControl } from "@angular/forms";
 
 export interface IAddNewLeaveTypeFormcontrol
 {   
-    adminId : FormControl<number|null>;
     typeName : FormControl<string|null>;
     maxDays : FormControl<number|null>;
     isHalfDayAllowed : FormControl<boolean|null>;
@@ -19,7 +18,6 @@ export interface IAddNewLeaveTypeFormcontrol
 
 export interface IAddNewLeaveType
 {   
-    adminId : number|null;
     typeName : string|null;
     maxDays : number|null;
     isHalfDayAllowed : boolean|null;

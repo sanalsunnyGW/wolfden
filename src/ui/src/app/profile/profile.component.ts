@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { IProfileForm } from '../interface/iprofile-from';
-import { Employee } from '../interface/iemployee';
 import { Gender } from '../enum/gender-enum';
 import { EmploymentType } from '../enum/employment-type-enum';
+import { ToastrService } from 'ngx-toastr';
+import { Employee } from '../interface/iemployee';
+import { IProfileForm } from '../interface/iprofile-from';
 import { EmployeeService } from '../service/employee.service';
-
 
 @Component({
   selector: 'app-profile',
@@ -17,6 +17,7 @@ import { EmployeeService } from '../service/employee.service';
 })
 export class ProfileComponent {
   userForm!: FormGroup<IProfileForm>;
+
   inDate = new Date();
   employeeData: Employee = {
     id: 0,
@@ -42,7 +43,8 @@ export class ProfileComponent {
     employmentType: 0,
     photo: ''
   };
-  constructor(private fb: FormBuilder, private employeeService: EmployeeService) {
+  constructor(private fb: FormBuilder, private employeeService: EmployeeService, private toastr: ToastrService
+  ) {
     this.buildForm();
   }
   private buildForm() {
@@ -56,7 +58,8 @@ export class ProfileComponent {
       address: new FormControl('', Validators.required),
       country: new FormControl('', Validators.required),
       state: new FormControl('', Validators.required),
-      photo: new FormControl('')
+      photo: new FormControl(''),
+      password: new FormControl('')
     })
   }
 
@@ -97,7 +100,8 @@ export class ProfileComponent {
       address: this.employeeData.address,
       country: this.employeeData.country,
       state: this.employeeData.state,
-      photo: this.employeeData.photo
+      photo: this.employeeData.photo,
+      password: null
     });
 
   }
@@ -110,7 +114,7 @@ export class ProfileComponent {
         }
       },
       error: (error) => {
-        alert("An error occurred while  Displaying Profile");
+        this.toastr.error('An error occurred while  Displaying Profile')
       }
     })
   }
@@ -141,22 +145,23 @@ export class ProfileComponent {
         address: formData.address,
         country: formData.country,
         state: formData.state,
-        photo: formData.photo
+        photo: formData.photo,
+        password: formData.password
       }
+      
+      this.toastr.error('An error occurred while  Updating Profile')
+
       this.employeeService.employeeUpdateEmployee(params).subscribe({
         next: (response: any) => {
           if (response == true) {
-            alert("Profile Updated Successfully")
+            this.toastr.success('Profile Updated Successfully')
             this.loadEmployeeData();
           }
-          else {
-            alert("Profile Update Failed")
-          }
+        },
+        error: (error) => {
+          this.toastr.error('An error occurred while  Updating Profile')
         }
       })
-    } else {
     }
-
   }
-
 }
