@@ -8,7 +8,8 @@
   position: fixed;
   color: #fefefe;
   box-shadow: 5px 5px 5px #939393;
-  overflow: auto;
+  overflow-y: auto;
+  margin-bottom: 20px;
   
   @media only screen and (max-width: 1300px) {
     width: 100px;
@@ -25,9 +26,7 @@
   top: 70px;
   flex-grow: 1;
   background-color: #ffff;
-  overflow: auto;
-
-
+  overflow-y:auto;
   @media only screen and (max-width: 1300px) {
     margin-left: 100px;      
   }
@@ -113,4 +112,7 @@
 
 .nav-items{
   margin-top: 10px;
+  margin-bottom: 20px;
+  height: 100vh;
+  overflow-y: auto;
 }
