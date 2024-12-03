@@ -17,7 +17,16 @@
     @for(employee of employeeData; track employee){
     <div class="col">
         <div class="card h-100">
-            <img src="{{employee.photo}}" class="card-img-top" alt="...">
+            <div>
+                @if(employee.photo){
+                <img src="{{employee.photo}}" class="img-thumbnail profile-img" alt="Profile Image">
+                }
+                @if(employee.photo==null){
+                <img src="default.png" class="img-thumbnail profile-img" alt="Profile Image">
+                }
+
+
+            </div>
             <div class="card-body">
                 <h5 class="card-title">{{employee.firstName}} {{employee.lastName}}</h5>
                 <p class="card-text">{{employee.departmentName}}<br>{{employee.designationName}}<br>{{employee.email}}
