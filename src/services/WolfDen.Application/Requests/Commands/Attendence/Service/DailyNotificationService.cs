@@ -13,21 +13,23 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
         private readonly IMediator _mediator = mediator;
         public async Task SendNotificationsAsync()
         {
-            var today = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1);
-            var minWorkDuration = 360;
+            DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1);
+            int minWorkDuration = 360;
 
             List<DailyAttendence> attendanceRecords = await _context.DailyAttendence
                 .Include(x => x.Employee)
                 .Where(x => x.Date == today)
                 .ToListAsync();
 
-            List<LeaveRequest>? leave = await _context.LeaveRequests
+            List<LeaveRequest> leaveRequests = await _context.LeaveRequests
                           .Where(x => x.LeaveRequestStatusId == LeaveRequestStatus.Approved && x.HalfDay == true && x.FromDate == today)
                           .ToListAsync();
 
-            foreach (var record in attendanceRecords)
+            Dictionary<int, LeaveRequest> leaveDictionary = leaveRequests.ToDictionary(x => x.EmployeeId);
+
+            foreach (DailyAttendence record in attendanceRecords)
             {
-                LeaveRequest? halfDay = leave.Find(x => x.EmployeeId == record.EmployeeId);
+                LeaveRequest? halfDay = leaveDictionary.GetValueOrDefault(record.EmployeeId);
 
                 if (halfDay is not null)
                 {
@@ -52,9 +54,9 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                         .Where(x => x.Id == record.EmployeeId)
                         .FirstOrDefaultAsync();
                     
-                    var managerIds = await FindManagerIdsAsync(employee.ManagerId);
+                    List<int> managerIds = await FindManagerIdsAsync(employee.ManagerId);
                  
-                    foreach (var managerId in managerIds)
+                    foreach (int managerId in managerIds)
                     {
                         string managerMessage = $"Employee {record.Employee.FirstName} {record.Employee.LastName} has worked {record.InsideDuration / 60} hours today, which is below the minimum required hours.";
 
@@ -74,9 +76,8 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
             List<int> managerIds = new List<int>();
             if (managerId is null)
                 return managerIds;
-            Employee? manager = await _context.Employees
-                .Where(m => m.Id == managerId)
-                .FirstOrDefaultAsync();
+
+            Employee? manager = await _context.Employees.FindAsync(managerId);
             if (manager is not null)
             {
                 managerIds.Add(manager.Id);

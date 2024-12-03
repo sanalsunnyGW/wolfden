@@ -38,11 +38,24 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
 
             List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
 
+            List<LeaveRequest> leave = leaveRequests
+               .Where(x => x.HalfDay == true)
+               .ToList();
+
+            Dictionary<DateOnly, LeaveRequest> leaveDictionary = leave.ToDictionary(x => x.FromDate);
+
             for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
                 if (currentDate > today)
                 {
                     break;
+                }
+
+                LeaveRequest? halfDay = leaveDictionary.GetValueOrDefault(currentDate);
+
+                if (halfDay is not null)
+                {
+                    minWorkDuration = minWorkDuration / 2;
                 }
 
                 AttendanceStatus statusId = AttendanceStatus.Absent;
@@ -53,7 +66,13 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
 
                     if (attendanceRecord.InsideDuration >= minWorkDuration)
                     {
-                        statusId = AttendanceStatus.Present;
+                        if (halfDay is not null)
+                        {
+                            statusId = AttendanceStatus.HalfDay;
+                        }
+                        else
+                            statusId = AttendanceStatus.Present;
+
                     }
                     else
                     {
@@ -96,10 +115,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
                                 statusId = AttendanceStatus.WFH;
                             }
                             else
-                            {
-                                if (leaveRequest.HalfDay == true)
-                                    statusId = AttendanceStatus.HalfDay;
-                                else
+                            { 
                                     statusId = AttendanceStatus.Leave;
                             }
                         }

@@ -47,6 +47,12 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
 
             List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
 
+            List<LeaveRequest> leave = leaveRequests
+                .Where(x => x.HalfDay == true)
+                .ToList();
+
+            Dictionary<DateOnly, LeaveRequest> leaveDictionary = leave.ToDictionary(x => x.FromDate);
+
             for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
                 if (currentDate > today) 
@@ -59,13 +65,24 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
                     continue; 
                 }
 
+                LeaveRequest? halfDay = leaveDictionary.GetValueOrDefault(currentDate);
 
-                DailyAttendence attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
+                if (halfDay is not null)
+                {
+                    minWorkDuration = minWorkDuration / 2;
+                }
+
+                DailyAttendence? attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (attendanceRecord is not null)
                 {
 
                     if (attendanceRecord.InsideDuration >= minWorkDuration)
                     {
+                        if (halfDay is not null)
+                        {
+                            summaryDto.HalfDay++;
+                        }
+                        else
                         summaryDto.Present++;
                     }
                     else
@@ -112,10 +129,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
                             }
                             else
                             {
-                                if (leaveRequest.HalfDay == true)
-                                    summaryDto.HalfDay++;
-                                else
-                                    summaryDto.Leave++;
+                                summaryDto.Leave++;
                             }
                         }
                         else
