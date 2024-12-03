@@ -43,6 +43,8 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                 int incompleteShiftCount = 0;
                 string lopDays = "";
                 string incompleteShiftDays = "";
+                int halfDay = 0;
+                string halfDayleaves = " ";
                 for (DateOnly currentDate = monthStart; currentDate <= attendanceClosingDate; currentDate = currentDate.AddDays(1))
                 {
                     if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
@@ -66,16 +68,31 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                             lopDays += currentDate.ToString("yyyy-MM-dd") + ",";
                             lopCount++;
                         }
+
+                        if(leaveRequest is not null && leaveRequest.HalfDay is true && attendanceRecord is not null)
+                        {
+                            halfDay++;
+                            halfDayleaves+= currentDate.ToString("yyyy-MM-dd") + ",";
+                        }
                     }
                 }
-                LOP lop = new LOP(attendanceClosingDate, employee.Id, lopCount, incompleteShiftCount, lopDays.Substring(0,lopDays.Length-1),
-                    incompleteShiftDays.Substring(0,incompleteShiftDays.Length-1));
+                lopDays = update(lopDays);
+                incompleteShiftDays = update(incompleteShiftDays);
+                halfDayleaves = update(halfDayleaves);
+
+                LOP lop = new LOP(attendanceClosingDate, employee.Id, lopCount, incompleteShiftCount, lopDays,
+                    incompleteShiftDays,halfDay,halfDayleaves);
                 await _context.AddAsync(lop);
             }
             DateTime date = new DateTime(request.Year, request.Month, 1);
             AttendenceClose attendenceClose = new AttendenceClose(attendanceClosingDate, true, date.ToString("MMMM"), request.Year);
             await _context.AddAsync(attendenceClose);
             return await _context.SaveChangesAsync(cancellationToken);
+        }
+        private string update(string days)
+        {
+            string updatedDays = days.Length > 0 ? days.Substring(0, days.Length - 1) : " ";
+            return updatedDays;
         }
     }
 }

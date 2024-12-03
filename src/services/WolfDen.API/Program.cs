@@ -22,6 +22,7 @@ using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
 using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
+using WolfDen.Application.Requests.Commands.Attendence.Email;
 
 
 var builder = WebApplication.CreateBuilder(args);

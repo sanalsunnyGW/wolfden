@@ -76,6 +76,9 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyDetails
                                       case AttendanceStatus.OngoingShift:
                                           status = "OnGoing Shift";
                                           break;
+                                      case AttendanceStatus.HalfDayLeave:
+                                          status = "HalfDay Leave";
+                                          break;
                                       default:
                                           status = "leave";
                                           break;
