@@ -33,7 +33,7 @@ export class EmployeeService {
   }
 
   getHierarchy() {
-    return this.http.get(`${this.baseUrl}/hierarchy`);
+    return this.http.get(`${this.baseUrl}/Employee/hierarchy`);
   }
   getEmployeeProfile(employeeId: number) {
     return this.http.get(`${this.baseUrl}/Employee/by-Id?EmployeeId=${employeeId}`);
@@ -65,6 +65,12 @@ export class EmployeeService {
     return this.http.put(`${this.baseUrl}/Employee/admin`, userForm)
   }
   roleChange(roleForm: any) {
-    return this.http.put(`${this.baseUrl}/Employee/super-admin`, roleForm)
+    return this.http.put(`${this.baseUrl}/Employee/role`, roleForm)
+  }
+  addEmployee(employeeForm:any){
+    return this .http.post(`${this.baseUrl}/Employee`,employeeForm)
+  }
+  syncEmployee(){
+    return this.http.patch(`${this.baseUrl}/Employee/employee-sync`,null)
   }
 }

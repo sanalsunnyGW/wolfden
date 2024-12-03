@@ -130,6 +130,12 @@ export class ProfileComponent {
     }
   }
 
+  removePicture(){
+    this.userForm.patchValue({
+      photo: null,
+    });
+    this.onSubmit()
+  }
   onSubmit() {
     if (this.userForm.valid) {
       const formData = this.userForm.value;
@@ -148,9 +154,6 @@ export class ProfileComponent {
         photo: formData.photo,
         password: formData.password
       }
-      
-      this.toastr.error('An error occurred while  Updating Profile')
-
       this.employeeService.employeeUpdateEmployee(params).subscribe({
         next: (response: any) => {
           if (response == true) {

@@ -6,6 +6,7 @@ import { IEmployeeDirectoryDto } from '../../../../interface/iemployee-directory
 import { WolfDenService } from '../../../../service/wolf-den.service';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import { IEmployeeDirectoryWithPagecount } from '../../../../interface/iemployee-directory-with-pagecount';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employee-directory',
@@ -29,7 +30,7 @@ export class EmployeeDirectoryComponent implements OnInit {
   pageSizeOptions: number[] = [1, 2, 3, 4];
   totalRecords: number = 0;
 
-  constructor(private wolfDenService: WolfDenService) {
+  constructor(private wolfDenService: WolfDenService,private router:Router) {
     this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
@@ -40,6 +41,9 @@ export class EmployeeDirectoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadEmployees();
+  }
+  onClick(){
+    // this.router.navigate(['/portal/employee-display'], { queryParams: { id:  } });
   }
 
   onPageChange(event: PageEvent): void {

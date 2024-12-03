@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IProfileForm } from '../../interface/iprofile-from';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Employee } from '../../interface/iemployee';
 import { EmployeeService } from '../../service/employee.service';
 import { Gender } from '../../enum/gender-enum';
@@ -198,8 +197,7 @@ export class EmloyeeHierarchyDisplayComponent {
       });
     }
   }
-
-
+  
   onSubmit() {
     if (this.userForm.valid) {
       const formData = this.userForm.value;
@@ -210,7 +208,7 @@ export class EmloyeeHierarchyDisplayComponent {
         managerId: formData.managerId,
         isActive: formData.isActive,
         joiningDate: formData.joiningDate,
-        employmentType: formData.employmentType,
+        employmentType: Number(formData.employmentType),
       }
       this.employeeService.adminUpdateEmployee(params).subscribe({
         next: (response: any) => {

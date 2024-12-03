@@ -1,4 +1,10 @@
-<div class="d-flex justify-content-end">
+<div class="d-flex justify-content-end gap-3">
+    <button type="button" class="btn btn-primary custom-btn" data-toggle="tooltip" data-placement="top"
+        title="Click to Sync Employees " data-bs-toggle="modal" data-bs-target="#SyncEmployee">Sync Employee
+    </button>
+    <button type="button" class="btn btn-primary custom-btn" data-toggle="tooltip" data-placement="top"
+        title="Click to Edit Employee Role " data-bs-toggle="modal" data-bs-target="#addEmployee">Add Employee
+    </button>
     <button type="button" class="btn btn-primary custom-btn" data-toggle="tooltip" data-placement="top"
         title="Click to Edit Employee Role " routerLink="/portal/employee-role">Edit Employee Role
     </button>
@@ -123,6 +129,213 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary custom-btn" data-bs-dismiss="modal"
                             [disabled]="!designationForm.valid">Save
+                            Changes</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="SyncEmployee" tabindex="-1" aria-labelledby="SyncEmployee" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="SyncEmployee">Do you want to Sync Employees
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary custom-btn" data-bs-dismiss="modal"
+                    (click)="sync()">Confirm</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="addEmployee" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="addEmployeeForm" aria-hidden="true">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addEmployee">Add Employee</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="employeeForm" (ngSubmit)="onSubmitAddEmployee()">
+
+                    <div class="mb-3">
+                        <label for="EmployeeCode" class="form-label">Employee Code</label>
+                        <input class="form-control" type="number" placeholder="Employee Code" aria-label="Employee Code"
+                            formControlName="employeeCode">
+                    </div>
+                    <div class="mb-3">
+
+
+                        <label for="RFId" class="form-label">RFId</label>
+                        <input class="form-control" type="text" placeholder="RFId" aria-label="RFId"
+                            formControlName="rfId">
+                    </div>
+                    @if(newEmployeeId>0)
+                    {
+                    <div class="mb-3">
+                        <b>New Employee ID : {{newEmployeeId}}</b>
+                    </div>
+                    <div class="mb-3 update-message">
+                        <b>Do you want to update Employment details of <br>Employee ID : {{newEmployeeId}}</b>
+                        <div class="d-flex justify-content-end gap-2 pt-3">
+                            <button type="button" class="btn btn-secondary" (click)="restEmployeeId()">No</button>
+                            <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal"
+                                data-bs-target="#employment" data-bs-dismiss="modal">Yes</button>
+                        </div>
+                    </div>
+
+                    }
+                    <div class="modal-footer mt-3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary custom-btn">Confirm</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="employment" tabindex="-1" aria-labelledby="employmentdetails" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="employmentdetails">Personal Details</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+                    <div class="mb-3">
+                        <label for="designationName" class="form-label">Designation</label>
+                        <select class="form-select form-select-sm" aria-label="Small select example"
+                            formControlName="designationId">
+                            <option selected>Select Designation</option>
+                            @for(item of designationData;track item){
+                            <option value={{item.id}}>{{item.designationName}}</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="departmentName" class="form-label">Department</label>
+                        <div>
+                            <select class="form-select form-select-sm" aria-label="Small select department"
+                                id="departmentName" formControlName="departmentId">
+                                <option selected>Select Department</option>
+                                @for(item of departmentData;track item){
+                                <option value={{item.id}}>{{item.departmentName}}</option>
+                                }
+                            </select>
+                        </div>
+                        @if(userForm.get('departmentName')?.invalid ) {
+                        <div class="text-danger">
+                            Department Name is required.
+                        </div>
+                        }
+                    </div>
+                    <div>
+                        <form [formGroup]="managerForm" (ngSubmit)="onSubmitManager()">
+
+                            <label for="managerName" class="form-label">Manager Name</label>
+                            <div class="input-group mb-3 ">
+                                <input type="text" aria-label="First name" class="form-control"
+                                    placeholder="First Name " formControlName="firstName">
+                                <input type="text" aria-label="Last name" class="form-control" placeholder="Last Name "
+                                    formControlName="lastName">
+                                <button type="submit" class="btn btn-primary custom-btn" data-toggle="tooltip"
+                                    data-placement="top" title="Click to Search Employees">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    @if(isDataLoaded && managerData.length>0)
+                    {
+                    <div class="table-container">
+                        <table class="table table-hover table-container">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Employee Id</th>
+                                    <th scope="col">Employee Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for(manager of managerData;track manager){
+                                <tr (click)="selectEmployee(manager.id)">
+                                    <th scope="row">{{manager.id}}</th>
+                                    <td>{{manager.firstName}} {{manager.lastName}}</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    }
+
+                    @if(isDataLoaded && managerData.length===0){
+                    <p>No manager data available.</p>
+                    }
+                    @if(userForm.get('managerName')?.invalid ) {
+                    <div class="text-danger">
+                        Manager Name is required.
+                    </div>
+                    }
+                    @if(isDataClicked){
+                    <div class="mb-3 mt-3">
+                        <label for="designationName" class="form-label">Selected EmployeeID</label>
+                        <div>
+                            <input class="form-control" type="text" value="{{employeeIdClicked}}"
+                                aria-label="readonly input example" readonly>
+                        </div>
+                    </div>
+                    }
+
+                    <div class="mb-3">
+                        <label for="joiningDate" class="form-label">Joining Date</label>
+                        <input type="date" class="form-control" id="joiningDate" formControlName="joiningDate">
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="employmenttype" class="form-label">Employment Type</label>
+                        <div>
+                            <select class="form-select form-select-sm" aria-label="Small select employmentType"
+                                id="employmenttype" formControlName="employmentType">
+                                <option disabled selected>Select Employment Type</option>
+                                <option value="1">Contract</option>
+                                <option value="2">Permanent</option>
+                                <option value="3">Other</option>
+                            </select>
+                        </div>
+                        @if(userForm.get('employmentType')?.invalid ) {
+                        <div class="text-danger">
+                            Employment Type is required.
+                        </div>
+                        }
+                    </div>
+
+                    <div class="form-check form-switch">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Active</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
+                            formControlName="isActive" checked>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            (click)="restEmployeeId()">Close</button>
+                        <button type="submit" class="btn btn-primary custom-btn" data-bs-dismiss="modal"
+                            [disabled]="!userForm.valid">Save
                             Changes</button>
                     </div>
                 </form>

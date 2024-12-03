@@ -395,14 +395,17 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("ArrivalTime")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("AttendanceStatusId")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
                     b.Property<DateTimeOffset?>("DepartureTime")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<bool?>("EmailSent")
+                        .HasColumnType("bit");
 
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
