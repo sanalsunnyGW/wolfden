@@ -33,6 +33,7 @@ ngOnInit(){
   .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
     next:(response : ILeaveUpdate) =>{
       this.leaveSettings = response;
+      console.log(this.leaveSettings)
       this.updateLeaveSetting.patchValue({
         minDaysForLeaveCreditJoining : this.leaveSettings.minDaysForLeaveCreditJoining,
         maxNegativeBalanceLimit : this.leaveSettings.maxNegativeBalanceLimit   

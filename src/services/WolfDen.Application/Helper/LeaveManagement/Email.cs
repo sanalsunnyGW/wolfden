@@ -11,7 +11,7 @@ namespace WolfDen.Application.Helper.LeaveManagement
         private readonly string _apiKey = configuration["BrevoApi:ApiKey"];
 
 
-        public bool SendMail(string senderEmail, string senderName, string[] receiverEmails, string message, string subject, string[] ccEmails = null)
+        public bool SendMail(string senderEmail, string senderName, string[] receiverEmails  , string message , string subject , string[] ccEmails = null)
         {
             try
             {

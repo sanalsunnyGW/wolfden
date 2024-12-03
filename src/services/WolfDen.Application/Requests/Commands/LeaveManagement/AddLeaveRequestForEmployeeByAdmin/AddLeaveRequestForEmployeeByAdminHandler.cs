@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WolfDen.Application.DTOs.LeaveManagement;
@@ -14,7 +15,7 @@ using static WolfDen.Domain.Enums.EmployeeEnum;
 
 namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestForEmployeeByAdmin
 {
-    public class AddLeaveRequestForEmployeeByAdminHandler(WolfDenContext context, IMediator mediator, IConfiguration configuration, ManagerEmailFinder emailFinder, Email email) : IRequestHandler<AddLeaveRequestForEmployeeByAdmin, bool>
+    public class AddLeaveRequestForEmployeeByAdminHandler(WolfDenContext context, IMediator mediator, IConfiguration configuration, ManagerEmailFinder emailFinder, Email email, UserManager<User> userManager) : IRequestHandler<AddLeaveRequestForEmployeeByAdmin, bool>
     {
         private readonly WolfDenContext _context= context;
         private readonly IMediator _mediator = mediator;
@@ -23,6 +24,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
         private readonly string _senderName = configuration["BrevoApi:SenderName"];
         private readonly ManagerEmailFinder _emailFinder = emailFinder;
         private readonly Email _email = email;
+        private readonly UserManager<User> _userManager = userManager;
         public async Task<bool> Handle(AddLeaveRequestForEmployeeByAdmin request, CancellationToken cancellationToken)
         {
             Employee employee = await _context.Employees.FirstOrDefaultAsync(x => x.EmployeeCode == request.EmployeeCode, cancellationToken);
@@ -34,6 +36,11 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
             LeaveBalance leaveBalance = await _context.LeaveBalances.FirstOrDefaultAsync(x => x.EmployeeId == employee.Id && x.TypeId == request.TypeId, cancellationToken);
             LeaveType leaveType = await _context.LeaveType.FirstOrDefaultAsync(x => x.Id == request.TypeId);
             LeaveSetting leaveSetting = await _context.LeaveSettings.FirstOrDefaultAsync();
+
+            User user = await _userManager.FindByIdAsync(employee.UserId);
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            string rolesString = string.Join(",", currentRoles);
+
             if (leaveType == null)
             {
                 throw new InvalidOperationException($"No Such Leave Type");
@@ -174,9 +181,18 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
                     AddLeaveRequestDayCommand addLeaveRequestDayCommand = new AddLeaveRequestDayCommand();
                     addLeaveRequestDayCommand.LeaveRequestId = leaveRequest.Id;
                     addLeaveRequestDayCommand.Date = dates;
-                    List<string> receivermanagerEmails = await _emailFinder.FindManagerEmailsAsync(employee.ManagerId, cancellationToken);
-                    List<string> SuperiorsMails = receivermanagerEmails.Skip(1).ToList();
-                    string[] immediateManagerMail = { receivermanagerEmails[0] };
+                    List<string> receiverManagerEmails = await _emailFinder.FindManagerEmailsAsync(employee.ManagerId, cancellationToken);
+                    string[] immediateManagerMail = [];
+                    string[]? superiorsMails = null;
+                    if (rolesString == "SuperAdmin")
+                    {
+                        immediateManagerMail = new string[] { employee.Email }; ;
+                    }
+                    else
+                    {
+                        immediateManagerMail = new string[] { receiverManagerEmails[0] };
+                        superiorsMails = receiverManagerEmails.Skip(1).ToArray();
+                    }
                     string subject = $"Leave Application for dates {request.FromDate} to &{request.ToDate}";
                     string message = $@"
                                     <html>
@@ -232,7 +248,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
                                     </body>
                                     </html>";
 
-                      _email.SendMail(_senderEmail, _senderName, immediateManagerMail, message, subject, SuperiorsMails.ToArray());
+                      _email.SendMail(_senderEmail, _senderName, immediateManagerMail, message, subject, superiorsMails.ToArray());
                     List<int> managerIds = await FindManagerIdsAsync(employee.ManagerId, cancellationToken);
                     string notificationMessage = $" Leave {leaveRequest.FromDate} to {leaveRequest.ToDate} is Applied by {admin.FirstName} {admin.LastName} [Admin Code :{admin.EmployeeCode}] for {employee.FirstName} {employee.LastName} [Employee Code : {employee.EmployeeCode}]";
                     foreach (int managerId in managerIds)

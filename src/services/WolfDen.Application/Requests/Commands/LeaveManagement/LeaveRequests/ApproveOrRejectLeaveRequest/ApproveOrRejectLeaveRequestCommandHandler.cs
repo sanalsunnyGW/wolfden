@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WolfDen.Application.DTOs.Employees;
@@ -11,7 +12,7 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.ApproveOrRejectLeaveRequest
 {
-    public class ApproveOrRejectLeaveRequestCommandHandler(WolfDenContext context, IMediator mediator, IConfiguration configuration, Email email) : IRequestHandler<ApproveOrRejectLeaveRequestCommand, bool>
+    public class ApproveOrRejectLeaveRequestCommandHandler(WolfDenContext context, IMediator mediator, IConfiguration configuration, Email email, UserManager<User> userManager) : IRequestHandler<ApproveOrRejectLeaveRequestCommand, bool>
     {
         private readonly WolfDenContext _context = context;
         private readonly IMediator _mediator = mediator;
@@ -19,12 +20,18 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
         private readonly string _senderEmail = configuration["BrevoApi:SenderEmail"];
         private readonly string _senderName = configuration["BrevoApi:SenderName"];
         private readonly Email _email = email;
+        private readonly UserManager<User> _userManager = userManager;
         public async Task<bool> Handle(ApproveOrRejectLeaveRequestCommand request, CancellationToken cancellationToken)
         {
             LeaveRequest leaveRequest = await _context.LeaveRequests.Where(x => x.Id == request.LeaveRequestId && x.LeaveRequestStatusId == LeaveRequestStatus.Open).FirstOrDefaultAsync(cancellationToken);
             LeaveType leaveType1 = await _context.LeaveType.Where(x => x.Id == leaveRequest.TypeId).FirstOrDefaultAsync(cancellationToken);  
             Employee employee = await _context.Employees.FirstOrDefaultAsync(x => x.Id == leaveRequest.EmployeeId,cancellationToken);
-            Employee manager = await _context.Employees.FirstOrDefaultAsync(x => x.Id == request.SuperiorId,cancellationToken); 
+            Employee manager = await _context.Employees.FirstOrDefaultAsync(x => x.Id == request.SuperiorId,cancellationToken);
+
+            User user = await _userManager.FindByIdAsync(manager.UserId);
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            string rolesString = string.Join(",", currentRoles);
+
             List<EmployeeHierarchyDto> employeeHierarchyDto = new List<EmployeeHierarchyDto>();
             GetEmployeeTeamQuery employeeTeamQuery = new GetEmployeeTeamQuery
             {
@@ -40,6 +47,10 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
             }
 
             List<int> listSubordinateEmployeeId = await GetAllChildIds(employeeHierarchyDto);
+            if(rolesString == "SuperAdmin")
+            {
+                listSubordinateEmployeeId.Add(request.SuperiorId);
+            }
 
             if (listSubordinateEmployeeId.Contains(leaveRequest.EmployeeId))
             {

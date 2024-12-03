@@ -13,5 +13,8 @@ import { EmployeeService } from '../../../service/employee.service';
 export class SideNavComponent {
   userService=inject(WolfDenService)
   employeeService=inject(EmployeeService)
-
+  
+ngOnInit(){
+  console.log('hi',this.userService.role)
+}
 }

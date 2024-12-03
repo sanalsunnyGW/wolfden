@@ -33,7 +33,7 @@ export class EmployeeService {
   }
 
   getHierarchy() {
-    return this.http.get(`${this.baseUrl}/hierarchy`);
+    return this.http.get(`${this.baseUrl}/Employee/hierarchy`);
   }
   getEmployeeProfile(employeeId: number) {
     return this.http.get(`${this.baseUrl}/Employee/by-Id?EmployeeId=${employeeId}`);
