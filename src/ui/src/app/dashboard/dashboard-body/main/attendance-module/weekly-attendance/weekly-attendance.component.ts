@@ -67,6 +67,10 @@ export class WeeklyAttendanceComponent {
                     {
                       text:'Leave',
                       fillStyle:'#9B7EBD'
+                    },
+                    {
+                      text:'OnGoing Shift',
+                      fillStyle:'#FEF3E2'
                     }
                   ];
                 },
@@ -104,7 +108,7 @@ export class WeeklyAttendanceComponent {
  weeklyData:WeeklyAttendance[]=[]
  barChart!:Chart;
  status:number[]=[]
- statusColor=["#72BF78","#AE445A","#FCF596","#AB886D","#536493","#9B7EBD"]
+ statusColor=["#72BF78","#AE445A","#FCF596","#AB886D","#536493","#9B7EBD","#FEF3E2"]
  ngOnInit(){
   const today=new Date();
   const year = getYear(today);
@@ -163,9 +167,12 @@ getStartOfWeek(selectedWeek:string){
               {
                 return this.statusColor[4];
               }
-            else
+            else if((x.attendanceStatusId===7))
             {
               return this.statusColor[5];
+            }
+            else{
+              return this.statusColor[6]
             }
           })
           this.barChart.update();

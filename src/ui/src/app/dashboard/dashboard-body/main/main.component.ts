@@ -9,4 +9,5 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './main.component.scss'
 })
 export class MainComponent {
+  
 }
