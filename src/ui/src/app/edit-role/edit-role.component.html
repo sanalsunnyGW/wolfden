@@ -1,0 +1,115 @@
+<div>
+    <form [formGroup]="managerForm" (ngSubmit)="onSubmit()">
+
+        <label for="managerName" class="form-label">Employee Name</label>
+        <div class="input-group mb-3 ">
+            <input type="text" aria-label="First name" class="form-control" placeholder="First Name "
+                formControlName="firstName">
+            <input type="text" aria-label="Last name" class="form-control" placeholder="Last Name "
+                formControlName="lastName">
+            <button type="submit" class="btn btn-primary custom-btn" data-toggle="tooltip" data-placement="top"
+                title="Click to Search Employees">Search
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+    </form>
+</div>
+@if(isDataLoaded && managerData.length>0)
+{
+<div class="table-container">
+    <table class="table table-hover table-container">
+        <thead>
+            <tr>
+                <th scope="col">Employee Id</th>
+                <th scope="col">Employee Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(manager of managerData;track manager){
+            <tr (click)="selectEmployee(manager)">
+                <th scope="row">{{manager.id}}</th>
+                <td>{{manager.firstName}} {{manager.lastName}}</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+}
+
+@if(isDataLoaded && managerData.length===0){
+<p>No manager data available.</p>
+}
+@if(isDataClicked){
+<label for="managerName" class="form-label mt-3">Selected Employee</label>
+
+<div class="table-container ">
+    <table class="table table-hover table-container">
+        <thead>
+            <tr>
+                <th scope="col">Employee Id</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Employee Role</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">{{employeeClicked.id}}</th>
+                <td>{{employeeClicked.firstName}} {{employeeClicked.lastName}}</td>
+                <td>{{employeeClicked.role}}</td>
+                <td>
+                    <button type="submit" class="btn btn-primary custom-btn" data-toggle="tooltip" data-placement="top"
+                        title="Click to Edit Employees Role" data-bs-toggle="modal" data-bs-target="#editrole">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                </td>
+
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+}
+
+
+<!-- Modal -->
+<div class="modal fade" id="editrole" tabindex="-1" aria-labelledby="editroleLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editroleLabel">Edit Role</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="roleForm" (ngSubmit)="roleChange()">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="role" id="flexRadioDefault1"
+                            formControlName="role" value="Employee">
+                        <label class="form-check-label" for="flexRadioDefault1">
+                            Employee
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="role" id="flexRadioDefault2"
+                            formControlName="role" value="Admin">
+                        <label class="form-check-label" for="flexRadioDefault2">
+                            Admin
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="role" id="flexRadioDefault3"
+                            formControlName="role" value="SuperAdmin">
+                        <label class="form-check-label" for="flexRadioDefault3">
+                            SuperAdmin
+                        </label>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary custom-btn" [disabled]="roleForm.invalid"
+                            data-bs-dismiss="modal">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

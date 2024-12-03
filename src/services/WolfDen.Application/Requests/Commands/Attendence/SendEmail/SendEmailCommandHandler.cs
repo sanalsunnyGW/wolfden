@@ -39,7 +39,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
             {
                 DailyAttendence? attendence = await _context.DailyAttendence
                .Where(a => a.Date == DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1) && a.EmployeeId == employee.Id).FirstOrDefaultAsync(cancellationToken);
-                attendence.EmailSent = true;
+                attendence.Update();
                 _context.Update(attendence);
                 return await _context.SaveChangesAsync(cancellationToken) > 0;
             }

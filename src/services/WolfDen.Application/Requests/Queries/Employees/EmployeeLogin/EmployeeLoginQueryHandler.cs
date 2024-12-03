@@ -53,4 +53,3 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeLogin
         }
     }
 }
-

@@ -1,9 +1,9 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WolfDen.Application.DTOs.Employees;
 using WolfDen.Application.Requests.Commands.Departments;
-using WolfDen.Application.Requests.Queries.Employees.GetAllDepartment;
-
+using WolfDen.Application.Requests.Queries.Department.GetAllDepartment;
 
 namespace WolfDen.API.Controllers.Department
 {
@@ -13,7 +13,7 @@ namespace WolfDen.API.Controllers.Department
     {
         private readonly IMediator _mediator=mediator;
 
-        
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPost]
         public async Task<int> AddDepartment([FromBody] AddDepartmentCommand command,CancellationToken cancellationToken)
         {

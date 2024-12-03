@@ -15,7 +15,7 @@ namespace WolfDen.Application.Helpers
         public async Task<List<string>> FindManagerEmailsAsync(int? managerId, CancellationToken cancellationToken)
         {
             List<string> managerEmails = new List<string>();
-            if (managerId is null) 
+            if (managerId is null)
                 return managerEmails;
             Employee? manager = await _context.Employees
                 .Where(m => m.Id == managerId)

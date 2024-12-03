@@ -52,14 +52,16 @@ namespace WolfDen.Domain.Entity
 
         }
 
-        public void Reject()
+        public void Reject(int processedBy)
         {
             LeaveRequestStatusId = LeaveRequestStatus.Rejected;
+            ProcessedBy = processedBy;
         }
 
-        public void Approve()
+        public void Approve(int processedBy)
         {
             LeaveRequestStatusId = LeaveRequestStatus.Approved;
+            ProcessedBy = processedBy;
         }
     }
 }

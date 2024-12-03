@@ -16,6 +16,20 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
         }
         public async Task<DailyAttendanceDTO> Handle(DailyDetailsQuery request, CancellationToken cancellationToken)
         {
+            DateOnly currentDate=request.Date;
+            DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
+            if(currentDate==today)
+            {
+                DailyAttendanceDTO holiday = new DailyAttendanceDTO();
+                holiday.AttendanceStatusId = AttendanceStatus.OngoingShift;
+                return holiday;
+            }
+            if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
+            {
+                DailyAttendanceDTO holiday=new DailyAttendanceDTO();
+                holiday.AttendanceStatusId=AttendanceStatus.NormalHoliday;
+                return holiday;    
+            }
             int minWorkDuration = 360;
             DailyAttendanceDTO? attendence = await _context.DailyAttendence
                 .Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date)
@@ -35,7 +49,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                     .FirstOrDefaultAsync(cancellationToken);
                 if (holiday is not null)
                 {
-                    if (holiday.Type == AttendanceStatus.NormalHoliday)
+                    if (holiday.Type is AttendanceStatus.NormalHoliday)
                     {
                         notPresentDay.AttendanceStatusId = AttendanceStatus.NormalHoliday;
                     }
@@ -45,14 +59,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                             .Where(x => x.EmployeeId == request.EmployeeId && x.FromDate <= request.Date && request.Date <= x.ToDate && x.LeaveRequestStatusId == LeaveRequestStatus.Approved)
                             .Include(x => x.LeaveType)
                             .FirstOrDefaultAsync(cancellationToken);
-                        if (leave is null)
-                        {
-                            notPresentDay.AttendanceStatusId = AttendanceStatus.Absent;
-                        }
-                        else
-                        {
-                            notPresentDay.AttendanceStatusId = AttendanceStatus.RestrictedHoliday;
-                        }
+
+                        notPresentDay.AttendanceStatusId = (leave is null) ? AttendanceStatus.Absent : AttendanceStatus.RestrictedHoliday;
                     }
                 }
                 else
@@ -67,29 +75,16 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                     }
                     else
                     {
-                        LeaveType? leaveType = await _context.LeaveType.FindAsync(leave.TypeId);
-                        if (leaveType?.LeaveCategoryId == LeaveCategory.WorkFromHome)
-                        {
-                            notPresentDay.AttendanceStatusId = AttendanceStatus.WFH;
-                        }
-                        else
-                        {
-                            notPresentDay.AttendanceStatusId = AttendanceStatus.Leave;
-                        }
+                        notPresentDay.AttendanceStatusId = (leave.LeaveType.LeaveCategoryId is LeaveCategory.WorkFromHome)
+                            ? AttendanceStatus.WFH : AttendanceStatus.Leave;
                     }
                 }
                 return notPresentDay;
             }
             else
             {
-                if (attendence.InsideHours >= minWorkDuration)
-                {
-                    attendence.AttendanceStatusId = AttendanceStatus.Present;
-                }
-                else
-                {
-                    attendence.AttendanceStatusId = AttendanceStatus.IncompleteShift;
-                }
+                attendence.AttendanceStatusId = (attendence.InsideHours >= minWorkDuration) ?
+                    AttendanceStatus.Present : AttendanceStatus.IncompleteShift;
             }
             List<AttendenceLogDTO> attendenceRecords = await _context.AttendenceLog
                 .Where(x => x.EmployeeId == request.EmployeeId && x.PunchDate == request.Date)

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WolfDen.Application.DTOs.LeaveManagement;
 using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLeaveType;
@@ -12,13 +13,13 @@ namespace WolfDen.API.Controllers.LeaveManagement
     public class LeaveTypeController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
-
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPost]
         public async Task<bool> AddleaveType([FromBody] AddLeaveTypeCommand command,CancellationToken cancellationToken)
         {
             return await _mediator.Send(command,cancellationToken);
         }
-
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPut]
         public async Task<bool> UpdateLeaveType(UpdateLeaveTypeCommand command, CancellationToken cancellationToken)
         {

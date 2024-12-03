@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import mermaid from 'mermaid';
 
 import { EmployeeService } from '../service/employee.service';
+import { ToastrService } from 'ngx-toastr';
 import { IEmployeeData } from '../interface/employee-data';
 
 
@@ -15,7 +16,7 @@ import { IEmployeeData } from '../interface/employee-data';
 })
 export class EmployeeHierarchyTreeComponent implements OnInit {
   @ViewChild('mermaidDiv', { static: true }) mermaidDiv!: ElementRef;
-  constructor(private router: Router, private employeeService: EmployeeService) { }
+  constructor(private router: Router, private employeeService: EmployeeService,private toastr: ToastrService) { }
   inDate = new Date();
   isDataLoaded: boolean = false;
   employeeData: IEmployeeData = {
@@ -44,7 +45,8 @@ export class EmployeeHierarchyTreeComponent implements OnInit {
   ngOnInit(): void {
     this.loadEmployeeHierarchy();
     (window as any).onA = (nodeName: string) => {
-      this.router.navigate(['/employee-display']);
+      const nodeId=nodeName.slice(4)
+      this.router.navigate(['/portal/employee-display'], { queryParams: { id: nodeId } });
     };
 
     mermaid.initialize({
@@ -83,13 +85,14 @@ export class EmployeeHierarchyTreeComponent implements OnInit {
         if (response) {
           this.employeeData = response;
           this.isDataLoaded = true;
+          console.log('data',this.employeeData)
           this.renderMermaidChart();
         } else {
-          alert('No Employee found');
+          this.toastr.error('No Employee found')
         }
       },
       error: (error) => {
-        alert('An error occurred while displaying hierarchy');
+        this.toastr.error('An error occurred while displaying hierarchy')
       },
     });
   }

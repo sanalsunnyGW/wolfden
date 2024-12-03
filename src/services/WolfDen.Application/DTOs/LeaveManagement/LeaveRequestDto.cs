@@ -5,6 +5,7 @@ namespace WolfDen.Application.DTOs.LeaveManagement
     public class LeaveRequestDto
     {
        public int Id { get; set; }  
+        public string? Name { get; set; }
         public string TypeName { get; set; }  
         public bool? HalfDay { get; set; }
         public DateOnly FromDate { get; set; }

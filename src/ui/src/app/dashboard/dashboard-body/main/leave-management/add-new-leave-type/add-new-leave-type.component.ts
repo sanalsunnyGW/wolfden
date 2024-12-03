@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, NgSelectOption, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IAddNewLeaveTypeFormcontrol } from '../../../../../interface/Add-New-Leave-Type-Interface';
+import { IAddNewLeaveTypeFormcontrol } from '../../../../../interface/add-new-leave-type-interface';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -22,7 +22,6 @@ export class AddNewLeaveTypeComponent{
     addNewLeaveType : FormGroup
     constructor() {
       this.addNewLeaveType = this.fb.group<IAddNewLeaveTypeFormcontrol>({
-        adminId : new FormControl(null),
         typeName: new FormControl(null,Validators.required),
         maxDays: new FormControl(null),
         isHalfDayAllowed: new FormControl(null),
