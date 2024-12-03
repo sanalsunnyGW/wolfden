@@ -1,7 +1,10 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using WolfDen.Application.DTOs.LeaveManagement;
+using WolfDen.Application.Helper.LeaveManagement;
+using WolfDen.Application.Helpers;
 using WolfDen.Application.Method.LeaveManagement;
 using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequestDays;
 using WolfDen.Domain.Entity;
@@ -11,11 +14,16 @@ using static WolfDen.Domain.Enums.EmployeeEnum;
 
 namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.AddLeaveRequest
 {
-    public class AddLeaveRequestCommandHandler(WolfDenContext context, AddLeaveRequestValidator validator, IMediator mediator) : IRequestHandler<AddLeaveRequestCommand, bool>
+    public class AddLeaveRequestCommandHandler(WolfDenContext context, AddLeaveRequestValidator validator, IMediator mediator,IConfiguration configuration, ManagerEmailFinder emailFinder, Email email) : IRequestHandler<AddLeaveRequestCommand, bool>
     {
         private readonly WolfDenContext _context = context;
         private readonly AddLeaveRequestValidator _validator = validator;
         private readonly IMediator _mediator = mediator;
+        private readonly string _apiKey = configuration["BrevoApi:ApiKey"];
+        private readonly string _senderEmail = configuration["BrevoApi:SenderEmail"];
+        private readonly string _senderName = configuration["BrevoApi:SenderName"]; 
+        private readonly ManagerEmailFinder _emailFinder = emailFinder;
+        private readonly Email _email = email;
 
         public async Task<bool> Handle(AddLeaveRequestCommand request, CancellationToken cancellationToken)
         {
@@ -256,6 +264,57 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ad
                     AddLeaveRequestDayCommand addLeaveRequestDayCommand = new AddLeaveRequestDayCommand();
                     addLeaveRequestDayCommand.LeaveRequestId = leaveRequest.Id;
                     addLeaveRequestDayCommand.Date = dates;
+                    List<string> receivermanagerEmails = await _emailFinder.FindManagerEmailsAsync(employee.ManagerId,cancellationToken);
+                    List<string> SuperiorsMails = receivermanagerEmails.Skip(1).ToList();
+                    string[] immediateManagerMail = { receivermanagerEmails[0] };
+                    string subject = $"Leave Application for dates {request.FromDate} to &{request.ToDate}";
+                    string message = $@"
+                                    <html>
+                                    <body>
+
+                                        <p>
+                                            I hope this message finds you well. This is an automated leave Application mail for {employee.FirstName} {employee.LastName}
+                                        </p>
+
+                                        <table border='1' style='border-collapse: collapse; width: 100%;'>
+                                            <tr>
+                                                <th style='padding: 8px; text-align: left; border: 1px solid #ddd;'>Information</th> 
+                                                <th style='padding: 8px; text-align: left; border: 1px solid #ddd;'>Value</th> 
+                                            </tr>
+                                            <tr>
+                                                <td style='padding: 8px; border: 1px solid #ddd;'>Employee Name</td> 
+                                                <td style='padding: 8px; border: 1px solid #ddd;'>{employee.FirstName} {employee.LastName}</td> 
+                                            </tr>
+                                            <tr>
+                                                <td style='padding: 8px; border: 1px solid #ddd;'>Employee Code</td> 
+                                                <td style='padding: 8px; border: 1px solid #ddd;'>{employee.EmployeeCode}</td> 
+                                            </tr>
+                                            <tr>
+                                                <td style='padding: 8px; border: 1px solid #ddd;'>Employee Phone</td> 
+                                                <td style='padding: 8px; border: 1px solid #ddd;'>{employee.PhoneNumber}</td> 
+                                            </tr>
+                                            <tr>
+                                                <td style='padding: 8px; border: 1px solid #ddd;'>Leave Type</td> 
+                                                <td style='padding: 8px; border: 1px solid #ddd;'>{((leaveType.LeaveCategoryId == LeaveCategory.PrivilegeLeave || (leaveType.LeaveCategoryId == LeaveCategory.CasualLeave && currentDate.DayNumber >= request.FromDate.DayNumber)) ? "Emergency Leave" : leaveType.TypeName)}</td>  
+                                            </tr>
+                                            <tr>
+                                                <td style='padding: 8px; border: 1px solid #ddd;'>From Date</td> 
+                                                <td style='padding: 8px; border: 1px solid #ddd;'>{request.FromDate}</td> 
+                                            </tr>
+                                            <tr>
+                                                <td style='padding: 8px; border: 1px solid #ddd;'>To Date</td> 
+                                                <td style='padding: 8px; border: 1px solid #ddd;'>{request.ToDate}</td> 
+                                            </tr>
+                                            <tr>
+                                                <td style='padding: 8px; border: 1px solid #ddd;'>Leave Description</td> 
+                                                <td style='padding: 8px; border: 1px solid #ddd;'>{request.Description}</td> 
+                                            </tr>
+                                        </table>
+
+                                    </body>
+                                    </html>";
+
+                     _email.SendMail(_senderEmail, _senderName, immediateManagerMail, message, subject, SuperiorsMails.ToArray());
                     return await _mediator.Send(addLeaveRequestDayCommand, cancellationToken);
                 }
                 else
