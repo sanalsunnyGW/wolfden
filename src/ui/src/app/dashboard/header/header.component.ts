@@ -18,13 +18,41 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
+  destroyRef=inject(DestroyRef);
   constructor(
     private router: Router,
     public userService: WolfDenService,
     private employeeService: EmployeeService,
-    private toastr: ToastrService){}
-    isDropdownOpen = false;
+    private leaveManagementService: LeaveManagementService,
+    private toastr: ToastrService
+  ) {}
+  ngOnInit(): void {
+    this.userService.getNotification(this.userService.userId).subscribe({
+      next: (data) =>{
+        this.notifications=data;
+      }
+    })
+  }
+  isDropdownOpen = false;
+  showNotifications = false;
+  notifications: INotificationForm[] = [];
 
+
+  get unreadNotifications(): number {
+    return this.notifications.length;
+  }
+  updateLeaveBalance(){
+    this.leaveManagementService.updateLeaveBalance()
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe((data: boolean) => {
+        if (data) {
+          this.toastr.success('Leave Balance of All employees Updated !!');
+        }
+        else {
+          this.toastr.error(' Sorry ! We have Encountered some issues while Updating employees leave balance !')
+        }
+      });
+  }
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
@@ -54,18 +82,24 @@ export class HeaderComponent {
     if (userMenuContainer && !userMenuContainer.contains(event.target as Node)) {
       this.isDropdownOpen = false;
     }
+
+    //notifications modal
+    const notificationIcon = document.querySelector('.notification .icon');
+    const notificationModal = document.querySelector('.modal-container');
+    if (notificationIcon && !notificationIcon.contains(event.target as Node) && 
+        notificationModal && !notificationModal.contains(event.target as Node)) {
+      this.showNotifications = false;
+
+    }
   }
 
-
-
-onLogout(){
-  this.userService.userId=0;
-  //destroy local stored tocken
-  localStorage.removeItem('token');
-  this.router.navigate(['/user/login']);
-  this.toastr.success("Logged out")
-}
+  onLogout() {
+    this.userService.userId = 0;
+    this.userService.role='';
+    localStorage.removeItem('token');
+    this.router.navigate(['/user/login']);
+    this.toastr.success("Logged out");
+  }
 
 }
-
 

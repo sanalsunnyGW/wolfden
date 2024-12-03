@@ -7,7 +7,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideToastr } from 'ngx-toastr';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { userInterceptor } from './Service/user.interceptor';
+import { userInterceptor } from './service/user.interceptor';
 
 
 export const appConfig: ApplicationConfig = {
