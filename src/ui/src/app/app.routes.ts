@@ -98,7 +98,7 @@ export const routes: Routes = [
             {
                 path: 'leave-request-history',
                 component: LeaveHistoryComponent,
-    
+                canActivate: [guardsGuard]
             },
             {
                 path: '',

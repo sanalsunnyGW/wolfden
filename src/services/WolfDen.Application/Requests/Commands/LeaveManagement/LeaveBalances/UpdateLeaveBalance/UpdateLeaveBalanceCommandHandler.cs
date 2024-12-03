@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Azure.Pipelines.WebApi;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
@@ -27,7 +28,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
 
             foreach (Employee emp in employees)
             {
-                if (emp.JoiningDate != null)
+                if (emp.JoiningDate is not null && emp.Gender is not null)
                 {
                     DateTime JoiningDateTime = emp.JoiningDate.Value.ToDateTime(TimeOnly.MinValue);
 
@@ -36,30 +37,8 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                         count = 0;
                         foreach (LeaveBalance leaveBalance in leaveBalanceList)
                         {
-                            if (leaveType.TypeName == "Maternity")
-                            {
-                                if (emp.Gender == EmployeeEnum.Gender.Male)
-                                {
-                                    leaveBalance.Balance = 0;
-                                }
-                                else
-                                {
-                                    leaveBalance.Balance = (decimal)leaveType.MaxDays;
-                                }
-                            }
-                            else if (leaveType.TypeName == "Paternity")
-                            {
-                                if (emp.Gender == EmployeeEnum.Gender.Male)
-                                {
-                                    leaveBalance.Balance = (decimal)leaveType.MaxDays;
-                                }
-                                else
-                                {
-                                    leaveBalance.Balance = 0;
-                                }
-                            }
-                            else //if its other  leave types
-                            {
+                            if ((emp.Gender == EmployeeEnum.Gender.Male && leaveType.LeaveCategoryId != LeaveCategory.Maternity) || (emp.Gender == EmployeeEnum.Gender.Female && leaveType.LeaveCategoryId != LeaveCategory.Paternity))
+                            { 
                                 if (leaveBalance.TypeId == leaveType.Id && leaveBalance.EmployeeId == emp.Id)   //data exists for that combination...its to be updated
                                 {
                                     count = count + 1;  //entry for that combination exist..so update it ..
@@ -76,15 +55,13 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                     {
                                         if (leaveBalance.Employee.JoiningDate?.Day < leaveSetting.MinDaysForLeaveCreditJoining)    //if joined  before 15th(maxcredit..)
                                         {
-                                            if (leaveBalance.LeaveType.TypeName == "Casual" || leaveBalance.LeaveType.TypeName == "Emergency")
-                                            {
-                                                leaveBalance.Balance = 1;             //bcoz initially balance is 1  //only casual leave is credited on same month
-                                            }
-                                            else //for new joinees other type leaves 
-                                            {
-                                                leaveBalance.Balance = 0;
-                                            }
+                                            leaveBalance.Balance = 1;             //bcoz initially balance is 1  //only casual leave is credited on same month
                                         }
+                                        else //for new joinees other type leaves 
+                                        {
+                                            leaveBalance.Balance = 0;
+                                        }
+
                                         leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
                                         lastCreditedMonth = leaveBalance.Employee.JoiningDate.Value;
                                         incrementValue = 0;
@@ -293,7 +270,6 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                                 }
                                             }
                                             _context.LeaveBalances.Update(leaveBalance);
-                                            //await _context.SaveChangesAsync(cancellationToken);
                                         }
                                         else
                                         {
@@ -313,81 +289,97 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                 }
                             }
                         }
-                        if (count == 0) //no entry in leavebalance ofr that combination...so add it(create new)
+                        if (count == 0) //no entry in leavebalance of that combination...so add it(create new)
                         {
-                            if (DateTime.Now.Subtract(JoiningDateTime).Days >= leaveType.DutyDaysRequired)
+                            if ((emp.Gender == EmployeeEnum.Gender.Male && leaveType.LeaveCategoryId != LeaveCategory.Maternity) || (emp.Gender==EmployeeEnum.Gender.Female  && leaveType.LeaveCategoryId!=LeaveCategory.Paternity))
                             {
-                                if (emp.JoiningDate?.Month == DateTime.Now.Month && emp.JoiningDate?.Year == DateTime.Now.Year)           //for same month yr newly joined employee 
+                                if (DateTime.Now.Subtract(JoiningDateTime).Days >= leaveType.DutyDaysRequired)
                                 {
-                                    if (emp.JoiningDate?.Day < leaveSetting.MinDaysForLeaveCreditJoining)        //if joined  before 15th(maxcredit..)
+                                    DateOnly FirstMonthDate= new DateOnly(DateTime.Now.Year,1,1);
+                                    decimal UpdateReq =  DateTime.Now.Month- FirstMonthDate.Month ;
+
+                                    if (emp.JoiningDate?.Month == DateTime.Now.Month && emp.JoiningDate?.Year == DateTime.Now.Year)           //for same month yr newly joined employee 
                                     {
-                                        balance = 1;             //bcoz initially balance is 1  //only casual leave is credited on same month
-                                    }
-                                    else
-                                    {
-                                        balance = 0;
-                                    }
-                                    leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                    lastCreditedMonth = DateOnly.FromDateTime(DateTime.Now);
-                                    incrementValue = 0;
-                                }
-                                else
-                                {
-                                    if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Month)
-                                    {
-                                        incrementValue = DateTime.Now.Month / 1;
-                                        lastCreditedMonth = DateOnly.FromDateTime(DateTime.Now);
-                                        leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                        balance = (int)(DateTime.Now.Month * leaveType.IncrementCount);
-                                    }
-                                    else if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Quarter)
-                                    {
-                                        incrementValue = (int)Math.Floor((decimal)DateTime.Now.Month / 3);
-                                        lastCreditedMonth = new DateOnly(DateTime.Now.Year, 1, 1).AddMonths(incrementValue * 3);
-                                        leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                        if ((decimal)leaveType.IncrementCount * (incrementValue + 1) >= (decimal)leaveType.MaxDays)
+                                        if (emp.JoiningDate?.Day < leaveSetting.MinDaysForLeaveCreditJoining)        //if joined  before 15th(maxcredit..)
                                         {
-                                            balance = (int)leaveType.MaxDays;
+                                            balance = 1;             //bcoz initially balance is 1  //only casual leave is credited on same month
                                         }
                                         else
                                         {
-                                            balance = (int)leaveType.IncrementCount * (incrementValue + 1);
+                                            balance = 0;
                                         }
-                                    }
-                                    else if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Half)
-                                    {
-                                        incrementValue = (int)Math.Floor((decimal)DateTime.Now.Month / 6);
-                                        lastCreditedMonth = new DateOnly(DateTime.Now.Year, 1, 1).AddMonths(incrementValue * 6);
                                         leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                        balance = (int)leaveType.IncrementCount * (incrementValue + 1);
+                                        lastCreditedMonth = DateOnly.FromDateTime(DateTime.Now);
+                                        incrementValue = 0;
                                     }
                                     else
                                     {
-                                        incrementValue = 0;
-                                        lastCreditedMonth = new DateOnly(DateTime.Now.Year, 1, 1);
-                                        leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                        balance = (int)leaveType.MaxDays;
+                                        if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Month)
+                                        {
+                                            incrementValue = DateTime.Now.Month / 1;
+                                            lastCreditedMonth = DateOnly.FromDateTime(DateTime.Now);
+                                            leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
+                                            balance = (int)(DateTime.Now.Month * leaveType.IncrementCount);
+                                        }
+                                        else if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Quarter)
+                                        {
+                                            incrementValue = (int)Math.Floor(UpdateReq / 3);
+                                            lastCreditedMonth =FirstMonthDate.AddMonths(incrementValue * 3);
+                                            leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
+                                            if ((decimal)leaveType.IncrementCount * (incrementValue + 1) >= (decimal)leaveType.MaxDays)
+                                            {
+                                                balance = (int)leaveType.MaxDays;
+                                            }
+                                            else
+                                            {
+                                                balance = (int)leaveType.IncrementCount * (incrementValue + 1);
+                                            }
+                                        }
+                                        else if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Half)
+                                        {
+                                            incrementValue = (int)Math.Floor(UpdateReq/ 6);
+                                            lastCreditedMonth =FirstMonthDate.AddMonths(incrementValue * 6);
+                                            leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
+                                            if ((decimal)leaveType.IncrementCount * (incrementValue + 1) >= (decimal)leaveType.MaxDays)
+                                            {
+                                                balance = (int)leaveType.MaxDays;
+                                            }
+                                            else
+                                            {
+                                                balance = (int)leaveType.IncrementCount * (incrementValue + 1);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            incrementValue = 0;
+                                            lastCreditedMonth = FirstMonthDate;
+                                            leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
+                                            balance = (int)leaveType.MaxDays;
+                                        }
                                     }
+                                    LeaveBalance leaveBalance1 = new LeaveBalance(emp.Id, leaveType.Id, balance);
+                                    _context.LeaveBalances.Add(leaveBalance1);
+                                    await _context.SaveChangesAsync(cancellationToken);
+                                    LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveBalance1.Id, leaveUpdateLog, balance, incrementValue, lastCreditedMonth);
+                                    _context.LeaveIncrementLogs.Add(leaveIncrement);
                                 }
-                                LeaveBalance leaveBalance1 = new LeaveBalance(emp.Id, leaveType.Id, balance);
-                                _context.LeaveBalances.Add(leaveBalance1);
-                                await _context.SaveChangesAsync(cancellationToken);
-                                LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveBalance1.Id, leaveUpdateLog, balance, incrementValue, lastCreditedMonth);
-                                _context.LeaveIncrementLogs.Add(leaveIncrement);
+                            }
+                            else
+                            {
+                                continue;
                             }
                         }
                         else
                         {
-                            continue;       //might NOT need
+                            continue;      
                         }
                     }
                 }
                 else
                 {
                     continue;
-                    throw new Exception("employee joining date is null");
+                    throw new Exception("employee joining date OR/AND gender is null");
                 }
-                await _context.SaveChangesAsync(cancellationToken);
             }
             int result = await _context.SaveChangesAsync(cancellationToken);
             return result > 0;

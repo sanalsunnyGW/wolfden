@@ -5,6 +5,7 @@ import { IEditLeaveType, IEditLeaveTypeFormControl } from '../../../../../interf
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-leave-type',
@@ -13,12 +14,14 @@ import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-
   templateUrl: './edit-leave-type.component.html',
   styleUrl: './edit-leave-type.component.scss'
 })
-export class EditLeaveTypeComponent implements OnInit{
+export class EditLeaveTypeComponent implements OnInit {
   fb = inject(FormBuilder);
   leaveManagement = inject(LeaveManagementService);
   editLeaveTypeForm: FormGroup<IEditLeaveTypeFormControl>
   leaveType: Array<IGetLeaveTypeIdAndname> = [];
-  destroyRef=inject(DestroyRef);
+  selectedType: number | null = null;
+  destroyRef = inject(DestroyRef);
+  toastr=inject(ToastrService);
 
   constructor() {
 
@@ -38,7 +41,6 @@ export class EditLeaveTypeComponent implements OnInit{
     });
   }
 
-  selectedType: number | null = null
   increments = [
     { type: 1, viewValue: 'Monthly Increment' },
     { type: 2, viewValue: 'Quarterly Increment' },
@@ -47,8 +49,8 @@ export class EditLeaveTypeComponent implements OnInit{
 
   ngOnInit(): void {
     this.leaveManagement.getLeaveTypeIdAndName()
-    .pipe(takeUntilDestroyed(this.destroyRef))
-    .subscribe((response: Array<IGetLeaveTypeIdAndname>) => {
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((response: Array<IGetLeaveTypeIdAndname>) => {
         this.leaveType = response;
       });
   }
@@ -56,10 +58,10 @@ export class EditLeaveTypeComponent implements OnInit{
   onSubmit() {
     if (this.editLeaveTypeForm.valid) {
       this.leaveManagement.editLeaveType(this.editLeaveTypeForm.value as IEditLeaveType)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((response) => {
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((response) => {
           if (response) {
-            alert("Leave Type Updated");
+            this.toastr.success("Leave Type Updated");
             this.editLeaveTypeForm.reset();
           }
         });

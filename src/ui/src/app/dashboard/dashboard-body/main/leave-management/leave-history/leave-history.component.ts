@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IRevokeLeave } from '../../../../../interface/revoke-leave';
 import { WolfDenService } from '../../../../../service/wolf-den.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -35,6 +36,7 @@ export class LeaveHistoryComponent implements OnInit {
   selectedDescription: string | null = null;
   selectedStatus: number|null = null;
   revokeLeave: IRevokeLeave = {} as IRevokeLeave
+  toastr=inject(ToastrService);
 
   leaveStatusId =
     [
@@ -105,7 +107,7 @@ export class LeaveHistoryComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (response: boolean) => {
           if (response) {
-            alert("Leave Revoked")
+            this.toastr.error("Leave Revoked")
           }
         },
         error: (error) => {
