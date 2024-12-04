@@ -42,6 +42,7 @@ export class SideNavComponent {
 
   ngOnInit()
 {
+  this.userService;
   this.employeeService.getMyTeamHierarchy(true,this.userService.userId)
   .pipe(takeUntilDestroyed(this.destroyRef))
   .subscribe((data:any)=> {

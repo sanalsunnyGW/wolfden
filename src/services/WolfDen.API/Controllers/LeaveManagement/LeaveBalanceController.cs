@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WolfDen.Application.DTOs.LeaveManagement;
 //using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.InitializeLeaveBalance;
@@ -19,6 +20,7 @@ namespace WolfDen.API.Controllers.LeaveManagement
             return await _mediator.Send(query, cancellationToken);
         }
 
+       // [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPut]
         public async Task<bool> UpdateLeaveBalance(CancellationToken cancellationToken)
         {

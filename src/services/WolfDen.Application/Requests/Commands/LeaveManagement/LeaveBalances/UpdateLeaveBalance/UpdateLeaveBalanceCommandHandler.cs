@@ -56,7 +56,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                     {
                                         if (leaveBalance.Employee.JoiningDate?.Day < leaveSetting.MinDaysForLeaveCreditJoining)    //if joined  before 15th(maxcredit..)
                                         {
-                                            leaveBalance.Balance = 1;             //bcoz initially balance is 1  //only casual leave is credited on same month
+                                            leaveBalance.Balance = 1;             //bcoz initially balance is 1  //leaves is credited on same month
                                         }
                                         else //for new joinees other type leaves 
                                         {
