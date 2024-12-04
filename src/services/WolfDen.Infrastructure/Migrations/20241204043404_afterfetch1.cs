@@ -5,15 +5,18 @@
 namespace WolfDen.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class holiday_description1 : Migration
+    public partial class afterfetch1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
+            migrationBuilder.AddColumn<string>(
                 name: "Description",
                 schema: "wolfden",
-                table: "Holiday")
+                table: "Holiday",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "")
                 .Annotation("SqlServer:IsTemporal", true)
                 .Annotation("SqlServer:TemporalHistoryTableName", "Holiday")
                 .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
@@ -24,13 +27,10 @@ namespace WolfDen.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
+            migrationBuilder.DropColumn(
                 name: "Description",
                 schema: "wolfden",
-                table: "Holiday",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "")
+                table: "Holiday")
                 .Annotation("SqlServer:IsTemporal", true)
                 .Annotation("SqlServer:TemporalHistoryTableName", "Holiday")
                 .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")

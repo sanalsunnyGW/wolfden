@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
@@ -6,6 +6,7 @@ import { IEmployeeDirectoryDto } from '../../../../interface/iemployee-directory
 import { WolfDenService } from '../../../../service/wolf-den.service';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import { IEmployeeDirectoryWithPagecount } from '../../../../interface/iemployee-directory-with-pagecount';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employee-directory',
@@ -28,9 +29,9 @@ export class EmployeeDirectoryComponent implements OnInit {
   pageSize: number = 1; 
   pageSizeOptions: number[] = [1, 5, 10, 20]; 
   totalRecords: number = 0;
-  
 
-  constructor(private wolfDenService: WolfDenService) {
+
+  constructor(private wolfDenService: WolfDenService,private router: Router) {
     this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
@@ -49,7 +50,9 @@ export class EmployeeDirectoryComponent implements OnInit {
     this.pageSize = event.pageSize;
     this.loadEmployees();
   }
-
+  routeToProfile(employeeId: number): void {
+    this.router.navigate(['/portal/employee-display'], { queryParams: { id: employeeId } });
+  }
   onSearch(): void {
     this.pageNumber = 0; 
     if (this.paginator) {

@@ -1,5 +1,5 @@
 <div class="header">
-  <div class="logo">
+  <div class="logo" routerLink="/portal/dashboard" style="cursor: pointer;">
     <img src="geekywolf-white-logo.svg">
   </div>
   <div class="user">
@@ -20,7 +20,7 @@
         {{ userService.firstName ? userService.firstName[0].toUpperCase() : 'NA' }}
       </span>
       <ul class="dropdown-menu" [class.show]="isDropdownOpen">
-        <li><a routerLink="/portal/profile">Profile</a></li>
+        <li><a routerLink="/portal/profile" (click)="toggleDropdown()">Profile</a></li>
         <li><a (click)="onLogout()">LogOut</a></li>
         <li><a routerLink="/user/reset-password">Reset Password</a></li>
         @if(userService.role == "SuperAdmin")

@@ -56,9 +56,20 @@
             <div 
             class="card border-dark mb-3"
             style="max-width: 40rem;">
-         <div class="card-header">
-           <strong>Employee Code:</strong> {{employee.employeeCode || 'N/A'}}
-         </div>
+            <div class="card-header ">
+              <div class="row">
+
+                 <div class="col">
+                   <strong>Employee Code:</strong> {{employee.employeeCode || 'N/A'}}
+                 </div>
+
+                 <div class="col d-flex justify-content-end">
+                  <button type="button" class="btn btn-primary" (click)="routeToProfile(employee.id)">Visit Profile</button>
+                </div>
+
+               </div>
+
+              </div>
          <div class="card-body text-dark">
            <h5 class="card-title">{{employee.firstName}} {{employee.lastName}}</h5>
            <p class="card-text">

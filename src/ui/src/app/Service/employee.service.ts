@@ -33,7 +33,8 @@ export class EmployeeService {
   }
 
   getHierarchy() {
-    return this.http.get(`${this.baseUrl}/hierarchy`);
+    return this.http.get(`${this.baseUrl}/Employee/hierarchy
+    `);
   }
   getEmployeeProfile(employeeId: number) {
     return this.http.get(`${this.baseUrl}/Employee/by-Id?EmployeeId=${employeeId}`);
@@ -42,7 +43,7 @@ export class EmployeeService {
     return this.http.put(`${this.baseUrl}/Employee/employee-update-employee`, userForm);
   }
   getMyTeamHierarchy(getFullHierarchy: boolean, employeeId: number) {
-    return this.http.get(`${this.baseUrl}/Employee/team?Id=${employeeId}&Hierarchy=${getFullHierarchy}`);
+    return this.http.get(`https://localhost:7015/api/Employee/team?Id=${getFullHierarchy}`);
   }
   addDepartment(departmentForm: any) {
     return this.http.post(`${this.baseUrl}/Department`, departmentForm);

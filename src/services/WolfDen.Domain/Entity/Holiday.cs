@@ -9,7 +9,7 @@ namespace WolfDen.Domain.Entity
         public DateOnly Date { get;private set; }
         public AttendanceStatus Type { get;private set; }
 
-        //public string Description {  get; private set; }
+        public string Description {  get; private set; }
         private Holiday()
         {
             
@@ -20,11 +20,11 @@ namespace WolfDen.Domain.Entity
             Type = type;
         }
 
-/*        public Holiday(DateOnly date, AttendanceStatus type, string description)
+        public Holiday(DateOnly date, AttendanceStatus type, string description)
         {
             Date = date;
             Type = type;
             Description = description;
-        }*/
+        }
     }
 }

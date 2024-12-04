@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from '../../enviornments/environment';
+import { Iholiday } from '../interface/iholiday';
 @Injectable({
   providedIn: 'root'
 })
@@ -127,6 +128,15 @@ export class WolfDenService {
       { headers: this.getHeaders(), params }
     );
   }
+  getHoliday(): Observable<Iholiday[]>{
+    const params=this.createHttpParams({});
+    return this.http.get<Iholiday[]>(
+      `${this.baseUrl}/api/Holiday/upcoming-holiday`,
+      {headers: this.getHeaders(), params }
+    );
+  }
+
+
   getTodaysAbsence():Observable<ItodaysAbsence[]>{
     const params= this.createHttpParams({});
     return this.http.get<ItodaysAbsence[]>(

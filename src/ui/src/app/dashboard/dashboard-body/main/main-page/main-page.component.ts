@@ -7,6 +7,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ILeaveBalanceList } from '../../../../interface/leave-balance-list-interface';
 import { WeeklyAttendanceComponent } from "../attendance-module/weekly-attendance/weekly-attendance.component";
 import { ItodaysAbsence } from '../../../../interface/itodays-absense';
+import { Iholiday } from '../../../../interface/iholiday';
+import { data } from 'jquery';
 
 
 interface Holiday {
@@ -47,6 +49,7 @@ export class MainPageComponent implements OnInit {
   destroyRef = inject(DestroyRef)
   leaveList: ILeaveBalanceList[] = [];
   todaysAbsences: ItodaysAbsence[]=[];
+  holidayList:Iholiday[]=[];
   leaveType1: string = '';
 leaveBalance1: number = 0;
 
@@ -60,6 +63,10 @@ leaveBalance3: number = 0;
     //todays absence
     this.userService.getTodaysAbsence().subscribe((data)=>{
       this.todaysAbsences=data;
+    })
+
+    this.userService.getHoliday().subscribe((data)=>{
+      this.holidayList=data;
     })
 
     this.leaveManagementService.getLeaveBalance(this.userService.userId)
