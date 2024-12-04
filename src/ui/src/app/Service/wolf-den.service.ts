@@ -81,7 +81,7 @@ export class WolfDenService {
       RFId: rfId,
     });
     return this.http.get<{ id: number, status: boolean }>(
-      `${this.baseUrl}/api/Employee/sign-up`,
+      `${this.baseUrl}/api/employee/sign-up`,
       { headers: this.getHeaders(), params }
     );
   }
@@ -92,7 +92,7 @@ export class WolfDenService {
       Password: password,
     });
     return this.http.get<any>(
-      `${this.baseUrl}/api/Employee/login`,
+      `${this.baseUrl}/api/employee/login`,
       { headers: this.getHeaders(), params }
 
     );
@@ -102,7 +102,7 @@ export class WolfDenService {
   }
 
   signIn(data: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/api/Employee/employee-update-employee`, data, { headers: this.getHeaders() });
+    return this.http.put(`${this.baseUrl}/api/employee/employee-update-employee`, data, { headers: this.getHeaders() });
   }
 
   getAllEmployees(pageNumber: number, pageSize: number, departmentId?: number, employeeName?: string): Observable<IEmployeeDirectoryWithPagecount> {
@@ -113,7 +113,7 @@ export class WolfDenService {
       EmployeeName: employeeName,
     });
     return this.http.get<IEmployeeDirectoryWithPagecount>(
-      `${this.baseUrl}/api/Employee/all`,
+      `${this.baseUrl}/api/employee/all`,
       { headers: this.getHeaders(), params }
     );
   }
@@ -143,16 +143,27 @@ export class WolfDenService {
       { headers: this.getHeaders(), params }
     );
   }
-  markAsRead(notificationId: number): Observable<any> {
-    return this.http.patch<any>(`${this.baseUrl}/api/Notification/read`, {notificationId}, {
+  markAsRead(notificationId: number): Observable<boolean> {
+    return this.http.patch<boolean>(`${this.baseUrl}/api/Notification/read`, {notificationId}, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
     });
   }
+  checkPassword(id: number, password: string): Observable<boolean> {
+    const params = this.createHttpParams({
+      Id: id,
+      Password: password,
+    });
+    return this.http.get<boolean>(
+      `${this.baseUrl}/api/employee/check-password`,
+      { headers: this.getHeaders(), params }
+
+    );
+  }
 
   resetPassword(id: number, password:string): Observable<boolean> {
-    const url = `${this.baseUrl}/api/Employee/reset-password`;
+    const url = `${this.baseUrl}/api/employee/reset-password`;
     const payload = { id,password }; 
     return this.http.patch<boolean>(url, payload, {
       headers: new HttpHeaders({
