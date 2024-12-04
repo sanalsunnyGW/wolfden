@@ -1,6 +1,4 @@
-import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, Inject, inject, OnInit } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { ILeaveBalanceList } from '../../../../../interface/leave-balance-list-interface';
@@ -16,20 +14,19 @@ import { WolfDenService } from '../../../../../service/wolf-den.service';
   styleUrl: './leave-dashboard.component.scss'
 })
 export class LeaveDashboardComponent implements OnInit {
-userService=inject(WolfDenService);
-leaveList:ILeaveBalanceList[]=[];
-destroyRef=inject(DestroyRef);
+  userService = inject(WolfDenService);
+  leaveList: ILeaveBalanceList[] = [];
+  destroyRef = inject(DestroyRef);
 
-constructor(private leaveManagementService:LeaveManagementService) {}
+  constructor(private leaveManagementService: LeaveManagementService) { }
 
-ngOnInit()
-{
-  this.leaveManagementService.getLeaveBalance(this.userService.userId)
-  .pipe(takeUntilDestroyed(this.destroyRef))
-  .subscribe((data)=> {
-      this.leaveList= data; 
-  });
-}
+  ngOnInit() {
+    this.leaveManagementService.getLeaveBalance(this.userService.userId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        this.leaveList = data;
+      });
+  }
 }
 
 
