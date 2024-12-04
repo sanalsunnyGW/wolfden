@@ -72,7 +72,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                             weeklySummary.EmployeeId = subEmployee.Id;
                             List<WeeklySummaryDTO> summary = await _mediator.Send(weeklySummary);
                             managerWeeklyAttendanceDTO.EmployeeName = subEmployee.FirstName + " " + subEmployee.LastName;
-                            managerWeeklyAttendanceDTO.weeklySummary = summary;
+                            managerWeeklyAttendanceDTO.WeeklySummary = summary;
                             managerWeeklyAttendanceDTOs.Add(managerWeeklyAttendanceDTO);
 
                         }

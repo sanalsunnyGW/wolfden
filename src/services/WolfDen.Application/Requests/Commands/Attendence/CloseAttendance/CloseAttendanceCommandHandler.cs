@@ -89,10 +89,20 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                     incompleteShiftDays,halfDay,halfDayleaves);
                 await _context.AddAsync(lop);
             }
+            List<LeaveRequest> openLeaveRequests = await _context.LeaveRequests
+                 .Where(x => x.FromDate <= attendanceClosingDate && x.ToDate >= monthStart &&
+                             x.LeaveRequestStatusId == LeaveRequestStatus.Open)
+                 .ToListAsync(cancellationToken);
+            foreach (var leaveRequest in openLeaveRequests)
+            {
+                leaveRequest.Reject(1);
+                _context.Update(leaveRequest);
+            }
             DateTime date = new DateTime(request.Year, request.Month, 1);
             AttendenceClose attendenceClose = new AttendenceClose(attendanceClosingDate, true, date.ToString("MMMM"), request.Year);
             await _context.AddAsync(attendenceClose);
             return await _context.SaveChangesAsync(cancellationToken);
+
         }
         private string update(string days)
         {

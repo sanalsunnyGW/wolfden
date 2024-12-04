@@ -3,6 +3,6 @@
     public class ManagerWeeklyAttendanceDTO
     {
         public string EmployeeName { get; set; }
-        public List<WeeklySummaryDTO> weeklySummary { get; set; }
+        public List<WeeklySummaryDTO> WeeklySummary { get; set; }
     }
 }

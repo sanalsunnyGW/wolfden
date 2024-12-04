@@ -79,7 +79,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail
                                                 .Bold().FontSize(12);
                                         });
 
-                                        foreach (var weeklySummary in employee.weeklySummary)
+                                        foreach (var weeklySummary in employee.WeeklySummary)
                                         {
                                             table.Cell().Border(1).Padding(10)
                                                 .Text(weeklySummary.Date).FontSize(12);
