@@ -1,19 +1,28 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using sib_api_v3_sdk.Model;
 using WolfDen.Application.DTOs.Employees;
 using WolfDen.Application.DTOs.LeaveManagement;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam;
+using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetSubordinateLeave
 {
-    public class GetSubordinateLeaveQueryHandler(WolfDenContext context, IMediator mediator) : IRequestHandler<GetSubordinateLeaveQuery, SubordinateLeaveRequestPaginationDto>
+    public class GetSubordinateLeaveQueryHandler(WolfDenContext context, IMediator mediator , UserManager<User> userManager) : IRequestHandler<GetSubordinateLeaveQuery, SubordinateLeaveRequestPaginationDto>
     {
         private readonly WolfDenContext _context = context;
         private readonly IMediator _mediator = mediator;
+        private readonly UserManager<User> _userManager = userManager;
         public async Task<SubordinateLeaveRequestPaginationDto> Handle(GetSubordinateLeaveQuery request, CancellationToken cancellationToken)
         {
+            Employee manager = await _context.Employees.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+            User user = await _userManager.FindByIdAsync(manager.UserId);
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            string rolesString = string.Join(",", currentRoles);
+
             List<EmployeeHierarchyDto> employeeHierarchyDto = new List<EmployeeHierarchyDto>();
             GetEmployeeTeamQuery getEmployeeTeamQuery = new GetEmployeeTeamQuery
             {
@@ -29,6 +38,10 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
             }
 
             List<int> listSubordinateEmployeeId = await GetAllChildIds(employeeHierarchyDto);
+            if(rolesString == "SuperAdmin")
+            {
+                listSubordinateEmployeeId.Add(request.Id);  
+            }
             List<SubordinateLeaveDto> subordinateLeaveDtosList = new List<SubordinateLeaveDto>();
             SubordinateLeaveRequestPaginationDto subordinateLeaveRequestPaginationDto = new SubordinateLeaveRequestPaginationDto();
 
