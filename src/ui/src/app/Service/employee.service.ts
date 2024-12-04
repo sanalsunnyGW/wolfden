@@ -33,39 +33,47 @@ export class EmployeeService {
   }
 
   getHierarchy() {
-    return this.http.get(`${this.baseUrl}/Employee/hierarchy
-    `);
+    return this.http.get(`${this.baseUrl}/employee/hierarchy`);
   }
   getEmployeeProfile(employeeId: number) {
-    return this.http.get(`${this.baseUrl}/Employee/by-Id?EmployeeId=${employeeId}`);
+    return this.http.get(`${this.baseUrl}/employee/by-Id?EmployeeId=${employeeId}`);
   }
   employeeUpdateEmployee(userForm: any) {
-    return this.http.put(`${this.baseUrl}/Employee/employee-update-employee`, userForm);
+    return this.http.put(`${this.baseUrl}/employee/employee-update-employee`, userForm);
   }
   getMyTeamHierarchy(getFullHierarchy: boolean, employeeId: number) {
-    return this.http.get(`https://localhost:7015/api/Employee/team?Id=${getFullHierarchy}`);
+    return this.http.get(`${this.baseUrl}/employee/team?Id=${employeeId}&Hierarchy=${getFullHierarchy}`);
   }
   addDepartment(departmentForm: any) {
-    return this.http.post(`${this.baseUrl}/Department`, departmentForm);
+    return this.http.post(`${this.baseUrl}/department`, departmentForm);
   }
   addDesignation(designationForm: any) {
-    return this.http.post(`${this.baseUrl}/Designation`, designationForm);
+    return this.http.post(`${this.baseUrl}/designation`, designationForm);
   }
   getAllDesignation() {
-    return this.http.get(`${this.baseUrl}/Designation`);
+    return this.http.get(`${this.baseUrl}/designation`);
 
   }
   getAllDepartment() {
-    return this.http.get(`${this.baseUrl}/Department`);
+    return this.http.get(`${this.baseUrl}/department`);
 
   }
   getEmployeeByName(firstName: any, lastName?: any) {
-    return this.http.get(`${this.baseUrl}/Employee/get-all-by-name?FirstName=${firstName}&LastName=${lastName}`)
+    return this.http.get(`${this.baseUrl}/employee/get-all-by-name?FirstName=${firstName}&LastName=${lastName}`)
   }
   adminUpdateEmployee(userForm: any) {
-    return this.http.put(`${this.baseUrl}/Employee/admin`, userForm)
+    return this.http.put(`${this.baseUrl}/employee/admin`, userForm)
   }
   roleChange(roleForm: any) {
-    return this.http.put(`${this.baseUrl}/Employee/super-admin`, roleForm)
+    return this.http.put(`${this.baseUrl}/employee/role`, roleForm)
+  }
+  addEmployee(employeeForm:any){
+    return this .http.post(`${this.baseUrl}/employee`,employeeForm)
+  }
+  syncEmployee(){
+    return this.http.patch(`${this.baseUrl}/employee/employee-sync`,null)
+  }
+  myTeamLeave(employeeId:number){
+    return this.http.get(`${this.baseUrl}/leave-request/next-week/approved?EmployeeId=${employeeId}`)
   }
 }

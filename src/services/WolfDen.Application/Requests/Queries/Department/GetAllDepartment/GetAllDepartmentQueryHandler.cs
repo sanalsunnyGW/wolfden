@@ -16,7 +16,7 @@ namespace WolfDen.Application.Requests.Queries.Department.GetAllDepartment
 
         public async Task<List<DepartmentDTO>> Handle(GetAllDepartmentQuery query, CancellationToken cancellationToken)
         {
-            var departments = await _context.Departments
+            List<DepartmentDTO> departments = await _context.Departments
               .Select(department => new DepartmentDTO
               {
                   Id = department.Id,

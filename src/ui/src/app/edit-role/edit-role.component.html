@@ -22,13 +22,17 @@
             <tr>
                 <th scope="col">Employee Id</th>
                 <th scope="col">Employee Name</th>
+                <th scope="col">Employee Role</th>
+
             </tr>
         </thead>
         <tbody>
             @for(manager of managerData;track manager){
-            <tr (click)="selectEmployee(manager)">
+            <tr (click)="selectEmployee(manager)" data-bs-toggle="modal" data-bs-target="#editrole">
                 <th scope="row">{{manager.id}}</th>
                 <td>{{manager.firstName}} {{manager.lastName}}</td>
+                <td>{{manager.role}}</td>
+
             </tr>
             }
         </tbody>
@@ -39,38 +43,6 @@
 @if(isDataLoaded && managerData.length===0){
 <p>No manager data available.</p>
 }
-@if(isDataClicked){
-<label for="managerName" class="form-label mt-3">Selected Employee</label>
-
-<div class="table-container ">
-    <table class="table table-hover table-container">
-        <thead>
-            <tr>
-                <th scope="col">Employee Id</th>
-                <th scope="col">Employee Name</th>
-                <th scope="col">Employee Role</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">{{employeeClicked.id}}</th>
-                <td>{{employeeClicked.firstName}} {{employeeClicked.lastName}}</td>
-                <td>{{employeeClicked.role}}</td>
-                <td>
-                    <button type="submit" class="btn btn-primary custom-btn" data-toggle="tooltip" data-placement="top"
-                        title="Click to Edit Employees Role" data-bs-toggle="modal" data-bs-target="#editrole">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                </td>
-
-            </tr>
-
-        </tbody>
-    </table>
-</div>
-}
-
 
 <!-- Modal -->
 <div class="modal fade" id="editrole" tabindex="-1" aria-labelledby="editroleLabel" aria-hidden="true">

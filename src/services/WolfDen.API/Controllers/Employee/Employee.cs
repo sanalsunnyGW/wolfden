@@ -15,14 +15,13 @@ using WolfDen.Infrastructure.Data;
 using WolfDen.Application.Requests.Commands.Employees.SuperAdminUpdateEmployee;
 using WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName;
 using WolfDen.Application.Requests.Commands.Employees.SyncEmployee;
-using Microsoft.AspNetCore.Identity.Data;
-using WolfDen.Application.Requests.Commands.Employees.ResetPassword;
-using System.ComponentModel.DataAnnotations;
+using WolfDen.Application.Requests.Commands.Employees.AddSuperAdmin;
+using WolfDen.Application.Requests.Queries.Employees.EmployeePasswordCheck;
 
 namespace WolfDen.API.Controllers.Employee
 {
-
-    [Route("api/[controller]")]
+    [Authorize]
+    [Route("api/employee")]
     [ApiController]
     public class Employee(IMediator mediator) : ControllerBase
     {
@@ -34,72 +33,26 @@ namespace WolfDen.API.Controllers.Employee
         {
             return await _mediator.Send(new SyncEmployeeCommand());
         }
-
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPost]
         public async Task<int> AddEmployee([FromBody] AddEmployeecommand command, CancellationToken cancellationToken)
         {
             return await _mediator.Send(command, cancellationToken);
         }
-        /* public async Task<IActionResult> AddEmployee([FromBody] AddEmployeecommand command, CancellationToken cancellationToken)
-         {
-             try
-             {
-                 int employeeId = await _mediator.Send(command, cancellationToken);
-
-                 return CreatedAtAction(nameof(AddEmployee), new { id = employeeId }, employeeId);
-             }
-             catch (ValidationException ex)
-             {
-                 var validationErrors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
-
-                 var result = new ObjectResult(new
-                 {
-                     Message = "Validation failed",
-                     Errors = validationErrors
-                 })
-                 {
-                     StatusCode = StatusCodes.Status422UnprocessableEntity 
-                 };
-                 return result;
-    }
-        }*/
-
-
-
-        /*     public async Task<IActionResult> AddEmployee([FromBody] AddEmployeecommand command, CancellationToken cancellationToken)
-             {
-                 try
-                 {
-                     int employeeId = await _mediator.Send(command, cancellationToken);
-
-                     return CreatedAtAction(nameof(AddEmployee), new { id = employeeId }, employeeId);
-                 }
-                 catch (ValidationException ex)
-                 {
-                     var validationErrors = ex.Errors.Select(e => new { e.PropertyName, e.ErrorMessage });
-                     return UnprocessableEntity(new
-                     {
-                         Message = "Validation failed",
-                         Errors = validationErrors
-                     });
-                 }
-             }*/
-
-
-
+        [AllowAnonymous]
         [HttpPut("employee-update-employee")]
         public async Task<bool> EmployeeUpdateEmployee([FromBody] EmployeeUpdateEmployeeCommand command, CancellationToken cancellationToken)
         {
             return await _mediator.Send(command, cancellationToken);
         }
-        //[Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPut("admin")]
         public async Task<bool> AdminUpdateEmployee([FromBody] AdminUpdateEmployeeCommand command, CancellationToken cancellationToken)
         {
             return await _mediator.Send(command, cancellationToken);
         }
-        //[Authorize(Roles = "SuperAdmin")]
-        [HttpPut("super-admin")]
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpPut("role")]
         public async Task<bool> SuperAdminUpdateEmployee([FromBody] SuperAdminUpdateEmployeeCommand command, CancellationToken cancellationToken)
         {
             return await _mediator.Send(command, cancellationToken);
@@ -115,6 +68,7 @@ namespace WolfDen.API.Controllers.Employee
         {
             return await _mediator.Send(query, cancellationToken);
         }
+        [AllowAnonymous]
         [HttpGet("login")]
         public async Task<LoginResponseDTO> EmployeeLogin([FromQuery] EmployeeLoginQuery query, CancellationToken cancellationToken)
         {
@@ -148,11 +102,12 @@ namespace WolfDen.API.Controllers.Employee
 
 
         }
-
-        [HttpPatch("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
+        [HttpGet("check-password")]
+        public async Task<ActionResult<bool>> CheckPassword([FromQuery] CheckEmployeePasswordQuery query, CancellationToken cancellationToken)
         {
-            return Ok(await _mediator.Send(command));
+            return await _mediator.Send(query, cancellationToken);
+
         }
+
     }
 }
