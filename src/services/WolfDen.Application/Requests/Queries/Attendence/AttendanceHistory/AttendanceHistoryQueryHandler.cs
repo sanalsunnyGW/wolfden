@@ -44,7 +44,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
 
             Dictionary<DateOnly, LeaveRequest> leaveDictionary = leave.ToDictionary(x => x.FromDate);
 
-            for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
+            for (DateOnly currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
                 AttendanceStatus statusId = AttendanceStatus.Absent;
 
