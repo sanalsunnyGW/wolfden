@@ -104,18 +104,7 @@ export class SigninComponent {
         photo:this.userForm.value.photo??'',
         password:this.userForm.value.password??''
 
-        // "id": 2,
-        // "firstName": "Anju",
-        // "lastName": "S",
-        // "email": "anju@gmail.com",
-        // "phoneNumber": "8921275104",
-        // "dateofBirth": "1999-12-03",
-        // "gender": 2,
-        // "address": "Kulathur",
-        // "country": "India",
-        // "state": "Kerala",
-        // "photo":  null,
-        // "password": "Example@123"
+
       }
   
 

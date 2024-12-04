@@ -114,7 +114,6 @@ export class WeeklyAttendanceComponent {
  status:number[]=[]
  statusColor=["#72BF78","#AE445A","#FCF596","#AB886D","#536493","#9B7EBD","#FEF3E2"]
  ngOnInit(){
-
   const today=new Date();
   const year = getYear(today);
   const weekNumber = getISOWeek(today);

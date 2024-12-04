@@ -7,24 +7,12 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Commands.Employees.ResetPassword
 {
-    public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, bool>
+    public class ResetPasswordCommandHandler(WolfDenContext context, IPasswordHasher<User> passwordHasher) : IRequestHandler<ResetPasswordCommand, bool>
     {
-        private readonly WolfDenContext _context;
-        private readonly IPasswordHasher<User> _passwordHasher;
-
-        public ResetPasswordCommandHandler(WolfDenContext context, IPasswordHasher<User> passwordHasher)
-        {
-            _context = context;
-            _passwordHasher = passwordHasher;
-        }
-
+        private readonly WolfDenContext _context = context;
+        private readonly IPasswordHasher<User> _passwordHasher = passwordHasher;
         public async Task<bool> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
-            if (request.Id <= 0 || string.IsNullOrWhiteSpace(request.password))
-            {
-                throw new ValidationException("Invalid employee ID or password.");
-            }
-
             var employee = await _context.Employees.FindAsync(new object[] { request.Id }, cancellationToken);
             if (employee == null)
             {
@@ -32,7 +20,7 @@ namespace WolfDen.Application.Requests.Commands.Employees.ResetPassword
             }
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == employee.Email, cancellationToken);
-            if (user == null)
+            if (user is null)
             {
                 throw new KeyNotFoundException("User not found for the associated employee.");
             }

@@ -59,7 +59,6 @@ leaveBalance2: number = 0;
 leaveType3: string = '';
 leaveBalance3: number = 0;
   ngOnInit() {
-    this.generateCalendar();
     //todays absence
     this.userService.getTodaysAbsence().subscribe((data)=>{
       this.todaysAbsences=data;
@@ -90,34 +89,5 @@ leaveBalance3: number = 0;
           
         }
       });
-  }
-
-  private generateCalendar() {
-    const year = this.currentDate.getFullYear();
-    const month = this.currentDate.getMonth();
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-    //empty cells for days before the first of the month
-    for (let i = 0; i < firstDay; i++) {
-      this.calendarDays.push({ date: '', isHoliday: false });
-    }
-
-    // Add actual days
-    for (let day = 1; day <= daysInMonth; day++) {
-      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-      const holiday = this.holidays.find(h => h.date === dateStr);
-
-      this.calendarDays.push({
-        date: day,
-        isHoliday: !!holiday,
-        holidayName: holiday?.name
-      });
-    }
-  }
-
-
-  getMonthAndYear(): string {
-    return this.currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
   }
 }

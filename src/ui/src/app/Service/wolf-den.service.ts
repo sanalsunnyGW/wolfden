@@ -30,7 +30,6 @@ export class WolfDenService {
       const payload = this.emp.decodeToken();
       if(payload){
       this.userId = parseInt(payload.EmployeeId || 0, 10);
-      console.log(this.userId)
       this.role = (payload.role||"");
       console.log(this.role)
       this.firstName = (payload.FirstName || 'welcome back');
@@ -145,9 +144,7 @@ export class WolfDenService {
     );
   }
   markAsRead(notificationId: number): Observable<any> {
-    const url = `${this.baseUrl}/api/Notification/read`;
-    const payload = { notificationId }; 
-    return this.http.patch<any>(url, payload, {
+    return this.http.patch<any>(`${this.baseUrl}/api/Notification/read`, {notificationId}, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
