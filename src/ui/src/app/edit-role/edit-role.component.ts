@@ -95,8 +95,6 @@ export class EditRoleComponent {
   }
 
   selectEmployee(employee: any): void {
-    this.employeeClicked = employee;
-    this.isDataClicked = true;
     this.roleForm.patchValue({
       id: employee.id,
       role: employee.role

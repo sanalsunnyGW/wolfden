@@ -18,3 +18,24 @@
 }
 
   
+.card {
+  height: 300px; /* Fixed height for all cards */
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+
+}
+
+.card-body {
+  flex-grow: 1; /* This ensures the content inside the card body takes the available space */
+  overflow: auto; /* Handles content overflow */
+  
+}
+.profile-img {
+  height: 290px;
+  object-fit: cover; /* Ensures the image fills the space without distortion */
+  width: 100%;
+}
+td {
+  padding-left: 30px; /* Adds space to the left of the value */
+}

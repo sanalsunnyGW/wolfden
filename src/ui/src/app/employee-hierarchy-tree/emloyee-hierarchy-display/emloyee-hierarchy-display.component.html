@@ -1,12 +1,17 @@
 <div class="container d-flex  profile-container mb-5 gap-2">
     <div>
-        <img src="{{employeeData.photo}}" class="img-thumbnail profile-img" alt="Profile Image">
+        @if(employeeData.photo){
+        <img src="{{employeeData.photo}}" class="rounded-circle profile-img" alt="Profile Image">
+        }
+        @if(!employeeData.photo){
+        <img src="{{profileImage()}}" class="rounded-circle profile-img" alt="Profile Image">
+        }
+
     </div>
-    <div class="profile-info">
-        <h2>{{employeeData.firstName}} {{employeeData.lastName}}</h2>
-        <h6>{{employeeData.designationName}}</h6>
+    <div class="profile-info p-2 h1">
+        <h1>{{employeeData.firstName}} {{employeeData.lastName}}</h1>
+        <h5 >{{employeeData.designationName}}</h5>
         <h6>{{employeeData.email}}</h6>
-        <h6>{{employeeData.phoneNumber}}</h6>
     </div>
 
 </div>
@@ -100,7 +105,7 @@
                             title="Click to Update Employment Details" (click)="loadForm(employeeData)">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
-                    }
+                        }
                     </div>
                 </th>
             </tr>
@@ -181,10 +186,10 @@
                                     placeholder="First Name " formControlName="firstName">
                                 <input type="text" aria-label="Last name" class="form-control" placeholder="Last Name "
                                     formControlName="lastName">
-                                    <button type="submit" class="btn btn-primary custom-btn" data-toggle="tooltip"
-                                    data-placement="top" title="Click to Search Employees"> 
+                                <button type="submit" class="btn btn-primary custom-btn" data-toggle="tooltip"
+                                    data-placement="top" title="Click to Search Employees">
                                     <i class="fa-solid fa-magnifying-glass"></i>
-                                            </button>
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -202,7 +207,7 @@
                                 @for(manager of managerData;track manager){
                                 <tr (click)="selectEmployee(manager.id)">
                                     <th scope="row">{{manager.id}}</th>
-                                    <td>{{manager.firstName}}  {{manager.lastName}}</td>
+                                    <td>{{manager.firstName}} {{manager.lastName}}</td>
                                 </tr>
                                 }
                             </tbody>
@@ -219,12 +224,13 @@
                     </div>
                     }
                     @if(isDataClicked){
-                        <div class="mb-3 mt-3">
-                            <label for="designationName" class="form-label">Selected EmployeeID</label>
-                            <div>
-                        <input class="form-control" type="text" value="{{employeeIdClicked}}" aria-label="readonly input example" readonly>
-                            </div>
+                    <div class="mb-3 mt-3">
+                        <label for="designationName" class="form-label">Selected EmployeeID</label>
+                        <div>
+                            <input class="form-control" type="text" value="{{employeeIdClicked}}"
+                                aria-label="readonly input example" readonly>
                         </div>
+                    </div>
                     }
 
                     <div class="mb-3">
@@ -247,6 +253,11 @@
                             Employment Type is required.
                         </div>
                         }
+                    </div>
+                    <div class="form-check form-switch">
+                        <label class="form-check-label" for="flexSwitchCheckChecked">Active</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
+                            checked formControlName="isActive">
                     </div>
                     <div class="d-flex justify-content-end gap-2">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

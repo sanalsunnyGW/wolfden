@@ -36,7 +36,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName
 
             foreach (var employee in employees)
             {
-                var user = await _userManager.FindByIdAsync(employee.UserId);
+                User user = await _userManager.FindByIdAsync(employee.UserId);
                 var userRole = await _userManager.GetRolesAsync(user);
                 EmployeeNameDTO employeeNameDTO = new EmployeeNameDTO()
                 {

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.Employees;
+using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Employees.ViewEmployee
@@ -15,7 +16,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.ViewEmployee
         }
         public async Task<EmployeeDTO> Handle(GetEmployeeQuery request, CancellationToken cancellationToken)
         {
-            var employee = await _context.Employees
+            Employee employee = await _context.Employees
                 .Include(e => e.Designation)
                 .Include(e => e.Department)
                 .Include(e => e.Manager)
