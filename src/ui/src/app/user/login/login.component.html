@@ -7,7 +7,7 @@
     <input class="form-control bg-body-secondary"
     placeholder="Email" formControlName="email">
     @if (hasDisplayableError('email') && userForm.controls['email'].hasError('required')) {
-        <div class="error-feedback">
+        <div class="error-feedback text-danger">
             Please enter your email
         </div>
         }
@@ -16,7 +16,7 @@
     <input type="password" class="form-control bg-body-secondary"
     placeholder="Password" formControlName="password">
     @if (hasDisplayableError('password') && userForm.controls['password'].hasError('required')) {
-        <div class="error-feedback">
+        <div class="error-feedback text-danger">
             Please enter your password
         </div>
         }

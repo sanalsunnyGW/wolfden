@@ -1,18 +1,27 @@
 <div class="container d-flex  profile-container mb-5">
-    <div class="position-relative d-inline-block">
-        <img src="{{employeeData.photo}}" class="img-thumbnail profile-img" alt="Profile Image">
+    <div>
+        @if(employeeData.photo){
+        <img src="{{employeeData.photo}}" class="rounded-circle profile-img " alt="Profile Image" data-bs-toggle="modal"
+            data-bs-target="#photo" data-toggle="tooltip" data-placement="top" title="Click to Update Profile Photo"
+            (click)="loadForm(employeeData)">
+        }
+        @if(!employeeData.photo){
+            
+        @if(!employeeData.photo){
+        <img src="{{profileImage()}}" class="rounded-circle profile-img" alt="Profile Image" data-bs-toggle="modal"
+            data-bs-target="#photo" data-toggle="tooltip" data-placement="top" title="Click to Update Profile Photo"
+            (click)="loadForm(employeeData)">
+        }
 
-        <i class="fa-solid fa-pen-to-square position-absolute text-white "
-            style="top: 10px; right: 10px; z-index: 10; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#photo"
-            data-toggle="tooltip" data-placement="top" title="Click to Update Profile Photo" (click)="loadForm(employeeData)">
-        </i>
+        }
+
+
+
     </div>
 
-    <div class="profile-info">
-        <h2>{{employeeData.firstName}} {{employeeData.lastName}}</h2>
-        <h6>{{employeeData.designationName}}</h6>
-        <h6>{{employeeData.email}}</h6>
-        <h6>{{employeeData.phoneNumber}}</h6>
+    <div class="profile-info p-2">
+        <h1>Hi, {{employeeData.firstName}} {{employeeData.lastName}}</h1>
+        <h5>{{employeeData.designationName}}</h5>
     </div>
 
 </div>
@@ -289,9 +298,17 @@
             <div class="modal-body">
                 <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
                     <div class="mb-3">
-                        <label for="formFile" class="form-label">Upload Photo</label>
+                        <div class="d-flex justify-content-between">
+                            <label for="formFile" class="form-label">Upload Photo</label>
+                            <i class="fa-solid fa-trash" data-bs-dismiss="modal" (click)="removePicture()"></i>
+
+                        </div>
                         <input class="form-control" type="file" id="formFile" (change)="onImageUpload($event)">
+
+
+
                     </div>
+
                     <div class="d-flex justify-content-end gap-2">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary custom-btn" data-bs-dismiss="modal"

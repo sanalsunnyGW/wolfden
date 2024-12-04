@@ -17,7 +17,7 @@
           <h5 class="card-title heading">
             <i class="fas fa-clock"></i> Arrival Time
           </h5>
-          <p class="card-text">{{convertToTime(dailyData.arrivalTime) }}</p>
+          <p class="card-text">{{dailyData.arrivalTime ? (dailyData.arrivalTime | date:'shortTime':'UTC') :'-'}}</p>
         </div>
       </div>
     </div>
@@ -28,7 +28,7 @@
           <h5 class="card-title heading">
             <i class="fas fa-sign-out-alt"></i> Departure
           </h5>
-          <p class="card-text">{{convertToTime(dailyData.departureTime)  }}</p>
+          <p class="card-text">{{dailyData.departureTime ?(dailyData.departureTime | date:'shortTime':'UTC') :'-'}}</p>
         </div>
       </div>
     </div>
@@ -59,11 +59,13 @@
 
     <div class="col">
       <div class="card shadow-sm cardStyle">
-        <div class="card-body">
+        <div class="card-body scroll">
           <h5 class="card-title heading">
             <i class="fas fa-times-circle"></i> Missed Punch
           </h5>
-          <p class="card-text">{{isMissed(dailyData.missedPunch)}}</p>
+          <p class="card-text" *ngFor="let punch of dailyData.missedPunch|splitComma">
+              {{punch}}
+         </p>
         </div>
       </div>
     </div>
@@ -92,7 +94,7 @@
         <tbody>
           <tr *ngFor="let log of dailyData.dailyLog; let i = index" class="align-middle">
             <td>{{ i + 1 }}</td>
-            <td>{{ convertToTime(log.time) }}</td>
+            <td>{{ log.time ? (log.time| date:'shortTime':'UTC') :'-'}}</td>
             <td>{{ log.deviceName }}</td>
             <td>
                 {{ log.direction === 1 ? 'IN' : 'OUT' }}

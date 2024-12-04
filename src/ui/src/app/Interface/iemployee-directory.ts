@@ -1,4 +1,5 @@
 export interface IEmployeeDirectoryDto {
+    id:number;
     employeeCode: number;
     firstName: string;
     lastName: string;

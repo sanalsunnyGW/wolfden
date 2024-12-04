@@ -2,7 +2,8 @@
   border-radius: 10px;
 }
 .card-body {
-  padding: 1.25rem;
+  padding: 1.35rem;
+  height: 115px;
 } 
 h5.card-title {
   font-size: 1.25rem;
@@ -25,7 +26,10 @@ table {
 table th {
   text-align: center;
 }
-
+.scroll {
+  max-height: 115px;
+  overflow-y: auto;
+}
 .table-responsive {
   margin-top: 20px;
 }

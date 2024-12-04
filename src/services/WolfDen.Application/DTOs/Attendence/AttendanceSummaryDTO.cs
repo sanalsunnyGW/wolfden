@@ -9,5 +9,6 @@
         public int NormalHoliday { get; set; }
         public int WFH { get; set; }
         public int Leave { get; set; }
+        public int HalfDay { get; set; }
     }
 }

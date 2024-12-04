@@ -10,8 +10,8 @@ namespace WolfDen.Application.DTOs.Employees
 {
     public class EmployeeDirectoryDTO
     {
+        public int Id { get;  set; }
         public int EmployeeCode { get; set; }
-
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Email { get; set; }
