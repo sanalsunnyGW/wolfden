@@ -28,7 +28,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
         public async Task<bool> Handle(AddLeaveRequestForEmployeeByAdmin request, CancellationToken cancellationToken)
         {
             Employee employee = await _context.Employees.FirstOrDefaultAsync(x => x.EmployeeCode == request.EmployeeCode, cancellationToken);
-            Employee admin = await _context.Employees.FirstOrDefaultAsync(x => x.Id == request.AdminId, cancellationToken); 
+            Employee admin = await _context.Employees.FirstAsync(x => x.Id == request.AdminId, cancellationToken); 
             if (employee == null)
             {
                 throw new InvalidOperationException($"No Such Employee");
@@ -193,6 +193,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
                         immediateManagerMail = new string[] { receiverManagerEmails[0] };
                         superiorsMails = receiverManagerEmails.Skip(1).ToArray();
                     }
+                    superiorsMails = receiverManagerEmails.Skip(1).ToArray();
                     string subject = $"Leave Application for dates {request.FromDate} to &{request.ToDate}";
                     string message = $@"
                                     <html>
@@ -248,7 +249,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
                                     </body>
                                     </html>";
 
-                      _email.SendMail(_senderEmail, _senderName, immediateManagerMail, message, subject, superiorsMails.ToArray());
+                      _email.SendMail(_senderEmail, _senderName, immediateManagerMail, message, subject, superiorsMails);
                     List<int> managerIds = await FindManagerIdsAsync(employee.ManagerId, cancellationToken);
                     string notificationMessage = $" Leave {leaveRequest.FromDate} to {leaveRequest.ToDate} is Applied by {admin.FirstName} {admin.LastName} [Admin Code :{admin.EmployeeCode}] for {employee.FirstName} {employee.LastName} [Employee Code : {employee.EmployeeCode}]";
                     foreach (int managerId in managerIds)
