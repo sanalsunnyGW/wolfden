@@ -1,18 +1,20 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.Attendence;
+using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
 {
-    public class DailyStatusQueryHandler(WolfDenContext context) : IRequestHandler<DailyStatusQuery, List<DailyStatusDTO>>
+    public class DailyStatusQueryHandler(WolfDenContext context, OfficeDurationSettings officeDurationSettings) : IRequestHandler<DailyStatusQuery, List<DailyStatusDTO>>
     {
         private readonly WolfDenContext _context = context;
+        private readonly OfficeDurationSettings _officeDurationSettings = officeDurationSettings;
         public async Task<List<DailyStatusDTO>> Handle(DailyStatusQuery request, CancellationToken cancellationToken)
         {
-            int minWorkDuration = 360;
+            int minWorkDuration = _officeDurationSettings.MinWorkDuration;
 
             DateOnly monthStart = new DateOnly(request.Year, request.Month, 1);
             DateOnly monthEnd = monthStart.AddMonths(1).AddDays(-1);

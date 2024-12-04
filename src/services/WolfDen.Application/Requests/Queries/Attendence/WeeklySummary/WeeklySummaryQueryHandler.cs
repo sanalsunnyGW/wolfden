@@ -1,18 +1,20 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.Attendence;
+using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
 {
-    public class WeeklySummaryQueryHandler(WolfDenContext context) : IRequestHandler<WeeklySummaryQuery, List<WeeklySummaryDTO>>
+    public class WeeklySummaryQueryHandler(WolfDenContext context, OfficeDurationSettings officeDurationSettings) : IRequestHandler<WeeklySummaryQuery, List<WeeklySummaryDTO>>
     {
         private readonly WolfDenContext _context = context;
+        private readonly OfficeDurationSettings _officeDurationSettings = officeDurationSettings;
         public async Task<List<WeeklySummaryDTO>> Handle(WeeklySummaryQuery request, CancellationToken cancellationToken)
         {
-            int minWorkDuration = 360;
+            int minWorkDuration = _officeDurationSettings.MinWorkDuration;
             List<WeeklySummaryDTO> weeklySummary = new List<WeeklySummaryDTO>();
             DateTime startDate = DateTime.Parse(request.WeekStart);
             DateTime endDate = DateTime.Parse(request.WeekEnd);

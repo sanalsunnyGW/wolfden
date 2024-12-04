@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.Requests.DTOs.Attendence;
+using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
@@ -10,9 +11,11 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
     public class DailyDetailsQueryHandler :IRequestHandler<DailyDetailsQuery,DailyAttendanceDTO>
     {
         private readonly WolfDenContext _context;
-        public DailyDetailsQueryHandler(WolfDenContext context)
+        private readonly OfficeDurationSettings _officeDurationSettings ;
+        public DailyDetailsQueryHandler(WolfDenContext context, OfficeDurationSettings officeDurationSettings)
         {
             _context = context;
+            _officeDurationSettings = officeDurationSettings;
         }
         public async Task<DailyAttendanceDTO> Handle(DailyDetailsQuery request, CancellationToken cancellationToken)
         {
@@ -30,7 +33,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                 holiday.AttendanceStatusId=AttendanceStatus.NormalHoliday;
                 return holiday;    
             }
-            int minWorkDuration = 360;
+            int minWorkDuration = _officeDurationSettings.MinWorkDuration;
             DailyAttendanceDTO? attendence = await _context.DailyAttendence
                 .Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date)
                 .Select(x => new DailyAttendanceDTO
