@@ -3,8 +3,15 @@ import { WolfDenService } from './service/wolf-den.service';
 import { inject } from '@angular/core';
 
 export const guardsGuard: CanActivateFn = (route, state) => {
- //for checking purpose
-  return true;
+  const userService=inject(WolfDenService);
+  userService.checkExpiry();
+  const isLoggedIn =  !!localStorage.getItem('token');;
+  const router = inject(Router); 
+  if(!isLoggedIn){
+    return router.createUrlTree(['/user/login']);  
+  }
+  return isLoggedIn;
+  
 };
 
 

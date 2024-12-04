@@ -14,4 +14,49 @@ th {
 background-color: #f4f4f4;
 color: #333;
 font-weight: bold;
+text-align: center;
 }
+
+td{
+    text-align: center;
+}
+
+.status-present {
+    color: green;
+  }
+  
+  .status-absent {
+    color: red;
+  }
+  
+  .status-incomplete {
+    color: orange;
+  }
+  
+  .status-restricted {
+    color: #ff9800;
+  }
+  
+  .status-normal-holiday {
+    color: #4caf50;
+  }
+  
+  .status-wfh {
+    color: blue;
+  }
+  
+  .status-leave {
+    color: purple;
+  }
+  
+  .status-weekend {
+    color: brown;
+  }
+  
+  .status-unknown {
+    color: grey;
+  }
+  .bold-status {
+    font-weight: 500;
+  }
+  
