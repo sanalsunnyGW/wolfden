@@ -13,7 +13,7 @@ namespace WolfDen.API.Controllers.Department
     {
         private readonly IMediator _mediator=mediator;
 
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost]
         public async Task<int> AddDepartment([FromBody] AddDepartmentCommand command,CancellationToken cancellationToken)
         {

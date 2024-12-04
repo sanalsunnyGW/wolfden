@@ -33,16 +33,20 @@ export class CheckUserComponent {
     ;
     if(this.userForm.valid){
      
-      this.userService.getEmployeeSignUp(this.userForm.value.employeeCode,this.userForm.value.rfid).subscribe({
-        next: (response: any) => {
+      this.userService.getEmployeeSignUp(this.userForm.value.employeeCode,this.userForm.value.rfId).subscribe({
+        next: (response) => {
           if(response.status){
+            this.userService.userId=response.id;
             this.toastr.success('Sucess')
             this.router.navigate(['/user/sign-in'])
         
           }
-          else{
+          else if(response.id!=0){
             this.toastr.error('user already exist')
             this.router.navigate(['/user/login'])
+          }
+          else{
+            this.toastr.error('Invalid');
           }
         
       },

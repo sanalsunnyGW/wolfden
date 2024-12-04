@@ -1,13 +1,15 @@
 <div class="d-flex flex-column gap-5 ">
-  <div class="d-flex">
-    <div>
-      <h3><span class="badge badcolr">Select a week</span></h3>
+  @if(currentRoute !== '/portal/dashboard'){
+    <div class="d-flex">
+      <div>
+        <h3><span class="badge badcolr">Select a week</span></h3>
+      </div>
+      <div>
+        <input type="week" id="week" name="week" class="form-control week" [(ngModel)]="selectedWeek"
+          (change)="getStartOfWeek(selectedWeek)">
+      </div>
     </div>
-    <div>
-      <input type="week" id="week" name="week" class="form-control week" [(ngModel)]="selectedWeek"
-        (change)="getStartOfWeek(selectedWeek)">
-    </div>
-  </div>
+  }
   <div class="chart">
     <canvas id="canvas" height="320"></canvas>
   </div>

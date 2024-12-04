@@ -11,7 +11,6 @@ using WolfDen.Application.DTOs.Attendence;
 using WolfDen.Application.Helpers;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
-using WolfDen.Infrastructure.Migrations;
 
 
 namespace WolfDen.Application.Requests.Commands.Attendence.Email

@@ -6,5 +6,7 @@ namespace WolfDen.Application.DTOs.Attendence
     {
         public DateOnly Date { get; set; }
         public AttendanceStatus Type { get; set; }
+
+        public string Description {  get; set; }
     }
 }

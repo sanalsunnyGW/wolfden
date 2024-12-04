@@ -1,0 +1,27 @@
+<div class="modal-backdrop" (click)="onClose()"></div>
+<div class="modal-container">
+  <div class="modal-header">
+    <h3>Notifications</h3>
+    <button class="close-button" (click)="onClose()">&times;</button>
+  </div>
+  <div class="modal-body">
+    @if(notifications.length === 0){
+      <div  class="no-notifications">
+        No new notifications
+      </div>
+    }
+    @else {
+      @for(notification of notifications; track notification ){
+        <div  class="notification-item">
+          <div class="notification-content" (click)="markNotificationAsRead(notification.notificationId)" title="click to mark as read">
+            <p [class.unread]="!notification">{{ notification.message }}</p>
+            <span class="timestamp">{{ notification.createdAt | date:'short' }}</span>
+          </div>
+          @if(!notifications[notifications.length-1]){
+            <div class="divider"></div>
+          }
+        </div>
+      }
+    }
+  </div>
+</div>
