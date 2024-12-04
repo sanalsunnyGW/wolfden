@@ -22,21 +22,21 @@ export class WolfDenService {
   public firstName: string = ""; 
 
   constructor(private http: HttpClient, private employeeService: EmployeeService) {
-    if (localStorage.getItem('token') !== null) {
-      const payload = this.emp.decodeToken();
-      if(payload){
-      this.userId = parseInt(payload.EmployeeId || 0, 10);
-      this.role = (payload.role||"");
-      this.firstName = (payload.FirstName || 'welcome back');
-      }else {
-        this.toastr.error('Invalid or expired token', 'Error');
-        this.router.navigate(['/user/login']); 
-      }
-    }
-    else{
-      this.toastr.error('login');
-      this.router.navigate(['/user/login']); 
-    }
+    // if (localStorage.getItem('token') !== null) {
+    //   const payload = this.emp.decodeToken();
+    //   if(payload){
+    //   this.userId = parseInt(payload.EmployeeId || 0, 10);
+    //   this.role = (payload.role||"");
+    //   this.firstName = (payload.FirstName || 'welcome back');
+    //   }else {
+    //     this.toastr.error('Invalid or expired token', 'Error');
+    //     this.router.navigate(['/user/login']); 
+    //   }
+    // }
+    // else{
+    //   this.toastr.error('login');
+    //   this.router.navigate(['/user/login']); 
+    // }
   }
   checkExpiry() {
     const payload = this.emp.decodeToken();
