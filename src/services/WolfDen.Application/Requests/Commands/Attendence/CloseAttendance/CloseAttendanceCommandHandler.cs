@@ -53,10 +53,21 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                     }
                     DailyAttendence? attendanceRecord = attendanceRecords.
                         FirstOrDefault(x => x.EmployeeId == employee.Id && x.Date == currentDate);
-                    if (attendanceRecord is not null && attendanceRecord.InsideDuration < minWorkDuration)
+                    if (attendanceRecord is not null)
                     {
-                        incompleteShiftDays += currentDate.ToString("yyyy-MM-dd") + ",";
-                        incompleteShiftCount++;
+                        LeaveRequest? leaveRequest = leaveRequests
+                                  .FirstOrDefault(x => x.EmployeeId == employee.Id && x.FromDate <= currentDate && x.ToDate >= currentDate);
+                        if (leaveRequest is not null && leaveRequest.HalfDay is true)
+                        {
+                            minWorkDuration = minWorkDuration / 2;
+                            halfDay++;
+                            halfDayleaves += currentDate.ToString("yyyy-MM-dd") + ",";
+                        }
+                        if (attendanceRecord.InsideDuration < minWorkDuration)
+                        {
+                            incompleteShiftDays += currentDate.ToString("yyyy-MM-dd") + ",";
+                            incompleteShiftCount++;
+                        } 
                     }
                     else 
                     {
@@ -67,12 +78,6 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                         {
                             lopDays += currentDate.ToString("yyyy-MM-dd") + ",";
                             lopCount++;
-                        }
-
-                        if(leaveRequest is not null && leaveRequest.HalfDay is true && attendanceRecord is not null)
-                        {
-                            halfDay++;
-                            halfDayleaves+= currentDate.ToString("yyyy-MM-dd") + ",";
                         }
                     }
                 }

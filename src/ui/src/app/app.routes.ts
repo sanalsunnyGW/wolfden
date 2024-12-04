@@ -33,10 +33,7 @@ import { AddLeaveByAdminForEmployeesComponent } from './dashboard/dashboard-body
 import { AttendanceHistoryComponent } from './dashboard/dashboard-body/main/attendance-module/attendance-history/attendance-history.component';
 
 export const routes: Routes = [
-    {
-        path: 'profile',
-        component: ProfileComponent
-    }, {
+ {
         path: 'user',
         component: UserComponent,
         children: [
@@ -54,11 +51,10 @@ export const routes: Routes = [
         component: DashboardComponent,
         children: [
             { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-             {path:'dashboard',component:MainPageComponent,canActivate: [guardsGuard]},
+             {path:'dashboard',component:MainPageComponent},
              {path:'employee-directory',component: EmployeeDirectoryComponent,canActivate: [guardsGuard]},
              {path:'leave-dashboard',component:LeaveDashboardComponent,canActivate: [guardsGuard]},
             {path:'leave-request-history',component:LeaveHistoryComponent,canActivate: [guardsGuard]},
-            { path: 'main-page', component: MainPageComponent },
             { path: 'employee-directory', component: EmployeeDirectoryComponent },
             { path: 'leave-dashboard', component: LeaveDashboardComponent },
             { path: 'leave-request-history', component: LeaveHistoryComponent },
@@ -68,7 +64,7 @@ export const routes: Routes = [
             { path: 'attendance/subordinates', component: SubordinatesComponent },
             { path: 'edit-leave-type', component: EditLeaveTypeComponent },
             { path: 'update-leave-balance', component: UpdateLeaveBalanceComponent },
-            {path:'attendance/attendance-history',component:AttendanceHistoryComponent},
+            {path:'attendance/attendance-history/:id',component:AttendanceHistoryComponent},
 
             {
                 path: 'company-hierarchy',
@@ -100,12 +96,7 @@ export const routes: Routes = [
                 component: LeaveHistoryComponent,
     
             },
-            {
-                path: '',
-                component: UserComponent,
-                canActivate: [guardsGuard]
-
-            },
+    
             {
                 path: 'profile',
                 component: ProfileComponent,

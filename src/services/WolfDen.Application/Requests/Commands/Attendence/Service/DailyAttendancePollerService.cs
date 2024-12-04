@@ -1,4 +1,4 @@
-﻿using System.Threading;
+﻿
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,7 +30,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
 
                 DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
                 List<DailyAttendence> newEntries = await _context.DailyAttendence.Include(x => x.Employee)
-                .Where(a => a.Date == today.AddDays(-1) && a.EmailSent == false && a.EmployeeId==42).ToListAsync();
+                .Where(a => a.Date == today.AddDays(-1) && a.EmailSent == false).ToListAsync();
 
                 List<LeaveRequest>? leave = await _context.LeaveRequests
                           .Where(x => x.LeaveRequestStatusId == LeaveRequestStatus.Approved && x.HalfDay == true && x.FromDate == today.AddDays(-1)).ToListAsync();
@@ -54,12 +54,13 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                         Duration = newEntry.InsideDuration,
                         ArrivalTime = newEntry.ArrivalTime,
                         DepartureTime = newEntry.DepartureTime,
-                        Date=newEntry.Date,
+                        Date = newEntry.Date,
                         Message = newEntry.InsideDuration < min
                             ? $"{newEntry.Employee.FirstName}'s shift on {newEntry.Date} is marked as incomplete due to insufficient hours; please review and address the issue."
                             : $"Great job {newEntry.Employee.FirstName}! Your extra hours on {newEntry.Date} are appreciated",
                         Subject = newEntry.InsideDuration < min ? "Incomplete Shift" : "Attendance Summary",
                         Status = newEntry.InsideDuration < min ? "Incomplete Shift" : "Shift Complete",
+                        MissedPunch = newEntry.MissedPunch != null ? newEntry.MissedPunch : "-"
                     };
                     await _mediator.Send(sendEmailCommand);
                 }

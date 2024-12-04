@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using sib_api_v3_sdk.Api;
 using sib_api_v3_sdk.Client;
 using sib_api_v3_sdk.Model;
+using WolfDen.Application.DTOs.Attendence;
 using WolfDen.Application.Helpers;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
@@ -35,9 +36,11 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
             Employee? employee = await _context.Employees
               .Where(e => e.Id == request.EmployeeId).FirstOrDefaultAsync(cancellationToken);
             string[] receiverEmails = { employee.Email };
-            List<string> managerEmails = await _emailFinder.FindManagerEmailsAsync(employee.ManagerId, cancellationToken);
+            List<string> managerEmails = await _emailFinder.FindManagerEmailsAsync(employee.ManagerId);
             string subject = request.Subject;
-           
+            int? hours = request.Duration / 60;
+            int? minutes = request.Duration % 60;
+            string duration = $"{hours}h {minutes}m";
             var dynamicData = new Dictionary<string, object>
         {
             { "name", request.Name },
@@ -45,8 +48,10 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
             { "arrivalTime",request.ArrivalTime.ToString("HH:mm:ss") },
             { "departureTime", request.DepartureTime.ToString("HH:mm:ss") },
             { "status", request.Status },
-            { "duration", request.Duration },
-            { "message",request.Message }
+            { "duration", duration},
+            { "message",request.Message},
+            { "missedPunch",request.MissedPunch }
+
         };
             int templateId = 10;
             bool status = SendMail(_senderEmail, _senderName, receiverEmails,templateId, dynamicData, managerEmails.ToArray(),subject);

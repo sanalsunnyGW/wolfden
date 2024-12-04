@@ -264,7 +264,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ad
                     AddLeaveRequestDayCommand addLeaveRequestDayCommand = new AddLeaveRequestDayCommand();
                     addLeaveRequestDayCommand.LeaveRequestId = leaveRequest.Id;
                     addLeaveRequestDayCommand.Date = dates;
-                    List<string> receivermanagerEmails = await _emailFinder.FindManagerEmailsAsync(employee.ManagerId,cancellationToken);
+                    List<string> receivermanagerEmails = await _emailFinder.FindManagerEmailsAsync(employee.ManagerId);
                     List<string> SuperiorsMails = receivermanagerEmails.Skip(1).ToList();
                     string[] immediateManagerMail = { receivermanagerEmails[0] };
                     string subject = $"Leave Application for dates {request.FromDate} to &{request.ToDate}";
