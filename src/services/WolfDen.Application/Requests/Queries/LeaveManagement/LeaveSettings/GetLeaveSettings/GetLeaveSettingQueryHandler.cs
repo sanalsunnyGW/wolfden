@@ -17,6 +17,10 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveSettings.Get
         public async Task<LeaveSettingDto> Handle(GetLeaveSettingQuery request, CancellationToken cancellationToken)
         {
             LeaveSetting leaveSetting = await _context.LeaveSettings.FirstOrDefaultAsync(cancellationToken);
+            if (leaveSetting is null) 
+            {
+                throw new Exception("Leave Settings Do Not Exist");
+            }
         
             LeaveSettingDto leaveSettingDto = new LeaveSettingDto
             {

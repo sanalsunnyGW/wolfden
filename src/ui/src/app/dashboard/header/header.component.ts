@@ -19,10 +19,9 @@ export class HeaderComponent {
     private router: Router,
     public userService: WolfDenService,
     private employeeService: EmployeeService,
-    private wolfdenService: WolfDenService,
     private toastr: ToastrService) {
     const login = employeeService.decodeToken();
-    
+    this.loginRole = userService.role;
   }
   isDropdownOpen = false;
 

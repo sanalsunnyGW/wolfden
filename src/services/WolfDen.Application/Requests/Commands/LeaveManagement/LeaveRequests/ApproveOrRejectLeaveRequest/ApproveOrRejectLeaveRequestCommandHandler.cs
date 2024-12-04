@@ -1,8 +1,10 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WolfDen.Application.DTOs.Employees;
 using WolfDen.Application.Helper.LeaveManagement;
+using WolfDen.Application.Requests.Commands.Attendence.SendNotification;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
@@ -10,7 +12,7 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.ApproveOrRejectLeaveRequest
 {
-    public class ApproveOrRejectLeaveRequestCommandHandler(WolfDenContext context, IMediator mediator, IConfiguration configuration, Email email) : IRequestHandler<ApproveOrRejectLeaveRequestCommand, bool>
+    public class ApproveOrRejectLeaveRequestCommandHandler(WolfDenContext context, IMediator mediator, IConfiguration configuration, Email email, UserManager<User> userManager) : IRequestHandler<ApproveOrRejectLeaveRequestCommand, bool>
     {
         private readonly WolfDenContext _context = context;
         private readonly IMediator _mediator = mediator;
@@ -18,12 +20,18 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
         private readonly string _senderEmail = configuration["BrevoApi:SenderEmail"];
         private readonly string _senderName = configuration["BrevoApi:SenderName"];
         private readonly Email _email = email;
+        private readonly UserManager<User> _userManager = userManager;
         public async Task<bool> Handle(ApproveOrRejectLeaveRequestCommand request, CancellationToken cancellationToken)
         {
             LeaveRequest leaveRequest = await _context.LeaveRequests.Where(x => x.Id == request.LeaveRequestId && x.LeaveRequestStatusId == LeaveRequestStatus.Open).FirstOrDefaultAsync(cancellationToken);
             LeaveType leaveType1 = await _context.LeaveType.Where(x => x.Id == leaveRequest.TypeId).FirstOrDefaultAsync(cancellationToken);  
             Employee employee = await _context.Employees.FirstOrDefaultAsync(x => x.Id == leaveRequest.EmployeeId,cancellationToken);
-            Employee manager = await _context.Employees.FirstOrDefaultAsync(x => x.Id == request.SuperiorId,cancellationToken); 
+            Employee manager = await _context.Employees.FirstOrDefaultAsync(x => x.Id == request.SuperiorId,cancellationToken);
+
+            User user = await _userManager.FindByIdAsync(manager.UserId);
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            string rolesString = string.Join(",", currentRoles);
+
             List<EmployeeHierarchyDto> employeeHierarchyDto = new List<EmployeeHierarchyDto>();
             GetEmployeeTeamQuery employeeTeamQuery = new GetEmployeeTeamQuery
             {
@@ -39,6 +47,10 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
             }
 
             List<int> listSubordinateEmployeeId = await GetAllChildIds(employeeHierarchyDto);
+            if(rolesString == "SuperAdmin")
+            {
+                listSubordinateEmployeeId.Add(request.SuperiorId);
+            }
 
             if (listSubordinateEmployeeId.Contains(leaveRequest.EmployeeId))
             {
@@ -50,6 +62,13 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
                     string subject = $"Leave Rejected  {leaveRequest.FromDate} to {leaveRequest.ToDate}";
                     string statusMessage = $"Your Following Leave is {(request.statusId == LeaveRequestStatus.Approved ? "Approved" : "Rejected")}.";
                     await Mail(receiver, subject, statusMessage);
+                    string message = $"Your Leave {leaveRequest.FromDate} to {leaveRequest.ToDate} is Rejected By {manager.FirstName} {manager.LastName} [Manager Code : {manager.EmployeeCode}]";
+                    NotificationCommand command = new NotificationCommand
+                    {
+                        EmployeeId = employee.Id,
+                        Message = message,
+                    };
+                    await _mediator.Send(command, cancellationToken);
                     return  result > 0;
                 }
                 else if (leaveType1.LeaveCategoryId != null && (request.statusId == LeaveRequestStatus.Approved && leaveRequest.LeaveType.LeaveCategoryId != LeaveCategory.WorkFromHome))
@@ -82,6 +101,13 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
                     string subject = $"Leave Approved  {leaveRequest.FromDate} to {leaveRequest.ToDate}";
                     string statusMessage = $"Your Following Leave is {(request.statusId == LeaveRequestStatus.Approved ? "Approved" : "Rejected")}.";
                     await Mail(receiver, subject, statusMessage);
+                    string message = $"Your Leave {leaveRequest.FromDate} to {leaveRequest.ToDate} is Approved By {manager.FirstName} {manager.LastName} [Manager Code : {manager.EmployeeCode}]";
+                    NotificationCommand command = new NotificationCommand
+                    {
+                        EmployeeId = employee.Id,
+                        Message = message,
+                    };
+                    await _mediator.Send(command, cancellationToken);
                     return result > 0;
                 }
                 else if(leaveType1.LeaveCategoryId != null && ( leaveRequest.LeaveType.LeaveCategoryId == LeaveCategory.WorkFromHome && request.statusId == LeaveRequestStatus.Approved))  
@@ -92,6 +118,13 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
                     string subject = $"Leave Approved  {leaveRequest.FromDate} to {leaveRequest.ToDate}";
                     string statusMessage = $"Your Following Leave is {(request.statusId == LeaveRequestStatus.Approved ? "Approved" : "Rejected")}.";
                     await Mail(receiver, subject, statusMessage);
+                    string message = $"Your Leave {leaveRequest.FromDate} to {leaveRequest.ToDate} is Approved By {manager.FirstName} {manager.LastName} [Manager Code : {manager.EmployeeCode}]";
+                    NotificationCommand command = new NotificationCommand
+                    {
+                        EmployeeId = employee.Id,
+                        Message = message,
+                    };
+                    await _mediator.Send(command, cancellationToken);
                     return result > 0;
                 }
                 else
