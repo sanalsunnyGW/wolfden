@@ -55,6 +55,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
                     if (attendanceRecord.InsideDuration >= minWorkDuration)
                     {
                         statusId = AttendanceStatus.Present;
+                        
                     }
                     else
                     {

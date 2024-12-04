@@ -81,9 +81,9 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                         }
                     }
                 }
-                lopDays = update(lopDays);
-                incompleteShiftDays = update(incompleteShiftDays);
-                halfDayleaves = update(halfDayleaves);
+                lopDays = UpdateListOfDays(lopDays);
+                incompleteShiftDays = UpdateListOfDays(incompleteShiftDays);
+                halfDayleaves = UpdateListOfDays(halfDayleaves);
 
                 LOP lop = new LOP(attendanceClosingDate, employee.Id, lopCount, incompleteShiftCount, lopDays,
                     incompleteShiftDays,halfDay,halfDayleaves);
@@ -104,10 +104,9 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
             return await _context.SaveChangesAsync(cancellationToken);
 
         }
-        private string update(string days)
+        private string UpdateListOfDays(string days)
         {
-            string updatedDays = days.Length > 0 ? days.Substring(0, days.Length - 1) : " ";
-            return updatedDays;
+            return days.Length > 0 ? days.Substring(0, days.Length - 1) : " ";
         }
     }
 }

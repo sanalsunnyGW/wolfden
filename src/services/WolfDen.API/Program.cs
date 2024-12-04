@@ -109,7 +109,7 @@ builder.Services.AddScoped<ManagerEmailFinder>();
 builder.Services.AddScoped<MonthlyPdf>();
 builder.Services.AddScoped<Email>();
 builder.Services.AddSingleton<WeeklyPdfService>();
-//builder.Services.AddHostedService<DailyAttendancePollerService>();
+
 
 QuestPDF.Settings.License = LicenseType.Community;
 

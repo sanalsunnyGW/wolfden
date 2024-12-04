@@ -29,7 +29,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
             if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
             {
                 DailyAttendanceDTO holiday=new DailyAttendanceDTO();
-                holiday.AttendanceStatusId=AttendanceStatus.NormalHoliday;
+                holiday.AttendanceStatusId=AttendanceStatus.Weekend;
                 return holiday;    
             }
             int minWorkDuration = 360;

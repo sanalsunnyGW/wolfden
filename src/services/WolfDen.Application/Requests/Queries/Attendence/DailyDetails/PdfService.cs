@@ -97,7 +97,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyDetails
                                       int? hours = dailyStatusDTO.OutsideHours / 60;
                                       int? minutes = dailyStatusDTO.OutsideHours % 60;
                                       row.RelativeItem().Padding(5).AlignLeft()
-                                      .Text($"Outside Duration: {hours}h{minutes}m")
+                                      .Text($"Outside Duration: {hours}h {minutes}m")
                                       .SemiBold().FontSize(14).FontColor(Colors.Black);
                                   });
                                   col.Item().Row(row =>

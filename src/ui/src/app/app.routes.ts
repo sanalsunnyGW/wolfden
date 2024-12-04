@@ -47,7 +47,7 @@ export const routes: Routes = [
             {path:'attendance/weekly',component:WeeklyAttendanceComponent},
             {path:'attendance/monthly',component:MonthlyReportComponent},
             {path:'attendance/subordinates',component:SubordinatesComponent} ,  
-            {path:'attendance/history',component:AttendanceHistoryComponent}, 
+            {path:'attendance/history/:id',component:AttendanceHistoryComponent}, 
             { path: 'edit-leave-type', component: EditLeaveTypeComponent },
             { path: 'update-leave-balance', component: UpdateLeaveBalanceComponent },
             {path:'attendance/attendance-history',component:AttendanceHistoryComponent},

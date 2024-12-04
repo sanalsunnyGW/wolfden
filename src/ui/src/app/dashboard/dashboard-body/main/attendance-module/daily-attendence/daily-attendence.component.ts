@@ -36,7 +36,8 @@ export class DailyAttendenceComponent {
     { id: 6, viewValue: 'WFH' },
     { id: 7, viewValue: 'Leave' },
     { id: 8, viewValue: 'OnGoing Shift' },
-    { id: 9, viewValue: 'Half Day Leave'}
+    { id: 9, viewValue: 'Half Day Leave'},
+    {id : 10, viewValue: 'Weekend' }
   ];
 
   getAttendanceStatus(id:number)

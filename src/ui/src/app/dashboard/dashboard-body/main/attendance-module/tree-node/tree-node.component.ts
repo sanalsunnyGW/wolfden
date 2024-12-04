@@ -27,7 +27,7 @@ export class TreeNodeComponent {
   }
   getAttendance(id:number)
   {
-    this.router.navigate(['portal/attendance/attendance-history',id])
+    this.router.navigate(['portal/attendance/history',id])
   }
   openModal(node:SubordinatesDetails)
   {
