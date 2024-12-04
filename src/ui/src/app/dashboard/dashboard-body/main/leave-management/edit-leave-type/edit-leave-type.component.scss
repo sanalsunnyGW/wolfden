@@ -2,7 +2,7 @@
     max-width: 900px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #f0f0f0;
+    background-color: hsl(200, 43%, 97%);
     border-radius: 8px;
   }
   
@@ -37,12 +37,6 @@
   .error {
     color: red;
     font-size: 0.9rem;
-  }
-  
-  pre {
-    background-color: #f0f0f0;
-    font-size: 0.9rem;
-    color: #555;
   }
   
   button {

@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.Azure.Pipelines.WebApi;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
@@ -13,6 +12,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
         private DateOnly lastCreditedMonth;
         private int incrementValue;
         private DateOnly leaveUpdateLog;
+        private DateOnly FirstMonthDate = new DateOnly(DateTime.Now.Year, 1, 1);
         private int count = 0;
         private int balance;
         public async Task<bool> Handle(UpdateLeaveBalanceCommand request, CancellationToken cancellationToken)
@@ -38,7 +38,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                         foreach (LeaveBalance leaveBalance in leaveBalanceList)
                         {
                             if ((emp.Gender == EmployeeEnum.Gender.Male && leaveType.LeaveCategoryId != LeaveCategory.Maternity) || (emp.Gender == EmployeeEnum.Gender.Female && leaveType.LeaveCategoryId != LeaveCategory.Paternity))
-                            { 
+                            {
                                 if (leaveBalance.TypeId == leaveType.Id && leaveBalance.EmployeeId == emp.Id)   //data exists for that combination...its to be updated
                                 {
                                     count = count + 1;  //entry for that combination exist..so update it ..
@@ -46,9 +46,10 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                     //UPDATE the Existing LeaveBalance Row values
 
                                     LeaveIncrementLog log = leaveIncrementLog
-                                            .Where(x => x.LeaveBalanceId.Equals(leaveBalance.Id))
+                                            .Where(x => x.LeaveBalanceId == leaveBalance.Id)
                                             .OrderByDescending(x => x.Id)
-                                            .FirstOrDefault();
+                                            .First();
+
                                     //check whether same user is passed of details ALSO last log date is to be got not the first
 
                                     if (leaveBalance.Employee.JoiningDate?.Month == DateTime.Now.Month && leaveBalance.Employee.JoiningDate?.Year == DateTime.Now.Year)        //for same month yr newly joined employee 
@@ -152,15 +153,15 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                                     }
                                                     else    //if no carry forward & also balance updated in next/new year 
                                                     {
-                                                        value = (int)Math.Floor((decimal)DateTime.Now.Month / 3);
+                                                        value = (int)Math.Floor((decimal)(FirstMonthDate.Month - DateTime.Now.Month) / 3);
 
-                                                        if (leaveBalance.Balance + leaveBalance.LeaveType.IncrementCount * value >= (decimal)leaveBalance.LeaveType.MaxDays)
+                                                        if (leaveBalance.LeaveType.IncrementCount * value >= (decimal)leaveBalance.LeaveType.MaxDays)
                                                         {
                                                             leaveBalance.Balance = (decimal)leaveBalance.LeaveType.MaxDays;
                                                         }
                                                         else
                                                         {
-                                                            leaveBalance.Balance += (int)(leaveBalance.LeaveType.IncrementCount * (value + 1));                //to get the value assigned according to the current month no. 
+                                                            leaveBalance.Balance = (int)(leaveBalance.LeaveType.IncrementCount * (value + 1));                //to get the value assigned according to the current month no. 
                                                         }                                                                                          //lastCreditedMonth = leaveIncrementLog.LastCreditedMonth.AddMonths((value * 3)+1);     //get the latest credited month but here in log field, its of prev. yr so cant add months
                                                         lastCreditedMonth = new DateOnly(DateTime.Now.Year, 1, 1).AddMonths(value * 3);        //gets latest credited month of this new yr  
                                                         leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
@@ -200,7 +201,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                                     }
                                                     else    //if no carry forward & also balance updated in next/new year 
                                                     {
-                                                        value = (int)Math.Floor((decimal)DateTime.Now.Month / 6);
+                                                        value = (int)Math.Floor((decimal)(FirstMonthDate.Month - DateTime.Now.Month) / 6);
                                                         leaveBalance.Balance = (int)(leaveBalance.LeaveType.IncrementCount * (value + 1));
                                                         lastCreditedMonth = new DateOnly(DateTime.Now.Year, 1, 1).AddMonths((value * 6));
                                                         leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
@@ -254,7 +255,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                                     {
                                                         if (leaveType.IncrementCount != null)
                                                         {
-                                                            leaveBalance.Balance += (decimal)leaveBalance.LeaveType.IncrementCount * value;
+                                                            leaveBalance.Balance = (decimal)leaveBalance.LeaveType.IncrementCount * value;
                                                             lastCreditedMonth = log.LastCreditedMonth.AddMonths(value * 1);
                                                             leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
                                                             incrementValue = (int)(leaveBalance.LeaveType.IncrementCount * value);
@@ -262,14 +263,13 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                                     }
                                                     else    //if no carry forward & also balance updated in next/new year 
                                                     {
-                                                        leaveBalance.Balance = (int)(leaveBalance.LeaveType.IncrementCount * DateTime.Now.Month);
-                                                        lastCreditedMonth = log.LastCreditedMonth.AddMonths(value * 1);
+                                                        leaveBalance.Balance = (int)(leaveType.MaxDays);
+                                                        lastCreditedMonth = FirstMonthDate;
                                                         leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                                        incrementValue = (int)(leaveBalance.LeaveType.IncrementCount * DateTime.Now.Month);
+                                                        incrementValue =(int)leaveType.MaxDays;
                                                     }
                                                 }
                                             }
-                                            _context.LeaveBalances.Update(leaveBalance);
                                         }
                                         else
                                         {
@@ -277,9 +277,10 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                             throw new Exception("Duty Days Eligibilty not met To get the leave Balance credited");
                                         }
                                     }
+                                    _context.LeaveBalances.Update(leaveBalance);
                                     LeaveIncrementLog leaveLog = new LeaveIncrementLog(leaveBalance.Id, leaveUpdateLog, leaveBalance.Balance, incrementValue, lastCreditedMonth);
+                                    _context.LeaveIncrementLogs.Add(leaveLog);
                                 }
-
                                 else
                                 {
                                     continue;
@@ -289,12 +290,11 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                         }
                         if (count == 0) //no entry in leavebalance of that combination...so add it(create new)
                         {
-                            if ((emp.Gender == EmployeeEnum.Gender.Male && leaveType.LeaveCategoryId != LeaveCategory.Maternity) || (emp.Gender==EmployeeEnum.Gender.Female  && leaveType.LeaveCategoryId!=LeaveCategory.Paternity))
+                            if ((emp.Gender == EmployeeEnum.Gender.Male && leaveType.LeaveCategoryId != LeaveCategory.Maternity) || (emp.Gender == EmployeeEnum.Gender.Female && leaveType.LeaveCategoryId != LeaveCategory.Paternity))
                             {
                                 if (DateTime.Now.Subtract(JoiningDateTime).Days >= leaveType.DutyDaysRequired)
                                 {
-                                    DateOnly FirstMonthDate= new DateOnly(DateTime.Now.Year,1,1);
-                                    decimal UpdateReq =  DateTime.Now.Month- FirstMonthDate.Month ;
+                                    decimal UpdateReq = DateTime.Now.Month - FirstMonthDate.Month;
 
                                     if (emp.JoiningDate?.Month == DateTime.Now.Month && emp.JoiningDate?.Year == DateTime.Now.Year)           //for same month yr newly joined employee 
                                     {
@@ -322,7 +322,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                         else if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Quarter)
                                         {
                                             incrementValue = (int)Math.Floor(UpdateReq / 3);
-                                            lastCreditedMonth =FirstMonthDate.AddMonths(incrementValue * 3);
+                                            lastCreditedMonth = FirstMonthDate.AddMonths(incrementValue * 3);
                                             leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
                                             if ((decimal)leaveType.IncrementCount * (incrementValue + 1) >= (decimal)leaveType.MaxDays)
                                             {
@@ -335,8 +335,8 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                         }
                                         else if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Half)
                                         {
-                                            incrementValue = (int)Math.Floor(UpdateReq/ 6);
-                                            lastCreditedMonth =FirstMonthDate.AddMonths(incrementValue * 6);
+                                            incrementValue = (int)Math.Floor(UpdateReq / 6);
+                                            lastCreditedMonth = FirstMonthDate.AddMonths(incrementValue * 6);
                                             leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
                                             if ((decimal)leaveType.IncrementCount * (incrementValue + 1) >= (decimal)leaveType.MaxDays)
                                             {
@@ -369,7 +369,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                         }
                         else
                         {
-                            continue;      
+                            continue;
                         }
                     }
                 }
