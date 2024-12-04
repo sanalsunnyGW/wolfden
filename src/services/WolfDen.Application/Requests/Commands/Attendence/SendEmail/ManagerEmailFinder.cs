@@ -12,18 +12,18 @@ namespace WolfDen.Application.Helpers
         {
             _context = context;
         }
-        public async Task<List<string>> FindManagerEmailsAsync(int? managerId, CancellationToken cancellationToken)
+        public async Task<List<string>> FindManagerEmailsAsync(int? managerId)
         {
             List<string> managerEmails = new List<string>();
             if (managerId is null) 
                 return managerEmails;
             Employee? manager = await _context.Employees
                 .Where(m => m.Id == managerId)
-                .FirstOrDefaultAsync(cancellationToken);
+                .FirstOrDefaultAsync();
             if (manager is not null)
             {
                 managerEmails.Add(manager.Email);
-                List<string> higherManagerEmails = await FindManagerEmailsAsync(manager.ManagerId, cancellationToken);
+                List<string> higherManagerEmails = await FindManagerEmailsAsync(manager.ManagerId);
                 managerEmails.AddRange(higherManagerEmails);
             }
             return managerEmails;

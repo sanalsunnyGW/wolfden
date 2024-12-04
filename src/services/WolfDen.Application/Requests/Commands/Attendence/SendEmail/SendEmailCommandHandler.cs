@@ -7,8 +7,6 @@ using sib_api_v3_sdk.Model;
 using WolfDen.Application.Helpers;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
-using WolfDen.Infrastructure.Migrations;
-
 
 namespace WolfDen.Application.Requests.Commands.Attendence.Email
 {
@@ -32,10 +30,21 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
             Employee? employee = await _context.Employees
               .Where(e => e.Id == request.EmployeeId).FirstOrDefaultAsync(cancellationToken);
             string[] receiverEmails = { employee.Email };
-            List<string> managerEmails = await _emailFinder.FindManagerEmailsAsync(employee.ManagerId, cancellationToken);
+            List<string> managerEmails = await _emailFinder.FindManagerEmailsAsync(employee.ManagerId);
             string subject = request.Subject;
-            string message = request.Message;
-            bool status = SendMail(_senderEmail, _senderName, receiverEmails, message, subject, managerEmails.ToArray());
+
+            var dynamicData = new Dictionary<string, object>
+        {
+            { "name", request.Name },
+            {"date",request.Date },
+            { "arrivalTime",request.ArrivalTime.ToString("HH:mm:ss") },
+            { "departureTime", request.DepartureTime.ToString("HH:mm:ss") },
+            { "status", request.Status },
+            { "duration", request.Duration },
+            { "message",request.Message }
+        };
+            int templateId = 10;
+            bool status = SendMail(_senderEmail, _senderName, receiverEmails, templateId, dynamicData, managerEmails.ToArray(), subject);
             if (status)
             {
                 DailyAttendence? attendence = await _context.DailyAttendence
@@ -46,7 +55,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
             }
             return false;
         }
-        private bool SendMail(string senderEmail, string senderName, string[] receiverEmails, string message, string subject, string[] ccEmails = null)
+        private bool SendMail(string senderEmail, string senderName, string[] receiverEmails, int templateId, Dictionary<string, object> templateParams, string[] ccEmails, string subject)
         {
             try
             {
@@ -61,7 +70,15 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
                 };
                 List<SendSmtpEmailTo> toList = receiverEmails.Select(email => new SendSmtpEmailTo(email)).ToList();
                 List<SendSmtpEmailCc> ccList = ccEmails?.Select(email => new SendSmtpEmailCc(email)).ToList() ?? new List<SendSmtpEmailCc>();
-                SendSmtpEmail sendSmtpEmail = new SendSmtpEmail(sender, toList, null, ccList, null, message, subject);
+                var sendSmtpEmail = new SendSmtpEmail
+                {
+                    Sender = sender,
+                    To = toList,
+                    Cc = ccList,
+                    TemplateId = templateId,
+                    Params = templateParams,
+                    Subject = subject
+                };
                 CreateSmtpEmail result = apiInstance.SendTransacEmail(sendSmtpEmail);
                 return true;
             }

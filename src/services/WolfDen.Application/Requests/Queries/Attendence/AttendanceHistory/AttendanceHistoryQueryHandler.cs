@@ -60,8 +60,6 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
                     minWorkDuration = minWorkDuration / 2;
                 }
 
-                AttendanceStatus statusId = AttendanceStatus.Absent;
-
                 if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
                 {
                     statusId = AttendanceStatus.Weekend;
