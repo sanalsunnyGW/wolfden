@@ -21,7 +21,9 @@ namespace WolfDen.Application.Requests.Queries.Attendence.GetHolidays
                 .Select(x => new HolidayDTO
                 {
                     Date = x.Date,
-                    Type = x.Type
+                    Type = x.Type,
+                    Description = x.Description,
+                    
                 })
                 .ToListAsync(cancellationToken);
 
