@@ -140,6 +140,7 @@ getStartOfWeek(selectedWeek:string){
     this.service.getWeeklyChart(this.employeeId,formattedStartDate,formattedEndDate).subscribe(
       (response: WeeklyAttendance[]) =>{
         if(response){
+          console.log(response)
           this.weeklyData = response.map((item) => {
             const convertedDate = new Date(item.date);
             return { ...item, date: convertedDate };

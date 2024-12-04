@@ -29,6 +29,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyRep
                 report.NofIncompleteShiftDays = lop.NoOfIncompleteShiftDays;
                 report.AbsentDays = lop.LOPDays;
                 report.NoOfAbsentDays = lop.LOPDaysCount;
+                report.HalfDays = lop.HalfDays; 
+                report.HalfDayLeaves = lop.HalfDayLeaves;
                 allEmployeesReport.Add(report);
             }
             int totalPage = allEmployeesReport.Count();

@@ -10,6 +10,7 @@
         WFH,
         Leave,
         OngoingShift,
+        HalfDayLeave,
         Weekend
     }
 }

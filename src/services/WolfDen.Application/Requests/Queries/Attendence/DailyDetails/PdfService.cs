@@ -1,4 +1,5 @@
-﻿using QuestPDF.Fluent;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using WolfDen.Application.Requests.DTOs.Attendence;
@@ -21,7 +22,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyDetails
                         page.PageColor(Colors.White);
                         page.DefaultTextStyle(x => x.FontSize(12));
                         page.Header()
-                            .Text("Monthly Attendance Report")
+                            .Text("Daily Attendance Report")
                             .AlignCenter()
                             .SemiBold().FontSize(30).FontColor(Colors.Black);
 
@@ -47,8 +48,10 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyDetails
                                   });
                                   col.Item().Row(row =>
                                   {
+                                      int? hours = dailyStatusDTO.InsideHours / 60;
+                                      int? minutes = dailyStatusDTO.InsideHours % 60;
                                       row.RelativeItem().Padding(5).AlignLeft()
-                                      .Text($"Inside Duration: {dailyStatusDTO.InsideHours} minutes")
+                                      .Text($"Inside Duration: {hours}h {minutes}m")
                                       .SemiBold().FontSize(14).FontColor(Colors.Black);
 
                                   });
@@ -76,6 +79,9 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyDetails
                                       case AttendanceStatus.OngoingShift:
                                           status = "OnGoing Shift";
                                           break;
+                                      case AttendanceStatus.HalfDayLeave:
+                                          status = "HalfDay Leave";
+                                          break;
                                       default:
                                           status = "leave";
                                           break;
@@ -88,8 +94,10 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyDetails
                                   });
                                   col.Item().Row(row =>
                                   {
+                                      int? hours = dailyStatusDTO.OutsideHours / 60;
+                                      int? minutes = dailyStatusDTO.OutsideHours % 60;
                                       row.RelativeItem().Padding(5).AlignLeft()
-                                      .Text($"Outside Duration: {dailyStatusDTO.OutsideHours} minutes")
+                                      .Text($"Outside Duration: {hours}h {minutes}m")
                                       .SemiBold().FontSize(14).FontColor(Colors.Black);
                                   });
                                   col.Item().Row(row =>
