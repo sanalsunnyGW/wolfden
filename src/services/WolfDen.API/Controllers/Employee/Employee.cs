@@ -70,6 +70,7 @@ namespace WolfDen.API.Controllers.Employee
             return await _mediator.Send(new GetEmployeeHierarchyQuery());
 
         }
+        [AllowAnonymous]
         [HttpGet("sign-up")]
         public async Task<EmployeeSignUpDto> GetEmployeeSignUp([FromQuery] GetEmployeeIDSignUpQuery query, CancellationToken cancellationToken)
         {
@@ -116,6 +117,7 @@ namespace WolfDen.API.Controllers.Employee
 
         }
 
+        [AllowAnonymous]
         [HttpPatch("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
         {

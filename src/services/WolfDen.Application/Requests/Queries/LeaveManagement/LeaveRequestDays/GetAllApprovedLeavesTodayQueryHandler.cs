@@ -17,7 +17,7 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequestDays
                 .Select(x => new PresentDayApprovedLeavesDto
                 {
                     EmployeeId = x.LeaveRequest.EmployeeId,
-                    EmployeeName = x.LeaveRequest.Employee.FirstName + x.LeaveRequest.Employee.LastName,
+                    EmployeeName = x.LeaveRequest.Employee.FirstName +" "+ x.LeaveRequest.Employee.LastName,
                     EmployeeCode = x.LeaveRequest.Employee.EmployeeCode,
                 }).ToListAsync(cancellationToken);
 
