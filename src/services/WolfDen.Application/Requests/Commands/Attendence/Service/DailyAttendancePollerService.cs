@@ -38,16 +38,61 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
 
                 _logger.LogInformation("Background service is running at: {time}", DateTimeOffset.Now);
 
+                List<Employee> allEmployees = await _context.Employees
+                    .Where(x=>x.IsActive==true)
+                    .ToListAsync();
+
+                List<int> employeesWithAttendance = await _context.DailyAttendence
+                   .Where(a => a.Date == today)
+                   .Select(a => a.EmployeeId)
+                   .ToListAsync();
+
+                List<Employee> absentEmployees = allEmployees
+                    .Where(emp => !employeesWithAttendance.Contains(emp.Id))
+                    .ToList();
+
                 List<DailyAttendence> attendanceRecords = await _context.DailyAttendence
                     .Include(x => x.Employee)
-                    .Where(a => a.Date == today && a.EmailSent == false && a.EmployeeId == 10)
+                    .Where(a => a.Date == today && a.EmailSent == false )
                     .ToListAsync();
 
                 List<LeaveRequest> leaveRequests = await _context.LeaveRequests
                     .Where(x => x.LeaveRequestStatusId == LeaveRequestStatus.Approved && x.HalfDay == true && x.FromDate == today)
                     .ToListAsync();
 
+
                 Dictionary<int, LeaveRequest> leaveDictionary = leaveRequests.ToDictionary(x => x.EmployeeId);
+
+                foreach (Employee employee in absentEmployees)
+                {
+                    LeaveRequest? approvedLeave = leaveDictionary.GetValueOrDefault(employee.Id);
+
+                    if (approvedLeave == null)
+                    {
+                        string absenceMessage = $"Dear {employee.FirstName}, you were marked as absent on ({today}). Please make sure to apply for leave for any future absences.";
+
+                        SendEmailCommand sendAbsenceEmail = new SendEmailCommand
+                        {
+                            EmployeeId = employee.Id,
+                            Name = employee.FirstName + " " + employee.LastName,
+                            Email = employee.Email,
+                            Duration = 0, 
+                            Date = today,
+                            Message = absenceMessage,
+                            Subject = "Absence Notification",
+                            Status = "Absent"
+                        };
+
+                        await _mediator.Send(sendAbsenceEmail);
+
+                        NotificationCommand sendAbsenceNotification = new NotificationCommand
+                        {
+                            EmployeeIds = new List<int> { employee.Id },
+                            Message = absenceMessage
+                        };
+                        await _mediator.Send(sendAbsenceNotification);
+                    }
+                }
 
                 foreach (DailyAttendence record in attendanceRecords)
                 {
