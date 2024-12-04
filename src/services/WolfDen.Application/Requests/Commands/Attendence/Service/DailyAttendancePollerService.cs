@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WolfDen.Application.Requests.Commands.Attendence.Email;
+using WolfDen.Application.Requests.Commands.Attendence.SendAbsenceEmail;
 using WolfDen.Application.Requests.Commands.Attendence.SendNotification;
 using WolfDen.Application.Services;
 using WolfDen.Domain.Entity;
@@ -53,7 +54,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
 
                 List<DailyAttendence> attendanceRecords = await _context.DailyAttendence
                     .Include(x => x.Employee)
-                    .Where(a => a.Date == today && a.EmailSent == false )
+                    .Where(a => a.Date == today && a.EmailSent == false && a.EmployeeId==10)
                     .ToListAsync();
 
                 List<LeaveRequest> leaveRequests = await _context.LeaveRequests
@@ -69,18 +70,16 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
 
                     if (approvedLeave == null)
                     {
-                        string absenceMessage = $"Dear {employee.FirstName}, you were marked as absent on ({today}). Please make sure to apply for leave for any future absences.";
+                        string absenceMessage = $"Dear {employee.FirstName}, you were marked as absent on ({today}). Please make sure to apply for leave.";
 
-                        SendEmailCommand sendAbsenceEmail = new SendEmailCommand
+                        SendAbsenceEmailCommand sendAbsenceEmail = new SendAbsenceEmailCommand
                         {
-                            EmployeeId = employee.Id,
+                            EmployeeId = 6,
                             Name = employee.FirstName + " " + employee.LastName,
                             Email = employee.Email,
-                            Duration = 0, 
                             Date = today,
                             Message = absenceMessage,
-                            Subject = "Absence Notification",
-                            Status = "Absent"
+                            Subject = "Absence Notification"
                         };
 
                         await _mediator.Send(sendAbsenceEmail);

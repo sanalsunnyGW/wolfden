@@ -9,13 +9,13 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
 {
-    public class AttendanceSummaryQueryHandler(WolfDenContext context, OfficeDurationSettings officeDurationSettings) : IRequestHandler<AttendanceSummaryQuery, AttendanceSummaryDTO>
+    public class AttendanceSummaryQueryHandler(WolfDenContext context, IOptions<OfficeDurationSettings> officeDurationSettings) : IRequestHandler<AttendanceSummaryQuery, AttendanceSummaryDTO>
     {
         private readonly WolfDenContext _context = context;
-        private readonly OfficeDurationSettings _officeDurationSettings=officeDurationSettings;
+        private readonly IOptions<OfficeDurationSettings> _officeDurationSettings=officeDurationSettings;
         public async Task<AttendanceSummaryDTO> Handle(AttendanceSummaryQuery request, CancellationToken cancellationToken)
         {
-            int minWorkDuration = _officeDurationSettings.MinWorkDuration;
+            int minWorkDuration = _officeDurationSettings.Value.MinWorkDuration;
 
             DateOnly monthStart = new DateOnly(request.Year, request.Month, 1);
             DateOnly monthEnd = monthStart.AddMonths(1).AddDays(-1);
