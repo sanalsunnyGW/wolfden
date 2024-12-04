@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using sib_api_v3_sdk.Model;
 using WolfDen.Application.DTOs.LeaveManagement;
 using WolfDen.Application.Helper.LeaveManagement;
 using WolfDen.Application.Helpers;
