@@ -30,6 +30,7 @@ import { EditLeaveRequestComponent } from './dashboard/dashboard-body/main/leave
 import { AddLeaveByAdminForEmployeesComponent } from './dashboard/dashboard-body/main/leave-management/add-leave-by-admin-for-employees/add-leave-by-admin-for-employees.component';
 import { AttendanceHistoryComponent } from './dashboard/dashboard-body/main/attendance-module/attendance-history/attendance-history.component';
 import { ResetPasswordComponent } from './user/reset-password/reset-password.component';
+import { CheckPasswordComponent } from './user/check-password/check-password.component';
 
 export const routes: Routes = [
     {
@@ -43,7 +44,8 @@ export const routes: Routes = [
             { path: 'check-user', component: CheckUserComponent },
             { path: 'sign-in', component: SigninComponent },
             { path: 'login', component: LoginComponent },
-            {path:'reset-password',component:ResetPasswordComponent}
+            {path:'reset-password',component:ResetPasswordComponent},
+            {path:'check-password', component:CheckPasswordComponent}
         ]
     },
 
