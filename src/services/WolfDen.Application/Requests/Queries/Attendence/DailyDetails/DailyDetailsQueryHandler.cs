@@ -9,7 +9,7 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
 {
-    public class DailyDetailsQueryHandler :IRequestHandler<DailyDetailsQuery,DailyAttendanceDTO>
+    public class DailyDetailsQueryHandler : IRequestHandler<DailyDetailsQuery, DailyAttendanceDTO>
     {
         private readonly WolfDenContext _context;
         private readonly IOptions<OfficeDurationSettings> _officeDurationSettings;
@@ -20,9 +20,9 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
         }
         public async Task<DailyAttendanceDTO> Handle(DailyDetailsQuery request, CancellationToken cancellationToken)
         {
-            DateOnly currentDate=request.Date;
+            DateOnly currentDate = request.Date;
             DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
-            if(currentDate==today)
+            if (currentDate == today)
             {
                 DailyAttendanceDTO holiday = new DailyAttendanceDTO();
                 holiday.AttendanceStatusId = AttendanceStatus.OngoingShift;
@@ -30,21 +30,21 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
             }
             if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
             {
-                DailyAttendanceDTO holiday=new DailyAttendanceDTO();
-                holiday.AttendanceStatusId=AttendanceStatus.Weekend;
-                return holiday;    
+                DailyAttendanceDTO holiday = new DailyAttendanceDTO();
+                holiday.AttendanceStatusId = AttendanceStatus.Weekend;
+                return holiday;
             }
             int minWorkDuration = _officeDurationSettings.Value.MinWorkDuration;
             DailyAttendanceDTO? attendence = await _context.DailyAttendence
                 .Where(x => x.EmployeeId == request.EmployeeId && x.Date == request.Date)
                 .Select(x => new DailyAttendanceDTO
-            {
-                ArrivalTime = x.ArrivalTime,
-                DepartureTime = x.DepartureTime,
-                InsideHours = x.InsideDuration,
-                OutsideHours = x.OutsideDuration,
-                MissedPunch = x.MissedPunch,
-            }).FirstOrDefaultAsync(cancellationToken);
+                {
+                    ArrivalTime = x.ArrivalTime,
+                    DepartureTime = x.DepartureTime,
+                    InsideHours = x.InsideDuration,
+                    OutsideHours = x.OutsideDuration,
+                    MissedPunch = x.MissedPunch,
+                }).FirstOrDefaultAsync(cancellationToken);
 
             if (attendence is null)
             {
@@ -92,10 +92,10 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                        .Where(x => x.EmployeeId == request.EmployeeId && x.FromDate <= request.Date && request.Date <= x.ToDate && x.LeaveRequestStatusId == LeaveRequestStatus.Approved)
                        .Include(x => x.LeaveType)
                        .FirstOrDefaultAsync(cancellationToken);
-                if(leave is not null && leave.HalfDay is true)
+                if (leave is not null && leave.HalfDay is true)
                 {
                     minWorkDuration = minWorkDuration / 2;
-                    attendence.AttendanceStatusId= (attendence.InsideHours >= minWorkDuration) ?
+                    attendence.AttendanceStatusId = (attendence.InsideHours >= minWorkDuration) ?
                     AttendanceStatus.HalfDayLeave : AttendanceStatus.IncompleteShift;
                 }
                 else
@@ -113,8 +113,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                     DeviceName = x.Device.Name,
                     Direction = x.Direction
                 }).ToListAsync(cancellationToken);
-             if(attendence is not null)
-            attendence.DailyLog = attendenceRecords;
+            if (attendence is not null)
+                attendence.DailyLog = attendenceRecords;
             return attendence;
         }
     }

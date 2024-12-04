@@ -105,13 +105,6 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                     string employeeMessage = $"Your working duration for {today} is {record.InsideDuration / 60} hours and {record.InsideDuration % 60} minutes.";
                     string employeeIncompleteMessage = $"Incomplete Shift !!! Your working duration today is {record.InsideDuration / 60} hours and {record.InsideDuration % 60} minutes.";
 
-                    LeaveRequest? halfDay = leave.Find(x => x.EmployeeId == newEntry.EmployeeId);
-
-                    if (halfDay is not null)
-                    {
-                        min = min / 2;
-                    }
-
                     SendEmailCommand sendEmailCommand = new SendEmailCommand
                     {
                         EmployeeId = record.EmployeeId,

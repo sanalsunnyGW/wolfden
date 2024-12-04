@@ -78,7 +78,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
                     {
                         if (halfDay is not null)
                         {
-                            statusId = AttendanceStatus.HalfDay;
+                            statusId = AttendanceStatus.HalfDayLeave;
                         }
                         else
                             statusId = AttendanceStatus.Present;
