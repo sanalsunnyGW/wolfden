@@ -24,6 +24,8 @@
           <th>Absent Days</th>
         <th>Incomplete Shift Days Count</th>
           <th>Incomplete Shift Days</th>
+          <th>Half Day Count</th>
+          <th>Half Day Leaves</th>
         </tr>
       </thead>
       <tbody *ngIf="display">
@@ -34,6 +36,8 @@
             <td>{{data.absentDays}}</td> 
             <td>{{data.nofIncompleteShiftDays}}</td> 
             <td>{{data.incompleteShiftDays}}</td> 
+            <td>{{data.halfDays}}</td>
+            <td>{{data.halfDayLeaves}}</td>
           </tr>
       </tbody>
     </table>

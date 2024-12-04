@@ -18,8 +18,8 @@ namespace WolfDen.Application.Requests.Commands.Employees.SyncEmployee
                 {
                     User user = new User(employee.RFId);
                     await _userManager.CreateAsync(user);
-                    await _userManager.AddToRoleAsync(user, "Employee");
                     employee.UpdateUserId(user.Id);
+                    await _userManager.AddToRoleAsync(user, "Employee");
                     _context.Employees.Update(employee);
 
                 }

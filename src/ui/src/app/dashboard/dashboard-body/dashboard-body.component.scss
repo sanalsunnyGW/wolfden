@@ -17,12 +17,12 @@
   .main {
     margin-left: 250px;  
     margin-top: 70px;
-    min-height: calc(100vh);
+    min-height: calc(100vh - 70px);
     padding: 20px;
     width: 100vw;
     top: 70px;
     flex-grow: 1;
-    background-color: #ffff;
+    background-color: #fafafa;
     overflow: auto;
 
     @media only screen and (max-width: 1300px) {

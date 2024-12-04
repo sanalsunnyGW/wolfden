@@ -5,9 +5,9 @@
 
 <div class="mb-3">
     <input class="form-control bg-body-secondary"
-    placeholder="RFID" formControlName="rfid">
-    @if (hasDisplayableError('rfid') && userForm.controls['rfid'].hasError('required')) {
-        <div class="error-feedback">
+    placeholder="RFID" formControlName="rfId">
+    @if (hasDisplayableError('rfId') && userForm.controls['rfId'].hasError('required')) {
+        <div class="error-feedback text-danger" >
             Please enter your RFID
         </div>
         }
@@ -16,7 +16,7 @@
     <input  class="form-control bg-body-secondary"
     placeholder="User Code" formControlName="employeeCode">
     @if (hasDisplayableError('employeeCode') && userForm.controls['employeeCode'].hasError('required')) {
-        <div class="error-feedback">
+        <div class="error-feedback text-danger">
             Please enter your employee code!
         </div>
         }
@@ -26,5 +26,6 @@
     Next 
 </button>
 </form>
-
+<p></p>
+<a href="" routerLink="/user/login">Already have a account?</a>
 

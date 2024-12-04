@@ -6,17 +6,22 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { AttendanceHistory } from '../../../../../interface/attendance-history';
+import { WolfDenService } from '../../../../../service/wolf-den.service';
+import { ActivatedRoute } from '@angular/router';
+import { DurationFormatPipe } from "../../../../../pipe/duration-format.pipe";
+import { SplitCommaPipe } from "../../../../../pipe/split-comma.pipe";
 
 @Component({
   selector: 'app-attendance-history',
   standalone: true,
-  imports: [ReactiveFormsModule,NgSelectModule,CommonModule,FormsModule,MatPaginatorModule],
+  imports: [ReactiveFormsModule, NgSelectModule, CommonModule, FormsModule, MatPaginatorModule, DurationFormatPipe, SplitCommaPipe],
   templateUrl: './attendance-history.component.html',
   styleUrl: './attendance-history.component.scss'
 })
 export class AttendanceHistoryComponent implements OnInit {
 
   service=inject(AttendanceService);
+  baseService=inject(WolfDenService);
   selectedYear: number;
   selectedMonth!: number;
   selectedStatus: number=0;  
@@ -24,20 +29,22 @@ export class AttendanceHistoryComponent implements OnInit {
   selectedPageNumber:number=0;
   attendanceData: any[] = [];
  
-  employeeId=1;
+  employeeId=this.baseService.userId;
   years: number[] = [];
   pageSizes = [5, 10, 20, 30, 40];
   totalPages!: number;
+Math: any;
 
-constructor() 
+constructor(private route:ActivatedRoute) 
 {
   this.selectedYear = new Date().getFullYear();
   for (let year = this.selectedYear; year >= 2020; year--) {
     this.years.push(year);
   }
 }
-
+id!:number
 ngOnInit(): void {
+  this.id=+this.route.snapshot.paramMap.get('id')!;
 }
 
 months = [
@@ -58,16 +65,18 @@ months = [
 status = [
   { id: 1, name: 'Present' },
   { id: 2, name: 'Absent' },
-  { id: 3, name: "Incomplete Shift" },
+  { id: 3, name: 'Incomplete Shift' },
   { id: 4, name: 'Restricted Holiday' },
   { id: 5, name: 'Normal Holiday' },
   { id: 6, name: "WFH" },
-  { id: 7, name: 'Leave' }
+  { id: 7, name: 'Leave' },
+  { id: 9, name:'Half Day'},
+  { id: 10, name:'Weekend'}
 ];
 
 fetchHistory(){
   this.service.getMonthlyHistoryByStatus(
-    this.employeeId,
+    this.id,
     this.selectedYear,
     this.selectedMonth,
     this.selectedStatus,
@@ -83,6 +92,20 @@ fetchHistory(){
 getStatusName(statusId: number): string {
   const statusObj = this.status.find(s => s.id === statusId);
   return statusObj ? statusObj.name : 'Unknown';  
+}
+
+getStatusClass(statusId: number): string {
+  switch (statusId) {
+    case 1: return 'status-present';
+    case 2: return 'status-absent';
+    case 3: return 'status-incomplete';
+    case 4: return 'status-restricted';
+    case 5: return 'status-normal-holiday';
+    case 6: return 'status-wfh';
+    case 7: return 'status-leave';
+    case 10: return 'status-weekend';
+    default: return 'status-unknown';
+  }
 }
 
 onPageChange(event:PageEvent):void{

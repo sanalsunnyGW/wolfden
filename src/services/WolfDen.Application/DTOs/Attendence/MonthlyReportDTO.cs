@@ -14,5 +14,7 @@
         public int Leave { get; set; }
         public string AbsentDays { get; set; }
         public int WFH{ get; set; }
+        public int HalfDays { get; set; }
+        public string HalfDayLeaves { get; set; }
     }
 }

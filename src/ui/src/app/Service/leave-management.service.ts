@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { ILeaveBalanceList } from '../interface/leave-balance-list-interface';
 import { ILeaveRequestHistoryResponse } from '../interface/leave-request-history';
 import { IGetLeaveTypeIdAndname } from '../interface/get-leave-type-interface';
-import { ILeaveApplication } from '../interface/leave-application-interface';
+import { ILeaveApplication } from '../interface/Leave-Application-Interface';
 import { IApproveRejectLeave } from '../interface/approve-or-reject-leave-interface';
 import { IEditleave } from '../interface/edit-leave-application-interface';
 import { environment } from '../../enviornments/environment';
@@ -11,7 +11,7 @@ import { ISubordinateLeavePaginationSend } from '../interface/subordinate-leave-
 import { ISubordinateLeavePaginationReceive } from '../interface/subordinate-leave-request-pagination-receive';
 import { WolfDenService } from './wolf-den.service';
 import { IRevokeLeave } from '../interface/revoke-leave';
-import { IAddNewLeaveType } from '../interface/add-new-leave-type-interface';
+import { IAddNewLeaveType } from '../interface/Add-New-Leave-Type-Interface';
 import { ILeaveUpdate, IUpdateLeaveSetting } from '../interface/update-leave-setting';
 import { IAddLeaveByAdminForEmployee } from '../interface/add-leave-by-admin-for-employee';
 import { IEditLeaveType} from '../interface/edit-leave-type';

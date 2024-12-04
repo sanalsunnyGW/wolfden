@@ -20,16 +20,17 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeLogin
         private readonly WolfDenContext _context = context;
 
 
+
         public async Task<LoginResponseDTO> Handle(EmployeeLoginQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            User user = await _userManager.FindByEmailAsync(request.Email);
             if (user != null && await _userManager.CheckPasswordAsync(user, request.Password))
             {
                 Employee employee = await _context.Employees.FirstOrDefaultAsync(x => x.UserId == user.Id);
-                var secretKey = _optionsMonitor.CurrentValue.Key;
+                string secretKey = _optionsMonitor.CurrentValue.Key;
                 var signInKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
                 var currentRoles = await _userManager.GetRolesAsync(user);
-                var rolesString = string.Join(",", currentRoles);
+                string rolesString = string.Join(",", currentRoles);
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]
@@ -45,7 +46,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeLogin
                 };
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);
-                var token = tokenHandler.WriteToken(securityToken);
+                string token = tokenHandler.WriteToken(securityToken);
                 return new LoginResponseDTO { Token = token };
             }
             return new LoginResponseDTO { ErrorMessage = "Invalid UserName or Password" };
@@ -53,4 +54,3 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeLogin
         }
     }
 }
-

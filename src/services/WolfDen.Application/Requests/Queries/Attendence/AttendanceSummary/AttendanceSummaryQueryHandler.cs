@@ -1,18 +1,21 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using WolfDen.Application.DTOs.Attendence;
+using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
 {
-    public class AttendanceSummaryQueryHandler(WolfDenContext context) : IRequestHandler<AttendanceSummaryQuery, AttendanceSummaryDTO>
+    public class AttendanceSummaryQueryHandler(WolfDenContext context, IOptions<OfficeDurationSettings> officeDurationSettings) : IRequestHandler<AttendanceSummaryQuery, AttendanceSummaryDTO>
     {
         private readonly WolfDenContext _context = context;
+        private readonly IOptions<OfficeDurationSettings> _officeDurationSettings=officeDurationSettings;
         public async Task<AttendanceSummaryDTO> Handle(AttendanceSummaryQuery request, CancellationToken cancellationToken)
         {
-            int minWorkDuration = 360;
+            int minWorkDuration = _officeDurationSettings.Value.MinWorkDuration;
 
             DateOnly monthStart = new DateOnly(request.Year, request.Month, 1);
             DateOnly monthEnd = monthStart.AddMonths(1).AddDays(-1);
@@ -25,7 +28,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
                 RestrictedHoliday = 0,
                 NormalHoliday = 0,
                 WFH = 0,
-                Leave = 0
+                Leave = 0,
+                HalfDay=0
             };
 
             DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -46,19 +50,42 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
 
             List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
 
-            for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
+            List<LeaveRequest> leave = leaveRequests
+                .Where(x => x.HalfDay == true)
+                .ToList();
+
+            Dictionary<DateOnly, LeaveRequest> leaveDictionary = leave.ToDictionary(x => x.FromDate);
+
+            for (DateOnly currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
                 if (currentDate > today) 
                 {
                     break;
                 }
 
-                DailyAttendence attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
+                if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    continue; 
+                }
+
+                LeaveRequest? halfDay = leaveDictionary.GetValueOrDefault(currentDate);
+
+                if (halfDay is not null)
+                {
+                    minWorkDuration = minWorkDuration / 2;
+                }
+
+                DailyAttendence? attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (attendanceRecord is not null)
                 {
 
                     if (attendanceRecord.InsideDuration >= minWorkDuration)
                     {
+                        if (halfDay is not null)
+                        {
+                            summaryDto.HalfDay++;
+                        }
+                        else
                         summaryDto.Present++;
                     }
                     else

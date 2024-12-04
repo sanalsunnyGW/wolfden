@@ -7,13 +7,13 @@ using WolfDen.Application.Requests.Queries.Designation;
 
 namespace WolfDen.API.Controllers.Designation
 {
-    [Route("api/[controller]")]
+    [Route("api/designation")]
     [ApiController]
     public class Designation(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator= mediator;
 
-        [Authorize(Roles = "SuperAdmin")]
+        //[Authorize(Roles = "SuperAdmin")]
         [HttpPost]
         public async Task<int> AddDesignation([FromBody] AddDesignationCommand command,CancellationToken cancellationToken)
         {

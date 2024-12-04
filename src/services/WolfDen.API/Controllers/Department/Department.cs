@@ -7,13 +7,13 @@ using WolfDen.Application.Requests.Queries.Department.GetAllDepartment;
 
 namespace WolfDen.API.Controllers.Department
 {
-    [Route("api/[controller]")]
+    [Route("api/department")]
     [ApiController]
     public class Department(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator=mediator;
 
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost]
         public async Task<int> AddDepartment([FromBody] AddDepartmentCommand command,CancellationToken cancellationToken)
         {

@@ -9,8 +9,8 @@ namespace WolfDen.Application.Requests.Commands.Attendence.SendNotification
 {
     public class NotificationCommandHandler(WolfDenContext context, NotificationCommandValidator validator) : IRequestHandler<NotificationCommand, int>
     {
-        private readonly WolfDenContext _context=context;
-        private readonly NotificationCommandValidator _validator=validator;
+        private readonly WolfDenContext _context = context;
+        private readonly NotificationCommandValidator _validator = validator;
         public async Task<int> Handle(NotificationCommand request, CancellationToken cancellationToken)
         {
             ValidationResult validationResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -20,13 +20,11 @@ namespace WolfDen.Application.Requests.Commands.Attendence.SendNotification
                 throw new ValidationException(validationResult.Errors);
             }
 
-            Employee? employee = await _context.Employees
-                .Where(x=>x.Id == request.EmployeeId)
-                .FirstOrDefaultAsync();
-
-            Notification notification = new Notification(request.EmployeeId, request.Message);
-
-            await _context.Notifications.AddAsync(notification);
+            foreach (var employeeId in request.EmployeeIds)
+            {
+                Notification notification = new Notification(employeeId, request.Message);
+                await _context.Notifications.AddAsync(notification, cancellationToken);
+            }
             return await _context.SaveChangesAsync(cancellationToken);
         }
     }

@@ -4,6 +4,7 @@ import mermaid from 'mermaid';
 import { ToastrService } from 'ngx-toastr';
 import { EmployeeService } from '../service/employee.service';
 import { IEmployeeData } from '../interface/employee-data';
+import { IteamLeave } from '../interface/iteam-leave';
 
 @Component({
   selector: 'app-my-team',
@@ -63,11 +64,32 @@ export class MyTeamComponent {
     photo: '',
     subordinates: []
   }];
+
+  teamLeave:IteamLeave[]=[{
+    name: '',
+    typeName: '',
+    halfDay: true,
+    fromDate: this.inDate,
+    toDate: this.inDate,
+    applyDate: this.inDate,
+  }]
+
+
+
+
+
+
+viewProfile(id:number){
+  this.router.navigate(['/portal/employee-display'], { queryParams: { id: id } });
+}
+
+
+
   ngOnInit(): void {
     this.loadEmployeeHierarchy();
     (window as any).onA = (nodeName: string) => {
-      const nodeId=nodeName.slice(4)
-      this.router.navigate(['/portal/employee-display'], { queryParams: { id: nodeId } });
+      const nodeId=nodeName.slice(4);
+      this.viewProfile(Number(nodeId))
     };
 
     mermaid.initialize({
@@ -101,6 +123,25 @@ export class MyTeamComponent {
       `
     });
 
+  }
+  viewLeave(){
+    const employee = this.employeeService.decodeToken();
+
+    this.employeeService.myTeamLeave(employee.EmployeeId).subscribe({
+      next: (response: any) => {
+        if (response) {
+          this.teamLeave = response;
+        } 
+        else {
+          this.toastr.info('No Employees applied leave')
+
+        }
+      },
+      error: (error) => {
+        this.toastr.error('An error occurred while displaying leave')
+
+      },
+    });
   }
   viewTeamHierarchy() {
     const employee = this.employeeService.decodeToken();

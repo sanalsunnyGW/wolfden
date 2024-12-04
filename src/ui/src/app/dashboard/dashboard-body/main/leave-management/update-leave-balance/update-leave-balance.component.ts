@@ -2,6 +2,7 @@ import { Component, DestroyRef,  OnInit, inject } from '@angular/core';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { WolfDenService } from '../../../../../service/wolf-den.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-leave-balance',
@@ -12,6 +13,7 @@ import { WolfDenService } from '../../../../../service/wolf-den.service';
 })
 export class UpdateLeaveBalanceComponent implements OnInit {
   destroyRef= inject(DestroyRef);
+  toastr=inject(ToastrService);
   
   constructor(private leaveManagementService: LeaveManagementService) { }
 
@@ -20,10 +22,10 @@ export class UpdateLeaveBalanceComponent implements OnInit {
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe((data: boolean) => {
         if (data) {
-          alert('Leave Balance of All employees Updated !!');
+          this.toastr.success('Leave Balance of All employees Updated !!');
         }
         else {
-          alert('Sorry ! Encountered some issues while Updating employees leave balance !')
+          this.toastr.error(' Sorry ! We have Encountered some issues while Updating employees leave balance !')
         }
       });
   }

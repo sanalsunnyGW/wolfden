@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WolfDen.Application.DTOs.Attendence;
 using WolfDen.Application.Requests.Commands.Attendence.AddHoliday;
+using WolfDen.Application.Requests.Queries.Attendence.GetHolidays;
 
 namespace WolfDen.API.Controllers.Attendence
 {
@@ -18,6 +20,12 @@ namespace WolfDen.API.Controllers.Attendence
         public async Task<int> AddHoliday([FromBody] AddHolidayCommand command, CancellationToken cancellationToken)
         {
             return await _mediator.Send(command, cancellationToken);
+        }
+
+        [HttpGet("upcoming-holiday")]
+        public async Task<List<HolidayDTO>> GetHoliday([FromQuery] GetHolidayQuery query, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(query, cancellationToken);
         }
     }
 }

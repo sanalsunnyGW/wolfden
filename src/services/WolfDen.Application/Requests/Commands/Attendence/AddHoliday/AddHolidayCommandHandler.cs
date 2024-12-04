@@ -9,7 +9,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.AddHoliday
         private readonly WolfDenContext _context=context;
         public async Task<int> Handle(AddHolidayCommand request, CancellationToken cancellationToken)
         {
-            Holiday holiday = new Holiday(request.Date, request.Type);
+            Holiday holiday = new Holiday(request.Date, request.Type, request.Description);
 
             await _context.Holiday.AddAsync(holiday);
             return await _context.SaveChangesAsync(cancellationToken);

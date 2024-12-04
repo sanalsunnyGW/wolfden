@@ -9,6 +9,9 @@
         NormalHoliday,
         WFH,
         Leave,
-        OngoingShift
+        OngoingShift,
+        HalfDayLeave,
+        Weekend
+        
     }
 }

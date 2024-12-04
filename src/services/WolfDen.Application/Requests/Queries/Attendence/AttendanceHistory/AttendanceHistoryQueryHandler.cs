@@ -1,21 +1,24 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using WolfDen.Application.DTOs.Attendence;
+using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
 {
-    public class AttendanceHistoryQueryHandler(WolfDenContext context): IRequestHandler<AttendanceHistoryQuery, AttendanceHistoryDTO>
+    public class AttendanceHistoryQueryHandler(WolfDenContext context, IOptions<OfficeDurationSettings> officeDurationSettings): IRequestHandler<AttendanceHistoryQuery, AttendanceHistoryDTO>
     {
         private readonly WolfDenContext _context=context;
+        private readonly IOptions<OfficeDurationSettings> _officeDurationSettings = officeDurationSettings;
         public async Task<AttendanceHistoryDTO> Handle(AttendanceHistoryQuery request, CancellationToken cancellationToken)
         {
             DateOnly monthStart = new DateOnly(request.Year, request.Month, 1);
             DateOnly monthEnd = monthStart.AddMonths(1).AddDays(-1);
 
-            int minWorkDuration = 360;
+            int minWorkDuration = _officeDurationSettings.Value.MinWorkDuration;
 
             List<WeeklySummaryDTO> attendanceHistory = new List<WeeklySummaryDTO>();
             List<WeeklySummaryDTO> filteredAttendance = new List<WeeklySummaryDTO>();
@@ -38,26 +41,57 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
 
             List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
 
-            for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
+            List<LeaveRequest> leave = leaveRequests
+               .Where(x => x.HalfDay == true)
+               .ToList();
+
+            Dictionary<DateOnly, LeaveRequest> leaveDictionary = leave.ToDictionary(x => x.FromDate);
+
+            for (DateOnly currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
+                AttendanceStatus statusId = AttendanceStatus.Absent;
+
                 if (currentDate > today)
                 {
                     break;
                 }
 
-                AttendanceStatus statusId = AttendanceStatus.Absent;
+                LeaveRequest? halfDay = leaveDictionary.GetValueOrDefault(currentDate);
 
+                if (halfDay is not null)
+                {
+                    minWorkDuration = minWorkDuration / 2;
+                }
+
+                if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    statusId = AttendanceStatus.Weekend;
+                    attendanceHistory.Add(new WeeklySummaryDTO
+                    {
+                        Date = currentDate,
+                        AttendanceStatusId = statusId
+                    });
+                    continue;
+                }
+                
                 DailyAttendence? attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (attendanceRecord is not null)
                 {
 
                     if (attendanceRecord.InsideDuration >= minWorkDuration)
                     {
-                        statusId = AttendanceStatus.Present;
+                        if (halfDay is not null)
+                        {
+                            statusId = AttendanceStatus.HalfDayLeave;
+                        }
+                        else
+                            statusId = AttendanceStatus.Present;
+
                     }
                     else
                     {
                         statusId = AttendanceStatus.IncompleteShift;
+
                     }
                 }
                 else
@@ -96,8 +130,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
                                 statusId = AttendanceStatus.WFH;
                             }
                             else
-                            {
-                                statusId = AttendanceStatus.Leave;
+                            { 
+                                    statusId = AttendanceStatus.Leave;
                             }
                         }
                         else
