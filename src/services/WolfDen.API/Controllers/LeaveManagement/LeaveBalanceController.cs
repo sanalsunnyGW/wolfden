@@ -27,13 +27,5 @@ namespace WolfDen.API.Controllers.LeaveManagement
             UpdateLeaveBalanceCommand command = new UpdateLeaveBalanceCommand();
             return await _mediator.Send(command, cancellationToken);
         }
-
-        //[HttpPost]
-        //public async Task<bool> InitializeLeaveBalance(int requestId, CancellationToken cancellationToken)
-        //{
-        //    InitializeLeaveBalanceCommand command = new InitializeLeaveBalanceCommand();
-        //    command.RequestId = requestId;
-        //    return await _mediator.Send(command, cancellationToken);
-        //}
     }
 }

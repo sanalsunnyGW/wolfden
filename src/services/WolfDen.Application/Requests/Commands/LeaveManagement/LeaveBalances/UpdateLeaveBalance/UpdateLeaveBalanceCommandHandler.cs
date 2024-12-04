@@ -33,10 +33,10 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                     DateTime JoiningDateTime = emp.JoiningDate.Value.ToDateTime(TimeOnly.MinValue);
 
                     foreach (LeaveType leaveType in leaveTypes)
-                    {
+                    { 
                         count = 0;
                         foreach (LeaveBalance leaveBalance in leaveBalanceList)
-                        {
+                        { 
                             if ((emp.Gender == EmployeeEnum.Gender.Male && leaveType.LeaveCategoryId != LeaveCategory.Maternity) || (emp.Gender == EmployeeEnum.Gender.Female && leaveType.LeaveCategoryId != LeaveCategory.Paternity))
                             {
                                 if (leaveBalance.TypeId == leaveType.Id && leaveBalance.EmployeeId == emp.Id)   //data exists for that combination...its to be updated
