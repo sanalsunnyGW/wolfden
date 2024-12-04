@@ -7,7 +7,7 @@ using WolfDen.Application.Requests.Queries.Department.GetAllDepartment;
 
 namespace WolfDen.API.Controllers.Department
 {
-    [Route("api/[controller]")]
+    [Route("api/department")]
     [ApiController]
     public class Department(IMediator mediator) : ControllerBase
     {

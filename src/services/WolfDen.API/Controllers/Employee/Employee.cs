@@ -21,7 +21,7 @@ using WolfDen.Application.Requests.Queries.Employees.EmployeePasswordCheck;
 namespace WolfDen.API.Controllers.Employee
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/employee")]
     [ApiController]
     public class Employee(IMediator mediator) : ControllerBase
     {

@@ -88,6 +88,17 @@ export class EmloyeeHierarchyDisplayComponent {
 
       })
   }
+  profileImage() {
+    if (this.employeeData.gender == Gender.Male) {
+      return "male.png"
+    }
+    else if (this.employeeData.gender == Gender.Female) {
+      return "female.jpg"
+    }
+    else {
+      return "default.png"
+    }
+  }
   selectEmployee(employeeId: number): void {
     this.employeeIdClicked = employeeId;
     this.userForm.patchValue({
@@ -197,7 +208,7 @@ export class EmloyeeHierarchyDisplayComponent {
       });
     }
   }
-  
+
   onSubmit() {
     if (this.userForm.valid) {
       const formData = this.userForm.value;

@@ -1,26 +1,17 @@
 <div class="container d-flex  profile-container mb-5 gap-2">
     <div>
         @if(employeeData.photo){
-        <img src="{{employeeData.photo}}" class="img-thumbnail profile-img" alt="Profile Image">
+        <img src="{{employeeData.photo}}" class="rounded-circle profile-img" alt="Profile Image">
         }
-        @if(employeeData.photo==null){
-        @if(employeeData.gender==1){
-        <img src="male.png" class="img-thumbnail profile-img" alt="Profile Image">
-        }
-        @if(employeeData.gender==2){
-        <img src="female.jpg" class="img-thumbnail profile-img" alt="Profile Image">
-        }
-        @if(employeeData.gender==3||employeeData.gender==null){
-        <img src="default.png" class="img-thumbnail profile-img" alt="Profile Image">
-        }
+        @if(!employeeData.photo){
+        <img src="{{profileImage()}}" class="rounded-circle profile-img" alt="Profile Image">
         }
 
     </div>
-    <div class="profile-info">
-        <h2>{{employeeData.firstName}} {{employeeData.lastName}}</h2>
-        <h6>{{employeeData.designationName}}</h6>
+    <div class="profile-info p-2 h1">
+        <h1>{{employeeData.firstName}} {{employeeData.lastName}}</h1>
+        <h5 >{{employeeData.designationName}}</h5>
         <h6>{{employeeData.email}}</h6>
-        <h6>{{employeeData.phoneNumber}}</h6>
     </div>
 
 </div>

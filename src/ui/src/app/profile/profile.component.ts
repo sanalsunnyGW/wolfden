@@ -59,7 +59,6 @@ export class ProfileComponent {
       country: new FormControl('', Validators.required),
       state: new FormControl('', Validators.required),
       photo: new FormControl(''),
-      password: new FormControl('')
     })
   }
 
@@ -73,6 +72,17 @@ export class ProfileComponent {
         return "Other";
       default:
         return "Unknown"
+    }
+  }
+  profileImage() {
+    if (this.employeeData.gender == Gender.Male) {
+      return "male.png"
+    }
+    else if (this.employeeData.gender == Gender.Female) {
+      return "female.jpg"
+    }
+    else {
+      return "default.png"
     }
   }
 
@@ -101,7 +111,6 @@ export class ProfileComponent {
       country: this.employeeData.country,
       state: this.employeeData.state,
       photo: this.employeeData.photo,
-      password: null
     });
 
   }
@@ -152,7 +161,6 @@ export class ProfileComponent {
         country: formData.country,
         state: formData.state,
         photo: formData.photo,
-        password: formData.password
       }
       this.employeeService.employeeUpdateEmployee(params).subscribe({
         next: (response: any) => {

@@ -5,7 +5,7 @@ using WolfDen.Application.Requests.Commands.Employees.AddSuperAdmin;
 
 namespace WolfDen.API.Controllers.Employee
 {
-    [Route("api/[controller]")]
+    [Route("api/superadmin")]
     [ApiController]
     public class SuperAdmin(IMediator mediator) : ControllerBase
     {

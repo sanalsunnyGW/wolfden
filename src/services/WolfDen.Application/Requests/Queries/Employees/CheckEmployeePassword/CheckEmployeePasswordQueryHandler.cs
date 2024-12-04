@@ -15,12 +15,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.CheckEmployeePassword
         {
             Employee employee = await _context.Employees.FindAsync(request.Id);
             User user = await _userManager.FindByIdAsync(employee.UserId);
-            bool checkPassword = await _userManager.CheckPasswordAsync(user, request.Password);
-            if (checkPassword)
-            {
-                return true;
-            }
-            return false;
+            return await _userManager.CheckPasswordAsync(user, request.Password);
         }
     }
 }

@@ -13,7 +13,7 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Employees.EmployeeLogin
 {
-    public class EmployeeLoginQueryHandler(IOptionsMonitor<JwtKey> optionsMonitort, UserManager<User> userManager, WolfDenContext context, IPasswordHasher<User> passwordHasher) : IRequestHandler<EmployeeLoginQuery, LoginResponseDTO>
+    public class EmployeeLoginQueryHandler(IOptionsMonitor<JwtKey> optionsMonitort, UserManager<User> userManager, WolfDenContext context) : IRequestHandler<EmployeeLoginQuery, LoginResponseDTO>
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly IOptionsMonitor<JwtKey> _optionsMonitor = optionsMonitort;

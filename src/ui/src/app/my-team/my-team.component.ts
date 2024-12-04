@@ -79,15 +79,17 @@ export class MyTeamComponent {
 
 
 
-
+viewProfile(id:number){
+  this.router.navigate(['/portal/employee-display'], { queryParams: { id: id } });
+}
 
 
 
   ngOnInit(): void {
     this.loadEmployeeHierarchy();
     (window as any).onA = (nodeName: string) => {
-      const nodeId=nodeName.slice(4)
-      this.router.navigate(['/portal/employee-display'], { queryParams: { id: nodeId } });
+      const nodeId=nodeName.slice(4);
+      this.viewProfile(Number(nodeId))
     };
 
     mermaid.initialize({

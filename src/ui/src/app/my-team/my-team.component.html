@@ -2,7 +2,7 @@
     <div class="mb-4 hierarchy">
         <h1><u>My Team</u></h1>
     </div>
-    <div class="d-flex gap-2">
+    <div class="d-flex gap-3">
         <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal" data-bs-target="#team"
             data-toggle="tooltip" data-placement="top" title="Click to view Full Team Hierarchy"
             (click)="viewTeamHierarchy()">
@@ -16,21 +16,40 @@
 <div class="row row-cols-1 row-cols-md-4 g-4">
     @for(employee of employeeData; track employee){
     <div class="col">
-        <div class="card h-100">
+        <div class="card h-100 " (click)="viewProfile(employee.id)">
             <div>
                 @if(employee.photo){
-                <img src="{{employee.photo}}" class="img-thumbnail profile-img" alt="Profile Image">
+                <img src="{{employee.photo}}" class="rounded-top profile-img" alt="Profile Image">
                 }
-                @if(employee.photo==null){
-                <img src="default.png" class="img-thumbnail profile-img" alt="Profile Image">
+                @if(!employee.photo){
+                <img src="default.png" class="rounded-top profile-img" alt="Profile Image">
                 }
 
 
             </div>
             <div class="card-body">
-                <h5 class="card-title">{{employee.firstName}} {{employee.lastName}}</h5>
-                <p class="card-text">{{employee.departmentName}}<br>{{employee.designationName}}<br>{{employee.email}}
-                    <br>{{employee.phoneNumber}}
+                <p class="card-text">
+                    <tr>
+                        <th>Name</th>
+                        <td>{{employee.firstName}} {{employee.lastName}}</td>
+                    </tr>
+                    <tr>
+                        <th>Designation</th>
+                        <td>{{employee.designationName}}</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Department</th>
+                        <td>{{employee.departmentName}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Email</th>
+                        <td>{{employee.email}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Contact</th>
+                        <td>{{employee.phoneNumber}}</td>
+                    </tr>
                 </p>
             </div>
         </div>

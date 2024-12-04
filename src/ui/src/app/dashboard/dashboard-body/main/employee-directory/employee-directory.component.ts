@@ -42,10 +42,6 @@ export class EmployeeDirectoryComponent implements OnInit {
   ngOnInit(): void {
     this.loadEmployees();
   }
-  onClick(){
-    // this.router.navigate(['/portal/employee-display'], { queryParams: { id:  } });
-  }
-
   onPageChange(event: PageEvent): void {
     this.pageNumber = event.pageIndex;
     console.log(this.pageNumber);
