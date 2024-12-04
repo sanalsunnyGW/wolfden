@@ -339,7 +339,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ad
                     {
                         NotificationCommand command = new NotificationCommand
                         {
-                            EmployeeId = managerId,
+                            EmployeeIds = new List<int> { managerId },
                             Message = notificationMessage,
                         };
                         await _mediator.Send(command, cancellationToken);

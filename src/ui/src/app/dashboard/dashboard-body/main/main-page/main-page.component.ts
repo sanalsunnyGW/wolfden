@@ -8,7 +8,6 @@ import { ILeaveBalanceList } from '../../../../interface/leave-balance-list-inte
 import { WeeklyAttendanceComponent } from "../attendance-module/weekly-attendance/weekly-attendance.component";
 import { ItodaysAbsence } from '../../../../interface/itodays-absense';
 import { Iholiday } from '../../../../interface/iholiday';
-import { data } from 'jquery';
 
 
 interface Holiday {
