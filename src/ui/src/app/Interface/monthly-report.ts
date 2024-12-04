@@ -4,7 +4,9 @@ export interface allEmployeesMonthlyReports {
     noOfAbsentDays:number,
     absentDays:string,
     nofIncompleteShiftDays:number,
-    incompleteShiftDays:string
+    incompleteShiftDays:string,
+    halfDays:number,
+    halfDayLeaves:string
 }
 export interface MonthlyReports{
     allEmployeesMonthlyReports: allEmployeesMonthlyReports[];
