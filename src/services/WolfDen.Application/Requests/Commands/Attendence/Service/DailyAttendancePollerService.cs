@@ -1,4 +1,4 @@
-﻿using LanguageExt;
+using LanguageExt;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -105,6 +105,13 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                     string employeeMessage = $"Your working duration for {today} is {record.InsideDuration / 60} hours and {record.InsideDuration % 60} minutes.";
                     string employeeIncompleteMessage = $"Incomplete Shift !!! Your working duration today is {record.InsideDuration / 60} hours and {record.InsideDuration % 60} minutes.";
 
+                    LeaveRequest? halfDay = leave.Find(x => x.EmployeeId == newEntry.EmployeeId);
+
+                    if (halfDay is not null)
+                    {
+                        min = min / 2;
+                    }
+
                     SendEmailCommand sendEmailCommand = new SendEmailCommand
                     {
                         EmployeeId = record.EmployeeId,
@@ -119,6 +126,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                             : $"Great job {record.Employee.FirstName}! Your extra hours on {today} are appreciated",
                         Subject = record.InsideDuration < minWorkDuration ? "Incomplete Shift" : "Attendance Summary",
                         Status = record.InsideDuration < minWorkDuration ? "Incomplete Shift" : "Shift Complete",
+                        MissedPunch = record.MissedPunch != null ? record.MissedPunch : "-"
                     };
 
                     await _mediator.Send(sendEmailCommand);

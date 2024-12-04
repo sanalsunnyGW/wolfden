@@ -1,9 +1,13 @@
-﻿using MediatR;
+﻿using System;
+using Azure.Core.Serialization;
+using LanguageExt;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using sib_api_v3_sdk.Api;
 using sib_api_v3_sdk.Client;
 using sib_api_v3_sdk.Model;
+using WolfDen.Application.DTOs.Attendence;
 using WolfDen.Application.Helpers;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
@@ -32,19 +36,23 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
             string[] receiverEmails = { employee.Email };
             List<string> managerEmails = await _emailFinder.FindManagerEmailsAsync(employee.ManagerId);
             string subject = request.Subject;
-
+            int? hours = request.Duration / 60;
+            int? minutes = request.Duration % 60;
+            string duration = $"{hours}h {minutes}m";
             var dynamicData = new Dictionary<string, object>
         {
             { "name", request.Name },
-            {"date",request.Date },
+            {"date",request.Date },  
             { "arrivalTime",request.ArrivalTime.ToString("HH:mm:ss") },
             { "departureTime", request.DepartureTime.ToString("HH:mm:ss") },
             { "status", request.Status },
-            { "duration", request.Duration },
-            { "message",request.Message }
+            { "duration", duration},
+            { "message",request.Message},
+            { "missedPunch",request.MissedPunch }
+
         };
             int templateId = 10;
-            bool status = SendMail(_senderEmail, _senderName, receiverEmails, templateId, dynamicData, managerEmails.ToArray(), subject);
+            bool status = SendMail(_senderEmail, _senderName, receiverEmails,templateId, dynamicData, managerEmails.ToArray(),subject);
             if (status)
             {
                 DailyAttendence? attendence = await _context.DailyAttendence
@@ -77,7 +85,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
                     Cc = ccList,
                     TemplateId = templateId,
                     Params = templateParams,
-                    Subject = subject
+                    Subject=subject
                 };
                 CreateSmtpEmail result = apiInstance.SendTransacEmail(sendSmtpEmail);
                 return true;

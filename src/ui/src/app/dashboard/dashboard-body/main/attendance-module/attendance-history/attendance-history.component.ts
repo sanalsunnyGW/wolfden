@@ -7,6 +7,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { AttendanceHistory } from '../../../../../interface/attendance-history';
 import { WolfDenService } from '../../../../../service/wolf-den.service';
+import { ActivatedRoute } from '@angular/router';
 import { DurationFormatPipe } from "../../../../../pipe/duration-format.pipe";
 import { SplitCommaPipe } from "../../../../../pipe/split-comma.pipe";
 
@@ -34,15 +35,16 @@ export class AttendanceHistoryComponent implements OnInit {
   totalPages!: number;
 Math: any;
 
-constructor() 
+constructor(private route:ActivatedRoute) 
 {
   this.selectedYear = new Date().getFullYear();
   for (let year = this.selectedYear; year >= 2020; year--) {
     this.years.push(year);
   }
 }
-
+id!:number
 ngOnInit(): void {
+  this.id=+this.route.snapshot.paramMap.get('id')!;
 }
 
 months = [
@@ -74,7 +76,7 @@ status = [
 
 fetchHistory(){
   this.service.getMonthlyHistoryByStatus(
-    this.employeeId,
+    this.id,
     this.selectedYear,
     this.selectedMonth,
     this.selectedStatus,

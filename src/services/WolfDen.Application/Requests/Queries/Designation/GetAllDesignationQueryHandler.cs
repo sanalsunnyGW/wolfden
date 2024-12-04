@@ -21,7 +21,7 @@ namespace WolfDen.Application.Requests.Queries.Designation
 
         public async Task<List<DesignationDTO>> Handle(GetAllDesignationQuery query, CancellationToken cancellationToken)
         {
-            var departments = await _context.Designations
+            List<DesignationDTO> designation = await _context.Designations
               .Select(designation => new DesignationDTO
               {
                   Id = designation.Id,
@@ -29,7 +29,7 @@ namespace WolfDen.Application.Requests.Queries.Designation
               })
               .ToListAsync(cancellationToken);
 
-            return departments;
+            return designation;
 
         }
 

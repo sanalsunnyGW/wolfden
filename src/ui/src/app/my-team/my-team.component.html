@@ -2,13 +2,13 @@
     <div class="mb-4 hierarchy">
         <h1><u>My Team</u></h1>
     </div>
-    <div class="d-flex gap-2">
+    <div class="d-flex gap-3">
         <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal" data-bs-target="#team"
             data-toggle="tooltip" data-placement="top" title="Click to view Full Team Hierarchy"
             (click)="viewTeamHierarchy()">
             View Team Hierarchy</button>
         <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal" data-bs-target="#leave"
-            data-toggle="tooltip" data-placement="top" title="Click to view Full Team Hierarchy">
+            data-toggle="tooltip" data-placement="top" title="Click to view Upcoming Leave" (click)="viewLeave()">
             View Upcoming Leaves </button>
     </div>
 </div>
@@ -16,71 +16,106 @@
 <div class="row row-cols-1 row-cols-md-4 g-4">
     @for(employee of employeeData; track employee){
     <div class="col">
-        <div class="card h-100">
-            <img src="{{employee.photo}}" class="card-img-top" alt="...">
+        <div class="card h-100 " (click)="viewProfile(employee.id)">
+            <div>
+                @if(employee.photo){
+                <img src="{{employee.photo}}" class="rounded-top profile-img" alt="Profile Image">
+                }
+                @if(!employee.photo){
+                <img src="default.png" class="rounded-top profile-img" alt="Profile Image">
+                }
+
+
+            </div>
             <div class="card-body">
-                <h5 class="card-title">{{employee.firstName}} {{employee.lastName}}</h5>
-                <p class="card-text">{{employee.departmentName}}<br>{{employee.designationName}}<br>{{employee.email}}
-                    <br>{{employee.phoneNumber}}
+                <p class="card-text">
+                    <tr>
+                        <th>Name</th>
+                        <td>{{employee.firstName}} {{employee.lastName}}</td>
+                    </tr>
+                    <tr>
+                        <th>Designation</th>
+                        <td>{{employee.designationName}}</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Department</th>
+                        <td>{{employee.departmentName}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Email</th>
+                        <td>{{employee.email}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Contact</th>
+                        <td>{{employee.phoneNumber}}</td>
+                    </tr>
                 </p>
             </div>
         </div>
     </div>
     }
+</div>
 
+<!-- Modal -->
+<div class="modal fade" id="leave" tabindex="-1" aria-labelledby="leave" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="leave">Upcoming Leaves</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped ">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">From</th>
+                            <th scope="col">To</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Half Day</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for(item of teamLeave;track item){
+                        <tr>
+                            <th scope="row">{{item.name}}</th>
+                            <td>{{item.fromDate}}</td>
+                            <td>{{item.toDate}}</td>
+                            <td>{{item.typeName}}</td>
+                            @if(item.halfDay){
+                            <td><i class="fa-solid fa-check"></i></td>
+                            }
+                            @if(!item.halfDay){
+                            <td><i class="fa-solid fa-xmark"></i></td>
+                            }
+                        </tr>
+                        }
 
-    <!-- Modal -->
-    <div class="modal fade" id="leave" tabindex="-1" aria-labelledby="leave" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="leave">Upcoming Leaves</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <table class="table table-striped-columns ">
-                        <thead>
-                            <tr>
-                                <th scope="col">Employees Name</th>
-                                <th scope="col">From</th>
-                                <th scope="col">To</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">Abhishek</th>
-                                <td>20/11/2024</td>
-                                <td>21/11,2024</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Anand</th>
-                                <td>25/11/2024</td>
-                                <td>28/11,2024</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="modal fade" id="team" tabindex="-1" aria-labelledby="team" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="team">My Team Hierarchy</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div #mermaidDiv data-toggle="tooltip" data-placement="top"
-                        title="Click a Profile to view Full Screen" data-bs-dismiss="modal"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+<div class="modal fade" id="team" tabindex="-1" aria-labelledby="team" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="team">My Team Hierarchy</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div #mermaidDiv data-toggle="tooltip" data-placement="top" title="Click a Profile to view Full Screen"
+                    data-bs-dismiss="modal"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+</div>

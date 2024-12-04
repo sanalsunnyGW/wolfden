@@ -4,11 +4,12 @@ import { CommonModule, formatDate } from '@angular/common';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { DailyAttendance } from '../../../../../interface/idaily-attendance';
 import { WolfDenService } from '../../../../../service/wolf-den.service';
+import { SplitCommaPipe } from "../../../../../pipe/split-comma.pipe";
 
 @Component({
   selector: 'app-daily-attendence',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SplitCommaPipe],
   templateUrl: './daily-attendence.component.html',
   styleUrl: './daily-attendence.component.scss'
 })
@@ -19,6 +20,8 @@ export class DailyAttendenceComponent {
   constructor(private router: Router,private route:ActivatedRoute) {}
   attendanceDate!:string
   dailyData!:DailyAttendance
+  present=false;
+  notPresent=false;
   ngOnInit() {
    this.attendanceDate = this.route.snapshot.paramMap.get('attendanceDate')!;
    this.getDailyAttendence();
@@ -33,7 +36,8 @@ export class DailyAttendenceComponent {
     { id: 6, viewValue: 'WFH' },
     { id: 7, viewValue: 'Leave' },
     { id: 8, viewValue: 'OnGoing Shift' },
-
+    { id: 9, viewValue: 'Half Day Leave'},
+    {id : 10, viewValue: 'Weekend' }
   ];
 
   getAttendanceStatus(id:number)
@@ -46,7 +50,6 @@ export class DailyAttendenceComponent {
   
   getDailyAttendence()
   {
-   
     const employeeId=this.baseService.userId;
     const selectedDate=new Date(this.attendanceDate)
     const date=formatDate(selectedDate, 'yyyy-MM-dd', 'en-US');
@@ -67,32 +70,15 @@ export class DailyAttendenceComponent {
     } 
     return `${hours}h ${minutes}m`;
   }
-  convertToTime(dateStr: string): string {
-    if(dateStr)
-    {
-      const split=dateStr.split('+')[0];
-      const DateRemove=split.split('T')[1];
-      return `${DateRemove}`
-    }
-    return '-' 
-  }
-  convertToDate(dateStr: string)
-  {
-    if(dateStr)
-      {
-        const split=dateStr.split('+')[0];
-        const DateRemove=split.split('T')[0];
-        return `${DateRemove}`
-      }
-      return '-'
-  }
   isMissed(missPunch:string)
   {
     if(missPunch)
     {
-      return missPunch;
+      this.present=true
     }
-    return '-'
+    else{
+      this.notPresent=true;
+    }
   }
   downloadDailyReport()
   {

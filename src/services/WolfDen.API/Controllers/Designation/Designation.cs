@@ -7,7 +7,7 @@ using WolfDen.Application.Requests.Queries.Designation;
 
 namespace WolfDen.API.Controllers.Designation
 {
-    [Route("api/[controller]")]
+    [Route("api/designation")]
     [ApiController]
     public class Designation(IMediator mediator) : ControllerBase
     {

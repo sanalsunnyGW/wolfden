@@ -14,5 +14,6 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
         public DateTimeOffset DepartureTime { get; set; }
         public int? Duration { get; set; }
         public DateOnly Date { get; set; }
+        public string MissedPunch { get; set; }
     }
 }

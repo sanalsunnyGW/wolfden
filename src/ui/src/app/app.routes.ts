@@ -33,23 +33,21 @@ export const routes: Routes = [
         ]
     },
     {
-        path: 'portal',
-        component: DashboardComponent,
-        children: [
-            { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-             {path:'dashboard',component:MainPageComponent,canActivate: [guardsGuard]},
-             {path:'employee-directory',component: EmployeeDirectoryComponent,canActivate: [guardsGuard]},
-             {path:'leave-dashboard',component:LeaveDashboardComponent,canActivate: [guardsGuard]},
-            {path:'leave-request-history',component:LeaveHistoryComponent,canActivate: [guardsGuard]},
-            { path: 'main-page', component: MainPageComponent },
-            { path: 'employee-directory', component: EmployeeDirectoryComponent },
-            { path: 'leave-dashboard', component: LeaveDashboardComponent },
-            { path: 'leave-request-history', component: LeaveHistoryComponent },
-            { path: 'attendance/daily/:attendanceDate', component: DailyAttendenceComponent },
-            { path: 'attendance/weekly', component: WeeklyAttendanceComponent },
-            { path: 'attendance/monthly', component: MonthlyReportComponent },
-            {path:'attendance/history',component:AttendanceHistoryComponent},
-            { path: 'attendance/subordinates', component: SubordinatesComponent },
+        path:'portal',
+        component:DashboardComponent,
+        children:[
+            { path: '', redirectTo: '/dashboard', pathMatch: 'full' }, 
+            {path:'dashboard',component:MainPageComponent},
+            {path:'employee-directory',component: EmployeeDirectoryComponent},
+            {path:'main-page',component:MainPageComponent},
+            {path:'employee-directory',component: EmployeeDirectoryComponent},
+            {path:'leave-dashboard',component:LeaveDashboardComponent},
+            {path:'leave-request-history',component:LeaveHistoryComponent},
+            {path:'attendance/daily/:attendanceDate',component:DailyAttendenceComponent},
+            {path:'attendance/weekly',component:WeeklyAttendanceComponent},
+            {path:'attendance/monthly',component:MonthlyReportComponent},
+            {path:'attendance/subordinates',component:SubordinatesComponent} ,  
+            {path:'attendance/history/:id',component:AttendanceHistoryComponent}, 
             { path: 'edit-leave-type', component: EditLeaveTypeComponent },
             { path: 'update-leave-balance', component: UpdateLeaveBalanceComponent },
             {path:'attendance/attendance-history',component:AttendanceHistoryComponent},
@@ -81,7 +79,7 @@ export const routes: Routes = [
             {
                 path: 'leave-request-history',
                 component: LeaveHistoryComponent,
-                canActivate: [guardsGuard]
+    
             },
             {
                 path: '',

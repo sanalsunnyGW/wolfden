@@ -18,6 +18,9 @@ using WolfDen.Application.Services;
 using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
+using WolfDen.Application.Requests.Commands.Attendence.Email;
+using WolfDen.Application.Helper.LeaveManagement;
+using WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -104,7 +107,8 @@ builder.Services.AddScoped<ManagerEmailFinder>();
 builder.Services.AddScoped<ManagerIdFinder>();
 builder.Services.AddScoped<MonthlyPdf>();
 builder.Services.AddScoped<Email>();
-//builder.Services.AddHostedService<DailyAttendancePollerService>();
+builder.Services.AddSingleton<WeeklyPdfService>();
+
 
 QuestPDF.Settings.License = LicenseType.Community;
 
@@ -126,6 +130,7 @@ builder.Services.AddScoped(sp =>
                 sp.GetRequiredService<ILogger<QueryBasedSyncService>>()
             ));
 builder.Services.AddScoped<DailyAttendancePollerService>();
+builder.Services.AddScoped<WeeklyAttendancePollerService>();
 
 builder.Services.AddControllers();
 var app = builder.Build();
@@ -150,6 +155,7 @@ using (var scope = app.Services.CreateScope())
 {
     var syncService = scope.ServiceProvider.GetRequiredService<QueryBasedSyncService>();
     var combineService = scope.ServiceProvider.GetRequiredService<DailyAttendancePollerService>();
+    var weeklyService= scope.ServiceProvider.GetRequiredService<WeeklyAttendancePollerService>();
 
     RecurringJob.AddOrUpdate(
         "sync-tables-job",
@@ -162,7 +168,13 @@ using (var scope = app.Services.CreateScope())
     () => combineService.ExecuteJobAsync(),
     "0 0 * * 2-6"
     );
+    
+    RecurringJob.AddOrUpdate(
+     "send-weeklyemails-job",
+     () => weeklyService.WeeklyEmail(),
+     "0 0 * * 6"
 
+ );
 }
 
 app.Run();

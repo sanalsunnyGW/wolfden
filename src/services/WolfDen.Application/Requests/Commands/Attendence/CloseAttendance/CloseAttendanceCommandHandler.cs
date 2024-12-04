@@ -43,6 +43,8 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                 int incompleteShiftCount = 0;
                 string lopDays = "";
                 string incompleteShiftDays = "";
+                int halfDay = 0;
+                string halfDayleaves = " ";
                 for (DateOnly currentDate = monthStart; currentDate <= attendanceClosingDate; currentDate = currentDate.AddDays(1))
                 {
                     if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
@@ -51,10 +53,21 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                     }
                     DailyAttendence? attendanceRecord = attendanceRecords.
                         FirstOrDefault(x => x.EmployeeId == employee.Id && x.Date == currentDate);
-                    if (attendanceRecord is not null && attendanceRecord.InsideDuration < minWorkDuration)
+                    if (attendanceRecord is not null)
                     {
-                        incompleteShiftDays += currentDate.ToString("yyyy-MM-dd") + ",";
-                        incompleteShiftCount++;
+                        LeaveRequest? leaveRequest = leaveRequests
+                                  .FirstOrDefault(x => x.EmployeeId == employee.Id && x.FromDate <= currentDate && x.ToDate >= currentDate);
+                        if (leaveRequest is not null && leaveRequest.HalfDay is true)
+                        {
+                            minWorkDuration = minWorkDuration / 2;
+                            halfDay++;
+                            halfDayleaves += currentDate.ToString("yyyy-MM-dd") + ",";
+                        }
+                        if (attendanceRecord.InsideDuration < minWorkDuration)
+                        {
+                            incompleteShiftDays += currentDate.ToString("yyyy-MM-dd") + ",";
+                            incompleteShiftCount++;
+                        } 
                     }
                     else 
                     {
@@ -68,14 +81,32 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                         }
                     }
                 }
-                LOP lop = new LOP(attendanceClosingDate, employee.Id, lopCount, incompleteShiftCount, lopDays.Substring(0,lopDays.Length-1),
-                    incompleteShiftDays.Substring(0,incompleteShiftDays.Length-1));
+                lopDays = UpdateListOfDays(lopDays);
+                incompleteShiftDays = UpdateListOfDays(incompleteShiftDays);
+                halfDayleaves = UpdateListOfDays(halfDayleaves);
+
+                LOP lop = new LOP(attendanceClosingDate, employee.Id, lopCount, incompleteShiftCount, lopDays,
+                    incompleteShiftDays,halfDay,halfDayleaves);
                 await _context.AddAsync(lop);
+            }
+            List<LeaveRequest> openLeaveRequests = await _context.LeaveRequests
+                 .Where(x => x.FromDate <= attendanceClosingDate && x.ToDate >= monthStart &&
+                             x.LeaveRequestStatusId == LeaveRequestStatus.Open)
+                 .ToListAsync(cancellationToken);
+            foreach (var leaveRequest in openLeaveRequests)
+            {
+                leaveRequest.Reject(1);
+                _context.Update(leaveRequest);
             }
             DateTime date = new DateTime(request.Year, request.Month, 1);
             AttendenceClose attendenceClose = new AttendenceClose(attendanceClosingDate, true, date.ToString("MMMM"), request.Year);
             await _context.AddAsync(attendenceClose);
             return await _context.SaveChangesAsync(cancellationToken);
+
+        }
+        private string UpdateListOfDays(string days)
+        {
+            return days.Length > 0 ? days.Substring(0, days.Length - 1) : " ";
         }
     }
 }
