@@ -31,12 +31,14 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                 Holiday = 0,
                 WFH = 0,
                 Leave = 0,
+                HalfDays = 0,
                 IncompleteShiftDays = "",
                 RestrictedHolidays = "",
                 NormalHolidays ="",
                 WFHDays = "",
                 LeaveDays = "",
-                AbsentDays = ""
+                AbsentDays = "",
+                HalfDayLeaves=""
             };
 
             DateOnly today = DateOnly.FromDateTime(DateTime.Now);
@@ -111,8 +113,16 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                         }
                         else if(leaveRequest is not null)
                         {
-                            summaryDto.Leave++;
-                            summaryDto.LeaveDays += currentDate.ToString("yyyy-MM-dd") + ",";
+                            if(leaveRequest.HalfDay is true)
+                            {
+                                summaryDto.HalfDays++;
+                                summaryDto.HalfDayLeaves += currentDate.ToString("yyyy-MM-dd") + ",";
+                            }
+                            else
+                            {
+                                summaryDto.Leave++;
+                                summaryDto.LeaveDays += currentDate.ToString("yyyy-MM-dd") + ",";
+                            } 
                         }
                         else
                         {
@@ -126,6 +136,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
             summaryDto.IncompleteShiftDays = update(summaryDto.IncompleteShiftDays);
             summaryDto.LeaveDays = update(summaryDto.LeaveDays);
             summaryDto.WFHDays = update(summaryDto.WFHDays);
+            summaryDto.HalfDayLeaves = update(summaryDto.HalfDayLeaves);
             return summaryDto;
         }
         private string update(string days)

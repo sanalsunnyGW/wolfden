@@ -8,5 +8,7 @@
         public string AbsentDays { get; set; }
         public int NofIncompleteShiftDays { get; set; }
         public string IncompleteShiftDays { get; set; }
+        public int HalfDays { get; set; }
+        public string HalfDayLeaves { get; set; }
     }
 }

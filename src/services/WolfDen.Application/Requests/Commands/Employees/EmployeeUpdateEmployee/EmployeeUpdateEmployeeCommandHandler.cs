@@ -6,20 +6,11 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee
 {
-    public class EmployeeUpdateEmployeeCommandHandler : IRequestHandler<EmployeeUpdateEmployeeCommand, bool>
+    public class EmployeeUpdateEmployeeCommandHandler(WolfDenContext context, EmployeeUpdateEmployeeValidator validator, UserManager<User> userManager) : IRequestHandler<EmployeeUpdateEmployeeCommand, bool>
     {
-        private readonly WolfDenContext _context;
-        private readonly EmployeeUpdateEmployeeValidator _validator;
-        private readonly UserManager<User> _userManager;
-        private readonly IPasswordHasher<User> _passwordHasher;
-
-        public EmployeeUpdateEmployeeCommandHandler(WolfDenContext context, EmployeeUpdateEmployeeValidator validator, UserManager<User> userManager, IPasswordHasher<User> passwordHasher)
-        {
-            _context = context;
-            _validator = validator;
-            _userManager = userManager;
-            _passwordHasher = passwordHasher;
-        }
+        private readonly WolfDenContext _context = context;
+        private readonly EmployeeUpdateEmployeeValidator _validator = validator;
+        private readonly UserManager<User> _userManager = userManager;
 
         public async Task<bool> Handle(EmployeeUpdateEmployeeCommand request, CancellationToken cancellationToken)
         {
@@ -39,7 +30,7 @@ namespace WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee
             try
             {
                 User user = await _userManager.FindByNameAsync(employee.RFId);
-                user.SetEmailPassword(request.Email, request.Password, _passwordHasher);
+                user.SetEmail(request.Email);
                 var updateResult = await _userManager.UpdateAsync(user);
                 employee.EmployeeUpdateEmployee(request.FirstName, request.LastName, request.DateofBirth, request.Email, request.PhoneNumber, request.Gender, request.Address, request.Country, request.State, request.Photo);
                 _context.Employees.Update(employee);
