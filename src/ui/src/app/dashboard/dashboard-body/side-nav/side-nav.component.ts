@@ -44,7 +44,7 @@ export class SideNavComponent {
 {
   this.employeeService.getMyTeamHierarchy(true,this.userService.userId)
   .pipe(takeUntilDestroyed(this.destroyRef))
-  .subscribe((data:any)=> {
+  .subscribe((data:IEmployeeData[])=> {
       this.employeeHierarchyList= data; 
   });
 }

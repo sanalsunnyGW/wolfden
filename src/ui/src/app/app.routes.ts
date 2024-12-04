@@ -21,6 +21,8 @@ import { EditLeaveTypeComponent } from './dashboard/dashboard-body/main/leave-ma
 import { UpdateLeaveBalanceComponent } from './dashboard/dashboard-body/main/leave-management/update-leave-balance/update-leave-balance.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AttendanceHistoryComponent } from './dashboard/dashboard-body/main/attendance-module/attendance-history/attendance-history.component';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { EditRoleComponent } from './edit-role/edit-role.component';
 
 export const routes: Routes = [
 {
@@ -91,6 +93,16 @@ export const routes: Routes = [
                 component: ProfileComponent,
                 canActivate: [guardsGuard]
             },
+            {
+                path:'admin-dashboard',
+                component:AdminDashboardComponent,
+                canActivate:[guardsGuard]
+            },
+            {
+                path:'employee-role',
+                component:EditRoleComponent,
+                canActivate:[guardsGuard]
+            }
             
         ]
     },

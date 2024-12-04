@@ -11,6 +11,8 @@ import { IadminForm } from '../interface/iadmin-form';
 import { ImanagerForm } from '../interface/imanager-form';
 import { ImanagerData } from '../interface/imanager-data';
 import { IaddEmployeeForm } from '../interface/iadd-employee-form';
+import { IaddEmployee } from '../interface/iadd-employee';
+import { IadminUpdate } from '../interface/iadmin-update';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -43,6 +45,7 @@ export class AdminDashboardComponent {
     id: 0,
     designationName: ''
   }];
+  params: IaddEmployee = {} as IaddEmployee;
   departmentForm!: FormGroup<IDepartmentForm>;
   designationForm!: FormGroup<IDesignationForm>;
 
@@ -86,12 +89,12 @@ export class AdminDashboardComponent {
 
   ngOnInit() {
     this.loadEmployeeData();
-  
+
   }
 
   loadEmployeeData() {
     this.employeeService.getAllDepartment().subscribe({
-      next: (response: any) => {
+      next: (response: IDepartment[]) => {
         if (response) {
           this.departmentData = response
         }
@@ -102,7 +105,7 @@ export class AdminDashboardComponent {
       }
     }),
       this.employeeService.getAllDesignation().subscribe({
-        next: (response: any) => {
+        next: (response: IDesignation[]) => {
           if (response) {
             this.designationData = response;
           }
@@ -115,12 +118,9 @@ export class AdminDashboardComponent {
 
   onSubmitDepartment() {
     if (this.departmentForm.valid) {
-      const formData = this.departmentForm.value;
-      const params = {
-        departmentName: formData.departmentName
-      }
+      const params: string = this.departmentForm.value.departmentName ?? '';
       this.employeeService.addDepartment(params).subscribe({
-        next: (response: any) => {
+        next: (response: number) => {
           if (response > 0) {
             this.toastr.success('Department added Successfully')
             this.loadEmployeeData();
@@ -135,12 +135,9 @@ export class AdminDashboardComponent {
   }
   onSubmitDesignation() {
     if (this.designationForm.valid) {
-      const formData = this.designationForm.value;
-      const params = {
-        designationName: formData.designationName
-      }
+      const params: string = this.designationForm.value.designationName ?? '';
       this.employeeService.addDesignation(params).subscribe({
-        next: (response: any) => {
+        next: (response: number) => {
           if (response > 0) {
             this.toastr.success('Designation added Successfully')
             this.loadEmployeeData();
@@ -159,11 +156,11 @@ export class AdminDashboardComponent {
     if (this.managerForm.valid) {
       const formData = this.managerForm.value;
       const params = {
-        firstName: formData.firstName,
-        lastName: formData.lastName
+        firstName: formData.firstName ?? '',
+        lastName: formData.lastName ?? ''
       }
       this.employeeService.getEmployeeByName(params.firstName, params.lastName).subscribe({
-        next: (response: any) => {
+        next: (response: ImanagerData[]) => {
           this.managerData = response;
           this.isDataLoaded = true;
           this.managerForm.get('firstName')?.setValue('');
@@ -175,16 +172,16 @@ export class AdminDashboardComponent {
       });
     }
   }
-  sync(){
+  sync() {
     this.employeeService.syncEmployee().subscribe({
-      next: (response: any) => {
-        if(response){
+      next: (response: boolean) => {
+        if (response) {
           this.toastr.success('Employee Sync Success');
         }
-        else{
+        else {
           this.toastr.info('Employees are already up to date')
         }
-        
+
       },
       error: (err) => {
         this.toastr.error('Error fetching managers');
@@ -197,18 +194,18 @@ export class AdminDashboardComponent {
   onSubmit() {
     if (this.userForm.valid) {
       const formData = this.userForm.value;
-      const params = {
+      const params : IadminUpdate = {
         id: this.newEmployeeId,
-        designationId: formData.designationId,
-        departmentId: formData.departmentId,
-        managerId: formData.managerId,
-        isActive: formData.isActive,
-        joiningDate: formData.joiningDate,
-        employmentType: Number(formData.employmentType),
+        designationId: formData.designationId ?? 0,
+        departmentId: formData.departmentId ?? 0,
+        managerId: formData.managerId ?? 0,
+        isActive: formData.isActive ?? false,
+        joiningDate: formData.joiningDate ?? this.inDate,
+        employmentType: Number(formData.employmentType)
       }
       this.employeeService.adminUpdateEmployee(params).subscribe({
-        next: (response: any) => {
-          if (response == true) {
+        next: (response: boolean) => {
+          if (response) {
             this.toastr.success('Profile Updated Successfully')
             this.loadEmployeeData();
             this.restEmployeeId();
@@ -229,13 +226,9 @@ export class AdminDashboardComponent {
     console.log(this.employeeForm)
     if (this.employeeForm.valid) {
       const formData = this.employeeForm.value;
-      const params = {
-        employeeCode: formData.employeeCode,
-        rfId: formData.rfId
-
-      }
-      this.employeeService.addEmployee(params).subscribe({
-        next: (response: any) => {
+      this.params.employeeCode = formData.employeeCode;
+      this.employeeService.addEmployee(this.params).subscribe({
+        next: (response: number) => {
           if (response > 0) {
             this.newEmployeeId = response;
             this.toastr.success('Employee Added Successfully')
