@@ -7,16 +7,10 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName
 {
-    public class GetAllEmployeesByNameQueryHandler : IRequestHandler<GetAllEmployeesByNameQuery, List<EmployeeNameDTO>>
+    public class GetAllEmployeesByNameQueryHandler(WolfDenContext context, UserManager<Domain.Entity.User> usermanager) : IRequestHandler<GetAllEmployeesByNameQuery, List<EmployeeNameDTO>>
     {
-        private readonly WolfDenContext _context;
-        private readonly UserManager<Domain.Entity.User> _userManager;
-
-        public GetAllEmployeesByNameQueryHandler(WolfDenContext context, UserManager<Domain.Entity.User> usermanager)
-        {
-            _context = context;
-            _userManager = usermanager;
-        }
+        private readonly WolfDenContext _context = context;
+        private readonly UserManager<Domain.Entity.User> _userManager = usermanager;
 
         public async Task<List<EmployeeNameDTO>> Handle(GetAllEmployeesByNameQuery query, CancellationToken cancellationToken)
         {

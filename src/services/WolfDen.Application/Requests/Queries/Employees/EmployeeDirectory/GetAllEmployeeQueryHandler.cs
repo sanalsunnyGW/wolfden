@@ -5,14 +5,11 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
 {
-    public class GetAllEmployeeQueryHandler : IRequestHandler<GetAllEmployeeQuery, PaginationResponse>
+    public class GetAllEmployeeQueryHandler(WolfDenContext context) : IRequestHandler<GetAllEmployeeQuery, PaginationResponse>
     {
-        private readonly WolfDenContext _context;
+        private readonly WolfDenContext _context = context;
 
-        public GetAllEmployeeQueryHandler(WolfDenContext context)
-        {  
-            _context = context;
-        }
+
         public async Task<PaginationResponse> Handle(GetAllEmployeeQuery request, CancellationToken cancellationToken)
         {
             int pageNumber = request.PageNumber > 0 ? request.PageNumber : 0;
@@ -26,7 +23,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
             }
             if (!string.IsNullOrWhiteSpace(request.EmployeeName))
             {
-                baseQuery = baseQuery.Where(e =>(e.FirstName + " " + e.LastName).Contains(request.EmployeeName));
+                baseQuery = baseQuery.Where(e => (e.FirstName + " " + e.LastName).Contains(request.EmployeeName));
             }
 
             int totalCount = await baseQuery.CountAsync(cancellationToken);
@@ -60,7 +57,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
             var empDirectory = new PaginationResponse
             {
                 EmployeeDirectoryDTOs = emp,
-                TotalRecords=totalCount,
+                TotalRecords = totalCount,
                 TotalPages = pageCount,
             };
 
