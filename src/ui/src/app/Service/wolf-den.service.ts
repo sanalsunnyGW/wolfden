@@ -101,8 +101,8 @@ export class WolfDenService {
     return this.userId !== 0;
   }
 
-  signIn(data: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/api/employee/employee-update-employee`, data, { headers: this.getHeaders() });
+  signIn(data: any): Observable<boolean> {
+    return this.http.put<boolean>(`${this.baseUrl}/api/employee/employee-update-employee`, data, { headers: this.getHeaders() });
   }
 
   getAllEmployees(pageNumber: number, pageSize: number, departmentId?: number, employeeName?: string): Observable<IEmployeeDirectoryWithPagecount> {
