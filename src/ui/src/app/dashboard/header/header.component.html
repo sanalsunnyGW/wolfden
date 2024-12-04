@@ -25,7 +25,7 @@
         <li><a routerLink="/user/check-password">Reset Password</a></li>
         @if(userService.role == "SuperAdmin")
         {
-        <li><a routerLink="/portal/admin-dashboard">Settings</a></li>
+        <li><a routerLink="/portal/admin-dashboard" (click)="toggleDropdown()">Settings</a></li>
         }
       </ul>
     </div>

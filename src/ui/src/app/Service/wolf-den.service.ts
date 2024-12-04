@@ -39,7 +39,6 @@ export class WolfDenService {
       }
     }
     else{
-      this.toastr.error('login');
       this.router.navigate(['/user/login']); 
     }
   }
