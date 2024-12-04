@@ -20,7 +20,7 @@ namespace WolfDen.API.Controllers.LeaveManagement
             return await _mediator.Send(query, cancellationToken);
         }
 
-       // [Authorize(Roles = "Admin,SuperAdmin")]
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPut]
         public async Task<bool> UpdateLeaveBalance(CancellationToken cancellationToken)
         {
