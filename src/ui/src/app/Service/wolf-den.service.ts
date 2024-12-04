@@ -1,11 +1,14 @@
-import { Injectable, inject } from '@angular/core';
-import { environment } from '../../enviornments/environment';
-import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { IEmployeeDirectoryWithPagecount } from '../interface/iemployee-directory-with-pagecount';
 import { EmployeeService } from './employee.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { INotificationForm } from '../interface/i-notification-form';
+import { ItodaysAbsence } from '../interface/itodays-absense';
+import { IEmployeeDirectoryWithPagecount } from '../interface/iemployee-directory-with-pagecount';
+import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { environment } from '../../enviornments/environment';
+import { Iholiday } from '../interface/iholiday';
 @Injectable({
   providedIn: 'root'
 })
@@ -17,9 +20,10 @@ export class WolfDenService {
   router=inject(Router)
 
   private baseUrl = environment.apiUrl;
-  public userId: number = 8;
+  public userId: number = 0;
   public role : string = "";
   public firstName: string = ""; 
+
 
   constructor(private http: HttpClient, private employeeService: EmployeeService) {
     if (localStorage.getItem('token') !== null) {
@@ -27,6 +31,7 @@ export class WolfDenService {
       if(payload){
       this.userId = parseInt(payload.EmployeeId || 0, 10);
       this.role = (payload.role||"");
+      console.log(this.role)
       this.firstName = (payload.FirstName || 'welcome back');
       }else {
         this.toastr.error('Invalid or expired token', 'Error');
@@ -49,7 +54,7 @@ export class WolfDenService {
         localStorage.removeItem('token');
         this.router.navigate(['/user/login']);
         this.toastr.error('Please login again', 'Session Timeout')
-       
+
       }
     }
   }
@@ -68,7 +73,6 @@ export class WolfDenService {
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({ 'Content-Type': 'application/json' });
-
   }
 
   getEmployeeSignUp(employeeCode: number, rfId: string): Observable<{ id: number, status: boolean }> {
@@ -112,5 +116,48 @@ export class WolfDenService {
       `${this.baseUrl}/api/Employee/all`,
       { headers: this.getHeaders(), params }
     );
+  }
+//notification
+  getNotification(employeeId: number): Observable<INotificationForm[]> {
+    const params = this.createHttpParams({
+      EmployeeId:employeeId
+    });
+    return this.http.get<INotificationForm[]>(
+      `${this.baseUrl}/api/Notification/employee`,
+      { headers: this.getHeaders(), params }
+    );
+  }
+  getHoliday(): Observable<Iholiday[]>{
+    const params=this.createHttpParams({});
+    return this.http.get<Iholiday[]>(
+      `${this.baseUrl}/api/Holiday/upcoming-holiday`,
+      {headers: this.getHeaders(), params }
+    );
+  }
+
+
+  getTodaysAbsence():Observable<ItodaysAbsence[]>{
+    const params= this.createHttpParams({});
+    return this.http.get<ItodaysAbsence[]>(
+      `${this.baseUrl}/api/LeaveRequestDay/leaves-on-current-day`,
+      { headers: this.getHeaders(), params }
+    );
+  }
+  markAsRead(notificationId: number): Observable<any> {
+    return this.http.patch<any>(`${this.baseUrl}/api/Notification/read`, {notificationId}, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    });
+  }
+
+  resetPassword(id: number, password:string): Observable<boolean> {
+    const url = `${this.baseUrl}/api/Employee/reset-password`;
+    const payload = { id,password }; 
+    return this.http.patch<boolean>(url, payload, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    });
   }
 }

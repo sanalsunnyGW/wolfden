@@ -1,18 +1,21 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using WolfDen.Application.DTOs.Attendence;
+using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
 {
-    public class DailyStatusQueryHandler(WolfDenContext context) : IRequestHandler<DailyStatusQuery, List<DailyStatusDTO>>
+    public class DailyStatusQueryHandler(WolfDenContext context, IOptions<OfficeDurationSettings> officeDurationSettings) : IRequestHandler<DailyStatusQuery, List<DailyStatusDTO>>
     {
         private readonly WolfDenContext _context = context;
+        private readonly IOptions<OfficeDurationSettings> _officeDurationSettings = officeDurationSettings;
         public async Task<List<DailyStatusDTO>> Handle(DailyStatusQuery request, CancellationToken cancellationToken)
         {
-            int minWorkDuration = 360;
+            int minWorkDuration = _officeDurationSettings.Value.MinWorkDuration;
 
             DateOnly monthStart = new DateOnly(request.Year, request.Month, 1);
             DateOnly monthEnd = monthStart.AddMonths(1).AddDays(-1);
@@ -37,6 +40,12 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
 
             List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
 
+            List<LeaveRequest> leave = leaveRequests
+               .Where(x => x.HalfDay == true)
+               .ToList();
+
+            Dictionary<DateOnly, LeaveRequest> leaveDictionary = leave.ToDictionary(x => x.FromDate);
+
             AttendanceStatus statusId = AttendanceStatus.Absent;
             for (var currentDate = monthStart; currentDate <= monthEnd; currentDate = currentDate.AddDays(1))
             {
@@ -45,13 +54,25 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                     break;
                 }
 
+                LeaveRequest? halfDay = leaveDictionary.GetValueOrDefault(currentDate);
+
+                if (halfDay is not null)
+                {
+                    minWorkDuration = minWorkDuration / 2;
+                }
+
                 DailyAttendence attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (attendanceRecord is not null)
                 {
 
                     if (attendanceRecord.InsideDuration >= minWorkDuration)
                     {
-                        statusId = AttendanceStatus.Present;
+                        if (halfDay is not null)
+                        {
+                            statusId = AttendanceStatus.HalfDayLeave;
+                        }
+                        else
+                            statusId = AttendanceStatus.Present;
                     }
                     else
                     {
@@ -98,6 +119,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                             else
                             {
                                 statusId = AttendanceStatus.Leave;
+
                             }
                         }
                         else

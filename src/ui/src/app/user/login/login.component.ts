@@ -43,7 +43,8 @@ export class LoginComponent {
             localStorage.setItem('token', response.token);
             const employee = this.employeeService.decodeToken();
             this.userService.userId=employee.EmployeeId;
-            this.userService.firstName=employee.FirstName          
+            this.userService.firstName=employee.FirstName;
+            this.userService.role=employee.role;
             this.toastr.success('Login sucessfull')
             this.router.navigate(['/portal/dashboard']);        
             }

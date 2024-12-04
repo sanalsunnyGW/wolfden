@@ -55,53 +55,53 @@ namespace WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail
                                         {
                                             header.Cell().Border(1).BorderColor(Colors.Black)
                                                 .Background(Colors.Grey.Lighten3)
-                                                .Padding(10).AlignCenter().Text("Date")
+                                                .Padding(3).AlignCenter().Text("Date")
                                                 .Bold().FontSize(12);
                                             header.Cell().Border(1).BorderColor(Colors.Black)
                                                 .Background(Colors.Grey.Lighten3)
-                                                .Padding(10).AlignCenter().Text("Arrival Time")
+                                                .Padding(3).AlignCenter().Text("Arrival Time")
                                                 .Bold().FontSize(12);
                                             header.Cell().Border(1).BorderColor(Colors.Black)
                                                 .Background(Colors.Grey.Lighten3)
-                                                .Padding(10).AlignCenter().Text("Departure Time")
+                                                .Padding(3).AlignCenter().Text("Departure Time")
                                                 .Bold().FontSize(12);
                                             header.Cell().Border(1).BorderColor(Colors.Black)
                                                 .Background(Colors.Grey.Lighten3)
-                                                .Padding(10).AlignCenter().Text("Missed Punch")
+                                                .Padding(3).AlignCenter().Text("Missed Punch")
                                                 .Bold().FontSize(12);
                                             header.Cell().Border(1).BorderColor(Colors.Black)
                                                 .Background(Colors.Grey.Lighten3)
-                                                .Padding(10).AlignCenter().Text("Status")
+                                                .Padding(3).AlignCenter().Text("Status")
                                                 .Bold().FontSize(12);
                                             header.Cell().Border(1).BorderColor(Colors.Black)
                                                 .Background(Colors.Grey.Lighten3)
-                                                .Padding(10).AlignCenter().Text("Inside Duration")
+                                                .Padding(3).AlignCenter().Text("Inside Duration")
                                                 .Bold().FontSize(12);
                                         });
 
                                         foreach (var weeklySummary in employee.WeeklySummary)
                                         {
-                                            table.Cell().Border(1).Padding(10)
+                                            table.Cell().Border(1).Padding(3)
                                                 .Text(weeklySummary.Date).FontSize(12);
-                                            table.Cell().Border(1).Padding(10)
+                                            table.Cell().Border(1).Padding(3)
                                                 .Text(weeklySummary.ArrivalTime).FontSize(12);
-                                            table.Cell().Border(1).Padding(10)
+                                            table.Cell().Border(1).Padding(3)
                                                 .Text(weeklySummary.DepartureTime).FontSize(12);
-                                            table.Cell().Border(1).Padding(10)
+                                            table.Cell().Border(1).Padding(3)
                                                 .Text(weeklySummary.MissedPunch).FontSize(12);
-                                            table.Cell().Border(1).Padding(10)
+                                            table.Cell().Border(1).Padding(3)
                                                 .Text(weeklySummary.AttendanceStatusId).FontSize(12);
                                             if(weeklySummary.InsideDuration!=null)
                                             {
                                                 int? hours = weeklySummary.InsideDuration / 60;
                                                 int? minutes = weeklySummary.InsideDuration % 60;
 
-                                                table.Cell().Border(1).Padding(10)
+                                                table.Cell().Border(1).Padding(3)
                                                     .Text($"{hours}h {minutes}m").FontSize(12);
                                             }
                                             else
                                             {
-                                                table.Cell().Border(1).Padding(10)
+                                                table.Cell().Border(1).Padding(3)
                                                    .Text($"-").FontSize(12);
                                             }
                                            

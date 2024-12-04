@@ -65,7 +65,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
                     string message = $"Your Leave {leaveRequest.FromDate} to {leaveRequest.ToDate} is Rejected By {manager.FirstName} {manager.LastName} [Manager Code : {manager.EmployeeCode}]";
                     NotificationCommand command = new NotificationCommand
                     {
-                        EmployeeId = employee.Id,
+                        EmployeeIds = new List<int> { employee.Id },
                         Message = message,
                     };
                     await _mediator.Send(command, cancellationToken);
@@ -104,7 +104,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
                     string message = $"Your Leave {leaveRequest.FromDate} to {leaveRequest.ToDate} is Approved By {manager.FirstName} {manager.LastName} [Manager Code : {manager.EmployeeCode}]";
                     NotificationCommand command = new NotificationCommand
                     {
-                        EmployeeId = employee.Id,
+                        EmployeeIds = new List<int> { employee.Id },
                         Message = message,
                     };
                     await _mediator.Send(command, cancellationToken);
@@ -121,7 +121,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
                     string message = $"Your Leave {leaveRequest.FromDate} to {leaveRequest.ToDate} is Approved By {manager.FirstName} {manager.LastName} [Manager Code : {manager.EmployeeCode}]";
                     NotificationCommand command = new NotificationCommand
                     {
-                        EmployeeId = employee.Id,
+                        EmployeeIds = new List<int> { employee.Id },
                         Message = message,
                     };
                     await _mediator.Send(command, cancellationToken);

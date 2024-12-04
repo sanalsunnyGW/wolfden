@@ -65,6 +65,22 @@
   color: black;
 }
 
+::ng-deep.fc .leave {
+  background-color: #d7e121;
+  color: black;
+}
+
+
+::ng-deep.fc .halfDay {
+  background-color: #b3ff00;
+  color: black;
+}
+
+::ng-deep.fc .holiday {
+  background-color: #62d4ed;
+  color: black;
+}
+
 
 ::ng-deep.fc .weekend-day:hover {
   background-color: #90949b !important;
@@ -77,4 +93,22 @@
 
 ::ng-deep .fc .fc-col-header-cell-cushion {
   padding: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.legend-label {
+  font-size: 1rem;
+  font-weight: 600;
 }

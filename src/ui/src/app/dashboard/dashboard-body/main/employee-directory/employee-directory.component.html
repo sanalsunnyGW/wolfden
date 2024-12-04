@@ -5,35 +5,22 @@
     <div class="flex justify-between items-center">
       <h1 class="text-2xl font-bold">Employee Directory</h1>
     </div>
-    
+
     <!-- Search and Filter -->
     <div class="d-flex flex-column gap-4 mb-4">
       <div class="row g-3">
         <div class="flex-1 col-6">
-          <input 
-            type="text" 
-            [(ngModel)]="searchTerm" 
-            placeholder="Search employees..."
-            class="w-100 p-2 border rounded" 
-          />
+          <input type="text" [(ngModel)]="searchTerm" placeholder="Search employees..."
+            class="w-100 p-2 border rounded" />
         </div>
         <div class="col-1">
-          <button 
-            type="button" 
-            class="btn btn-primary" 
-            (click)="onSearch()"
-          >
+          <button type="button" class="btn btn-primary" (click)="onSearch()">
             Search
           </button>
         </div>
         <div class="col-1 w-100">
-          <select 
-            [ngModel]="selectedDepartment" 
-            (change)="onDepartmentChange($event)" 
-            class="p-2 border rounded"
-            name="All Departments" 
-            [value]="'0'"
-          >
+          <select [ngModel]="selectedDepartment" (change)="onDepartmentChange($event)" class="p-2 border rounded"
+            name="All Departments" [value]="'0'">
             <option [value]="'0'">All Departments</option>
             <option [value]="'1'">Developer</option>
             <option [value]="'2'">QA</option>
@@ -44,65 +31,62 @@
 
       <!-- Loading State -->
       @if(isLoading){
-        <div class="text-center py-4 flex gap-4">
-          Loading...
-        </div>
+      <div class="text-center py-4 flex gap-4">
+        Loading...
+      </div>
       }
 
       <!-- Employee List -->
       @if(!isLoading){
-        <div class="grid flex gap-4">
-          <div *ngFor="let employee of employeesPagecount.employeeDirectoryDTOs" 
-               class="card border-dark mb-3"
-               style="max-width: 40rem;">
-               <div class="card-header ">
-               <div class="row">
-               
-                  <div class="col">
-                    <strong>Employee Code:</strong> {{employee.employeeCode || 'N/A'}}
-                  </div>
+      <div class="grid flex gap-4">
+        @for(employee of employeesPagecount.employeeDirectoryDTOs; track employee){
+        <div class="card border-dark mb-3" style="max-width: 40rem;">
+          <div class="card-header ">
+            <div class="row">
 
-                  <div class="col d-flex justify-content-end"><button type="button" class="btn btn-primary">Visit Profile</button>
-                  </div>
-                 
-                </div>
-                
-               </div>
-            
-            <div class="card-body text-dark">
-              <h5 class="card-title">{{employee.firstName}} {{employee.lastName}}</h5>
-              <p class="card-text">
-                <strong>Designation:</strong> {{employee.designationName}}
-              </p>
-              <p class="card-text">
-                <strong>Department:</strong> {{employee.departmentName}}
-              </p>
-              <p class="card-text">
-                <strong>Email:</strong> {{employee.email}}
-              </p>
-              <p class="card-text">
-                <strong>Contact:</strong> {{employee.phoneNumber}}
-              </p>
+              <div class="col">
+                <strong>Employee Code:</strong> {{employee.employeeCode || 'N/A'}}
+              </div>
+
+              <div class="col d-flex justify-content-end">
+                <button type="button" class="btn btn-primary" (click)="routeToProfile(employee.id)">Visit
+                  Profile</button>
+              </div>
+
             </div>
+
+          </div>
+          <div class="card-body text-dark">
+            <h5 class="card-title">{{employee.firstName}} {{employee.lastName}}</h5>
+            <p class="card-text">
+              <strong>Designation:</strong> {{employee.designationName}}
+            </p>
+            <p class="card-text">
+              <strong>Department:</strong> {{employee.departmentName}}
+            </p>
+            <p class="card-text">
+              <strong>Email:</strong> {{employee.email}}
+            </p>
+            <p class="card-text">
+              <strong>Contact:</strong> {{employee.phoneNumber}}
+            </p>
           </div>
         </div>
-
-        <!-- Empty State -->
-        @if(employeesPagecount.employeeDirectoryDTOs.length === 0){
-          <div class="text-center py-8 text-gray-500">
-            No employees found matching your criteria
-          </div>
         }
 
-        <!-- Pagination -->
-        <mat-paginator
-          [length]="totalRecords"
-          [pageSize]="pageSize"
-          [pageSizeOptions]="pageSizeOptions"
-          [pageIndex]="pageNumber"
-          (page)="onPageChange($event)"
-          aria-label="Select page">
-        </mat-paginator>
+      </div>
+
+      <!-- Empty State -->
+      @if(employeesPagecount.employeeDirectoryDTOs.length === 0){
+      <div class="text-center py-8 text-gray-500">
+        No employees found matching your criteria
+      </div>
+      }
+
+      <!-- Pagination -->
+      <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="pageNumber" (page)="onPageChange($event)" aria-label="Select page">
+      </mat-paginator>
       }
     </div>
   </div>

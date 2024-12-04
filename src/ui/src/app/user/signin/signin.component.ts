@@ -36,6 +36,18 @@ export class SigninComponent {
   
     return null;
   }
+
+  onImageUpload(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const base64Image = e.target.result;
+        this.userForm.value.photo = base64Image;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
   
   constructor(private fb: FormBuilder, 
     private userService: WolfDenService, 
@@ -55,7 +67,12 @@ export class SigninComponent {
       gender: new FormControl<number | null>(null, Validators.required),
       phoneNumber:new FormControl<string|null>(null,Validators.required),
       password:new FormControl<string|null>(null,Validators.required),
-      confirmPassword:new FormControl<string|null>(null,Validators.required)
+      confirmPassword:new FormControl<string|null>(null,Validators.required),
+      address:new FormControl<string|null>(null,Validators.required),
+      country:new FormControl<string|null>(null,Validators.required),
+      state:new FormControl<string|null>(null,Validators.required),
+      photo:new FormControl<string|null>(null),
+
     },{validators:this.passwordMatchValidator})
   }
 
@@ -81,6 +98,10 @@ export class SigninComponent {
         phoneNumber:this.userForm.value.phoneNumber??'',
         dateofBirth: formattedDate,   
         gender:this.userForm.value.gender?? '',
+        address:this.userForm.value.address??'',
+        country:this.userForm.value.country??'',
+        state:this.userForm.value.state??'',
+        photo:this.userForm.value.photo??'',
         password:this.userForm.value.password??''
 
 
@@ -88,13 +109,16 @@ export class SigninComponent {
   
 
       this.userService.signIn(userData).subscribe({
-        next: (response: any) => {
-          // console.log('User registered successfully:', response);
-          // alert("User registered successfully");
-          this.toastr.success('New user created!','Registration Successful')
-
-
-          this.router.navigate(['user/login']);
+        next: (response) => {
+          console.log(response)
+          if(response===true){
+            this.toastr.success('New user created!','Registration Successful')
+            this.router.navigate(['user/login']);
+          }
+          else{
+            this.toastr.error("form invalid")
+          }
+         
         },
         error: (error: any) => {
           // console.error('Error during registration:', error);
