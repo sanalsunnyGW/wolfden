@@ -6,6 +6,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { AttendanceHistory } from '../../../../../interface/attendance-history';
+import { WolfDenService } from '../../../../../service/wolf-den.service';
 import { ActivatedRoute } from '@angular/router';
 import { DurationFormatPipe } from "../../../../../pipe/duration-format.pipe";
 import { SplitCommaPipe } from "../../../../../pipe/split-comma.pipe";
@@ -20,12 +21,15 @@ import { SplitCommaPipe } from "../../../../../pipe/split-comma.pipe";
 export class AttendanceHistoryComponent implements OnInit {
 
   service=inject(AttendanceService);
+  baseService=inject(WolfDenService);
   selectedYear: number;
   selectedMonth!: number;
   selectedStatus: number=0;  
   selectedPageSize: number = 5;   
   selectedPageNumber:number=0;
   attendanceData: any[] = [];
+ 
+  employeeId=this.baseService.userId;
   years: number[] = [];
   pageSizes = [5, 10, 20, 30, 40];
   totalPages!: number;
@@ -64,9 +68,10 @@ status = [
   { id: 3, name: 'Incomplete Shift' },
   { id: 4, name: 'Restricted Holiday' },
   { id: 5, name: 'Normal Holiday' },
-  { id: 6, name: 'WFH' },
+  { id: 6, name: "WFH" },
   { id: 7, name: 'Leave' },
-  { id: 9, name:'Weekend'}
+  { id: 9, name:'Half Day'},
+  { id: 10, name:'Weekend'}
 ];
 
 fetchHistory(){
@@ -98,7 +103,7 @@ getStatusClass(statusId: number): string {
     case 5: return 'status-normal-holiday';
     case 6: return 'status-wfh';
     case 7: return 'status-leave';
-    case 9: return 'status-weekend';
+    case 10: return 'status-weekend';
     default: return 'status-unknown';
   }
 }

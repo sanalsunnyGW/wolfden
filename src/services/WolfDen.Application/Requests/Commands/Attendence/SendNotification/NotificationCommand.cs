@@ -2,9 +2,9 @@
 
 namespace WolfDen.Application.Requests.Commands.Attendence.SendNotification
 {
-    public class NotificationCommand:IRequest<int>
+    public class NotificationCommand : IRequest<int>
     {
-        public int EmployeeId { get; set; }
+        public List<int> EmployeeIds { get; set; }
         public string Message { get; set; }
     }
 }
