@@ -82,6 +82,11 @@ export const routes: Routes = [
     
             },
             {
+                path: '',
+                component: UserComponent,
+                canActivate: [guardsGuard]
+            },
+            {
                 path: 'profile',
                 component: ProfileComponent,
                 canActivate: [guardsGuard]
