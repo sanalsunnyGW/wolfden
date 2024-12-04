@@ -1,55 +1,82 @@
+
 <div class="nav-items d-flex flex-column flex-md-column">
-  <div class="nav-item row" routerLink="/portal/dashboard">
+  <div class="nav-item row" routerLink="/portal/dashboard" routerLinkActive="active">
     <span>Dashboard</span>
   </div>
-  <div class="nav-item row" routerLink="/portal/company-hierarchy">
+  <div class="nav-item row" routerLink="/portal/company-hierarchy" routerLinkActive="active">
     <span>Company Hierarchy</span>
   </div>
-
-  <div class="nav-item row" routerLink="/portal/my-team">
+  <div class="nav-item row" routerLink="/portal/my-team" routerLinkActive="active">
     <span>My Team</span>
   </div>
-  <div class="nav-item row" routerLink="/portal/employee-directory">
+  <div class="nav-item row" routerLink="/portal/employee-directory" routerLinkActive="active">
     <span>Employee Directory</span>
   </div>
 
-  <div class="nav-item dropdown row">
-    <span class="dropdown-toggle" id="leaveDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-      Leave
-    </span>
-    <ul class="dropdown-menu" aria-labelledby="leaveDropdown">
-      <li><a class="dropdown-item" [routerLink]="'/portal/leave-dashboard'">Leave Dashboard</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/portal/leave-application'">Apply Leave</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/portal/leave-request-history'">Leave Request History</a></li>
-      @if(employeeHierarchyList[0].subordinates!=null)
-      {
-      <li><a class="dropdown-item" [routerLink]="'/portal/subordinate-leave-request'">Subordinate Leaves</a></li>
-      }
-      @if(userService.role=='Admin'|| userService.role=='SuperAdmin')
-      {
-      <li><a class="dropdown-item" [routerLink]="'/portal/update-leave-balance'">Update Leave Balance</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/portal/add-leave-by-admin-for-employees'">Apply Leave For Employee</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/portal/edit-leave-type'">Edit Existing Leave Type</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/portal/add-new-leave-type'">Add New Leave Type</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/portal/update-leave-settings'">Update Leave Settings</a></li>
-      }
-    </ul>
+  <div class="nav-section">
+    <div class="nav-item row section-header" (click)="toggleSection('leave')">
+      <span class="d-flex align-items-center">
+        <span>Leave</span>
+        <i class="section-icon" [class.expanded]="isSectionExpanded('leave')"></i>
+      </span>
+    </div>
+    <div class="section-content" [@expandCollapse]="isSectionExpanded('leave') ? 'expanded' : 'collapsed'">
+      <div class="nav-item sub-item" routerLink="/portal/leave-dashboard" routerLinkActive="active">
+        <span>Leave Dashboard</span>
+      </div>
+        <div class="nav-item sub-item" routerLink="/portal/leave-application" routerLinkActive="active">
+          <span>Apply Leave</span>
+        </div>
+        <div class="nav-item sub-item" routerLink="/portal/leave-request-history" routerLinkActive="active">
+          <span>Leave Request History</span>
+        </div>
+        @if(userService.role=='Admin') {
+          <div class="nav-item sub-item" routerLink="/portal/subordinate-leave-request" routerLinkActive="active">
+            <span>Subordinate Leaves</span>
+          </div>
+          <div class="nav-item sub-item" routerLink="/portal/update-leave-balance" routerLinkActive="active">
+            <span>Update Leave Balance</span>
+          </div>
+          <div class="nav-item sub-item" routerLink="/portal/add-leave-by-admin-for-employees" routerLinkActive="active">
+            <span>Apply Leave For Employee</span>
+          </div>
+          <div class="nav-item sub-item" routerLink="/portal/edit-leave-type" routerLinkActive="active">
+            <span>Edit Existing Leave Type</span>
+          </div>
+          <div class="nav-item sub-item" routerLink="/portal/add-new-leave-type" routerLinkActive="active">
+            <span>Add New Leave Type</span>
+          </div>
+          <div class="nav-item sub-item" routerLink="/portal/update-leave-settings" routerLinkActive="active">
+            <span>Update Leave Settings</span>
+          </div>
+        }
+      </div>
   </div>
 
-  <div class="nav-item row">
-    <span>Calendar</span>
-  </div>
 
-  <div class="nav-item dropdown row">
-    <span class="dropdown-toggle" id="attendanceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-      Attendance
-    </span>
-    <ul class="dropdown-menu" aria-labelledby="attendanceDropdown">
-      <li><a class="dropdown-item" [routerLink]="'/portal/attendance/calendar'">Attendance Dashboard</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/portal/attendance/history'">Attendance History</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/portal/attendance/monthly'">Attendance Reports</a></li>
-      <li><a class="dropdown-item" [routerLink]="'/portal/attendance/subordinates'">Team Attendance </a></li>
-      <li><a class="dropdown-item" [routerLink]="'/portal/attendance/weekly'">Weekly Attendance </a></li>
-    </ul>
+  <div class="nav-section">
+    <div class="nav-item row section-header" (click)="toggleSection('attendance')">
+      <span class="d-flex align-items-center">
+        <span>Attendance</span>
+        <i class="section-icon" [class.expanded]="isSectionExpanded('attendance')"></i>
+      </span>
+    </div>
+    <div class="section-content" [@expandCollapse]="isSectionExpanded('attendance') ? 'expanded' : 'collapsed'">
+      <div class="nav-item sub-item" routerLink="/portal/attendance/calendar" routerLinkActive="active">
+        <span>Attendance Dashboard</span>
+      </div>
+      <div class="nav-item sub-item" routerLink="/portal/attendance/history" routerLinkActive="active">
+        <span>Attendance History</span>
+      </div>
+      <div class="nav-item sub-item" routerLink="/portal/attendance/monthly" routerLinkActive="active">
+        <span>Attendance Reports</span>
+      </div>
+      <div class="nav-item sub-item" routerLink="/portal/attendance/subordinates" routerLinkActive="active">
+        <span>Team Attendance</span>
+      </div>
+      <div class="nav-item sub-item" routerLink="/portal/attendance/weekly" routerLinkActive="active">
+        <span>Weekly Attendance</span>
+      </div>
+    </div>
   </div>
 </div>

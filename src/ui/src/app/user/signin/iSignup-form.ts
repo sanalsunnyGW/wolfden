@@ -10,4 +10,8 @@ export interface ISignupForm {
     phoneNumber:FormControl<string|null>;
     password: FormControl<string|null>;
     confirmPassword: FormControl<string|null>;
+    address: FormControl<string|null>;
+    country: FormControl<string|null>;
+    state: FormControl<string|null>;
+    photo: FormControl<string|null>;
 }

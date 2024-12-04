@@ -13,8 +13,8 @@ namespace WolfDen.Application.Requests.Services
             List<SubOrdinateDTO> result = new List<SubOrdinateDTO>();
             List<Employee> employees = await _context.Employees
                 .Where(x => x.ManagerId == managerId && x.IsActive == true)
-                .Include(x=>x.Department)
-                .Include(x=>x.Designation)
+                .Include(x => x.Department)
+                .Include(x => x.Designation)
                 .ToListAsync();
             foreach (Employee employee in employees)
             {

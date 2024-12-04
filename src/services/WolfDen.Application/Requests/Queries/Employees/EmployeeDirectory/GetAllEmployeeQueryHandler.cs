@@ -36,6 +36,7 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory
                .Take(request.PageSize)
                .Select(e => new EmployeeDirectoryDTO
                {
+                   Id = e.Id,
                    EmployeeCode = e.EmployeeCode,
                    FirstName = e.FirstName,
                    LastName = e.LastName,

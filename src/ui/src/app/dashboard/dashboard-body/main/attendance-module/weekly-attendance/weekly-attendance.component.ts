@@ -6,6 +6,7 @@ import { Chart,registerables } from 'chart.js';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { WeeklyAttendance } from '../../../../../interface/iweekly-attendance';
 import { WolfDenService } from '../../../../../service/wolf-den.service';
+import { Router } from '@angular/router';
 
 Chart.register(...registerables);
 
@@ -17,7 +18,10 @@ Chart.register(...registerables);
   styleUrl: './weekly-attendance.component.scss'
 })
 export class WeeklyAttendanceComponent {
-  constructor() {}
+  currentRoute: string;
+  constructor(private router: Router) {
+    this.currentRoute = this.router.url;
+  }
   createChart() {
     {
       if (this.barChart) {

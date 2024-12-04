@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
@@ -27,10 +27,11 @@ export class EmployeeDirectoryComponent implements OnInit {
   isLoading: boolean = false; 
   pageNumber: number = 0;
   pageSize: number = 1; 
-  pageSizeOptions: number[] = [1, 2, 3, 4];
+  pageSizeOptions: number[] = [1, 5, 10, 20]; 
   totalRecords: number = 0;
 
-  constructor(private wolfDenService: WolfDenService,private router:Router) {
+
+  constructor(private wolfDenService: WolfDenService,private router: Router) {
     this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
@@ -48,7 +49,9 @@ export class EmployeeDirectoryComponent implements OnInit {
     this.pageSize = event.pageSize;
     this.loadEmployees();
   }
-
+  routeToProfile(employeeId: number): void {
+    this.router.navigate(['/portal/employee-display'], { queryParams: { id: employeeId } });
+  }
   onSearch(): void {
     this.pageNumber = 0; 
     if (this.paginator) {
