@@ -199,7 +199,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ad
                         }
                         else
                         {
-                            return await Balance(leaveBalance.Balance,leaveType.TypeName);
+                            return await Balance(leaveBalance.Balance,leaveType.TypeName,virtualBalance);
                         }
 
                     }
@@ -235,7 +235,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ad
                         }
                         else
                         {
-                            return await Balance(leaveBalance.Balance,leaveType.TypeName);
+                            return await Balance(leaveBalance.Balance,leaveType.TypeName,virtualBalance);
                         }
 
                     }
@@ -472,7 +472,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ad
                     }
                     else
                     {
-                        return await Balance(leaveBalance2.Balance, EmergencyLeave.TypeName);
+                        return await Balance(leaveBalance2.Balance, EmergencyLeave.TypeName,EmergencyVirtualBalance);
                     }
 
                 }
@@ -482,15 +482,15 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ad
                 }
             }
 
-            async Task<bool> Balance(decimal balance, string name)
+            async Task<bool> Balance(decimal balance, string name , decimal vitualBalance)
             {
                 if (balance < days)
                 {
-                    throw new InvalidOperationException($"No Sufficient Leave for type {name}");
+                    throw new InvalidOperationException($"No Sufficient Leave for type {name}. Remaing Balance : {balance}");
                 }
                 else
                 {
-                    throw new InvalidOperationException($"Revoke or edit existing {name}. All Balances are taken by applied leaves");
+                    throw new InvalidOperationException($"Revoke or edit existing {name}. All Balances are taken by applied leaves. Remaining Virtual Balance : {virtualBalance}");
                 }
             }
 

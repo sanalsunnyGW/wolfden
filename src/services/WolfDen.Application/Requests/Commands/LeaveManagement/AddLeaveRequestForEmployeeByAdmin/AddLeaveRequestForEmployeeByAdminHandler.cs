@@ -126,7 +126,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
                             }
                             else
                             {
-                                return await Balance(leaveBalance.Balance + leaveSetting.MaxNegativeBalanceLimit,leaveType.TypeName);
+                                return await Balance(leaveBalance.Balance + leaveSetting.MaxNegativeBalanceLimit,leaveType.TypeName,virtualBalance);
                             }
                         }
                         else
@@ -155,7 +155,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
                                 }
                                 else
                                 {
-                                    return await Balance(leaveBalance2.Balance + leaveSetting.MaxNegativeBalanceLimit,EmergencyLeave.TypeName);
+                                    return await Balance(leaveBalance2.Balance + leaveSetting.MaxNegativeBalanceLimit,EmergencyLeave.TypeName,EmergencyVirtualBalance);
                                 }
 
                             }
@@ -167,7 +167,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
                         }
                         else
                         {
-                            return await Balance(leaveBalance.Balance + leaveSetting.MaxNegativeBalanceLimit,leaveType.TypeName);
+                            return await Balance(leaveBalance.Balance + leaveSetting.MaxNegativeBalanceLimit,leaveType.TypeName,virtualBalance);
                         }
                     }
 
@@ -294,15 +294,15 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
 
             }
 
-            async Task<bool> Balance(decimal balance,string name)
+            async Task<bool> Balance(decimal balance,string name, decimal virtualBalance)
             {
                 if (balance < days)
                 {
-                    throw new InvalidOperationException($"No Sufficient Leave for type {name}, including Negative Leaves");
+                    throw new InvalidOperationException($"No Sufficient Leave for type {name}, including Negative Leaves. Remaing Balance : {balance}");
                 }
                 else
                 {
-                    throw new InvalidOperationException($"Revoke or edit existing {name}. All Balances are taken by applied leaves, including Negative Leaves");
+                    throw new InvalidOperationException($"Revoke or edit existing {name}. All Balances are taken by applied leaves, including Negative Leaves. Remaing Virtual Balance : {virtualBalance}");
                 }
             }
 
