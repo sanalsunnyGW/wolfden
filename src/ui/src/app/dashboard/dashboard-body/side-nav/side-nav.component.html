@@ -66,12 +66,15 @@
       <div class="nav-item sub-item" routerLink="/portal/attendance/calendar" routerLinkActive="active">
         <span>Attendance Dashboard</span>
       </div>
-      <div class="nav-item sub-item" routerLink="/portal/attendance/history" routerLinkActive="active">
+      <div class="nav-item sub-item" [routerLink]="['/portal/attendance/history', id]" routerLinkActive="active">
         <span>Attendance History</span>
       </div>
-      <div class="nav-item sub-item" routerLink="/portal/attendance/monthly" routerLinkActive="active">
-        <span>Attendance Reports</span>
-      </div>
+      @if(userService.role ==="Admin" || userService.role ==="SuperAdmin"){
+        <div class="nav-item sub-item" routerLink="/portal/attendance/monthly" routerLinkActive="active">
+          <span>Attendance Reports</span>
+        </div>
+      }
+
       <div class="nav-item sub-item" routerLink="/portal/attendance/subordinates" routerLinkActive="active">
         <span>Team Attendance</span>
       </div>

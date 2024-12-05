@@ -54,7 +54,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
 
                 List<DailyAttendence> attendanceRecords = await _context.DailyAttendence
                     .Include(x => x.Employee)
-                    .Where(a => a.Date == today && a.EmailSent == false && a.EmployeeId==10)
+                    .Where(a => a.Date == today && a.EmailSent == false && a.EmployeeId==3)
                     .ToListAsync();
 
                 List<LeaveRequest> leaveRequests = await _context.LeaveRequests
