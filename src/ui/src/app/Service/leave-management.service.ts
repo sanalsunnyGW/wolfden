@@ -84,7 +84,7 @@ export class LeaveManagementService {
     } 
     
     editLeaveType(editLeaveType: IEditLeaveType) {
-      return this.http.put(`${this.baseUrl}/leave-type`, editLeaveType);
+      return this.http.put<boolean>(`${this.baseUrl}/leave-type`, editLeaveType);
     }
 
     updateLeaveBalance() {
@@ -92,6 +92,10 @@ export class LeaveManagementService {
     }
 
     revokeLeaveRequest(leaveRequestId : IRevokeLeave){
-      return this.http.patch<boolean>(`${this.baseUrl}/leave-request/revoke-leave/${this.id}`,leaveRequestId)
+      return this.http.patch<boolean>(`${this.baseUrl}/leave-request/revoke-leave/${this.id}`,leaveRequestId);
+    }
+
+    getLeaveDetails(typeId:number){
+    return this.http.get<IEditLeaveType>(`${this.baseUrl}/leave-type/details?RequestId=${typeId}`);
     }
 }

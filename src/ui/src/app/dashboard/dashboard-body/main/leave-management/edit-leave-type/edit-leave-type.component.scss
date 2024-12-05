@@ -2,9 +2,9 @@
     max-width: 900px;
     margin: 20px auto;
     padding: 20px;
-    background-color: hsl(200, 43%, 97%);
+    background-color: #eaf4fc;
     border-radius: 8px;
-  }
+    border: 1px solid #bcd5f2;  }
   
   .pForm {
     display: flex;
@@ -20,8 +20,8 @@
   .form-group label {
     font-weight: 600;
     font-size: 1.1rem;
-    color: #333;
-  }
+   color: #333;
+   }
   
   .form-check {
     display: flex;
@@ -40,11 +40,10 @@
   }
   
   button {
-    padding: 12px 20px;
+    width: 40%;
     background-color: #96bee8;
     color: white;
     font-size: 1.2rem;
-    justify-content: center;
   }
   
   button:hover {

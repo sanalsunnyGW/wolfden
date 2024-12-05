@@ -1095,7 +1095,9 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasDefaultValue(1);
 
                     b.Property<int?>("DutyDaysRequired")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<int?>("IncrementCount")
                         .HasColumnType("int");
@@ -1114,7 +1116,9 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasDefaultValue(7);
 
                     b.Property<int?>("MaxDays")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<DateTime>("PeriodEnd")
                         .ValueGeneratedOnAddOrUpdate()
