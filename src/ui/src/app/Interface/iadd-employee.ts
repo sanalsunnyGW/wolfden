@@ -1,4 +1,4 @@
 export interface IaddEmployee {
-    employeeCode: number|null|undefined;
+    employeeCode: number;
     rfId: string;
 }

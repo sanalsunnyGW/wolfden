@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { EmployeeService } from '../service/employee.service';
@@ -13,6 +13,7 @@ import { ImanagerData } from '../interface/imanager-data';
 import { IaddEmployeeForm } from '../interface/iadd-employee-form';
 import { IaddEmployee } from '../interface/iadd-employee';
 import { IadminUpdate } from '../interface/iadmin-update';
+import { WolfDenService } from '../service/wolf-den.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -48,10 +49,11 @@ export class AdminDashboardComponent {
   params: IaddEmployee = {} as IaddEmployee;
   departmentForm!: FormGroup<IDepartmentForm>;
   designationForm!: FormGroup<IDesignationForm>;
-
+  wolfdenService = inject(WolfDenService)
   constructor(private employeeService: EmployeeService, private fb: FormBuilder, private toastr: ToastrService) {
     this.buildForm();
   }
+
   employeeId: number = 0;
   private buildForm() {
     this.departmentForm = this.fb.group({
@@ -89,6 +91,8 @@ export class AdminDashboardComponent {
 
   ngOnInit() {
     this.loadEmployeeData();
+    this.wolfdenService;
+
 
   }
 
@@ -194,7 +198,7 @@ export class AdminDashboardComponent {
   onSubmit() {
     if (this.userForm.valid) {
       const formData = this.userForm.value;
-      const params : IadminUpdate = {
+      const params: IadminUpdate = {
         id: this.newEmployeeId,
         designationId: formData.designationId ?? 0,
         departmentId: formData.departmentId ?? 0,
@@ -226,7 +230,9 @@ export class AdminDashboardComponent {
     console.log(this.employeeForm)
     if (this.employeeForm.valid) {
       const formData = this.employeeForm.value;
-      this.params.employeeCode = formData.employeeCode;
+
+      this.params.employeeCode = formData.employeeCode ?? 0;
+      this.params.rfId = formData.rfId ?? '';
       this.employeeService.addEmployee(this.params).subscribe({
         next: (response: number) => {
           if (response > 0) {
