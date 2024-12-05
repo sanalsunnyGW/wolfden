@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using sib_api_v3_sdk.Model;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
@@ -19,7 +20,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
         {
             LeaveSetting leaveSetting = await _context.LeaveSettings.FirstOrDefaultAsync(cancellationToken);
             List<Employee> employees = await _context.Employees.ToListAsync(cancellationToken);
-            List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
+            List<LeaveType> leaveTypes = await _context.LeaveTypes.ToListAsync(cancellationToken);
             List<LeaveIncrementLog> leaveIncrementLog = await _context.LeaveIncrementLogs.ToListAsync(cancellationToken);
             List<LeaveBalance> leaveBalanceList = await _context.LeaveBalances
                 .Include(x => x.LeaveType)
@@ -33,10 +34,10 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                     DateTime JoiningDateTime = emp.JoiningDate.Value.ToDateTime(TimeOnly.MinValue);
 
                     foreach (LeaveType leaveType in leaveTypes)
-                    { 
+                    {
                         count = 0;
                         foreach (LeaveBalance leaveBalance in leaveBalanceList)
-                        { 
+                        {
                             if ((emp.Gender == EmployeeEnum.Gender.Male && leaveType.LeaveCategoryId != LeaveCategory.Maternity) || (emp.Gender == EmployeeEnum.Gender.Female && leaveType.LeaveCategoryId != LeaveCategory.Paternity))
                             {
                                 if (leaveBalance.TypeId == leaveType.Id && leaveBalance.EmployeeId == emp.Id)   //data exists for that combination...its to be updated
@@ -266,7 +267,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                                         leaveBalance.Balance = (int)(leaveType.MaxDays);
                                                         lastCreditedMonth = FirstMonthDate;
                                                         leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                                        incrementValue =(int)leaveType.MaxDays;
+                                                        incrementValue = (int)leaveType.MaxDays;
                                                     }
                                                 }
                                             }

@@ -15,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './edit-leave-type.component.scss'
 })
 export class EditLeaveTypeComponent implements OnInit {
+
   fb = inject(FormBuilder);
   leaveManagement = inject(LeaveManagementService);
   editLeaveTypeForm: FormGroup<IEditLeaveTypeFormControl>
@@ -22,6 +23,7 @@ export class EditLeaveTypeComponent implements OnInit {
   selectedType: number | null = null;
   destroyRef = inject(DestroyRef);
   toastr=inject(ToastrService);
+  editType: IEditLeaveType|null=null;
 
   constructor() {
 
@@ -55,6 +57,30 @@ export class EditLeaveTypeComponent implements OnInit {
       });
   }
 
+  onLeaveTypeChange(event:number) {
+    console.log(event)
+    this.leaveManagement.getLeaveDetails(event)
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe((response:IEditLeaveType) => {
+      if (response) {
+        this.editType=response;
+        this.editLeaveTypeForm.patchValue({
+          maxDays: response.maxDays,
+          isHalfDayAllowed: response.isHalfDayAllowed,
+          incrementCount: response.incrementCount,
+          incrementGapId: response.incrementGapId,
+          carryForward: response.carryForward,
+          carryForwardLimit: response.carryForwardLimit,
+          daysCheck: response.daysCheck,
+          daysCheckMore: response.daysCheckMore,
+          daysCheckEqualOrLess: response.daysCheckEqualOrLess,
+          dutyDaysRequired: response.dutyDaysRequired,
+          sandwich: response.sandwich
+        })
+      }
+    });  
+  }
+
   onSubmit() {
     if (this.editLeaveTypeForm.valid) {
       this.leaveManagement.editLeaveType(this.editLeaveTypeForm.value as IEditLeaveType)
@@ -63,6 +89,10 @@ export class EditLeaveTypeComponent implements OnInit {
           if (response) {
             this.toastr.success("Leave Type Updated");
             this.editLeaveTypeForm.reset();
+          }
+          else
+          {
+            this.toastr.error("Leave Type couldn't be Updated !");
           }
         });
     }
