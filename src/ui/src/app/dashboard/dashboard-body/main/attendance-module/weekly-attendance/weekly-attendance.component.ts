@@ -75,6 +75,10 @@ export class WeeklyAttendanceComponent {
                     {
                       text:'OnGoing Shift',
                       fillStyle:'#FEF3E2'
+                    },
+                    {
+                      text:'Half Day',
+                      fillStyle:'#E195AB'
                     }
                   ];
                 },
@@ -89,8 +93,6 @@ export class WeeklyAttendanceComponent {
                     return `0 minutes`;
                   }
                   return `${context.label}: ${context.raw} minutes`;
-
-                 
                 }
               }
             }
@@ -109,10 +111,11 @@ export class WeeklyAttendanceComponent {
  selectedWeek!:string;
  offset=0;
  employeeId=this.baseService.userId;
+ 
  weeklyData:WeeklyAttendance[]=[]
  barChart!:Chart;
  status:number[]=[]
- statusColor=["#72BF78","#AE445A","#FCF596","#AB886D","#536493","#9B7EBD","#FEF3E2"]
+ statusColor=["#72BF78","#AE445A","#FCF596","#AB886D","#536493","#9B7EBD","#FEF3E2","#E195AB"]
  ngOnInit(){
   const today=new Date();
   const year = getYear(today);
@@ -122,6 +125,7 @@ export class WeeklyAttendanceComponent {
  }
 getStartOfWeek(selectedWeek:string){
   if (selectedWeek) {
+    console.log(this.employeeId)
     this.createChart();
     const year = parseInt(this.selectedWeek.split('-W')[0], 10);
     const week = parseInt(this.selectedWeek.split('-W')[1], 10);
@@ -176,8 +180,12 @@ getStartOfWeek(selectedWeek:string){
             {
               return this.statusColor[5];
             }
+            else if((x.attendanceStatusId===8))
+              {
+                return this.statusColor[6];
+              }
             else{
-              return this.statusColor[6]
+              return this.statusColor[7];
             }
           })
           this.barChart.update();

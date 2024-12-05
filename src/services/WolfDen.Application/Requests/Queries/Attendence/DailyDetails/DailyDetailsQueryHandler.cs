@@ -22,12 +22,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
         {
             DateOnly currentDate = request.Date;
             DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
-            if (currentDate == today)
-            {
-                DailyAttendanceDTO holiday = new DailyAttendanceDTO();
-                holiday.AttendanceStatusId = AttendanceStatus.OngoingShift;
-                return holiday;
-            }
+           
             if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
             {
                 DailyAttendanceDTO holiday = new DailyAttendanceDTO();
@@ -45,7 +40,11 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                     OutsideHours = x.OutsideDuration,
                     MissedPunch = x.MissedPunch,
                 }).FirstOrDefaultAsync(cancellationToken);
-
+            if (currentDate == today)
+            {
+               attendence.AttendanceStatusId=AttendanceStatus.OngoingShift;
+                return attendence;
+            }
             if (attendence is null)
             {
                 DailyAttendanceDTO notPresentDay = new DailyAttendanceDTO();

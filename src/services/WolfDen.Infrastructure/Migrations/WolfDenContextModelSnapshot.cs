@@ -401,7 +401,7 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
-                    b.Property<DateTimeOffset?>("DepartureTime")
+                    b.Property<DateTimeOffset>("DepartureTime")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<bool?>("EmailSent")
@@ -748,6 +748,13 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("date");
 
                     b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HalfDayLeaves")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HalfDays")
                         .HasColumnType("int");
 
                     b.Property<string>("IncompleteShiftDays")

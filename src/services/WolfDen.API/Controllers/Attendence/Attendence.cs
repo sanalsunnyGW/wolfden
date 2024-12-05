@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using QuestPDF.Fluent;
+using QuestPDF.Infrastructure;
 using WolfDen.Application.DTOs.Attendence;
 using WolfDen.Application.Requests.Commands.Attendence.CloseAttendance;
 using WolfDen.Application.Requests.DTOs.Attendence;
@@ -8,20 +9,12 @@ using WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyReport;
 using WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory;
 using WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary;
 using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
+using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
-using WolfDen.Application.Requests.Queries.Attendence.WeeklySummary;
-using WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory;
-using WolfDen.Application.Requests.Commands.Attendence.CloseAttendance;
-using WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyReport;
-using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
-using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
-using WolfDen.Application.Requests.Queries.Attendence.WeeklySummary;
 using WolfDen.Application.Requests.Queries.Attendence.SubOrdinates;
-using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
-using QuestPDF.Infrastructure;
-using WolfDen.Application.Requests.Commands.Attendence.Email;
+using WolfDen.Application.Requests.Queries.Attendence.WeeklySummary;
 
 
 namespace WolfDen.API.Controllers.Attendence
