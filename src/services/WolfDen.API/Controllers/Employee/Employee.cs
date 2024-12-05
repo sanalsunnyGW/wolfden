@@ -70,6 +70,7 @@ namespace WolfDen.API.Controllers.Employee
             return await _mediator.Send(new GetEmployeeHierarchyQuery());
 
         }
+        [AllowAnonymous]
         [HttpGet("sign-up")]
         public async Task<EmployeeSignUpDto> GetEmployeeSignUp([FromQuery] GetEmployeeIDSignUpQuery query, CancellationToken cancellationToken)
         {

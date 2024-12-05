@@ -6,6 +6,7 @@ import { LeaveManagementService } from '../../../../../service/leave-management.
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ILeaveApplication, ILeaveApplicationFormControl } from '../../../../../interface/Leave-Application-Interface';
 import { ToastrService } from 'ngx-toastr';
+import { ILeaveRequest } from '../../../../../interface/leave-request';
 
 @Component({
   selector: 'app-leave-application',
@@ -46,11 +47,14 @@ export class LeaveApplicationComponent implements OnInit {
     if(this.applyLeave.valid){
       this.leaveManagement.applyLeaveRequest(this.applyLeave.value as ILeaveApplication )
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-        next:(response : boolean)=>{
-          if(response)
+        next:(response : ILeaveRequest)=>{
+          if(response.successStatus == true)
           {
             this.toastr.success("Leave Request Added")
             this.applyLeave.reset();
+          }
+          else{
+            this.toastr.error(`${response.message}`)
           }
         },
           error:(error) =>{

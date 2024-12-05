@@ -31,7 +31,7 @@ namespace WolfDen.API.Controllers.LeaveManagement
             return await _mediator.Send(query, cancellationToken);
         }
         [HttpPost]
-        public async Task<bool> ApplyLeaveRequest( [FromBody] AddLeaveRequestCommand command,CancellationToken cancellationToken)
+        public async Task<ResponseDto> ApplyLeaveRequest( [FromBody] AddLeaveRequestCommand command,CancellationToken cancellationToken)
         {
             return await _mediator.Send(command, cancellationToken);
         }

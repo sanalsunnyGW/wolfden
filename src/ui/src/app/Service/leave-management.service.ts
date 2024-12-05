@@ -15,6 +15,7 @@ import { IAddNewLeaveType } from '../interface/Add-New-Leave-Type-Interface';
 import { ILeaveUpdate, IUpdateLeaveSetting } from '../interface/update-leave-setting';
 import { IAddLeaveByAdminForEmployee } from '../interface/add-leave-by-admin-for-employee';
 import { IEditLeaveType} from '../interface/edit-leave-type';
+import { ILeaveRequest } from '../interface/leave-request';
 
 @Injectable({
   providedIn: 'root'
@@ -61,7 +62,7 @@ export class LeaveManagementService {
 
     applyLeaveRequest(leaveApplication : ILeaveApplication){
       leaveApplication.empId = this.id;
-      return this.http.post<boolean>(`${this.baseUrl}/leave-request`,leaveApplication)
+      return this.http.post<ILeaveRequest>(`${this.baseUrl}/leave-request`,leaveApplication)
     }
 
     getSubordinateLeaverequest(pagination :ISubordinateLeavePaginationSend){
