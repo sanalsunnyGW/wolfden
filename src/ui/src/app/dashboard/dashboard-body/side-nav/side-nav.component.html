@@ -30,7 +30,7 @@
         <div class="nav-item sub-item" routerLink="/portal/leave-request-history" routerLinkActive="active">
           <span>Leave Request History</span>
         </div>
-        @if(userService.role=='Admin') {
+        @if(userService.role=='Admin'|| userService.role=='SuperAdmin') {
           <div class="nav-item sub-item" routerLink="/portal/subordinate-leave-request" routerLinkActive="active">
             <span>Subordinate Leaves</span>
           </div>

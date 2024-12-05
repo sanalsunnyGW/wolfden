@@ -12,8 +12,8 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241204043404_afterfetch1")]
-    partial class afterfetch1
+    [Migration("20241204124651_LeaveFirst")]
+    partial class LeaveFirst
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -404,7 +404,7 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
-                    b.Property<DateTimeOffset?>("DepartureTime")
+                    b.Property<DateTimeOffset>("DepartureTime")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<bool?>("EmailSent")
@@ -751,6 +751,13 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("date");
 
                     b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HalfDayLeaves")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HalfDays")
                         .HasColumnType("int");
 
                     b.Property<string>("IncompleteShiftDays")

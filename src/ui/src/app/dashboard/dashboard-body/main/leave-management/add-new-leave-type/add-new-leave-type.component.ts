@@ -3,7 +3,8 @@ import { FormBuilder, FormControl, FormGroup, FormsModule, NgSelectOption, React
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { IAddNewLeaveTypeFormcontrol } from '../../../../../interface/Add-New-Leave-Type-Interface';
+import { IAddNewLeaveType, IAddNewLeaveTypeFormcontrol } from '../../../../../interface/Add-New-Leave-Type-Interface';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-new-leave-type',
@@ -16,8 +17,9 @@ export class AddNewLeaveTypeComponent{
   fb = inject(FormBuilder)
   leaveManagement = inject(LeaveManagementService)
   destroyRef= inject(DestroyRef);
+  toastr = inject(ToastrService)
 
-    addNewLeaveType : FormGroup
+    addNewLeaveType : FormGroup<IAddNewLeaveTypeFormcontrol>
     constructor() {
       this.addNewLeaveType = this.fb.group<IAddNewLeaveTypeFormcontrol>({
         typeName: new FormControl(null,Validators.required),
@@ -46,16 +48,16 @@ export class AddNewLeaveTypeComponent{
       {
         if(this.addNewLeaveType.valid)
         {
-          this.leaveManagement.addNewLeaveType(this.addNewLeaveType.value)
+          this.leaveManagement.addNewLeaveType(this.addNewLeaveType.value as IAddNewLeaveType )
           .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
             next:(response : boolean)=>{
               if(response)
               {
-                alert("New Leave Type Added")
+                this.toastr.success("New Leave Type Added")
               }
             },
               error:(error) =>{
-                alert(error)
+                this.toastr.error(error)
                 }
            }
            );

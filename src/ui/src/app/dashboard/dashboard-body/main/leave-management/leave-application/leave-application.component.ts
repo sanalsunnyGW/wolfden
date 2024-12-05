@@ -4,7 +4,8 @@ import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ILeaveApplicationFormControl } from '../../../../../interface/Leave-Application-Interface';
+import { ILeaveApplication, ILeaveApplicationFormControl } from '../../../../../interface/Leave-Application-Interface';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-leave-application',
@@ -16,10 +17,11 @@ import { ILeaveApplicationFormControl } from '../../../../../interface/Leave-App
 export class LeaveApplicationComponent implements OnInit {
 
   fb = inject(FormBuilder);
-  applyLeave : FormGroup
+  applyLeave : FormGroup<ILeaveApplicationFormControl>
   leaveManagement = inject(LeaveManagementService)
   leaveType : Array<IGetLeaveTypeIdAndname> = []
   destroyRef= inject(DestroyRef);
+  toastr = inject(ToastrService)
 
   constructor(){
     this.applyLeave = this.fb.group<ILeaveApplicationFormControl>({
@@ -42,16 +44,16 @@ export class LeaveApplicationComponent implements OnInit {
   
   onSubmit(){
     if(this.applyLeave.valid){
-      this.leaveManagement.applyLeaveRequest(this.applyLeave.value)
+      this.leaveManagement.applyLeaveRequest(this.applyLeave.value as ILeaveApplication )
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next:(response : boolean)=>{
           if(response)
           {
-            alert("Leave Request Added")
+            this.toastr.success("Leave Request Added")
           }
         },
           error:(error) =>{
-            alert(error)
+            this.toastr.error(error)
             }
        }
        );

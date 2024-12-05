@@ -10,7 +10,6 @@ export interface IEditleaveFormControl{
 }
 
 export interface IEditleave{
-    empId : number|null
     leaveRequestId : number | null
     typeId : number | null
     halfDay : boolean|null

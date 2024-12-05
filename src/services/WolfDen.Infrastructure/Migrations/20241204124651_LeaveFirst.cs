@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WolfDen.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class ones : Migration
+    public partial class LeaveFirst : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -69,101 +69,6 @@ namespace WolfDen.Infrastructure.Migrations
                 })
                 .Annotation("SqlServer:IsTemporal", true)
                 .Annotation("SqlServer:TemporalHistoryTableName", "AttendenceClose")
-                .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
-                .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
-
-            migrationBuilder.CreateTable(
-                name: "DailyAttendence",
-                schema: "wolfden",
-                columns: table => new
-                {
-                    DailyId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    Date = table.Column<DateOnly>(type: "date", nullable: false)
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    ArrivalTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    DepartureTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    InsideDuration = table.Column<int>(type: "int", nullable: true)
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    OutsideDuration = table.Column<int>(type: "int", nullable: true)
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    PantryDuration = table.Column<int>(type: "int", nullable: true)
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    MissedPunch = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    EmailSent = table.Column<bool>(type: "bit", nullable: true)
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    PeriodEnd = table.Column<DateTime>(type: "datetime2", nullable: false)
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    PeriodStart = table.Column<DateTime>(type: "datetime2", nullable: false)
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DailyAttendence", x => x.DailyId);
-                })
-                .Annotation("SqlServer:IsTemporal", true)
-                .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
                 .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
@@ -310,6 +215,12 @@ namespace WolfDen.Infrastructure.Migrations
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
                     Type = table.Column<int>(type: "int", maxLength: 255, nullable: false)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "Holiday")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                         .Annotation("SqlServer:IsTemporal", true)
                         .Annotation("SqlServer:TemporalHistoryTableName", "Holiday")
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
@@ -1265,6 +1176,108 @@ namespace WolfDen.Infrastructure.Migrations
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
 
             migrationBuilder.CreateTable(
+                name: "DailyAttendence",
+                schema: "wolfden",
+                columns: table => new
+                {
+                    DailyId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    Date = table.Column<DateOnly>(type: "date", nullable: false)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    ArrivalTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    DepartureTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    InsideDuration = table.Column<int>(type: "int", nullable: true)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    OutsideDuration = table.Column<int>(type: "int", nullable: true)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    PantryDuration = table.Column<int>(type: "int", nullable: true)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    MissedPunch = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    EmailSent = table.Column<bool>(type: "bit", nullable: true)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    PeriodEnd = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    PeriodStart = table.Column<DateTime>(type: "datetime2", nullable: false)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DailyAttendence", x => x.DailyId);
+                    table.ForeignKey(
+                        name: "FK_DailyAttendence_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalSchema: "wolfden",
+                        principalTable: "Employee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("SqlServer:IsTemporal", true)
+                .Annotation("SqlServer:TemporalHistoryTableName", "DailyAttendence")
+                .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
+
+            migrationBuilder.CreateTable(
                 name: "LeaveBalance",
                 schema: "wolfden",
                 columns: table => new
@@ -1500,6 +1513,18 @@ namespace WolfDen.Infrastructure.Migrations
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    HalfDays = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "LOP")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
+                    HalfDayLeaves = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                        .Annotation("SqlServer:IsTemporal", true)
+                        .Annotation("SqlServer:TemporalHistoryTableName", "LOP")
+                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
+                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
+                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
                     PeriodEnd = table.Column<DateTime>(type: "datetime2", nullable: false)
                         .Annotation("SqlServer:IsTemporal", true)
                         .Annotation("SqlServer:TemporalHistoryTableName", "LOP")
@@ -1661,6 +1686,12 @@ namespace WolfDen.Infrastructure.Migrations
                 schema: "wolfden",
                 table: "AttendenceLog",
                 column: "DeviceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DailyAttendence_EmployeeId",
+                schema: "wolfden",
+                table: "DailyAttendence",
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Department_Name",

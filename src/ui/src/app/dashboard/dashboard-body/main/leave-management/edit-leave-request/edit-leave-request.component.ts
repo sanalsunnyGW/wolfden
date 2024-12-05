@@ -2,10 +2,11 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { IGetLeaveTypeIdAndname } from '../../../../../interface/get-leave-type-interface';
-import {  IEditleaveFormControl } from '../../../../../interface/edit-leave-application-interface';
+import {  IEditleave, IEditleaveFormControl } from '../../../../../interface/edit-leave-application-interface';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-leave-request',
@@ -17,11 +18,12 @@ import { ActivatedRoute } from '@angular/router';
 export class EditLeaveRequestComponent implements OnInit {
 
   fb = inject(FormBuilder);
-  editLeave : FormGroup
+  editLeave : FormGroup<IEditleaveFormControl>
   leaveManagement = inject(LeaveManagementService)
   leaveType : Array<IGetLeaveTypeIdAndname> = []
   destroyRef= inject(DestroyRef);
   router = inject(ActivatedRoute)
+  toastr = inject(ToastrService)
   id =  this.router.snapshot.paramMap.get('leaveRequestId')
   leaveRequestId = this.id ? Number(this.id) : null;
 
@@ -43,7 +45,7 @@ export class EditLeaveRequestComponent implements OnInit {
               this.leaveType = response
       },
       error:(error) => {
-        alert(error)
+        this.toastr.error(error)
       }
     })
   }
@@ -51,16 +53,16 @@ export class EditLeaveRequestComponent implements OnInit {
   onSubmit(){
 
     if(this.editLeave.valid){
-      this.leaveManagement.editLeaveRequest(this.editLeave.value)
+      this.leaveManagement.editLeaveRequest(this.editLeave.value as IEditleave)
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next:(response : boolean)=>{
           if(response)
           {
-            alert("Leave Edited")
+            this.toastr.success("Leave Edited")
           }
         },
           error:(error) =>{
-            alert(error)
+            this.toastr.error(error)
             }
        }
        

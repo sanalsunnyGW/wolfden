@@ -250,18 +250,22 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
                                     </html>";
 
                       _email.SendMail(_senderEmail, _senderName, immediateManagerMail, message, subject, superiorsMails);
-                    List<int> managerIds = await FindManagerIdsAsync(employee.ManagerId, cancellationToken);
-                    string notificationMessage = $" Leave {leaveRequest.FromDate} to {leaveRequest.ToDate} is Applied by {admin.FirstName} {admin.LastName} [Admin Code :{admin.EmployeeCode}] for {employee.FirstName} {employee.LastName} [Employee Code : {employee.EmployeeCode}]";
-                    foreach (int managerId in managerIds)
+                    if (rolesString != "SuperAdmin") 
                     {
+                        List<int> managerIds = await FindManagerIdsAsync(employee.ManagerId, cancellationToken);
+                        string notificationMessage = $" Leave {leaveRequest.FromDate} to {leaveRequest.ToDate} is Applied by {admin.FirstName} {admin.LastName} [Admin Code :{admin.EmployeeCode}] for {employee.FirstName} {employee.LastName} [Employee Code : {employee.EmployeeCode}]";
+
                         NotificationCommand command = new NotificationCommand
                         {
-                            EmployeeIds = new List<int> { managerId },
-                            
+                            EmployeeIds = managerIds,
+
                             Message = notificationMessage,
                         };
+
                         await _mediator.Send(command, cancellationToken);
                     }
+                        
+                    
                     return await _mediator.Send(addLeaveRequestDayCommand, cancellationToken);
 
                 }

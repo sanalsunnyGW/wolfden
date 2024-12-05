@@ -1,8 +1,9 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ILeaveUpdate, IUpdateLeaveSettingFormControl } from '../../../../../interface/update-leave-setting';
+import { ILeaveUpdate, IUpdateLeaveSetting, IUpdateLeaveSettingFormControl } from '../../../../../interface/update-leave-setting';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -16,7 +17,8 @@ export class UpdateLeaveSettingsComponent {
   fb = inject(FormBuilder)
   leaveManagement = inject(LeaveManagementService)
   destroyRef= inject(DestroyRef);
-  updateLeaveSetting : FormGroup
+  toastr = inject(ToastrService);
+  updateLeaveSetting : FormGroup<IUpdateLeaveSettingFormControl>
   leaveSettings : ILeaveUpdate = {} as ILeaveUpdate;
 
   constructor(){
@@ -39,7 +41,7 @@ ngOnInit(){
                });
     },
     error:(error) =>{
-      alert(error)
+      this.toastr.error(error)
     }
   })
 }
@@ -47,16 +49,16 @@ ngOnInit(){
   onSubmit(){
     if(this.updateLeaveSetting.valid)
       {
-        this.leaveManagement.updateLeaveSettings(this.updateLeaveSetting.value)
+        this.leaveManagement.updateLeaveSettings(this.updateLeaveSetting.value as IUpdateLeaveSetting)
         .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
           next:(response : boolean)=>{
             if(response)
             {
-              alert("Leave Settings Updated")
+              this.toastr.success("Leave Settings Updated")
             }
           },
             error:(error) =>{
-              alert(error)
+              this.toastr.error(error)
               }
          }
          
