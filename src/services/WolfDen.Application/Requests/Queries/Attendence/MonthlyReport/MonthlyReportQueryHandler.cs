@@ -76,12 +76,16 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                     {
                         minWorkDuration = minWorkDuration / 2;
                         summaryDto.HalfDays++;
-                        summaryDto.HalfDayLeaves += currentDate.ToString("yyyy-MM-dd") + ",";
+                        summaryDto.HalfDayLeaves += currentDate.ToString("yyyy-MM-dd") + ", ";
                     }
                     if (attendanceRecord.InsideDuration < minWorkDuration)
                     {
-                        summaryDto.IncompleteShiftDays += currentDate.ToString("yyyy-MM-dd") + ",";
+                        summaryDto.IncompleteShiftDays += currentDate.ToString("yyyy-MM-dd") + ", ";
                         summaryDto.IncompleteShift++;
+                    }
+                    else
+                    {
+                        summaryDto.Present++;
                     }
                 }
                 else
@@ -92,7 +96,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                         if (holiday.Type is AttendanceStatus.NormalHoliday)
                         {
                             summaryDto.Holiday++;
-                            summaryDto.NormalHolidays += currentDate.ToString("yyyy-MM-dd") + ",";
+                            summaryDto.NormalHolidays += currentDate.ToString("yyyy-MM-dd") + ", ";
                         }
                         else if (holiday.Type is AttendanceStatus.RestrictedHoliday)
                         {
@@ -102,7 +106,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                             if (leaveRequestForHoliday is not null && leaveRequestForHoliday.LeaveType.LeaveCategoryId is LeaveCategory.RestrictedHoliday)
                             {
                                 summaryDto.Holiday++;
-                                summaryDto.RestrictedHolidays += currentDate.ToString("yyyy-MM-dd") + ",";
+                                summaryDto.RestrictedHolidays += currentDate.ToString("yyyy-MM-dd") + ", ";
                             }
                         }
                     }
@@ -113,18 +117,18 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                         if (leaveRequest is not null && leaveRequest.LeaveType.LeaveCategoryId is LeaveCategory.WorkFromHome)
                         {
                             summaryDto.WFH++;
-                            summaryDto.WFHDays += currentDate.ToString("yyyy-MM-dd") + ",";
+                            summaryDto.WFHDays += currentDate.ToString("yyyy-MM-dd") + ", ";
                         }
                         else if(leaveRequest is not null)
                         {
                             summaryDto.Leave++;
-                            summaryDto.LeaveDays += currentDate.ToString("yyyy-MM-dd") + ",";
+                            summaryDto.LeaveDays += currentDate.ToString("yyyy-MM-dd") + ", ";
                            
                         }
                         else
                         {
                             summaryDto.Absent++;
-                            summaryDto.AbsentDays += currentDate.ToString("yyyy-MM-dd") + ",";
+                            summaryDto.AbsentDays += currentDate.ToString("yyyy-MM-dd") + ", ";
                         }
                     }
                 }
@@ -134,11 +138,12 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
             summaryDto.LeaveDays = update(summaryDto.LeaveDays);
             summaryDto.WFHDays = update(summaryDto.WFHDays);
             summaryDto.HalfDayLeaves = update(summaryDto.HalfDayLeaves);
+            summaryDto.RestrictedHolidays = update(summaryDto.RestrictedHolidays);
             return summaryDto;
         }
         private string update(string days)
         {
-            string updatedDays = days.Length > 0 ? days.Substring(0, days.Length - 1)  : " ";
+            string updatedDays = days.Length > 0 ? days.Substring(0, days.Length - 2)  : " ";
             return updatedDays;
         }
     }

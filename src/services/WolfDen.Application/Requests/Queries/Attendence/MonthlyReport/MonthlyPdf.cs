@@ -50,6 +50,12 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyReport
                                     row.RelativeItem().Padding(5).AlignLeft().Text($"Leave Days: {monthlyReportDTO.Leave}")
                                         .SemiBold().FontSize(14).FontColor(Colors.Black);
                                 });
+                                col.Item().Row(row =>
+                                {
+                                    row.RelativeItem().Padding(5).AlignLeft().Text($"Half Days: {monthlyReportDTO.HalfDays}")
+                                        .SemiBold().FontSize(14).FontColor(Colors.Black);
+                                   
+                                });
                             });
 
                             column.Item().PaddingVertical(1, Unit.Centimetre).Table(table =>
@@ -87,6 +93,9 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyReport
 
                                 table.Cell().Border(1).Padding(10).Text("Absent Days").FontSize(12);
                                 table.Cell().Border(1).Padding(10).Text(monthlyReportDTO.AbsentDays).FontSize(12);
+
+                                table.Cell().Border(1).Padding(10).Text("Half Days").FontSize(12);
+                                table.Cell().Border(1).Padding(10).Text(monthlyReportDTO.HalfDayLeaves).FontSize(12);
 
                             });
                         });
