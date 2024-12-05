@@ -34,7 +34,7 @@ namespace WolfDen.API.Controllers.LeaveManagement
             return await _mediator.Send(query, cancellationToken);
         }
 
-        [HttpGet("leave-type-details")]
+        [HttpGet("details")]
         public async Task<LeaveTypeDto> GetLeaveDetails([FromQuery] GetLeaveTypeQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);

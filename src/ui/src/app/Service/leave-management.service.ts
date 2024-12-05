@@ -96,6 +96,6 @@ export class LeaveManagementService {
     }
 
     getLeaveDetails(typeId:number){
-    return this.http.get<IEditLeaveType>(`${this.baseUrl}/leave-type/leave-type-details?RequestId=${typeId}`);
+    return this.http.get<IEditLeaveType>(`${this.baseUrl}/leave-type/details?RequestId=${typeId}`);
     }
 }
