@@ -8,6 +8,7 @@ import { NotificationModalComponent } from '../../notification-modal/notificatio
 import { INotificationForm } from '../../interface/i-notification-form';
 import { LeaveManagementService } from '../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { error } from 'jquery';
 
 
 @Component({
@@ -45,13 +46,16 @@ export class HeaderComponent {
     this.leaveManagementService.updateLeaveBalance()
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe((data: boolean) => {
+      next: (response: any) => {
         if (data) {
           this.toastr.success('Leave Balance of All employees Updated !!');
         }
         else {
           this.toastr.error(' Sorry ! We have Encountered some issues while Updating employees leave balance !')
         }
-      });
+      }
+    }
+      );
   }
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;

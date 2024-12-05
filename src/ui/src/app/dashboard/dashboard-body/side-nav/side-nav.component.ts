@@ -56,8 +56,8 @@ export class SideNavComponent {
   }];
 
   expandedSections: { [key: string]: boolean } = {
-    leave: true,
-    attendance: true
+    leave: false,
+    attendance: false
   };
 
   toggleSection(section: string): void {
