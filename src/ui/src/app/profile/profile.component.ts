@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Gender } from '../enum/gender-enum';
@@ -8,6 +8,13 @@ import { Employee } from '../interface/iemployee';
 import { IProfileForm } from '../interface/iprofile-from';
 import { EmployeeService } from '../service/employee.service';
 import { IEmployeeUpdate } from '../interface/iemployee-update';
+import { WolfDenService } from '../service/wolf-den.service';
+import { IDepartment } from '../interface/idepartment';
+import { IDesignation } from '../interface/idesignation';
+import { IadminForm } from '../interface/iadmin-form';
+import { ImanagerForm } from '../interface/imanager-form';
+import { ImanagerData } from '../interface/imanager-data';
+import { IadminUpdate } from '../interface/iadmin-update';
 
 @Component({
   selector: 'app-profile',
@@ -18,8 +25,10 @@ import { IEmployeeUpdate } from '../interface/iemployee-update';
 })
 export class ProfileComponent {
   userForm!: FormGroup<IProfileForm>;
+  adminForm!: FormGroup<IadminForm>;
   employeeUpdate: IEmployeeUpdate = {} as IEmployeeUpdate;
   inDate = new Date();
+  wolfdenService=inject(WolfDenService)
   employeeData: Employee = {
     id: 0,
     rfId: '',
@@ -44,6 +53,25 @@ export class ProfileComponent {
     employmentType: 0,
     photo: ''
   };
+  departmentData: IDepartment[] = [{
+    id: 0,
+    departmentName: ''
+  }];
+  designationData: IDesignation[] = [{
+    id: 0,
+    designationName: ''
+  }];
+  managerForm!: FormGroup<ImanagerForm>;
+  managerData: ImanagerData[] = [{
+    id: 0,
+    firstName: '',
+    lastName: '',
+    role: ''
+  }]
+
+  isDataLoaded: boolean = false;
+  isDataClicked: boolean = false;
+  employeeIdClicked: number = 0;
   constructor(private fb: FormBuilder, private employeeService: EmployeeService, private toastr: ToastrService
   ) {
     this.buildForm();
@@ -60,7 +88,47 @@ export class ProfileComponent {
       country: new FormControl('', Validators.required),
       state: new FormControl('', Validators.required),
       photo: new FormControl(''),
+    }), this.adminForm = this.fb.group({
+      designationId: new FormControl<number | null>(null, Validators.required),
+      departmentId: new FormControl<number | null>(null, Validators.required),
+      managerId: new FormControl<number | null>(null),
+      isActive: new FormControl<boolean | null>(null),
+      joiningDate: new FormControl(this.inDate, Validators.required),
+      employmentType: new FormControl<number | null>(null, Validators.required),
+
+    }),
+    this.managerForm = this.fb.group({
+      firstName: new FormControl('', Validators.required),
+      lastName: new FormControl(''),
+
     })
+  }
+  selectEmployee(employeeId: number): void {
+    this.employeeIdClicked = employeeId;
+    this.adminForm.patchValue({
+      managerId: employeeId
+    });
+    this.isDataClicked = true;
+  }
+  onSubmitManager() {
+    if (this.managerForm.valid) {
+      const formData = this.managerForm.value;
+      const params = {
+        firstName: formData.firstName ?? '',
+        lastName: formData.lastName ?? ''
+      }
+      this.employeeService.getEmployeeByName(params.firstName, params.lastName).subscribe({
+        next: (response: ImanagerData[]) => {
+          this.managerData = response;
+          this.isDataLoaded = true;
+          this.managerForm.get('firstName')?.setValue('');
+          this.managerForm.get('lastName')?.setValue('');
+        },
+        error: (err) => {
+          this.toastr.error('Error fetching managers');
+        }
+      });
+    }
   }
 
   getGenderDisplay(gender: number): string {
@@ -114,6 +182,39 @@ export class ProfileComponent {
       photo: this.employeeData.photo,
     });
 
+  }
+  adminLoadForm(employeeData: Employee) {
+    this.adminForm.patchValue({
+      designationId: this.employeeData.designationId,
+      departmentId: this.employeeData.departmentId,
+      managerId: this.employeeData.managerId,
+      isActive: this.employeeData.isActive,
+      joiningDate: this.employeeData.joiningDate,
+      employmentType: this.employeeData.employmentType,
+
+    }),
+      this.employeeService.getAllDepartment().subscribe({
+        next: (response: IDepartment[]) => {
+          if (response) {
+            this.departmentData = response
+          }
+        },
+        error: (error) => {
+          this.toastr.error('An error occurred while Displaying Departments')
+
+        }
+      }),
+      this.employeeService.getAllDesignation().subscribe({
+        next: (response: IDesignation[]) => {
+          if (response) {
+            this.designationData = response;
+          }
+        },
+        error: (error) => {
+          this.toastr.error('An error occurred while Displaying Designations')
+
+        }
+      })
   }
   loadEmployeeData() {
     const employee = this.employeeService.decodeToken();
@@ -175,4 +276,35 @@ export class ProfileComponent {
       })
     }
   }
+  adminSubmit() {
+    console.log(this.adminForm)
+    if (this.adminForm.valid) {
+      const formData = this.adminForm.value;
+      const params : IadminUpdate = {
+        id: this.wolfdenService.userId,
+        designationId: formData.designationId ?? 0,
+        departmentId: Number(formData.departmentId) ?? 0,
+        managerId: formData.managerId ?? null,
+        isActive: formData.isActive ?? false,
+        joiningDate: formData.joiningDate ?? this.inDate,
+        employmentType: Number(formData.employmentType)
+
+      }
+      this.employeeService.adminUpdateEmployee(params).subscribe({
+        next: (response) => {
+          if (response == true) {
+            this.toastr.success('Profile Updated Successfully')
+            this.loadEmployeeData();
+          }
+          else {
+            this.toastr.error('Profile Update Failed')
+          }
+        },
+        error: (error) => {
+          this.toastr.error('An error occurred while  Updating Profile')
+        }
+      })
+    }
+  }
 }
+

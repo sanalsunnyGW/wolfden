@@ -11,6 +11,8 @@ import { IaddEmployee } from '../interface/iadd-employee';
 import { IEmployeeUpdate } from '../interface/iemployee-update';
 import { IRole } from '../interface/irole-form';
 import { IadminUpdate } from '../interface/iadmin-update';
+import { IDepartmentData } from '../interface/idepartment-form';
+import { IDesignationData } from '../interface/idesignation-form';
 
 @Injectable({
   providedIn: 'root'
@@ -53,10 +55,10 @@ export class EmployeeService {
   getMyTeamHierarchy(getFullHierarchy: boolean, employeeId: number) {
     return this.http.get<IEmployeeData[]>(`${this.baseUrl}/employee/team?Id=${employeeId}&Hierarchy=${getFullHierarchy}`);
   }
-  addDepartment(departmentForm: string) {
+  addDepartment(departmentForm: IDepartmentData) {
     return this.http.post<number>(`${this.baseUrl}/department`, departmentForm);
   }
-  addDesignation(designationForm: string) {
+  addDesignation(designationForm: IDesignationData) {
     return this.http.post<number>(`${this.baseUrl}/designation`, designationForm);
   }
   getAllDesignation() {

@@ -5,8 +5,8 @@ import { EmployeeService } from '../service/employee.service';
 import { RouterLink } from '@angular/router';
 import { IDepartment } from '../interface/idepartment';
 import { IDesignation } from '../interface/idesignation';
-import { IDepartmentForm } from '../interface/idepartment-form';
-import { IDesignationForm } from '../interface/idesignation-form';
+import { IDepartmentData, IDepartmentForm } from '../interface/idepartment-form';
+import { IDesignationData, IDesignationForm } from '../interface/idesignation-form';
 import { IadminForm } from '../interface/iadmin-form';
 import { ImanagerForm } from '../interface/imanager-form';
 import { ImanagerData } from '../interface/imanager-data';
@@ -121,8 +121,11 @@ export class AdminDashboardComponent {
   }
 
   onSubmitDepartment() {
+
     if (this.departmentForm.valid) {
-      const params: string = this.departmentForm.value.departmentName ?? '';
+      const params: IDepartmentData = {
+        departmentName: this.departmentForm.value.departmentName ?? ''
+      }
       this.employeeService.addDepartment(params).subscribe({
         next: (response: number) => {
           if (response > 0) {
@@ -139,8 +142,10 @@ export class AdminDashboardComponent {
   }
   onSubmitDesignation() {
     if (this.designationForm.valid) {
-      const params: string = this.designationForm.value.designationName ?? '';
-      this.employeeService.addDesignation(params).subscribe({
+      const designationData: IDesignationData = {
+        designationName: this.designationForm.value.designationName ?? ''
+      }
+      this.employeeService.addDesignation(designationData).subscribe({
         next: (response: number) => {
           if (response > 0) {
             this.toastr.success('Designation added Successfully')

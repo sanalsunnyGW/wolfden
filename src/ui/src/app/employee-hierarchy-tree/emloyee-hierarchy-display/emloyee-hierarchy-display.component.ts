@@ -216,8 +216,8 @@ export class EmloyeeHierarchyDisplayComponent {
       const params : IadminUpdate = {
         id: this.employeeId,
         designationId: formData.designationId ?? 0,
-        departmentId: formData.departmentId ?? 0,
-        managerId: formData.managerId ?? 0,
+        departmentId: Number(formData.departmentId) ?? 0,
+        managerId: formData.managerId ?? null,
         isActive: formData.isActive ?? false,
         joiningDate: formData.joiningDate ?? this.inDate,
         employmentType: Number(formData.employmentType)
