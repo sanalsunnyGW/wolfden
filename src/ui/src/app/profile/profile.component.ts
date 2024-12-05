@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Employee } from '../interface/iemployee';
 import { IProfileForm } from '../interface/iprofile-from';
 import { EmployeeService } from '../service/employee.service';
+import { IEmployeeUpdate } from '../interface/iemployee-update';
 
 @Component({
   selector: 'app-profile',
@@ -17,7 +18,7 @@ import { EmployeeService } from '../service/employee.service';
 })
 export class ProfileComponent {
   userForm!: FormGroup<IProfileForm>;
-
+  employeeUpdate: IEmployeeUpdate = {} as IEmployeeUpdate;
   inDate = new Date();
   employeeData: Employee = {
     id: 0,
@@ -117,7 +118,7 @@ export class ProfileComponent {
   loadEmployeeData() {
     const employee = this.employeeService.decodeToken();
     this.employeeService.getEmployeeProfile(employee.EmployeeId).subscribe({
-      next: (response: any) => {
+      next: (response: Employee) => {
         if (response) {
           this.employeeData = response;
         }
@@ -139,7 +140,7 @@ export class ProfileComponent {
     }
   }
 
-  removePicture(){
+  removePicture() {
     this.userForm.patchValue({
       photo: null,
     });
@@ -147,23 +148,22 @@ export class ProfileComponent {
   }
   onSubmit() {
     if (this.userForm.valid) {
-      const formData = this.userForm.value;
       const employee = this.employeeService.decodeToken();
-      const params = {
-        id: employee.EmployeeId,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phoneNumber: formData.phoneNumber,
-        dateofBirth: formData.dateofBirth,
-        gender: Number(formData.gender),
-        address: formData.address,
-        country: formData.country,
-        state: formData.state,
-        photo: formData.photo,
+      const updateDetails: IEmployeeUpdate = {
+        id : employee.EmployeeId,
+        firstName: this.userForm.value.firstName ?? '',
+        lastName: this.userForm.value.lastName ?? '',
+        email: this.userForm.value.email ?? '',
+        phoneNumber: this.userForm.value.phoneNumber ?? '',
+        gender: Number(this.userForm.value.gender),
+        address: this.userForm.value.address ?? '',
+        country: this.userForm.value.country ?? '',
+        state : this.userForm.value.state ?? '',
+        photo: this.userForm.value.photo ?? '',
+        dateofBirth: this.userForm.value.dateofBirth ?? this.inDate,
       }
-      this.employeeService.employeeUpdateEmployee(params).subscribe({
-        next: (response: any) => {
+      this.employeeService.employeeUpdateEmployee(updateDetails).subscribe({
+        next: (response: boolean) => {
           if (response == true) {
             this.toastr.success('Profile Updated Successfully')
             this.loadEmployeeData();

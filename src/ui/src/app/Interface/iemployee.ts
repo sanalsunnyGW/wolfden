@@ -22,3 +22,4 @@ export interface Employee {
   employmentType: number;
   photo: string;
 }
+

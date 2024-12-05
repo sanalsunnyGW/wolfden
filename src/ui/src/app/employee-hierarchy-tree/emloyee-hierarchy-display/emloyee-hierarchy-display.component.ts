@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { ImanagerForm } from '../../interface/imanager-form';
 import { IDepartment } from '../../interface/idepartment';
 import { IDesignation } from '../../interface/idesignation';
+import { IadminUpdate } from '../../interface/iadmin-update';
 
 @Component({
   selector: 'app-emloyee-hierarchy-display',
@@ -143,7 +144,7 @@ export class EmloyeeHierarchyDisplayComponent {
   }
   loadEmployeeData() {
     this.employeeService.getEmployeeProfile(this.employeeId).subscribe({
-      next: (response: any) => {
+      next: (response: Employee) => {
         if (response) {
           this.employeeData = response;
         }
@@ -165,7 +166,7 @@ export class EmloyeeHierarchyDisplayComponent {
 
     }),
       this.employeeService.getAllDepartment().subscribe({
-        next: (response: any) => {
+        next: (response: IDepartment[]) => {
           if (response) {
             this.departmentData = response
           }
@@ -176,7 +177,7 @@ export class EmloyeeHierarchyDisplayComponent {
         }
       }),
       this.employeeService.getAllDesignation().subscribe({
-        next: (response: any) => {
+        next: (response: IDesignation[]) => {
           if (response) {
             this.designationData = response;
           }
@@ -192,11 +193,11 @@ export class EmloyeeHierarchyDisplayComponent {
     if (this.managerForm.valid) {
       const formData = this.managerForm.value;
       const params = {
-        firstName: formData.firstName,
-        lastName: formData.lastName
+        firstName: formData.firstName ?? '',
+        lastName: formData.lastName ?? ''
       }
       this.employeeService.getEmployeeByName(params.firstName, params.lastName).subscribe({
-        next: (response: any) => {
+        next: (response: ImanagerData[]) => {
           this.managerData = response;
           this.isDataLoaded = true;
           this.managerForm.get('firstName')?.setValue('');
@@ -212,17 +213,18 @@ export class EmloyeeHierarchyDisplayComponent {
   onSubmit() {
     if (this.userForm.valid) {
       const formData = this.userForm.value;
-      const params = {
+      const params : IadminUpdate = {
         id: this.employeeId,
-        designationId: formData.designationId,
-        departmentId: formData.departmentId,
-        managerId: formData.managerId,
-        isActive: formData.isActive,
-        joiningDate: formData.joiningDate,
-        employmentType: Number(formData.employmentType),
+        designationId: formData.designationId ?? 0,
+        departmentId: formData.departmentId ?? 0,
+        managerId: formData.managerId ?? 0,
+        isActive: formData.isActive ?? false,
+        joiningDate: formData.joiningDate ?? this.inDate,
+        employmentType: Number(formData.employmentType)
+
       }
       this.employeeService.adminUpdateEmployee(params).subscribe({
-        next: (response: any) => {
+        next: (response) => {
           if (response == true) {
             this.toastr.success('Profile Updated Successfully')
             this.loadEmployeeData();

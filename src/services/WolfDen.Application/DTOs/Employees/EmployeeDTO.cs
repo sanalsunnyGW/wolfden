@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static WolfDen.Domain.Enums.EmployeeEnum;
-using WolfDen.Domain.Entity;
-
-namespace WolfDen.Application.DTOs.Employees
+﻿namespace WolfDen.Application.DTOs.Employees
 {
     public class EmployeeDTO : EmployeeDirectoryDTO
     {
