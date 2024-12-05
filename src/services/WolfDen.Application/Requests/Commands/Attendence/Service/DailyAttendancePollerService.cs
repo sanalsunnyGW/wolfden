@@ -3,10 +3,12 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using WolfDen.Application.Requests.Commands.Attendence.Email;
 using WolfDen.Application.Requests.Commands.Attendence.SendAbsenceEmail;
 using WolfDen.Application.Requests.Commands.Attendence.SendNotification;
 using WolfDen.Application.Services;
+using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
@@ -19,18 +21,21 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IMediator _mediator;
         private readonly ManagerIdFinder _managerIdFinder;
+        private readonly IOptions<OfficeDurationSettings> _officeDurationSettings;
 
-        public DailyAttendancePollerService(IMediator mediator, ILogger<DailyAttendancePollerService> logger, IServiceScopeFactory serviceScopeFactory, ManagerIdFinder managerIdFinder)
+
+        public DailyAttendancePollerService(IMediator mediator, ILogger<DailyAttendancePollerService> logger, IServiceScopeFactory serviceScopeFactory, ManagerIdFinder managerIdFinder,IOptions<OfficeDurationSettings> officeDurationSettings)
         {
             _mediator = mediator;
             _logger = logger;
             _serviceScopeFactory = serviceScopeFactory;
             _managerIdFinder = managerIdFinder;
+            _officeDurationSettings = officeDurationSettings;
         }
 
         public async Task ExecuteJobAsync()
         {
-            int minWorkDuration = 360;
+            int minWorkDuration = _officeDurationSettings.Value.MinWorkDuration;
             DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1);
 
             using (IServiceScope scope = _serviceScopeFactory.CreateScope())
@@ -49,12 +54,12 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                    .ToListAsync();
 
                 List<Employee> absentEmployees = allEmployees
-                    .Where(emp => !employeesWithAttendance.Contains(emp.Id) && emp.Id==6)
+                    .Where(emp => !employeesWithAttendance.Contains(emp.Id))
                     .ToList();
 
                 List<DailyAttendence> attendanceRecords = await _context.DailyAttendence
                     .Include(x => x.Employee)
-                    .Where(a => a.Date == today && a.EmailSent == false && a.EmployeeId==10)
+                    .Where(a => a.Date == today && a.EmailSent == false && a.EmployeeId==3)
                     .ToListAsync();
 
                 List<LeaveRequest> leaveRequests = await _context.LeaveRequests
@@ -68,13 +73,13 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                 {
                     LeaveRequest? approvedLeave = leaveDictionary.GetValueOrDefault(employee.Id);
 
-                    if (approvedLeave == null)
+                    if (approvedLeave is null)
                     {
                         string absenceMessage = $"Dear {employee.FirstName}, you were marked as absent on ({today}). Please make sure to apply for leave.";
 
                         SendAbsenceEmailCommand sendAbsenceEmail = new SendAbsenceEmailCommand
                         {
-                            EmployeeId = 6,
+                            EmployeeId = employee.Id,
                             Name = employee.FirstName + " " + employee.LastName,
                             Email = employee.Email,
                             Date = today,

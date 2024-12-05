@@ -1,7 +1,9 @@
 ﻿using System.Drawing.Text;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using WolfDen.Application.DTOs.Attendence;
+using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
@@ -11,14 +13,17 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
     public class MonthlyReportQueryHandler : IRequestHandler<MonthlyReportQuery,MonthlyReportDTO>
     {
         private readonly WolfDenContext _context;
-        public MonthlyReportQueryHandler(WolfDenContext context)
+        private readonly IOptions<OfficeDurationSettings> _officeDurationSettings;
+
+        public MonthlyReportQueryHandler(WolfDenContext context,IOptions<OfficeDurationSettings> officeDurationSettings)
         {
             _context = context;
+            _officeDurationSettings = officeDurationSettings;
         }
         public async Task<MonthlyReportDTO> Handle(MonthlyReportQuery request, CancellationToken cancellationToken)
         {
             
-            int minWorkDuration = 360;
+            int minWorkDuration = _officeDurationSettings.Value.MinWorkDuration;
 
             DateOnly monthStart = new DateOnly(request.Year, request.Month, 1);
             DateOnly monthEnd = monthStart.AddMonths(1).AddDays(-1);
