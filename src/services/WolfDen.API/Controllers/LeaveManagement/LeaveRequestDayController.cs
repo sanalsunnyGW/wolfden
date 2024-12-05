@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WolfDen.Application.DTOs.LeaveManagement;
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequestDays;

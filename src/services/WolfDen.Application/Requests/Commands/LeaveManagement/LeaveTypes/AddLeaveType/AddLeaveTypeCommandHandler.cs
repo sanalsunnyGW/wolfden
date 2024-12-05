@@ -28,7 +28,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLe
                     request.IncrementGapId, request.CarryForward, request.CarryForwardLimit, request.DaysCheck, request.DaysCheckMore,
                     request.DaysCheckEqualOrLess, request.DutyDaysRequired, request.Sandwich);
 
-            _context.LeaveType.Add(leaveType);
+            _context.LeaveTypes.Add(leaveType);
             int saveResult = await _context.SaveChangesAsync(cancellationToken);
             return saveResult >0;
 
