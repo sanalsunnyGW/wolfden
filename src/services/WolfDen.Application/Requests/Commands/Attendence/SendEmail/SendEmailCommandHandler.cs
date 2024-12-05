@@ -12,7 +12,6 @@ using WolfDen.Application.Helpers;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
-
 namespace WolfDen.Application.Requests.Commands.Attendence.Email
 {
     public class SendEmailCommandHandler : IRequestHandler<SendEmailCommand, bool>
@@ -64,7 +63,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
             }
             return false;
         }
-        private bool SendMail(string senderEmail, string senderName, string[] receiverEmails, int templateId, Dictionary<string, object> templateParams, string[] ccEmails,string subject)
+        private bool SendMail(string senderEmail, string senderName, string[] receiverEmails, int templateId, Dictionary<string, object> templateParams, string[]? ccEmails, string subject)
         {
             try
             {

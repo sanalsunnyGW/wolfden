@@ -9,13 +9,13 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
 {
-    public class WeeklySummaryQueryHandler(WolfDenContext context) : IRequestHandler<WeeklySummaryQuery, List<WeeklySummaryDTO>>
+    public class WeeklySummaryQueryHandler(WolfDenContext context, IOptions<OfficeDurationSettings> officeDurationSettings) : IRequestHandler<WeeklySummaryQuery, List<WeeklySummaryDTO>>
     {
         private readonly WolfDenContext _context = context;
-
+        private readonly IOptions<OfficeDurationSettings> _officeDurationSettings = officeDurationSettings;
         public async Task<List<WeeklySummaryDTO>> Handle(WeeklySummaryQuery request, CancellationToken cancellationToken)
         {
-            int minWorkDuration = 360;
+            int minWorkDuration = _officeDurationSettings.Value.MinWorkDuration;
             List<WeeklySummaryDTO> weeklySummary = new List<WeeklySummaryDTO>();
             DateTime startDate = DateTime.Parse(request.WeekStart);
             DateTime endDate = DateTime.Parse(request.WeekEnd);
@@ -59,7 +59,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
                 {
                     minWorkDuration = minWorkDuration / 2;
                 }
-if (currentDate == today)
+
+                if (currentDate == today)
                 {
                     statusId = AttendanceStatus.OngoingShift;
                     weeklySummary.Add(new WeeklySummaryDTO

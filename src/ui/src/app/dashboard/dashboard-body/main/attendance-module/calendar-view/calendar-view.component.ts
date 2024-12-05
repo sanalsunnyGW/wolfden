@@ -74,7 +74,16 @@ export class CalendarViewComponent implements OnInit  {
   handleDateClick(arg: DateClickArg) {
     const selectedDate = arg.dateStr;
     this.newDate=selectedDate;
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); 
+    const day = currentDate.getDate().toString().padStart(2, '0'); 
+    const formattedDate = `${year}-${month}-${day}`;
+
+    if(selectedDate <= formattedDate)
+    {
     this.router.navigate(['portal/attendance/daily', this.newDate]);
+    }
   }
 
   getDayCellClassNames(arg: DayCellContentArg): string[] {
@@ -100,7 +109,10 @@ export class CalendarViewComponent implements OnInit  {
         case 1:return ['present'];
         case 2:return ['absent'];
         case 3:return ['incompleteShift'];
-        case 4:return ['wfh'];
+        case 5:return ['holiday'];
+        case 6:return ['wfh'];
+        case 7:return ['leave'];
+        case 9:return ['halfDay'];
       }
     }
 

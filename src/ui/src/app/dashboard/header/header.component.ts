@@ -18,18 +18,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  destroyRef = inject(DestroyRef);
+  destroyRef=inject(DestroyRef);
   constructor(
     private router: Router,
     public userService: WolfDenService,
     private employeeService: EmployeeService,
     private leaveManagementService: LeaveManagementService,
     private toastr: ToastrService
-  ) { }
+  ) {}
   ngOnInit(): void {
     this.userService.getNotification(this.userService.userId).subscribe({
-      next: (data) => {
-        this.notifications = data;
+      next: (data) =>{
+        this.notifications=data;
       }
     })
   }
@@ -41,10 +41,10 @@ export class HeaderComponent {
   get unreadNotifications(): number {
     return this.notifications.length;
   }
-  updateLeaveBalance() {
+  updateLeaveBalance(){
     this.leaveManagementService.updateLeaveBalance()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((data: boolean) => {
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe((data: boolean) => {
         if (data) {
           this.toastr.success('Leave Balance of All employees Updated !!');
         }
@@ -62,11 +62,11 @@ export class HeaderComponent {
   }
   closeNotifications = (): void => {
     this.showNotifications = false;
-
+  
     //to update the count
     this.userService.getNotification(1).subscribe({
       next: (data) => {
-        this.notifications = data.filter(notification => notification);
+        this.notifications = data.filter(notification => notification); 
       },
       error: (err) => {
         console.error('Error fetching notifications:', err);
@@ -86,8 +86,8 @@ export class HeaderComponent {
     //notifications modal
     const notificationIcon = document.querySelector('.notification .icon');
     const notificationModal = document.querySelector('.modal-container');
-    if (notificationIcon && !notificationIcon.contains(event.target as Node) &&
-      notificationModal && !notificationModal.contains(event.target as Node)) {
+    if (notificationIcon && !notificationIcon.contains(event.target as Node) && 
+        notificationModal && !notificationModal.contains(event.target as Node)) {
       this.showNotifications = false;
 
     }
@@ -95,11 +95,12 @@ export class HeaderComponent {
 
   onLogout() {
     this.userService.userId = 0;
-    this.userService.role = '';
+    this.userService.role='';
     localStorage.removeItem('token');
     this.router.navigate(['/user/login']);
     this.toastr.success("Logged out");
   }
 
 }
+
 

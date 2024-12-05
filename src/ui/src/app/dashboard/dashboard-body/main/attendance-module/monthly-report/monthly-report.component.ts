@@ -3,8 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule, formatDate } from '@angular/common';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { AttendanceService } from '../../../../../service/attendance.service';
-import { allEmployeesMonthlyReports, MonthlyReports } from '../../../../../interface/monthly-report';
 import { ICheckAttencdanceClose } from '../../../../../interface/check-attendance-close';
+import { allEmployeesMonthlyReports, MonthlyReports } from '../../../../../interface/monthly-report';
 
 @Component({
   selector: 'app-monthly-report',
@@ -23,8 +23,8 @@ export class MonthlyReportComponent {
   monthIsSelected=false
   display=false
   pageNumber=-1;
-  pageSize=5;
-  pageSizes=[5,10,15,20]
+  pageSize=1;
+  pageSizes=[1,2,3]
   totalPages=0;
   constructor() {}
   monthlyData!:MonthlyReports
@@ -42,7 +42,6 @@ export class MonthlyReportComponent {
     const year = parseInt(selectedMonth.split('-')[0], 10);
     const month = parseInt(selectedMonth.split('-')[1], 10);
     this.monthNumber=Number(month);
-    console.log(this.monthNumber)
     this.yearNumber=Number(year);
     this.service.checkAttendanceClose(this.monthNumber,this.yearNumber).subscribe(
       (response: ICheckAttencdanceClose) =>{
@@ -50,13 +49,7 @@ export class MonthlyReportComponent {
           this.checkStatus=true;
       }
       else{
-        const currentDate=new Date()
-        const month=currentDate.getMonth();
-        console.log(month)
-        if(month+1==this.monthNumber)
         this.checkClosedStatus=true;
-        else
-        alert(`Sorry,you cant close the attendance of ${this.monthNames[this.monthNumber-1]} on ${this.monthNames[month]}`)
       }
   });  
   }

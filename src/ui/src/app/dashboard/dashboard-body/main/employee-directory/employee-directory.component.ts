@@ -26,7 +26,7 @@ export class EmployeeDirectoryComponent implements OnInit {
   private searchSubject = new Subject<string>();
   isLoading: boolean = false; 
   pageNumber: number = 0;
-  pageSize: number = 1; 
+  pageSize: number = 5; 
   pageSizeOptions: number[] = [1, 5, 10, 20]; 
   totalRecords: number = 0;
 
