@@ -69,15 +69,18 @@
       <div class="nav-item sub-item" routerLink="/portal/attendance/history" routerLinkActive="active">
         <span>Attendance History</span>
       </div>
+      @if(userService.role=="Admin" || userService.role=="SuperAdmin")
+      {
       <div class="nav-item sub-item" routerLink="/portal/attendance/monthly" routerLinkActive="active">
         <span>Attendance Reports</span>
       </div>
+    }
       @if(employeeHierarchyList[0].subordinates!=null)
       {
       <div class="nav-item sub-item" routerLink="/portal/attendance/subordinates" routerLinkActive="active">
         <span>Team Attendance</span>
       </div>
-    }
+      }
     
       <div class="nav-item sub-item" routerLink="/portal/attendance/weekly" routerLinkActive="active">
         <span>Weekly Attendance</span>

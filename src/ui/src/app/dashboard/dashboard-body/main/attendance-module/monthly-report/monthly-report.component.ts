@@ -49,7 +49,13 @@ export class MonthlyReportComponent {
           this.checkStatus=true;
       }
       else{
+        const currentDate=new Date()
+        const month=currentDate.getMonth();
+        console.log(month)
+        if(month+1==this.monthNumber)
         this.checkClosedStatus=true;
+        else
+        alert(`Sorry,you cant close the attendance of ${this.monthNames[this.monthNumber-1]} on ${this.monthNames[month]}`)
       }
   });  
   }
