@@ -418,29 +418,37 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ad
 
             async Task<bool> WorkFromHomeCheck()
             {
-                if (leaveType.DutyDaysRequired.HasValue)
+                if(!request.HalfDay.HasValue ||request.HalfDay == false)
                 {
-                    if (employee.JoiningDate.HasValue)
+                    if (leaveType.DutyDaysRequired.HasValue)
                     {
-                        if ((request.FromDate.DayNumber - employee.JoiningDate.Value.DayNumber >= leaveType.DutyDaysRequired))
+                        if (employee.JoiningDate.HasValue)
                         {
-                            return await AddLeave();
+                            if ((request.FromDate.DayNumber - employee.JoiningDate.Value.DayNumber >= leaveType.DutyDaysRequired))
+                            {
+                                return await AddLeave();
+                            }
+                            else
+                            {
+                                throw new InvalidOperationException($"Minimum Duty Days of {leaveType.DutyDaysRequired} is Required for {leaveType.TypeName} .");
+                            }
+
                         }
                         else
                         {
-                            throw new InvalidOperationException($"Minimum Duty Days of {leaveType.DutyDaysRequired} is Required for {leaveType.TypeName} .");
+                            throw new InvalidOperationException($"Joining date Not assinged by HR.");
                         }
-
                     }
                     else
                     {
-                        throw new InvalidOperationException($"Joining date Not assinged by HR.");
+                        return await AddLeave();
                     }
                 }
                 else
                 {
-                    return await AddLeave();
+                    throw new Exception("Work From Home Cannot be Applied For Half Day");
                 }
+                
             }
 
 

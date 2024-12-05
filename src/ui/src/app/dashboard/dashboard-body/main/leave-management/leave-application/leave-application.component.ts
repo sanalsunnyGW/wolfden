@@ -50,6 +50,7 @@ export class LeaveApplicationComponent implements OnInit {
           if(response)
           {
             this.toastr.success("Leave Request Added")
+            this.applyLeave.reset();
           }
         },
           error:(error) =>{

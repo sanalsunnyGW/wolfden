@@ -349,29 +349,37 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
 
                 async Task<bool> WorkFromHomeCheck()
                 {
-                    if (leaveType.DutyDaysRequired.HasValue)
+                    if(!!request.HalfDay.HasValue || request.HalfDay == false)
                     {
-                        if (employee.JoiningDate.HasValue)
+                        if (leaveType.DutyDaysRequired.HasValue)
                         {
-                            if ((request.FromDate.DayNumber - employee.JoiningDate.Value.DayNumber >= leaveType.DutyDaysRequired))
+                            if (employee.JoiningDate.HasValue)
                             {
-                                return await EditLeaveRequest();
+                                if ((request.FromDate.DayNumber - employee.JoiningDate.Value.DayNumber >= leaveType.DutyDaysRequired))
+                                {
+                                    return await EditLeaveRequest();
+                                }
+                                else
+                                {
+                                    throw new InvalidOperationException($"Minimum Duty Days of {leaveType.DutyDaysRequired} is Required for {leaveType.TypeName} .");
+                                }
+
                             }
                             else
                             {
-                                throw new InvalidOperationException($"Minimum Duty Days of {leaveType.DutyDaysRequired} is Required for {leaveType.TypeName} .");
+                                throw new InvalidOperationException($"Joining date Not assinged by HR.");
                             }
-
                         }
                         else
                         {
-                            throw new InvalidOperationException($"Joining date Not assinged by HR.");
+                            return await EditLeaveRequest();
                         }
                     }
                     else
                     {
-                        return await EditLeaveRequest();
+                        throw new Exception("Work From Home Cannot be Applied For Half Day");
                     }
+                   
                 }
 
 

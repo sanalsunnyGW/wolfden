@@ -4,8 +4,8 @@
 
 
 <div class="d-flex justify-content-center pt-5">
-<div class="container size">
-    <form [formGroup]="updateLeaveSetting" class="form-container p-4 rounded shadow-sm color " (ngSubmit)="onSubmit()"  >
+<div class="container size fw-bold">
+    <form [formGroup]="updateLeaveSetting" class="form-container p-4 rounded shadow-sm color was-validated" (ngSubmit)="onSubmit()"  >
       <div class="form-group mb-3">
         <label for="minDaysForLeaveCreditJoining">Enter Minimum Days Required For Leave Credit On Joining</label>
         <input type="number" class="form-control" id="minDaysForLeaveCreditJoining" [placeholder]="leaveSettings.minDaysForLeaveCreditJoining"  formControlName="minDaysForLeaveCreditJoining">

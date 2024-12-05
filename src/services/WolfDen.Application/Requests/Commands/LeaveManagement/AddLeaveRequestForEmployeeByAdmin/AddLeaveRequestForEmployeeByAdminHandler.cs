@@ -90,7 +90,15 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
                 {
                     if (leaveType.LeaveCategoryId == LeaveCategory.WorkFromHome && currentDate < request.FromDate)
                     {
-                        return await AddLeave();
+                        if(!request.HalfDay.HasValue || request.HalfDay == false)
+                        {
+                            return await AddLeave();
+                        }
+                        else
+                        {
+                            throw new Exception("Work From Home can Only Be Given For Full Days");
+                        }
+                        
                     }
 
                     else if (currentDate.DayNumber < request.FromDate.DayNumber)

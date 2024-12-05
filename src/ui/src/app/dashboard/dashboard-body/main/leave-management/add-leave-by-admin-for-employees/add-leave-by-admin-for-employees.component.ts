@@ -56,6 +56,7 @@ export class AddLeaveByAdminForEmployeesComponent implements OnInit{
           if(response)
           {
             this.toastr.success("Leave Added")
+            this.applyLeave.reset();
           }
         },
           error:(error) =>{

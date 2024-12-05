@@ -41,7 +41,7 @@ ngOnInit(){
                });
     },
     error:(error) =>{
-      this.toastr.error(error)
+      this.toastr.error  (error)
     }
   })
 }

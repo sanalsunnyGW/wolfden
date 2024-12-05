@@ -4,13 +4,13 @@
 
 
 <div class="d-flex justify-content-center pt-5">
-<div class="container size ">
-    <form [formGroup]="addNewLeaveType" (ngSubmit)="onSubmit()" class="form-container rounded p-4 shadow-sm color ">
+<div class="container size fw-bold ">
+    <form [formGroup]="addNewLeaveType" (ngSubmit)="onSubmit()" class="form-container rounded p-4 shadow-sm color was-validated">
   
       <div class="form-group mb-3">
-        <label for="typeName" class="form-label">New Leave Type Name</label>
-        <input type="text" class="form-control" id="typeName" placeholder="Enter Name" formControlName="typeName" ng-required="text">
-        <div class="error">@if(addNewLeaveType.get('typeName')?.invalid && addNewLeaveType.get('typeName')?.touched){
+        <label for="typeName" class="form-label ">New Leave Type Name</label>
+        <input type="text" class="form-control" id="typeName" placeholder="Enter Name" formControlName="typeName" ng-required="text" required>
+        <div class="error text-danger fw-lighter fst-italic">@if(addNewLeaveType.get('typeName')?.invalid && addNewLeaveType.get('typeName')?.touched){
           Type Name is Required
           } 
         </div>
@@ -30,7 +30,7 @@
                    id="isHalfDayAllowed" 
                    [value]="true" 
                    formControlName="isHalfDayAllowed">
-            <label class="form-check-label" for="isHalfDayAllowed">Half Day</label>
+            <label class="form-check-label " for="isHalfDayAllowed">Half Day</label>
         </div>
     </div>
 

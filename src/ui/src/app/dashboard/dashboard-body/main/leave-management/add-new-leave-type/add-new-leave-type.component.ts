@@ -54,6 +54,7 @@ export class AddNewLeaveTypeComponent{
               if(response)
               {
                 this.toastr.success("New Leave Type Added")
+                this.addNewLeaveType.reset();
               }
             },
               error:(error) =>{

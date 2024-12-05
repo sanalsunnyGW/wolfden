@@ -59,6 +59,7 @@ export class EditLeaveRequestComponent implements OnInit {
           if(response)
           {
             this.toastr.success("Leave Edited")
+            this.editLeave.reset();
           }
         },
           error:(error) =>{
