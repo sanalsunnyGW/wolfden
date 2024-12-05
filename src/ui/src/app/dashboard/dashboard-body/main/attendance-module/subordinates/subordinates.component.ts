@@ -5,7 +5,6 @@ import { Component, inject } from '@angular/core';
 import { AttendanceService } from '../../../../../service/attendance.service';
 import { SubordinatesDetails } from '../../../../../interface/subordinates-details';
 import { WolfDenService } from '../../../../../service/wolf-den.service';
-import { tick } from '@angular/core/testing';
 import { NoSubordinateModalComponent } from '../no-subordinate-modal/no-subordinate-modal.component';
 
 @Component({
@@ -19,7 +18,6 @@ export class SubordinatesComponent {
   service=inject(AttendanceService)
   baseService=inject(WolfDenService)
   employeeData: SubordinatesDetails[]=[] ;
-  noSubordinate=false;
   dialogRef = inject(MatDialog);
   constructor(public dialog: MatDialog) { 
   }
