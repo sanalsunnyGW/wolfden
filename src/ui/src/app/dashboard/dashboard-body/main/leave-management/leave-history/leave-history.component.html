@@ -40,13 +40,13 @@
       <td>{{requestStatus(leaveRequest.leaveRequestStatusId)}}</td>
       <td>{{leaveRequest.processedBy}}</td>
       <td>
-        @if(requestStatus(leaveRequest.leaveRequestStatusId)=='Open' )
+        @if(requestStatus(leaveRequest.leaveRequestStatusId)=='Open')
         {
         <button class="btn btn-secondary" (click)="onEdit(leaveRequest.id)">Edit </button>
         }
       </td>
       <td>
-        @if(requestStatus(leaveRequest.leaveRequestStatusId)=='Approved')
+        @if(requestStatus(leaveRequest.leaveRequestStatusId)=='Approved' || requestStatus(leaveRequest.leaveRequestStatusId)=='Open')
         {
         <button class="btn btn-danger" (click)="onDelete(leaveRequest.id)">Delete</button>
         }

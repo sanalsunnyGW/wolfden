@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,10 +16,11 @@ using static WolfDen.Domain.Enums.EmployeeEnum;
 
 namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestForEmployeeByAdmin
 {
-    public class AddLeaveRequestForEmployeeByAdminHandler(WolfDenContext context, IMediator mediator, IConfiguration configuration, ManagerEmailFinder emailFinder, Email email, UserManager<User> userManager) : IRequestHandler<AddLeaveRequestForEmployeeByAdmin, bool>
+    public class AddLeaveRequestForEmployeeByAdminHandler(WolfDenContext context, IMediator mediator,AddLeaveRequestForEmployeeByAdminValidator validator, IConfiguration configuration, ManagerEmailFinder emailFinder, Email email, UserManager<User> userManager) : IRequestHandler<AddLeaveRequestForEmployeeByAdmin, bool>
     {
         private readonly WolfDenContext _context= context;
         private readonly IMediator _mediator = mediator;
+        private readonly AddLeaveRequestForEmployeeByAdminValidator _validator = validator; 
         private readonly string _apiKey = configuration["BrevoApi:ApiKey"];
         private readonly string _senderEmail = configuration["BrevoApi:SenderEmail"];
         private readonly string _senderName = configuration["BrevoApi:SenderName"];
@@ -27,6 +29,13 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
         private readonly UserManager<User> _userManager = userManager;
         public async Task<bool> Handle(AddLeaveRequestForEmployeeByAdmin request, CancellationToken cancellationToken)
         {
+
+            var validatorResult = await _validator.ValidateAsync(request, cancellationToken);
+            if (!validatorResult.IsValid)
+            {
+                var errors = string.Join(", ", validatorResult.Errors.Select(e => e.ErrorMessage));
+                throw new ValidationException($"Validation failed: {errors}");
+            }
             Employee employee = await _context.Employees.FirstOrDefaultAsync(x => x.EmployeeCode == request.EmployeeCode, cancellationToken);
             Employee admin = await _context.Employees.FirstAsync(x => x.Id == request.AdminId, cancellationToken); 
             if (employee == null)

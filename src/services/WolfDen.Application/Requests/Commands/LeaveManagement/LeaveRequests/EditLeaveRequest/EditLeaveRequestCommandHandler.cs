@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.LeaveManagement;
 using WolfDen.Application.Method.LeaveManagement;
@@ -10,12 +11,20 @@ using static WolfDen.Domain.Enums.EmployeeEnum;
 
 namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.EditLeaveRequest
 {
-    public class EditLeaveRequestCommandHandler(WolfDenContext context, IMediator mediator) : IRequestHandler<EditLeaveRequestCommand, bool>
+    public class EditLeaveRequestCommandHandler(WolfDenContext context, IMediator mediator , EditLeaveRequestValidator validator) : IRequestHandler<EditLeaveRequestCommand, bool>
     {
         private readonly WolfDenContext _context = context;
         private readonly IMediator _mediator = mediator;
+        private readonly EditLeaveRequestValidator _validator = validator;
         public async Task<bool> Handle(EditLeaveRequestCommand request, CancellationToken cancellationToken)
         {
+
+            var validatorResult = await _validator.ValidateAsync(request, cancellationToken);
+            if (!validatorResult.IsValid)
+            {
+                var errors = string.Join(", ", validatorResult.Errors.Select(e => e.ErrorMessage));
+                throw new ValidationException($"Validation failed: {errors}");
+            }
             LeaveRequest leaveRequest = await _context.LeaveRequests.Where(x => x.Id == request.LeaveRequestId && x.RequestedBy == request.EmpId).FirstOrDefaultAsync();
             if (leaveRequest is null)
             {
@@ -252,6 +261,10 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                 {
                     if (days > 0)
                     {
+                        if (!request.HalfDay.HasValue)
+                        {
+                            request.HalfDay = false;
+                        }
                         leaveRequest.EditLeave(request.TypeId, request.HalfDay, request.FromDate, request.ToDate, LeaveRequestStatus.Open, request.Description);
                         _context.Update(leaveRequest);
                         List<LeaveRequestDay> leaveRequestDayList = await _context.LeaveRequestDays.Where(x => x.LeaveRequestId == request.LeaveRequestId).ToListAsync(cancellationToken);
