@@ -1,3 +1,4 @@
+<span class="badge badge-danger red" *ngIf="noSubordinate">You dont have any subordinates</span>
 <ul>
   <ng-container *ngFor="let node of employeeData">
     <app-tree-node [item]="node"></app-tree-node>

@@ -51,7 +51,6 @@ export class MonthlyReportComponent {
       else{
         const currentDate=new Date()
         const month=currentDate.getMonth();
-        console.log(month)
         if(month+1==this.monthNumber)
         this.checkClosedStatus=true;
         else
