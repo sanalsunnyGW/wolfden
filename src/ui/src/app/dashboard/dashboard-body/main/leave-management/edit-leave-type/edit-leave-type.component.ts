@@ -58,7 +58,6 @@ export class EditLeaveTypeComponent implements OnInit {
   }
 
   onLeaveTypeChange(event:number) {
-    console.log(event)
     this.leaveManagement.getLeaveDetails(event)
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe((response:IEditLeaveType) => {

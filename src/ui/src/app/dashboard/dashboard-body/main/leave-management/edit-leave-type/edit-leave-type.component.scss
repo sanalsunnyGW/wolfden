@@ -4,7 +4,7 @@
     padding: 20px;
     background-color: #eaf4fc;
     border-radius: 8px;
-  }
+    border: 1px solid #bcd5f2;  }
   
   .pForm {
     display: flex;
@@ -20,8 +20,8 @@
   .form-group label {
     font-weight: 600;
     font-size: 1.1rem;
-    color: #333;
-  }
+   color: #333;
+   }
   
   .form-check {
     display: flex;
