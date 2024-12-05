@@ -101,7 +101,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                         byte[] pdf = document.GeneratePdf();
 
                        
-                        string?[] receiverEmails = new[] { manager.Email };
+                        string?[] receiverEmails = [manager.Email];
                         List<string> managerEmails = await _emailFinder.FindManagerEmailsAsync(manager.ManagerId);
 
                        

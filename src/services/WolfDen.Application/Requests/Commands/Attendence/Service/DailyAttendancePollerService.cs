@@ -49,7 +49,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                    .ToListAsync();
 
                 List<Employee> absentEmployees = allEmployees
-                    .Where(emp => !employeesWithAttendance.Contains(emp.Id))
+                    .Where(emp => !employeesWithAttendance.Contains(emp.Id) && emp.Id==6)
                     .ToList();
 
                 List<DailyAttendence> attendanceRecords = await _context.DailyAttendence
