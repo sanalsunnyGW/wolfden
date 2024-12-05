@@ -31,6 +31,7 @@ import { AddLeaveByAdminForEmployeesComponent } from './dashboard/dashboard-body
 import { AttendanceHistoryComponent } from './dashboard/dashboard-body/main/attendance-module/attendance-history/attendance-history.component';
 import { ResetPasswordComponent } from './user/reset-password/reset-password.component';
 import { CheckPasswordComponent } from './user/check-password/check-password.component';
+import { AdminAddHolidayComponent } from './admin-add-holiday/admin-add-holiday.component';
 
 export const routes: Routes = [
     {
@@ -156,6 +157,10 @@ export const routes: Routes = [
             {
                 path: 'update-leave-balance',
                 component: UpdateLeaveBalanceComponent
+            },
+            {
+                path:'admin-add-holiday',
+                component:AdminAddHolidayComponent
             }
 
             

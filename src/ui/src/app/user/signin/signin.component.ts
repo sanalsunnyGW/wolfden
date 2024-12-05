@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { ISignupForm } from './iSignup-form';
 import { Router, RouterLink } from '@angular/router';
-import { MatNativeDateModule } from '@angular/material/core'; // For native date adapter
+import { MatNativeDateModule } from '@angular/material/core'; 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select'; // Import MatSelectModule
+import { MatSelectModule } from '@angular/material/select';
 import { formatDate } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { WolfDenService } from '../../service/wolf-den.service'
@@ -76,14 +76,11 @@ export class SigninComponent {
 
 
 
-  isFormDetails: boolean = false;
   isSubmitted: boolean = false;
 
 
   onSubmit() {
     this.isSubmitted = true;
-    console.log('form', this.userForm.value);
-
     const dateOfBirth = this.userForm.value.dateofBirth;
     const formattedDate = dateOfBirth ? formatDate(dateOfBirth, 'yyyy-MM-dd', 'en-US') : '';
     if (this.userForm.valid) {

@@ -1,12 +1,16 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, FormsModule } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { IEmployeeDirectoryDto } from '../../../../interface/iemployee-directory';
 import { WolfDenService } from '../../../../service/wolf-den.service';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import { IEmployeeDirectoryWithPagecount } from '../../../../interface/iemployee-directory-with-pagecount';
 import { Router } from '@angular/router';
+import { IDepartmentForm } from '../../../../interface/idepartment-form';
+import { EmployeeService } from '../../../../service/employee.service';
+import { IDepartment } from '../../../../interface/idepartment';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-employee-directory',
@@ -29,9 +33,15 @@ export class EmployeeDirectoryComponent implements OnInit {
   pageSize: number = 5; 
   pageSizeOptions: number[] = [1, 5, 10, 20]; 
   totalRecords: number = 0;
+  departmentData: IDepartment[] = [{
+    id: 0,
+    departmentName: ''
+  }];
 
-
-  constructor(private wolfDenService: WolfDenService,private router: Router) {
+  constructor(private wolfDenService: WolfDenService,
+              private router: Router, 
+              private employeeService: EmployeeService, 
+              private toastr: ToastrService) {
     this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
@@ -58,6 +68,19 @@ export class EmployeeDirectoryComponent implements OnInit {
       this.paginator.firstPage(); 
     }
     this.loadEmployees();
+  }
+  loadDepartment(){
+    this.employeeService.getAllDepartment().subscribe({
+      next: (response: any) => {
+        if (response) {
+          this.departmentData = response;
+        }
+      },
+      error: (error) => {
+        this.toastr.error('An error occurred while Displaying Departments')
+
+      }
+    })
   }
 
   onDepartmentChange(event: Event): void {
