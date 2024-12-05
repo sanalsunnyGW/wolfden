@@ -41,7 +41,7 @@ export class CheckUserComponent {
             this.router.navigate(['/user/sign-in'])
         
           }
-          else if(response.id!=0){
+          else if(response.id===0){
             this.toastr.error('user already exist')
             this.router.navigate(['/user/login'])
           }

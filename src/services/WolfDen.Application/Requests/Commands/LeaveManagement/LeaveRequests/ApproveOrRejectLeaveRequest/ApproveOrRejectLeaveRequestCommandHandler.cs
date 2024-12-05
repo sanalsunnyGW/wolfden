@@ -33,7 +33,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
                 throw new ValidationException($"Validation failed: {errors}");
             }
             LeaveRequest leaveRequest = await _context.LeaveRequests.Where(x => x.Id == request.LeaveRequestId && x.LeaveRequestStatusId == LeaveRequestStatus.Open).FirstOrDefaultAsync(cancellationToken);
-            LeaveType leaveType1 = await _context.LeaveType.Where(x => x.Id == leaveRequest.TypeId).FirstOrDefaultAsync(cancellationToken);  
+            LeaveType leaveType1 = await _context.LeaveTypes.Where(x => x.Id == leaveRequest.TypeId).FirstOrDefaultAsync(cancellationToken);  
             Employee employee = await _context.Employees.FirstOrDefaultAsync(x => x.Id == leaveRequest.EmployeeId,cancellationToken);
             Employee manager = await _context.Employees.FirstOrDefaultAsync(x => x.Id == request.SuperiorId,cancellationToken);
 
@@ -95,7 +95,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
 
                     if (leaveType1.LeaveCategoryId != null && ( leaveRequest.ApplyDate >= leaveRequest.FromDate && leaveRequest.LeaveType.LeaveCategoryId !=LeaveCategory.BereavementLeave))
                     {
-                        LeaveType leaveType = await _context.LeaveType.FirstOrDefaultAsync(x => x.LeaveCategoryId == LeaveCategory.EmergencyLeave);
+                        LeaveType leaveType = await _context.LeaveTypes.FirstOrDefaultAsync(x => x.LeaveCategoryId == LeaveCategory.EmergencyLeave);
                         LeaveBalance leaveBalance2 = await _context.LeaveBalances.FirstOrDefaultAsync(x => x.TypeId == leaveType.Id && x.EmployeeId == leaveRequest.EmployeeId);
 
 

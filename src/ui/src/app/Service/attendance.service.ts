@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { DailyAttendance } from '../interface/idaily-attendance';
 import { environment } from '../../enviornments/environment';
-import { MonthlyReports } from '../interface/monthly-report';
 import { IAttendanceSummary } from '../interface/attendance-summary';
 import { WeeklyAttendance } from '../interface/iweekly-attendance';
 import { ICheckAttencdanceClose } from '../interface/check-attendance-close';
 import { SubordinatesDetails } from '../interface/subordinates-details';
 import { IAttendanceData } from '../interface/attendance-data';
 import { AttendanceHistory } from '../interface/attendance-history';
+import { MonthlyReports } from '../interface/monthly-report';
 
 @Injectable({
   providedIn: 'root'
