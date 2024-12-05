@@ -25,8 +25,6 @@ namespace WolfDen.Application.Requests.Commands.Attendence.SendAbsenceEmail
 
         public async Task<bool> Handle(SendAbsenceEmailCommand request, CancellationToken cancellationToken)
         {
-            Employee? employee = await _context.Employees
-              .Where(e => e.Id == request.EmployeeId).FirstOrDefaultAsync(cancellationToken);
             string[] receiverEmail = { request.Email } ;
             string subject = request.Subject;
             string message = request.Message;

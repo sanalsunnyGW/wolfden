@@ -64,9 +64,12 @@ export class AttendanceService {
   getMonthlyHistoryByStatus(employeeId: number, year: number, month: number, attendanceStatusId: number, pageNumber: number, pageSize: number) {
     let url = `${this.baseUrl}/api/attendance/employee/history?EmployeeId=${employeeId}&Year=${year}&Month=${month}&PageNumber=${pageNumber}&PageSize=${pageSize}`;
 
-    if (attendanceStatusId !== 0) {
+    if (attendanceStatusId !== 11 && attendanceStatusId !== 0) {
       url += `&AttendanceStatusId=${attendanceStatusId}`;
-    }
+  }
+
+    
+
     return this.http.get<AttendanceHistory>(url);
   }
 }
