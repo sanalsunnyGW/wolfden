@@ -9,9 +9,12 @@
           type="date" 
           class="form-control" 
            />
-        <div *ngIf="isSubmitted && userForm.controls['date'].invalid" class="invalid-feedback">
-          Please select a valid date.
-        </div>
+           @if(isSubmitted && userForm.controls['date'].invalid){
+            <div class="invalid-feedback">
+              Please select a valid date.
+            </div>
+           }
+
       </div>
   
       <div class="mb-3">
@@ -24,9 +27,12 @@
           <option value=5>Normal Holiday</option>
           <option value=4>Restricted Holiday</option>
         </select>
-        <div *ngIf="isSubmitted && userForm.controls['type'].invalid" class="invalid-feedback">
-          Please select a holiday type.
-        </div>
+        @if(isSubmitted && userForm.controls['type'].invalid){
+          <div  class="invalid-feedback">
+            Please select a holiday type.
+          </div>
+        }
+
       </div>
   
       <div class="mb-3">
@@ -36,9 +42,12 @@
           formControlName="description" 
           class="form-control" 
           rows="3"></textarea>
-        <div *ngIf="isSubmitted && userForm.controls['description'].invalid" class="invalid-feedback">
-          Description is required.
-        </div>
+          @if(isSubmitted && userForm.controls['description'].invalid){
+            <div  class="invalid-feedback">
+              Description is required.
+            </div>
+          }
+
       </div>
   
       <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">Add Holiday</button>
