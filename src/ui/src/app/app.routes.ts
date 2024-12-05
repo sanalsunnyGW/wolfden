@@ -67,7 +67,7 @@ export const routes: Routes = [
             { path: 'attendance/subordinates', component: SubordinatesComponent },
             { path: 'edit-leave-type', component: EditLeaveTypeComponent },
             { path: 'update-leave-balance', component: UpdateLeaveBalanceComponent },
-            {path:'attendance/attendance-history',component:AttendanceHistoryComponent},
+            {path:'attendance/history/:id',component:AttendanceHistoryComponent},
 
             {
                 path: 'company-hierarchy',

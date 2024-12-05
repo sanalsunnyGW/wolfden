@@ -12,8 +12,8 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241203065145_halfDay")]
-    partial class halfDay
+    [Migration("20241204112944_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -404,7 +404,7 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
-                    b.Property<DateTimeOffset?>("DepartureTime")
+                    b.Property<DateTimeOffset>("DepartureTime")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<bool?>("EmailSent")
@@ -478,6 +478,9 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Department", "wolfden");
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
@@ -516,6 +519,9 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnName("PeriodStart");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Designation", "wolfden");
 
@@ -697,6 +703,10 @@ namespace WolfDen.Infrastructure.Migrations
 
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("PeriodEnd")
                         .ValueGeneratedOnAddOrUpdate()

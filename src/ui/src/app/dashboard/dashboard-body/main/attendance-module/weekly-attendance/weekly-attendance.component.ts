@@ -111,6 +111,7 @@ export class WeeklyAttendanceComponent {
  selectedWeek!:string;
  offset=0;
  employeeId=this.baseService.userId;
+ 
  weeklyData:WeeklyAttendance[]=[]
  barChart!:Chart;
  status:number[]=[]
@@ -124,6 +125,7 @@ export class WeeklyAttendanceComponent {
  }
 getStartOfWeek(selectedWeek:string){
   if (selectedWeek) {
+    console.log(this.employeeId)
     this.createChart();
     const year = parseInt(this.selectedWeek.split('-W')[0], 10);
     const week = parseInt(this.selectedWeek.split('-W')[1], 10);

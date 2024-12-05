@@ -70,14 +70,18 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                 DailyAttendence? attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (attendanceRecord is not null)
                 {
-                    if (attendanceRecord.InsideDuration >= minWorkDuration)
+                    LeaveRequest? leaveRequest = leaveRequests
+                              .FirstOrDefault(x => x.FromDate <= currentDate && x.ToDate >= currentDate);
+                    if (leaveRequest is not null && leaveRequest.HalfDay is true)
                     {
-                        summaryDto.Present++;
+                        minWorkDuration = minWorkDuration / 2;
+                        summaryDto.HalfDays++;
+                        summaryDto.HalfDayLeaves += currentDate.ToString("yyyy-MM-dd") + ",";
                     }
-                    else
+                    if (attendanceRecord.InsideDuration < minWorkDuration)
                     {
-                        summaryDto.IncompleteShift++;
                         summaryDto.IncompleteShiftDays += currentDate.ToString("yyyy-MM-dd") + ",";
+                        summaryDto.IncompleteShift++;
                     }
                 }
                 else
@@ -113,16 +117,9 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                         }
                         else if(leaveRequest is not null)
                         {
-                            if(leaveRequest.HalfDay is true)
-                            {
-                                summaryDto.HalfDays++;
-                                summaryDto.HalfDayLeaves += currentDate.ToString("yyyy-MM-dd") + ",";
-                            }
-                            else
-                            {
-                                summaryDto.Leave++;
-                                summaryDto.LeaveDays += currentDate.ToString("yyyy-MM-dd") + ",";
-                            } 
+                            summaryDto.Leave++;
+                            summaryDto.LeaveDays += currentDate.ToString("yyyy-MM-dd") + ",";
+                           
                         }
                         else
                         {
