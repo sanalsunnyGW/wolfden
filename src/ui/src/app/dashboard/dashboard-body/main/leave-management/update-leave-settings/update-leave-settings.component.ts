@@ -31,19 +31,7 @@ export class UpdateLeaveSettingsComponent {
 
     
 ngOnInit(){
-  this.leaveManagement.getLeaveSetting()
-  .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-    next:(response : ILeaveUpdate) =>{
-      this.leaveSettings = response;
-      this.updateLeaveSetting.patchValue({
-        minDaysForLeaveCreditJoining : this.leaveSettings.minDaysForLeaveCreditJoining,
-        maxNegativeBalanceLimit : this.leaveSettings.maxNegativeBalanceLimit   
-               });
-    },
-    error:(error) =>{
-      this.toastr.error  (error)
-    }
-  })
+  this.getDetails();
 }
 
   onSubmit(){
@@ -64,6 +52,22 @@ ngOnInit(){
          
          );
       }
+  }
+
+  getDetails(){
+    this.leaveManagement.getLeaveSetting()
+    .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next:(response : ILeaveUpdate) =>{
+        this.leaveSettings = response;
+        this.updateLeaveSetting.patchValue({
+          minDaysForLeaveCreditJoining : this.leaveSettings.minDaysForLeaveCreditJoining,
+          maxNegativeBalanceLimit : this.leaveSettings.maxNegativeBalanceLimit   
+                 });
+      },
+      error:(error) =>{
+        this.toastr.error  (error)
+      }
+    })
   }
 
 

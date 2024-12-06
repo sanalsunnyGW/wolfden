@@ -10,6 +10,7 @@ using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Revoke
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetLeaveRequestHistory;
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetApprovedNextWeekLeaves;
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetSubordinateLeave;
+using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetLeaveRequestById;
 
 namespace WolfDen.API.Controllers.LeaveManagement
 {
@@ -71,6 +72,17 @@ namespace WolfDen.API.Controllers.LeaveManagement
         public async Task<ResponseDto> AddLeaveForSubordinates([FromBody] AddLeaveRequestForEmployeeByAdmin command,CancellationToken cancellationToken)
         {
             return await _mediator.Send(command, cancellationToken);
+        }
+
+        [HttpGet("{leaveRequestId}")]
+        public async Task<EditLeaveRequestDto> GetLeaveRequestById(int leaveRequestId, CancellationToken cancellationToken)
+        {
+            GetLeaveRequestByIdQuery query = new GetLeaveRequestByIdQuery
+            {
+                leaveRequestId = leaveRequestId
+            };
+
+            return await _mediator.Send(query,cancellationToken);
         }
     }
 }

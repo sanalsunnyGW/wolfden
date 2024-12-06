@@ -183,7 +183,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ad
                             {
                                 if (leaveType.IsHalfDayAllowed == true)
                                 {
-                                    if (leaveDaysResultDto.DaysCount == 1)
+                                    if (leaveDaysResultDto.DaysCount == 1 || leaveDaysResultDto.DaysCount == 0)
                                     {
                                         if (leaveType.DaysCheck.HasValue)
                                         {
@@ -271,7 +271,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ad
                             {
                                 if (leaveType.IsHalfDayAllowed == true)
                                 {
-                                    if (leaveDaysResultDto.DaysCount == 1)
+                                    if (leaveDaysResultDto.DaysCount == 1 || leaveDaysResultDto.DaysCount == 0)
                                     {
                                         return await PreviousDayLeaves();
                                     }

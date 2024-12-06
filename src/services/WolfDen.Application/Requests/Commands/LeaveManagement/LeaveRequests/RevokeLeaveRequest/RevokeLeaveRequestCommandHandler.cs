@@ -40,10 +40,12 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Re
                         LeaveType leaveType2 = await _context.LeaveTypes.FirstOrDefaultAsync(x => x.LeaveCategoryId == LeaveCategory.EmergencyLeave);
                         LeaveBalance leaveBalance2 = await _context.LeaveBalances.FirstOrDefaultAsync(x => x.TypeId == leaveType2.Id && x.EmployeeId == leaveRequest.EmployeeId);
                         leaveBalance2.UpdateBalance(leaveBalance2.Balance + leaveRequestDayCount);
+                        _context.Update(leaveBalance2);
                     }
+                    _context.Update(leaveBalance);
                 }
                 leaveRequest.RevokeLeave();
-                _context.Update(leaveRequest);
+               
                 int saveresult = await _context.SaveChangesAsync(cancellationToken);
                 return saveresult > 0;
             }

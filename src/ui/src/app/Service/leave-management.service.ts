@@ -26,7 +26,6 @@ export class LeaveManagementService {
   constructor() { }
   private http = inject(HttpClient);
   private userService= inject(WolfDenService);
-  id= this.userService.userId;
   private baseUrl = environment.leave;
   
   getLeaveBalance(id: number) {
@@ -34,6 +33,8 @@ export class LeaveManagementService {
   }
 
   getLeaveRequestHistory(id: number, pageNumber: number, pageSize: number, selectedStatus: number|null) {
+    console.log(this.userService.userId)
+    console.log(id)
     if (selectedStatus!=null) {
       return this.http.get<ILeaveRequestHistoryResponse>(`${this.baseUrl}/leave-request?EmployeeId=${id}&PageNumber=${pageNumber}&PageSize=${pageSize}&LeaveStatusId=${selectedStatus}`);
     }
@@ -52,7 +53,7 @@ export class LeaveManagementService {
 
 
     updateLeaveSettings(updateLeaveSettings : IUpdateLeaveSetting){
-      updateLeaveSettings.adminId = this.id;
+      updateLeaveSettings.adminId = this.userService.userId;
       return this.http.put<boolean>(`${this.baseUrl}/leave-setting`,updateLeaveSettings)
     }
 
@@ -61,26 +62,26 @@ export class LeaveManagementService {
     }
 
     applyLeaveRequest(leaveApplication : ILeaveApplication){
-      leaveApplication.empId = this.id;
+      leaveApplication.empId = this.userService.userId;
       return this.http.post<ILeaveRequest>(`${this.baseUrl}/leave-request`,leaveApplication)
     }
 
     getSubordinateLeaverequest(pagination :ISubordinateLeavePaginationSend){
-      pagination.id = this.id
+      pagination.id = this.userService.userId
       return this.http.get<ISubordinateLeavePaginationReceive>(`${this.baseUrl}/leave-request/subordinate-leave-requests?Id=${pagination.id}&StatusId=${pagination.statusId}&PageSize=${pagination.pageSize}&PageNumber=${pagination.pageNumber}`)
     }
     
     approveOrRejectLeave(approveRejectLeave : IApproveRejectLeave){
-      return this.http.patch<boolean>(`${this.baseUrl}/leave-request/subordinate-leave-requests/${this.id}`,approveRejectLeave)
+      return this.http.patch<boolean>(`${this.baseUrl}/leave-request/subordinate-leave-requests/${this.userService.userId}`,approveRejectLeave)
     }
 
     editLeaveRequest(editleave : IEditleave)
     {
-      return this.http.put<ILeaveRequest>(`${this.baseUrl}/leave-request/edit-leave/${this.id}`,editleave)
+      return this.http.put<ILeaveRequest>(`${this.baseUrl}/leave-request/edit-leave/${this.userService.userId}`,editleave)
     }
 
     applyLeaveByAdminforEmployee(leaveByAdminforEmployee : IAddLeaveByAdminForEmployee){
-      leaveByAdminforEmployee.adminId = this.id;
+      leaveByAdminforEmployee.adminId = this.userService.userId
       return this.http.post<ILeaveRequest>(`${this.baseUrl}/leave-request/leave-for-employee-by-admin`,leaveByAdminforEmployee)
     } 
     
@@ -93,10 +94,15 @@ export class LeaveManagementService {
     }
 
     revokeLeaveRequest(leaveRequestId : IRevokeLeave){
-      return this.http.patch<boolean>(`${this.baseUrl}/leave-request/revoke-leave/${this.id}`,leaveRequestId);
+      return this.http.patch<boolean>(`${this.baseUrl}/leave-request/revoke-leave/${this.userService.userId}`,leaveRequestId);
     }
 
     getLeaveDetails(typeId:number){
     return this.http.get<IEditLeaveType>(`${this.baseUrl}/leave-type/details?RequestId=${typeId}`);
+    }
+
+    getLeaveRequest(leaveRequestId : number)
+    {
+      return this.http.get<IEditleave>(`${this.baseUrl}/leave-request/${leaveRequestId}`)
     }
 }

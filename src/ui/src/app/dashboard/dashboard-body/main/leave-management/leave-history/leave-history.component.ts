@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { IRevokeLeave } from '../../../../../interface/revoke-leave';
 import { WolfDenService } from '../../../../../service/wolf-den.service';
 import { ToastrService } from 'ngx-toastr';
+import { IEditleave } from '../../../../../interface/edit-leave-application-interface';
 
 
 @Component({
@@ -96,8 +97,8 @@ export class LeaveHistoryComponent implements OnInit {
     this.loadLeaveRequests();
   }
 
-  onEdit(i: number) {
-    this.router.navigate(['portal/edit-leave-request', i]);
+  onEdit(leaveRequestId: number) {
+    this.router.navigate(['portal/edit-leave-request', leaveRequestId]);
   }
 
   onDelete(i: number) {
