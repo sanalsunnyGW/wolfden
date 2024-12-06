@@ -75,10 +75,14 @@ export class WeeklyAttendanceComponent {
                     {
                       text:'OnGoing Shift',
                       fillStyle:'#FEF3E2'
+                    },
+                    {
+                      text:'Half Day',
+                      fillStyle:'#E195AB'
                     }
                   ];
                 },
-                usePointStyle: true, 
+                usePointStyle: true,
               }
             },
             tooltip: {
@@ -112,7 +116,7 @@ export class WeeklyAttendanceComponent {
  weeklyData:WeeklyAttendance[]=[]
  barChart!:Chart;
  status:number[]=[]
- statusColor=["#72BF78","#AE445A","#FCF596","#AB886D","#536493","#9B7EBD","#FEF3E2"]
+ statusColor=["#72BF78","#AE445A","#FCF596","#AB886D","#536493","#9B7EBD","#FEF3E2","#E195AB"]
  ngOnInit(){
   const today=new Date();
   const year = getYear(today);
@@ -165,22 +169,26 @@ getStartOfWeek(selectedWeek:string){
               return this.statusColor[2];
             }
             else if((x.attendanceStatusId===4)||(x.attendanceStatusId===5))
-            {
-              return this.statusColor[3];
-            }
-            else if((x.attendanceStatusId===6))
               {
-                return this.statusColor[4];
+                return this.statusColor[3];
               }
-            else if((x.attendanceStatusId===7))
-            {
-              return this.statusColor[5];
-            }
-            else{
-              return this.statusColor[6]
-            }
-          })
-          this.barChart.update();
+              else if((x.attendanceStatusId===6))
+                {
+                  return this.statusColor[4];
+                }
+              else if((x.attendanceStatusId===7))
+              {
+                return this.statusColor[5];
+              }
+              else if((x.attendanceStatusId===8))
+                {
+                  return this.statusColor[6];
+                }
+              else{
+                return this.statusColor[7];
+              }
+            })
+            this.barChart.update();
        }
         else {alert('Error fetching attendance:') }    
     });
