@@ -33,7 +33,7 @@ export class AttendanceHistoryComponent implements OnInit {
   years: number[] = [];
   pageSizes = [5, 10, 20, 30, 40];
   totalPages!: number;
-Math: any;
+  noRecordFound!: boolean;
 
 constructor(private route:ActivatedRoute) 
 {
@@ -83,12 +83,22 @@ fetchHistory(){
     this.selectedStatus,
     this.selectedPageNumber,
     this.selectedPageSize).subscribe(
-    (response:AttendanceHistory)=>{
-      this.attendanceData=response.attendanceHistory;
-      this.totalPages=response.totalPages;
-    }
-  )
-}
+      (response: AttendanceHistory) => {
+        if (response.attendanceHistory && response.attendanceHistory.length === 0) {
+          this.attendanceData = [];
+          this.noRecordFound = true;  
+        } else {
+          this.attendanceData = response.attendanceHistory;
+          this.totalPages = response.totalPages;
+          this.noRecordFound = false; 
+        }
+      },
+      error => {
+        console.error('Error fetching history:', error);
+        this.noRecordFound = true; 
+      }
+    );
+  }
 
 getStatusName(statusId: number): string {
   const statusObj = this.status.find(s => s.id === statusId);

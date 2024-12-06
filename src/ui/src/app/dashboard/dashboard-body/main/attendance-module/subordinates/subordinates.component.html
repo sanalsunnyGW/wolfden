@@ -1,4 +1,11 @@
 <ul>
+    @if(!employeeData){
+        <div class="d-flex justify-content-center mt-5">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+    }  
   <ng-container *ngFor="let node of employeeData">
     <app-tree-node [item]="node"></app-tree-node>
   </ng-container>
