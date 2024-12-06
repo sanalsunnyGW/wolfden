@@ -1,6 +1,4 @@
 using System.Reflection;
-using System.Security.Claims;
-using System.Text;
 using FluentValidation;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using QuestPDF.Infrastructure;
 using WolfDen.Application.Helper.LeaveManagement;
 using WolfDen.Application.Helpers;
 using WolfDen.Application.Requests.Commands.Attendence.Service;
@@ -21,10 +18,18 @@ using WolfDen.Infrastructure.Data;
 using WolfDen.Application.Requests.Commands.Attendence.Email;
 using WolfDen.Application.Helper.LeaveManagement;
 using WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail;
-
+using QuestPDF.Infrastructure;
+using System.Security.Claims;
+using System.Text;
+using FluentValidation.AspNetCore;
+using WolfDen.Application.Requests.Commands.Employees.Service;
 
 var builder = WebApplication.CreateBuilder(args);
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Add FluentValidation services to the container
+builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+
+// Add your services here
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x =>
 {
@@ -36,24 +41,27 @@ builder.Services.AddSwaggerGen(x =>
         Scheme = "Bearer"
     });
     x.AddSecurityRequirement(new OpenApiSecurityRequirement
-{
     {
-    new OpenApiSecurityScheme
-    {
-        Reference = new OpenApiReference
         {
-            Type = ReferenceType.SecurityScheme,
-            Id = JwtBearerDefaults.AuthenticationScheme,
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = JwtBearerDefaults.AuthenticationScheme,
+                }
+            },
+            new string[] { }
         }
-    },
-    new string[] { }
-    }
+    });
 });
-});
+
 var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
+
 builder.Services.AddIdentityCore<User>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<WolfDenContext>();
+
 builder.Services.Configure<JwtKey>(builder.Configuration.GetSection("JWT"));
 builder.Services.Configure<OfficeDurationSettings>(builder.Configuration.GetSection("OfficeDuration"));
 
@@ -71,7 +79,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<WolfDenContext>(x =>
 {
     x.UseSqlServer(connectionString);
-
 });
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(x =>
@@ -80,7 +87,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(x =>
     x.Password.RequireUppercase = true;
     x.Password.RequireLowercase = true;
     x.Password.RequireDigit = true;
-
 }).AddEntityFrameworkStores<WolfDenContext>().AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(x =>
@@ -109,14 +115,13 @@ builder.Services.AddScoped<MonthlyPdf>();
 builder.Services.AddScoped<Email>();
 builder.Services.AddSingleton<WeeklyPdfService>();
 
-
 QuestPDF.Settings.License = LicenseType.Community;
 
 builder.Services.AddMediatR(x =>
 {
     x.RegisterServicesFromAssembly(Assembly.Load("WolfDen.Application"));
-
 });
+
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("WolfDen.Application"));
 builder.Services.AddHangfire(configuration => configuration
         .UseSimpleAssemblyNameTypeSerializer()
@@ -131,9 +136,14 @@ builder.Services.AddScoped(sp =>
             ));
 builder.Services.AddScoped<DailyAttendancePollerService>();
 builder.Services.AddScoped<WeeklyAttendancePollerService>();
+builder.Services.AddScoped<SyncEmployeeService>();
 
 builder.Services.AddControllers();
+
 var app = builder.Build();
+
+// FluentValidation error handling middleware
+app.UseMiddleware<ValidationExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -142,6 +152,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseHangfireDashboard();
 }
+
 app.UseCors(options => options.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowAnyMethod());
 
 app.UseHttpsRedirection();
@@ -155,26 +166,60 @@ using (var scope = app.Services.CreateScope())
 {
     var syncService = scope.ServiceProvider.GetRequiredService<QueryBasedSyncService>();
     var combineService = scope.ServiceProvider.GetRequiredService<DailyAttendancePollerService>();
-    var weeklyService= scope.ServiceProvider.GetRequiredService<WeeklyAttendancePollerService>();
-
+    var weeklyService = scope.ServiceProvider.GetRequiredService<WeeklyAttendancePollerService>();
+    var syncEmployee= scope.ServiceProvider.GetRequiredService<SyncEmployeeService>();
     RecurringJob.AddOrUpdate(
         "sync-tables-job",
         () => syncService.SyncTablesAsync(),
         "*/5 * * * *"  // Cron expression for every 5 minutes
     );
     
-    RecurringJob.AddOrUpdate(
-    "send-attendance-notifications-job",
-    () => combineService.ExecuteJobAsync(),
-    "0 0 * * 2-6"
-    );
-    
-    RecurringJob.AddOrUpdate(
-     "send-weeklyemails-job",
-     () => weeklyService.WeeklyEmail(),
-     "0 0 * * 6"
 
- );
+    RecurringJob.AddOrUpdate(
+        "send-attendance-notifications-job",
+        () => combineService.ExecuteJobAsync(),
+        "0 0 * * 2-6"
+    );
+
+    RecurringJob.AddOrUpdate(
+        "send-weeklyemails-job",
+        () => weeklyService.WeeklyEmail(),
+        "0 0 * * 6"
+    );
+
+    RecurringJob.AddOrUpdate(
+        "sync-employee-user-job",
+        () => syncEmployee.SyncEmployeeUser(),
+        "*/5 * * * *"
+        );
 }
 
 app.Run();
+
+
+// Custom middleware to handle FluentValidation exceptions
+public class ValidationExceptionHandlingMiddleware
+{
+    private readonly RequestDelegate _next;
+
+    public ValidationExceptionHandlingMiddleware(RequestDelegate next)
+    {
+        _next = next;
+    }
+
+    public async Task InvokeAsync(HttpContext httpContext)
+    {
+        try
+        {
+            await _next(httpContext);
+        }
+        catch (ValidationException ex)
+        {
+            httpContext.Response.ContentType = "application/json";
+            httpContext.Response.StatusCode = 400;
+            var errors = ex.Errors.Select(e => e.ErrorMessage).ToList();
+            var errorResponse = new { Errors = errors };
+            await httpContext.Response.WriteAsJsonAsync(errorResponse);
+        }
+    }
+}

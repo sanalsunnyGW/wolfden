@@ -1,25 +1,19 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WolfDen.Application.DTOs.Employees;
 using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
 using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
-using WolfDen.Application.Requests.Commands.Employees.SuperAdminUpdateEmployee;
-using WolfDen.Application.Requests.Commands.Employees.SyncEmployee;
 using WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory;
-using WolfDen.Application.Requests.Queries.Employees.EmployeeLogin;
-using WolfDen.Application.Requests.Queries.Employees.EmployeePasswordCheck;
-using WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeIdSignUp;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam;
+using WolfDen.Application.Requests.Queries.Employees.EmployeeLogin;
 using WolfDen.Application.Requests.Queries.Employees.ViewEmployee;
 using Microsoft.AspNetCore.Authorization;
 using WolfDen.Infrastructure.Data;
 using WolfDen.Application.Requests.Commands.Employees.SuperAdminUpdateEmployee;
 using WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName;
-using WolfDen.Application.Requests.Commands.Employees.SyncEmployee;
 using WolfDen.Application.Requests.Queries.Employees.EmployeePasswordCheck;
 using WolfDen.Application.Requests.Commands.Employees.ResetPassword;
 
@@ -32,14 +26,10 @@ namespace WolfDen.API.Controllers.Employee
     {
         private readonly IMediator _mediator = mediator;
 
-
-        [HttpPatch("employee-sync")]
-        public async Task<bool> SyncEmployee()
-        {
-            return await _mediator.Send(new SyncEmployeeCommand());
-        }
+  
 
 
+        [AllowAnonymous]
 
         [HttpPost]
         public async Task<int> AddEmployee([FromBody] AddEmployeecommand command, CancellationToken cancellationToken)

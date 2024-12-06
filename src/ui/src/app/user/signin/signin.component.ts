@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ISignupForm } from './iSignup-form';
 import { Router, RouterLink } from '@angular/router';
 import { MatNativeDateModule } from '@angular/material/core'; 
@@ -49,6 +49,7 @@ export class SigninComponent {
     }
   }
 
+
   constructor(private fb: FormBuilder,
     private userService: WolfDenService,
     private router: Router,
@@ -60,7 +61,8 @@ export class SigninComponent {
     this.userForm = this.fb.group({
       firstName: new FormControl('', Validators.required),
       lastName: new FormControl('', Validators.required),
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [Validators.required, Validators.email,  
+                                  Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)]),
       dateofBirth: new FormControl(isdate, Validators.required),
       gender: new FormControl<number | null>(null, Validators.required),
       phoneNumber: new FormControl<string | null>(null, Validators.required),

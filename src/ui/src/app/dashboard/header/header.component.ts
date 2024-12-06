@@ -68,7 +68,7 @@ export class HeaderComponent {
     this.showNotifications = false;
   
     //to update the count
-    this.userService.getNotification(1).subscribe({
+    this.userService.getNotification(this.userService.userId).subscribe({
       next: (data) => {
         this.notifications = data.filter(notification => notification); 
       },

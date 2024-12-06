@@ -129,8 +129,8 @@ export class WolfDenService {
     );
   }
   
-  addHoliday(data: IaddHolidayService): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/api/Holiday/holiday`, data, { headers: this.getHeaders() });
+  addHoliday(data: IaddHolidayService): Observable<number> {
+    return this.http.post<number>(`${this.baseUrl}/api/Holiday/holiday`, data, { headers: this.getHeaders() });
   }
   getHoliday(): Observable<Iholiday[]>{
     const params=this.createHttpParams({});

@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
 
