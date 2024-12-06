@@ -25,7 +25,12 @@ namespace WolfDen.API.Controllers.Employee
     public class Employee(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+
+  
+
+
         [AllowAnonymous]
+
         [HttpPost]
         public async Task<int> AddEmployee([FromBody] AddEmployeecommand command, CancellationToken cancellationToken)
         {
