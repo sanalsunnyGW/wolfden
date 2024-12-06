@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
@@ -20,6 +21,7 @@ namespace WolfDen.Infrastructure.Configuration
             builder.Property(x => x.DaysCheck).HasDefaultValue(1);
             builder.Property(x => x.DaysCheckMore).HasDefaultValue(1);   
             builder.Property(x => x.DaysCheckEqualOrLess).HasDefaultValue(1);
+            builder.Property(x => x.IncrementCount).HasDefaultValue(0);
         }
     }
 }

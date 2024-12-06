@@ -6,6 +6,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { ToastrService } from 'ngx-toastr';
+import { ILeaveRequest } from '../../../../../interface/leave-request';
 
 @Component({
   selector: 'app-add-leave-by-admin-for-employees',
@@ -52,11 +53,14 @@ export class AddLeaveByAdminForEmployeesComponent implements OnInit{
 
       this.leaveManagement.applyLeaveByAdminforEmployee(this.applyLeave.value as IAddLeaveByAdminForEmployee)
       .pipe(takeUntilDestroyed(this.destroyRef)) .subscribe({
-        next:(response : boolean)=>{
-          if(response)
+        next:(response : ILeaveRequest)=>{
+          if(response.successStatus == true)
           {
             this.toastr.success("Leave Added")
             this.applyLeave.reset();
+          }
+          else{
+            this.toastr.error(`${response.message}`)
           }
         },
           error:(error) =>{

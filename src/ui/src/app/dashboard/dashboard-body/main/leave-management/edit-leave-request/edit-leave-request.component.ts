@@ -7,6 +7,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { ILeaveRequest } from '../../../../../interface/leave-request';
 
 @Component({
   selector: 'app-edit-leave-request',
@@ -55,11 +56,14 @@ export class EditLeaveRequestComponent implements OnInit {
     if(this.editLeave.valid){
       this.leaveManagement.editLeaveRequest(this.editLeave.value as IEditleave)
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-        next:(response : boolean)=>{
-          if(response)
+        next:(response : ILeaveRequest)=>{
+          if(response.successStatus== true)
           {
             this.toastr.success("Leave Edited")
             this.editLeave.reset();
+          }
+          else{
+            this.toastr.error(`${response.message}`)
           }
         },
           error:(error) =>{

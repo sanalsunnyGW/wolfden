@@ -76,12 +76,12 @@ export class LeaveManagementService {
 
     editLeaveRequest(editleave : IEditleave)
     {
-      return this.http.put<boolean>(`${this.baseUrl}/leave-request/edit-leave/${this.id}`,editleave)
+      return this.http.put<ILeaveRequest>(`${this.baseUrl}/leave-request/edit-leave/${this.id}`,editleave)
     }
 
     applyLeaveByAdminforEmployee(leaveByAdminforEmployee : IAddLeaveByAdminForEmployee){
       leaveByAdminforEmployee.adminId = this.id;
-      return this.http.post<boolean>(`${this.baseUrl}/leave-request/leave-for-employee-by-admin`,leaveByAdminforEmployee)
+      return this.http.post<ILeaveRequest>(`${this.baseUrl}/leave-request/leave-for-employee-by-admin`,leaveByAdminforEmployee)
     } 
     
     editLeaveType(editLeaveType: IEditLeaveType) {

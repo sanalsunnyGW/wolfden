@@ -1,8 +1,9 @@
 ﻿using MediatR;
+using WolfDen.Application.DTOs.LeaveManagement;
 
 namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestForEmployeeByAdmin
 {
-    public class AddLeaveRequestForEmployeeByAdmin : IRequest<bool>
+    public class AddLeaveRequestForEmployeeByAdmin : IRequest<ResponseDto>
     {
         public int AdminId { get; set; }
         public int EmployeeCode { get; set; }

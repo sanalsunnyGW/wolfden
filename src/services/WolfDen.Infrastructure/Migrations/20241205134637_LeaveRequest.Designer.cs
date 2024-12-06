@@ -12,8 +12,8 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241205105230_Latest-changes-of-attendanceTeam-db")]
-    partial class LatestchangesofattendanceTeamdb
+    [Migration("20241205134637_LeaveRequest")]
+    partial class LeaveRequest
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

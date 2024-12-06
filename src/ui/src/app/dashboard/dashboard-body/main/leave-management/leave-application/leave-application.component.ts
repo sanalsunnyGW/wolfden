@@ -41,6 +41,7 @@ export class LeaveApplicationComponent implements OnInit {
     .subscribe((response : Array<IGetLeaveTypeIdAndname>) => {
               this.leaveType = response;
       });
+      
   }
   
   onSubmit(){

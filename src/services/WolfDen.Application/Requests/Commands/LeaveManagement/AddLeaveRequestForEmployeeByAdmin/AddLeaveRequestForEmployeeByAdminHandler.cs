@@ -16,7 +16,7 @@ using static WolfDen.Domain.Enums.EmployeeEnum;
 
 namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestForEmployeeByAdmin
 {
-    public class AddLeaveRequestForEmployeeByAdminHandler(WolfDenContext context, IMediator mediator,AddLeaveRequestForEmployeeByAdminValidator validator, IConfiguration configuration, ManagerEmailFinder emailFinder, Email email, UserManager<User> userManager) : IRequestHandler<AddLeaveRequestForEmployeeByAdmin, bool>
+    public class AddLeaveRequestForEmployeeByAdminHandler(WolfDenContext context, IMediator mediator,AddLeaveRequestForEmployeeByAdminValidator validator, IConfiguration configuration, ManagerEmailFinder emailFinder, Email email, UserManager<User> userManager) : IRequestHandler<AddLeaveRequestForEmployeeByAdmin, ResponseDto>
     {
         private readonly WolfDenContext _context= context;
         private readonly IMediator _mediator = mediator;
@@ -27,7 +27,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
         private readonly ManagerEmailFinder _emailFinder = emailFinder;
         private readonly Email _email = email;
         private readonly UserManager<User> _userManager = userManager;
-        public async Task<bool> Handle(AddLeaveRequestForEmployeeByAdmin request, CancellationToken cancellationToken)
+        public async Task<ResponseDto> Handle(AddLeaveRequestForEmployeeByAdmin request, CancellationToken cancellationToken)
         {
 
             var validatorResult = await _validator.ValidateAsync(request, cancellationToken);
@@ -96,7 +96,12 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
                         }
                         else
                         {
-                            throw new Exception("Work From Home can Only Be Given For Full Days");
+                            return new ResponseDto
+                            {
+                                SuccessStatus = false,
+                                Message = "Work From Home can Only Be Given For Full Days"
+                            };
+                            
                         }
                         
                     }
@@ -116,7 +121,12 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
                                     }
                                     else
                                     {
-                                        throw new InvalidOperationException($"Selected Day Do not Contain Restricted Holiday");
+                                        return new ResponseDto
+                                        {
+                                            SuccessStatus = false,
+                                            Message = $"Selected Day Do not Contain Restricted Holiday"
+                                        };
+                                        
                                     }
                                 }
                                 else
@@ -131,7 +141,12 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
                         }
                         else
                         {
-                            throw new Exception($"{leaveType.TypeName} can not be applied in advance");
+                            return new ResponseDto
+                            {
+                                SuccessStatus = false,
+                                Message = $"{leaveType.TypeName} can not be applied in advance"
+                            };
+                           
                         }
                     }
                     else
@@ -161,7 +176,12 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
                             }
                             else
                             {
-                                throw new InvalidOperationException($"Applying Leave For Previous Day is only Possible for Emergency Leave And Bereavement Leave ");
+                                return new ResponseDto
+                                {
+                                    SuccessStatus = false,
+                                    Message = $"Applying Leave For Previous Day is only Possible for Emergency Leave And Bereavement Leave "
+                                };
+                                
                             }
 
                         }
@@ -176,20 +196,35 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
                 {
                     if (!employee.Gender.HasValue)
                     {
-                        throw new InvalidOperationException($"Complete Profile Details Before Applying Leave.Mainly Gender");
+                        return new ResponseDto
+                        {
+                            SuccessStatus = false,
+                            Message = $"Complete Profile Details Before Applying Leave.Mainly Gender"
+                        };
+                        
 
                     }
-                    throw new InvalidOperationException($"The Leave  Applied is gender Specific And You Cannot Apply For {leaveType.TypeName} for {employee.FirstName} {employee.LastName}");
+                    return new ResponseDto
+                    {
+                        SuccessStatus = false,
+                        Message = $"The Leave  Applied is gender Specific And You Cannot Apply For {leaveType.TypeName} for {employee.FirstName} {employee.LastName}"
+                    };
+                    
                 }
             }
             else
             {
-                throw new InvalidOperationException($"One Of the Date in Applied Dates is Already Applied");
+                return new ResponseDto
+                {
+                    SuccessStatus = false,
+                    Message = $"One Of the Date in Applied Dates is Already Applied"
+                };
+                
             }
 
             
 
-            async Task<bool> AddLeave()
+            async Task<ResponseDto> AddLeave()
             {   if(days > 0)
                 {
                     LeaveRequest leaveRequest = new LeaveRequest(employee.Id, request.TypeId, request.HalfDay, request.FromDate, request.ToDate, currentDate, LeaveRequestStatus.Open, request.Description, request.AdminId);
@@ -282,27 +317,55 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.AddLeaveRequestF
                         await _mediator.Send(command, cancellationToken);
                     }
                         
-                    
-                    return await _mediator.Send(addLeaveRequestDayCommand, cancellationToken);
+                    bool status = await _mediator.Send(addLeaveRequestDayCommand, cancellationToken);
+                    if(status)
+                    {
+                        return new ResponseDto
+                        {
+                            SuccessStatus = true,
+                        };
+                    }
+                    else
+                    {
+                        return new ResponseDto
+                        {
+                            SuccessStatus = false
+                        };
+                    }
 
                 }
                 else
                 {
-                    throw new InvalidOperationException("Total leave Days are zero");
+                    return new ResponseDto
+                    {
+                        SuccessStatus = false,
+                        Message = "Total leave Days are zero"
+                    };
+                    
                 }
                 
 
             }
 
-            async Task<bool> Balance(decimal balance,string name, decimal virtualBalance)
+            async Task<ResponseDto> Balance(decimal balance,string name, decimal virtualBalance)
             {
                 if (balance < days)
                 {
-                    throw new InvalidOperationException($"No Sufficient Leave for type {name}, including Negative Leaves. Remaing Balance : {balance}");
+                    return new ResponseDto
+                    {
+                        SuccessStatus = false,
+                        Message = $"No Sufficient Leave for type {name}, including Negative Leaves. Remaing Balance : {balance}"
+                    };
+                    
                 }
                 else
                 {
-                    throw new InvalidOperationException($"Revoke or edit existing {name}. All Balances are taken by applied leaves, including Negative Leaves. Remaing Virtual Balance : {virtualBalance}");
+                    return new ResponseDto
+                    {
+                        SuccessStatus = false,
+                        Message = $"Revoke or edit existing {name}. All Balances are taken by applied leaves, including Negative Leaves. Remaing Virtual Balance : {virtualBalance}"
+                    };
+                   
                 }
             }
 

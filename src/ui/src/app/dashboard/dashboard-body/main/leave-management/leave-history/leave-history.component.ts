@@ -106,7 +106,7 @@ export class LeaveHistoryComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (response: boolean) => {
           if (response) {
-            this.toastr.error("Leave Revoked")
+            this.toastr.success("Leave Revoked")
           }
         },
         error: (error) => {

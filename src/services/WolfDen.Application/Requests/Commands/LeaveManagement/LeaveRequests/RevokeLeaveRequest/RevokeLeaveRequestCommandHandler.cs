@@ -29,11 +29,11 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Re
             }
             if(leaveRequest.LeaveRequestStatusId == LeaveRequestStatus.Approved || leaveRequest.LeaveRequestStatusId == LeaveRequestStatus.Open && leaveRequest.EmployeeId == request.EmployeeId)
             {
-                if (leaveRequest.LeaveRequestStatusId == LeaveRequestStatus.Approved && leave.LeaveCategoryId != LeaveCategory.WorkFromHome)
+                if (leaveRequest.LeaveRequestStatusId == LeaveRequestStatus.Approved && leaveRequest.TypeId != leave.Id)
                 {
                     LeaveBalance leaveBalance = await _context.LeaveBalances.FirstOrDefaultAsync(x => x.EmployeeId == leaveRequest.EmployeeId && x.TypeId == leaveRequest.TypeId, cancellationToken);
                     LeaveType leaveType = await _context.LeaveTypes.FirstOrDefaultAsync(x => x.Id == leaveRequest.TypeId, cancellationToken);
-                    leaveRequestDayCount = leaveRequest.HalfDay == true ? (leaveRequestDayCount / 2) : leaveRequestDayCount;
+                    leaveRequestDayCount = (leaveRequest.HalfDay == true) ? (leaveRequestDayCount / 2) : leaveRequestDayCount;
                     leaveBalance.UpdateBalance(leaveBalance.Balance + leaveRequestDayCount);
                     if (leaveType.LeaveCategoryId != null && (leaveRequest.ApplyDate >= leaveRequest.FromDate && leaveRequest.LeaveType.LeaveCategoryId != LeaveCategory.BereavementLeave))
                     {
@@ -43,6 +43,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Re
                     }
                 }
                 leaveRequest.RevokeLeave();
+                _context.Update(leaveRequest);
                 int saveresult = await _context.SaveChangesAsync(cancellationToken);
                 return saveresult > 0;
             }

@@ -212,59 +212,35 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                             }
                                             else      //which does not have increment like the privelege leave thats got in a go   //updatd in a year
                                             {
-                                                int value = (int)Math.Floor(UpdateReq / 12);
-                                                if (leaveBalance.LeaveType.CarryForward == true)
+                                                if(DateTime.Now.Year == log.LastCreditedMonth.Year)   //updated tried in same yr
                                                 {
-                                                    if (DateTime.Now.Year == log.LastCreditedMonth.Year)                     //updated in same yr & carry forward allowed
-                                                    {
-                                                        if ((leaveBalance.Balance + (leaveBalance.LeaveType.IncrementCount * value)) > leaveBalance.LeaveType.CarryForwardLimit)          //if new balance exceeds carrylimit 
-                                                        {
-                                                            leaveBalance.Balance = (decimal)leaveBalance.LeaveType.CarryForwardLimit;       //set carryforward limit itself as balance
-                                                            lastCreditedMonth = log.LastCreditedMonth.AddMonths(value * 1);
-                                                            leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                                            incrementValue = 0;
-                                                        }
-                                                        else
-                                                        {
-                                                            leaveBalance.Balance += (decimal)leaveBalance.LeaveType.IncrementCount * value;
-                                                            lastCreditedMonth = log.LastCreditedMonth.AddMonths(value * 1);
-                                                            leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                                            incrementValue = (int)(leaveBalance.LeaveType.IncrementCount * value);
-                                                        }
-                                                    }
-                                                    else     //carryforward allowed & a new yr updated
-                                                    {
-                                                        if ((leaveBalance.Balance + (leaveBalance.LeaveType.IncrementCount * value) + leaveBalance.LeaveType.MaxDays) > leaveBalance.LeaveType.CarryForwardLimit)          //if new balance exceeds carrylimit ///max days bcoz each yr updated by max days 
-                                                        {
-                                                            leaveBalance.Balance = (decimal)(leaveBalance.LeaveType.CarryForwardLimit);       //set carryforward limit itself as balance
-                                                            lastCreditedMonth = log.LastCreditedMonth.AddMonths(value * 1);
-                                                            leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                                            incrementValue = 0;
-                                                        }
-                                                        else
-                                                        {
-                                                            leaveBalance.Balance += (decimal)(leaveBalance.LeaveType.IncrementCount * value + leaveBalance.LeaveType.MaxDays);
-                                                            lastCreditedMonth = log.LastCreditedMonth.AddMonths(value * 1);
-                                                            leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                                            incrementValue = (int)(leaveBalance.LeaveType.IncrementCount * value + leaveBalance.LeaveType.MaxDays);
-                                                        }
-                                                    }
+                                                    leaveBalance.Balance = leaveBalance.Balance;       //set carryforward limit itself as balance
+                                                    lastCreditedMonth = log.LastCreditedMonth;
+                                                    leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
+                                                    incrementValue = 0;
                                                 }
-                                                else //if no carry forward allowed
+                                                else //new yr & carry frwd allowed
                                                 {
-                                                    if (DateTime.Now.Year == log.LastCreditedMonth.Year)   //check if balance updated in the same yr as that of last updated
+                                                    if (leaveType.CarryForward == true)
                                                     {
-                                                        if (leaveType.IncrementCount != null)
+                                                        if (leaveBalance.Balance + leaveType.MaxDays >= leaveType.CarryForwardLimit)
                                                         {
-                                                            leaveBalance.Balance = (decimal)leaveBalance.LeaveType.IncrementCount * value;
-                                                            lastCreditedMonth = log.LastCreditedMonth.AddMonths(value * 1);
+                                                            leaveBalance.Balance = (decimal)leaveType.CarryForwardLimit;
+                                                            lastCreditedMonth = FirstMonthDate;
                                                             leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                                            incrementValue = (int)(leaveBalance.LeaveType.IncrementCount * value);
+                                                            incrementValue = (int)leaveType.CarryForwardLimit;
+                                                        }
+                                                        else
+                                                        {
+                                                            leaveBalance.Balance += (decimal)leaveType.MaxDays;
+                                                            lastCreditedMonth = FirstMonthDate;
+                                                            leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
+                                                            incrementValue = (int)leaveType.MaxDays;
                                                         }
                                                     }
-                                                    else    //if no carry forward & also balance updated in next/new year 
+                                                    else  //NO carry frwd  & new yr
                                                     {
-                                                        leaveBalance.Balance = (int)(leaveType.MaxDays);
+                                                        leaveBalance.Balance = (decimal)leaveType.MaxDays;
                                                         lastCreditedMonth = FirstMonthDate;
                                                         leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
                                                         incrementValue = (int)leaveType.MaxDays;
