@@ -25,12 +25,7 @@ namespace WolfDen.API.Controllers.Employee
     public class Employee(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
-
-  
-
-
         [AllowAnonymous]
-
         [HttpPost]
         public async Task<int> AddEmployee([FromBody] AddEmployeecommand command, CancellationToken cancellationToken)
         {
@@ -90,21 +85,17 @@ namespace WolfDen.API.Controllers.Employee
         public async Task<ActionResult<PaginationResponse>> GetAllEmployees([FromQuery] GetAllEmployeeQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
-
         }
 
         [HttpGet("get-all-by-name")]
         public async Task<ActionResult<List<EmployeeNameDTO>>> GetAllEmployees([FromQuery] GetAllEmployeesByNameQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
-
-
         }
         [HttpGet("check-password")]
         public async Task<ActionResult<bool>> CheckPassword([FromQuery] CheckEmployeePasswordQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
-
         }
 
         [AllowAnonymous]

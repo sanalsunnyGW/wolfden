@@ -21,7 +21,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Re
                 throw new ValidationException($"Validation failed: {errors}");
             }
             LeaveRequest leaveRequest = await _context.LeaveRequests.FirstOrDefaultAsync(x => x.Id == request.LeaveRequestId, cancellationToken);
-            LeaveType leave = await _context.LeaveType.FirstOrDefaultAsync(x => x.LeaveCategoryId == LeaveCategory.WorkFromHome, cancellationToken); 
+            LeaveType leave = await _context.LeaveTypes.FirstOrDefaultAsync(x => x.LeaveCategoryId == LeaveCategory.WorkFromHome, cancellationToken); 
             decimal leaveRequestDayCount = await _context.LeaveRequestDays.Where(x => x.LeaveRequestId == request.LeaveRequestId).CountAsync();
             if (leaveRequest is null)
             {
@@ -32,12 +32,12 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Re
                 if (leaveRequest.LeaveRequestStatusId == LeaveRequestStatus.Approved && leave.LeaveCategoryId != LeaveCategory.WorkFromHome)
                 {
                     LeaveBalance leaveBalance = await _context.LeaveBalances.FirstOrDefaultAsync(x => x.EmployeeId == leaveRequest.EmployeeId && x.TypeId == leaveRequest.TypeId, cancellationToken);
-                    LeaveType leaveType = await _context.LeaveType.FirstOrDefaultAsync(x => x.Id == leaveRequest.TypeId, cancellationToken);
+                    LeaveType leaveType = await _context.LeaveTypes.FirstOrDefaultAsync(x => x.Id == leaveRequest.TypeId, cancellationToken);
                     leaveRequestDayCount = leaveRequest.HalfDay == true ? (leaveRequestDayCount / 2) : leaveRequestDayCount;
                     leaveBalance.UpdateBalance(leaveBalance.Balance + leaveRequestDayCount);
                     if (leaveType.LeaveCategoryId != null && (leaveRequest.ApplyDate >= leaveRequest.FromDate && leaveRequest.LeaveType.LeaveCategoryId != LeaveCategory.BereavementLeave))
                     {
-                        LeaveType leaveType2 = await _context.LeaveType.FirstOrDefaultAsync(x => x.LeaveCategoryId == LeaveCategory.EmergencyLeave);
+                        LeaveType leaveType2 = await _context.LeaveTypes.FirstOrDefaultAsync(x => x.LeaveCategoryId == LeaveCategory.EmergencyLeave);
                         LeaveBalance leaveBalance2 = await _context.LeaveBalances.FirstOrDefaultAsync(x => x.TypeId == leaveType2.Id && x.EmployeeId == leaveRequest.EmployeeId);
                         leaveBalance2.UpdateBalance(leaveBalance2.Balance + leaveRequestDayCount);
                     }

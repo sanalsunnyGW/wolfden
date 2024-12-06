@@ -32,6 +32,7 @@ export class SideNavComponent {
   userService = inject(WolfDenService);
   employeeService = inject(EmployeeService);
   destroyRef = inject(DestroyRef);
+  id=this.userService.userId;
   employeeHierarchyList: IEmployeeData[] = [{
     id: 0,
     employeeCode: 0,

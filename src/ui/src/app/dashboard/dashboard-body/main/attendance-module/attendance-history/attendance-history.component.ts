@@ -71,7 +71,8 @@ status = [
   { id: 6, name: "WFH" },
   { id: 7, name: 'Leave' },
   { id: 9, name:'Half Day'},
-  { id: 10, name:'Weekend'}
+  { id: 10, name:'Weekend'},
+  { id: 11, name: 'All'}
 ];
 
 fetchHistory(){
