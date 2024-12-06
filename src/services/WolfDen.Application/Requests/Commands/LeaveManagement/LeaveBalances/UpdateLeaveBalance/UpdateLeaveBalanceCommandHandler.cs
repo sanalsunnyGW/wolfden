@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using sib_api_v3_sdk.Model;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
@@ -19,7 +20,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
         {
             LeaveSetting leaveSetting = await _context.LeaveSettings.FirstOrDefaultAsync(cancellationToken);
             List<Employee> employees = await _context.Employees.ToListAsync(cancellationToken);
-            List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
+            List<LeaveType> leaveTypes = await _context.LeaveTypes.ToListAsync(cancellationToken);
             List<LeaveIncrementLog> leaveIncrementLog = await _context.LeaveIncrementLogs.ToListAsync(cancellationToken);
             List<LeaveBalance> leaveBalanceList = await _context.LeaveBalances
                 .Include(x => x.LeaveType)
@@ -56,7 +57,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                     {
                                         if (leaveBalance.Employee.JoiningDate?.Day < leaveSetting.MinDaysForLeaveCreditJoining)    //if joined  before 15th(maxcredit..)
                                         {
-                                            leaveBalance.Balance = 1;             //bcoz initially balance is 1  //only casual leave is credited on same month
+                                            leaveBalance.Balance = 1;             //bcoz initially balance is 1  //leaves is credited on same month
                                         }
                                         else //for new joinees other type leaves 
                                         {
@@ -266,7 +267,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                                         leaveBalance.Balance = (int)(leaveType.MaxDays);
                                                         lastCreditedMonth = FirstMonthDate;
                                                         leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                                        incrementValue =(int)leaveType.MaxDays;
+                                                        incrementValue = (int)leaveType.MaxDays;
                                                     }
                                                 }
                                             }

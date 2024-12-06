@@ -12,7 +12,7 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveTypes
 
         public async Task<List<LeaveTypeDto>> Handle(GetAllLeaveTypeIdAndNameQuery request, CancellationToken cancellationToken)
         {
-            List<LeaveTypeDto> leaveTypeDtoList = await _context.LeaveType
+            List<LeaveTypeDto> leaveTypeDtoList = await _context.LeaveTypes
                 .Where(leaveType => leaveType.LeaveCategoryId != LeaveCategory.EmergencyLeave)
                 .Select(leaveType => new LeaveTypeDto
                 {

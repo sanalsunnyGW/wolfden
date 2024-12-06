@@ -46,7 +46,7 @@
         }
       </td>
       <td>
-        @if(requestStatus(leaveRequest.leaveRequestStatusId)=='Approved')
+        @if(requestStatus(leaveRequest.leaveRequestStatusId)=='Approved'||requestStatus(leaveRequest.leaveRequestStatusId)=='Open')
         {
         <button class="btn btn-danger" (click)="onDelete(leaveRequest.id)">Delete</button>
         }

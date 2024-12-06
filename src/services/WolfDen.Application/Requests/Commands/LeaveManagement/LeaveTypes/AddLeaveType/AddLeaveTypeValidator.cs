@@ -18,7 +18,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveTypes.AddLe
 
         private async Task<bool> BeUniqueTypeName(string typeName, CancellationToken cancellationToken)
         {
-            return !await _context.LeaveType
+            return !await _context.LeaveTypes
                 .AnyAsync(x => x.TypeName == typeName, cancellationToken);
         }
 
