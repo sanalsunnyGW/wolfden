@@ -10,6 +10,7 @@ using WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Revoke
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetLeaveRequestHistory;
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetApprovedNextWeekLeaves;
 using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetSubordinateLeave;
+using WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetLeaveRequestById;
 
 namespace WolfDen.API.Controllers.LeaveManagement
 {
@@ -31,7 +32,7 @@ namespace WolfDen.API.Controllers.LeaveManagement
             return await _mediator.Send(query, cancellationToken);
         }
         [HttpPost]
-        public async Task<bool> ApplyLeaveRequest( [FromBody] AddLeaveRequestCommand command,CancellationToken cancellationToken)
+        public async Task<ResponseDto> ApplyLeaveRequest( [FromBody] AddLeaveRequestCommand command,CancellationToken cancellationToken)
         {
             return await _mediator.Send(command, cancellationToken);
         }
@@ -59,7 +60,7 @@ namespace WolfDen.API.Controllers.LeaveManagement
         
 
         [HttpPut("edit-leave/{id}")]
-        public async Task<bool> EditLeave(int id ,[FromBody] EditLeaveRequestCommand command,CancellationToken cancellationToken)
+        public async Task<ResponseDto> EditLeave(int id ,[FromBody] EditLeaveRequestCommand command,CancellationToken cancellationToken)
         {
             command.EmpId = id;
             return await _mediator.Send(command,cancellationToken) ;
@@ -68,9 +69,20 @@ namespace WolfDen.API.Controllers.LeaveManagement
         [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPost("leave-for-employee-by-admin")]
 
-        public async Task<bool> AddLeaveForSubordinates([FromBody] AddLeaveRequestForEmployeeByAdmin command,CancellationToken cancellationToken)
+        public async Task<ResponseDto> AddLeaveForSubordinates([FromBody] AddLeaveRequestForEmployeeByAdmin command,CancellationToken cancellationToken)
         {
             return await _mediator.Send(command, cancellationToken);
+        }
+
+        [HttpGet("{leaveRequestId}")]
+        public async Task<EditLeaveRequestDto> GetLeaveRequestById(int leaveRequestId, CancellationToken cancellationToken)
+        {
+            GetLeaveRequestByIdQuery query = new GetLeaveRequestByIdQuery
+            {
+                leaveRequestId = leaveRequestId
+            };
+
+            return await _mediator.Send(query,cancellationToken);
         }
     }
 }

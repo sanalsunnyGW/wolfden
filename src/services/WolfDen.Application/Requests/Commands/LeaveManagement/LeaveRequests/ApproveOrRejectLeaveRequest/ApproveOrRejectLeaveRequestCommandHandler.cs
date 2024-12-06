@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,10 +13,11 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.ApproveOrRejectLeaveRequest
 {
-    public class ApproveOrRejectLeaveRequestCommandHandler(WolfDenContext context, IMediator mediator, IConfiguration configuration, Email email, UserManager<User> userManager) : IRequestHandler<ApproveOrRejectLeaveRequestCommand, bool>
+    public class ApproveOrRejectLeaveRequestCommandHandler(WolfDenContext context,ApproveOrRejectLeaveValidator validator, IMediator mediator, IConfiguration configuration, Email email, UserManager<User> userManager) : IRequestHandler<ApproveOrRejectLeaveRequestCommand, bool>
     {
         private readonly WolfDenContext _context = context;
         private readonly IMediator _mediator = mediator;
+        private readonly ApproveOrRejectLeaveValidator _validator = validator;
         private readonly string _apiKey = configuration["BrevoApi:ApiKey"];
         private readonly string _senderEmail = configuration["BrevoApi:SenderEmail"];
         private readonly string _senderName = configuration["BrevoApi:SenderName"];
@@ -23,6 +25,13 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ap
         private readonly UserManager<User> _userManager = userManager;
         public async Task<bool> Handle(ApproveOrRejectLeaveRequestCommand request, CancellationToken cancellationToken)
         {
+
+            var validatorResult = await _validator.ValidateAsync(request, cancellationToken);
+            if (!validatorResult.IsValid)
+            {
+                var errors = string.Join(", ", validatorResult.Errors.Select(e => e.ErrorMessage));
+                throw new ValidationException($"Validation failed: {errors}");
+            }
             LeaveRequest leaveRequest = await _context.LeaveRequests.Where(x => x.Id == request.LeaveRequestId && x.LeaveRequestStatusId == LeaveRequestStatus.Open).FirstOrDefaultAsync(cancellationToken);
             LeaveType leaveType1 = await _context.LeaveTypes.Where(x => x.Id == leaveRequest.TypeId).FirstOrDefaultAsync(cancellationToken);  
             Employee employee = await _context.Employees.FirstOrDefaultAsync(x => x.Id == leaveRequest.EmployeeId,cancellationToken);

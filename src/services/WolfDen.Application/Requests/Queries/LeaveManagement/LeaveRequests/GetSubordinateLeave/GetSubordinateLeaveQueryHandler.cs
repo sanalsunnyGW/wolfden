@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using sib_api_v3_sdk.Model;
@@ -11,13 +12,21 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.GetSubordinateLeave
 {
-    public class GetSubordinateLeaveQueryHandler(WolfDenContext context, IMediator mediator , UserManager<User> userManager) : IRequestHandler<GetSubordinateLeaveQuery, SubordinateLeaveRequestPaginationDto>
+    public class GetSubordinateLeaveQueryHandler(WolfDenContext context,GetSubordinateLeaveValidator validator, IMediator mediator , UserManager<User> userManager) : IRequestHandler<GetSubordinateLeaveQuery, SubordinateLeaveRequestPaginationDto>
     {
         private readonly WolfDenContext _context = context;
         private readonly IMediator _mediator = mediator;
+        private readonly GetSubordinateLeaveValidator _validator = validator;
         private readonly UserManager<User> _userManager = userManager;
         public async Task<SubordinateLeaveRequestPaginationDto> Handle(GetSubordinateLeaveQuery request, CancellationToken cancellationToken)
         {
+            var validatorResult = await _validator.ValidateAsync(request, cancellationToken);
+            if (!validatorResult.IsValid)
+            {
+                var errors = string.Join(", ", validatorResult.Errors.Select(e => e.ErrorMessage));
+                throw new ValidationException($"Validation failed: {errors}");
+            }
+
             Employee manager = await _context.Employees.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             User user = await _userManager.FindByIdAsync(manager.UserId);
             var currentRoles = await _userManager.GetRolesAsync(user);

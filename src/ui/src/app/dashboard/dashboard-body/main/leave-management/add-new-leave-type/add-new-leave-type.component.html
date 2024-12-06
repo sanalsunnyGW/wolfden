@@ -1,49 +1,55 @@
-<div >
-    <form [formGroup]="addNewLeaveType" (ngSubmit)="onSubmit()">
+<div class="mb-3">
+  <h1> Add New Leave Type</h1>
+</div>
+
+
+<div class="d-flex justify-content-center pt-5">
+<div class="container size fw-bold ">
+    <form [formGroup]="addNewLeaveType" (ngSubmit)="onSubmit()" class="form-container rounded p-4 shadow-sm color was-validated">
   
       <div class="form-group mb-3">
-        <label for="typeName" class="form-label">Enter New Leave Type Name</label>
-        <input type="text" class="form-control" id="typeName" placeholder="Enter Name" formControlName="typeName">
-        <div class="error">@if(addNewLeaveType.get('typeName')?.invalid && addNewLeaveType.get('typeName')?.touched){
+        <label for="typeName" class="form-label ">New Leave Type Name</label>
+        <input type="text" class="form-control" id="typeName" placeholder="Enter Name" formControlName="typeName" ng-required="text" required>
+        <div class="error text-danger fw-lighter fst-italic">@if(addNewLeaveType.get('typeName')?.invalid && addNewLeaveType.get('typeName')?.touched){
           Type Name is Required
           } 
         </div>
       </div>
 
       <div class="form-group mb-3">
-        <label for="maxDays" class="form-label">Enter Max Days</label>
-        <input type="number" class="form-control" id="maxDays" placeholder="Enter Max Days" formControlName="maxDays">
+        <label for="maxDays" class="form-label">Max Days</label>
+        <input type="number" class="form-control" id="maxDays" placeholder="Maximum Credits Possible For The Leave " formControlName="maxDays">
       </div>
-      <pre><b>Hint :</b>Enter max days to which a leave can sum up to</pre>
+    
 
       <div class="form-group mb-3">
-        <label for="isHalfDayAllowed" class="form-label">Select if Half Day Allowed</label>
+        <label for="isHalfDayAllowed" class="form-label">Select If Half Day Allowed</label>
         <div class="form-check form-switch">
             <input class="form-check-input" 
                    type="checkbox" 
                    id="isHalfDayAllowed" 
                    [value]="true" 
                    formControlName="isHalfDayAllowed">
-            <label class="form-check-label" for="isHalfDayAllowed">Half Day</label>
+            <label class="form-check-label " for="isHalfDayAllowed">Half Day</label>
         </div>
     </div>
 
       <div class="form-group mb-3">
-        <label  class="form-label">Select increment Type if there is increment  </label>
+        <label  class="form-label">Select Increment Type  </label>
         <ng-select [items]="increments" 
         bindLabel="viewValue"
-        bindValue="type" placeholder="select Increment Type" formControlName="incrementGapId" id="incrementGapId">
+        bindValue="type" placeholder="Select Increment Type If There Is Increment" formControlName="incrementGapId" id="incrementGapId">
         </ng-select>
       </div>
   
       <div class="form-group mb-3">
-        <label for="incrementCount" class="form-label">Enter Increment Count</label>
-        <input type="number" class="form-control" id="incrementCount" placeholder="Enter Increment Count" formControlName="incrementCount">
+        <label for="incrementCount" class="form-label">Increment Count</label>
+        <input type="number" class="form-control" id="incrementCount" placeholder="Enter Increment Count " formControlName="incrementCount">
       </div>
 
 
       <div class="form-group mb-3">
-        <label for="carryForward" class="form-label">Select if Carry Forward</label>
+        <label for="carryForward" class="form-label">Select If Carry Forward</label>
         <div class="form-check form-switch">
             <input class="form-check-input" 
                    type="checkbox" 
@@ -55,38 +61,34 @@
     </div>
 
       <div class="form-group mb-3">
-        <label for="carryForwardLimit" class="form-label">Enter Carry Forward Count</label>
+        <label for="carryForwardLimit" class="form-label">Carry Forward Count</label>
         <input type="number" class="form-control" id="carryForwardLimit" placeholder="Enter Carry Forward Count" formControlName="carryForwardLimit">
       </div>
 
 
       <div class="form-group mb-3">
-        <label for="daysCheck" class="=form-label">Enter Days Check Count</label>
-        <input type="number" class="form-control" id="daysCheck" placeholder="Enter Days Check Count" formControlName="daysCheck">
+        <label for="daysCheck" class="=form-label">Threshold Days Count</label>
+        <input type="number" class="form-control" id="daysCheck" placeholder="Applied Leave Days Count To Check Minimun Days Gap for Applying Leave" formControlName="daysCheck">
       </div>
-      <pre><b>Hint:</b> Days Check </pre>
+
+      <div class="form-group mb-3">
+        <label for="daysCheckEqualOrLess" class="form-label">Minimun Days Below Threshold Count</label>
+        <input type="number" class="form-control" id="daysCheckEqualOrLess" placeholder="Minimun Days Gap required For Applying Leave If Requested Days is Less Than Threshold Count " formControlName="daysCheckEqualOrLess">
+      </div>
 
 
       <div class="form-group mb-3">
-        <label for="daysCheckEqualOrLess" class="form-label">Enter daysCheckEqualOrLess Count</label>
-        <input type="number" class="form-control" id="daysCheckEqualOrLess" placeholder="Enter daysCheckEqualOrLess Count" formControlName="daysCheckEqualOrLess">
+        <label for="daysCheckMore" class="form-label">Minimum Days Above Threshold Count</label>
+        <input type="number" class="form-control" id="daysCheckMore" placeholder="Minimun Days Gap required For Applying Leave If Requested Days is More Than Threshold Count" formControlName="daysCheckMore">
       </div>
-      <pre><b>Hint:</b>Enter Days Check Count</pre>
-
 
       <div class="form-group mb-3">
-        <label for="daysCheckMore" class="form-label">Enter daysCheckMore Count</label>
-        <input type="number" class="form-control" id="daysCheckMore" placeholder="Enter daysCheckMore Count" formControlName="daysCheckMore">
-      </div>
-      <pre><b>Hint:</b>DaysCheckMore</pre>
-
-      <div class="form-group mb-3">
-        <label for="dutyDaysRequired" class="form-label">Enter Duty Days  Required</label>
-        <input type="number" class="form-control" id="dutyDaysRequired" placeholder="Enter dutyDaysRequired Count" formControlName="dutyDaysRequired">
+        <label for="dutyDaysRequired" class="form-label">Duty Days Required</label>
+        <input type="number" class="form-control" id="dutyDaysRequired" placeholder="Enter Minimum Duty Days Required For Applying Leave" formControlName="dutyDaysRequired">
       </div>
 
     <div class="form-group mb-3">
-      <label for="sandwich" class="form-label">Select if Sandwich Policy Applicable</label>
+      <label for="sandwich" class="form-label">Select If Sandwich Policy Applicable</label>
       <div class="form-check form-switch">
           <input class="form-check-input" 
                  type="checkbox" 
@@ -100,4 +102,4 @@
       <button class="btn btn-primary" type="submit" [disabled]="addNewLeaveType.invalid">Submit</button>
     </form>
   </div>
-  
+</div>

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using WolfDen.Application.DTOs.LeaveManagement;
 using WolfDen.Application.Method.LeaveManagement;
@@ -10,12 +11,20 @@ using static WolfDen.Domain.Enums.EmployeeEnum;
 
 namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.EditLeaveRequest
 {
-    public class EditLeaveRequestCommandHandler(WolfDenContext context, IMediator mediator) : IRequestHandler<EditLeaveRequestCommand, bool>
+    public class EditLeaveRequestCommandHandler(WolfDenContext context, IMediator mediator , EditLeaveRequestValidator validator) : IRequestHandler<EditLeaveRequestCommand, ResponseDto>
     {
         private readonly WolfDenContext _context = context;
         private readonly IMediator _mediator = mediator;
-        public async Task<bool> Handle(EditLeaveRequestCommand request, CancellationToken cancellationToken)
+        private readonly EditLeaveRequestValidator _validator = validator;
+        public async Task<ResponseDto> Handle(EditLeaveRequestCommand request, CancellationToken cancellationToken)
         {
+
+            var validatorResult = await _validator.ValidateAsync(request, cancellationToken);
+            if (!validatorResult.IsValid)
+            {
+                var errors = string.Join(", ", validatorResult.Errors.Select(e => e.ErrorMessage));
+                throw new ValidationException($"Validation failed: {errors}");
+            }
             LeaveRequest leaveRequest = await _context.LeaveRequests.Where(x => x.Id == request.LeaveRequestId && x.RequestedBy == request.EmpId).FirstOrDefaultAsync();
             if (leaveRequest is null)
             {
@@ -74,7 +83,12 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                                 }
                                 else
                                 {
-                                    throw new InvalidOperationException($"For more than {leaveType.DaysCheck} {leaveType.TypeName}, leave FromDate should be atleast {leaveType.DaysCheckMore} days before. ");
+                                    return new ResponseDto
+                                    {
+                                        SuccessStatus = false,
+                                        Message = $"For more than {leaveType.DaysCheck} {leaveType.TypeName}, leave FromDate should be atleast {leaveType.DaysCheckMore} days before. "
+                                    };
+                                    
                                 }
                             }
                             else if (leaveType.DaysCheck.HasValue && (days <= leaveType.DaysCheck))
@@ -85,12 +99,22 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                                 }
                                 else
                                 {
-                                    throw new InvalidOperationException($"For less than or {leaveType.DaysCheck} {leaveType.TypeName}, leave should be applied atleast {leaveType.DaysCheckEqualOrLess} days before. ");
+                                    return new ResponseDto
+                                    {
+                                        SuccessStatus = false,
+                                        Message = $"For less than or {leaveType.DaysCheck} {leaveType.TypeName}, leave should be applied atleast {leaveType.DaysCheckEqualOrLess} days before. "
+                                    };
+                                    
                                 }
                             }
                             else
                             {
-                                throw new InvalidOperationException($"Days Check Not Assinged");
+                                return new ResponseDto
+                                {
+                                    SuccessStatus = false,
+                                    Message = $"Days Check Not Assinged"
+                                };
+                                
                             }
                         }
 
@@ -111,7 +135,12 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                                             }
                                             else
                                             {
-                                                throw new InvalidOperationException($"For more than {leaveType.DaysCheck} {leaveType.TypeName}, leave FromDate should be atleast {leaveType.DaysCheckMore} days before. ");
+                                                return new ResponseDto
+                                                {
+                                                    SuccessStatus = false,
+                                                    Message = $"For more than {leaveType.DaysCheck} {leaveType.TypeName}, leave FromDate should be atleast {leaveType.DaysCheckMore} days before. "
+                                                };
+                                                
                                             }
                                         }
                                         else
@@ -122,13 +151,23 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                                             }
                                             else
                                             {
-                                                throw new InvalidOperationException($"For less than or {leaveType.DaysCheck} {leaveType.TypeName}, leave should be applied atleast {leaveType.DaysCheckEqualOrLess} days before. ");
+                                                return new ResponseDto
+                                                {
+                                                    SuccessStatus = false,
+                                                    Message = $"For less than or {leaveType.DaysCheck} {leaveType.TypeName}, leave should be applied atleast {leaveType.DaysCheckEqualOrLess} days before. "
+                                                };
+                                                
                                             }
                                         }
                                     }
                                     else
                                     {
-                                        throw new InvalidOperationException("Days Check Not Assinged");
+                                        return new ResponseDto
+                                        {
+                                            SuccessStatus = false,
+                                            Message = "Days Check Not Assinged"
+                                        };
+                                        
                                     }
 
 
@@ -150,7 +189,12 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                                                     }
                                                     else
                                                     {
-                                                        throw new InvalidOperationException($"For more than {leaveType.DaysCheck} {leaveType.TypeName}, leave FromDate should be atleast {leaveType.DaysCheckMore} days before Apply Date. ");
+                                                        return new ResponseDto
+                                                        {
+                                                            SuccessStatus = false,
+                                                            Message = $"For more than {leaveType.DaysCheck} {leaveType.TypeName}, leave FromDate should be atleast {leaveType.DaysCheckMore} days before Apply Date. "
+                                                        };
+                                                        
                                                     }
                                                 }
                                                 else
@@ -161,30 +205,49 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                                                     }
                                                     else
                                                     {
-                                                        throw new InvalidOperationException($"For less than {leaveType.DaysCheck} or {leaveType.DaysCheck} {leaveType.TypeName}, leave should be applied atleast {leaveType.DaysCheckEqualOrLess} days before. ");
+                                                        return new ResponseDto
+                                                        {
+                                                            SuccessStatus = false,
+                                                            Message = $"For less than {leaveType.DaysCheck} or {leaveType.DaysCheck} {leaveType.TypeName}, leave should be applied atleast {leaveType.DaysCheckEqualOrLess} days before. "
+                                                        };
+                                                        
                                                     }
                                                 }
                                             }
                                             else
                                             {
-                                                throw new InvalidOperationException("Days Check Not Assinged");
+                                                return new ResponseDto
+                                                {
+                                                    SuccessStatus = false,
+                                                    Message = "Days Check Not Assinged"
+                                                };
+                                                
                                             }
                                         }
                                         else
                                         {
-                                            throw new InvalidOperationException("Half Day can Only Be Applied For One Day");
+                                            return new ResponseDto
+                                            {
+                                                SuccessStatus = false,
+                                                Message = "Half Day can Only Be Applied For One Day"
+                                            };
+                                            
                                         }
                                     }
                                     else
                                     {
-                                        throw new InvalidOperationException($"Half Day Not Applicable for {leaveType.TypeName}");
+                                        return new ResponseDto
+                                        {
+                                            SuccessStatus = false,
+                                            Message = $"Half Day Not Applicable for {leaveType.TypeName}"
+                                        };
                                     }
                                 }
 
                             }
                             else
                             {
-                                return await Balance(leaveBalance.Balance,leaveType.TypeName);
+                                return await Balance(leaveBalance.Balance,leaveType.TypeName,virtualBalance);
                             }
 
                         }
@@ -206,12 +269,22 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                                         }
                                         else
                                         {
-                                            throw new InvalidOperationException("Half Day can Only Be Applied For One Day");
+                                            return new ResponseDto
+                                            {
+                                                SuccessStatus = false,
+                                                Message = "Half Day can Only Be Applied For One Day"
+                                            };
+                                            
                                         }
                                     }
                                     else
                                     {
-                                        throw new InvalidOperationException($"Half Day Not Applicable for {leaveType.TypeName}");
+                                        return new ResponseDto
+                                        {
+                                            SuccessStatus = false,
+                                            Message = $"Half Day Not Applicable for {leaveType.TypeName}"
+                                        };
+                                        
                                     }
 
                                 }
@@ -220,38 +293,62 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                             }
                             else
                             {
-                                return await Balance(leaveBalance.Balance,leaveType.TypeName);
+                                return await Balance(leaveBalance.Balance,leaveType.TypeName,virtualBalance);
                             }
 
                         }
                         else
                         {
-                            throw new InvalidOperationException($"Current Leave Cannot Be Applied for Selected Dates");
+                            return new ResponseDto
+                            {
+                                SuccessStatus = false,
+                                Message = $"Current Leave Cannot Be Applied for Selected Dates"
+                            };
+                            
                         }
                     }
                     else
                     {
                         if (!employee.Gender.HasValue)
                         {
-                            throw new InvalidOperationException($"Complete Profile Details Before Applying Leave.Mainly Gender");
+                            return new ResponseDto
+                            {
+                                SuccessStatus = false,
+                                Message = $"Complete Profile Details Before Applying Leave.Mainly Gender"
+                            };
+                            
 
                         }
-                        throw new InvalidOperationException($"The Leave You Applied is gender Specific And You Cannot Apply For {leaveType.TypeName}");
+                        return new ResponseDto
+                        {
+                            SuccessStatus = false,
+                            Message = $"The Leave You Applied is gender Specific And You Cannot Apply For {leaveType.TypeName}"
+                        };
+                        
                     }
                 }
                 else
                 {
-                    throw new InvalidOperationException($"One Of the Date in Applied Dates is Already Applied");
+                    return new ResponseDto
+                    {
+                        SuccessStatus = false,
+                        Message = $"One Of the Date in Applied Dates is Already Applied"
+                    };
+                    
                 }
 
 
 
 
 
-                async Task<bool> EditLeaveRequest()
+                async Task<ResponseDto> EditLeaveRequest()
                 {
                     if (days > 0)
                     {
+                        if (!request.HalfDay.HasValue)
+                        {
+                            request.HalfDay = false;
+                        }
                         leaveRequest.EditLeave(request.TypeId, request.HalfDay, request.FromDate, request.ToDate, LeaveRequestStatus.Open, request.Description);
                         _context.Update(leaveRequest);
                         List<LeaveRequestDay> leaveRequestDayList = await _context.LeaveRequestDays.Where(x => x.LeaveRequestId == request.LeaveRequestId).ToListAsync(cancellationToken);
@@ -262,7 +359,23 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                             AddLeaveRequestDayCommand addLeaveRequestDayCommand = new AddLeaveRequestDayCommand();
                             addLeaveRequestDayCommand.LeaveRequestId = leaveRequest.Id;
                             addLeaveRequestDayCommand.Date = dates;
-                            return await _mediator.Send(addLeaveRequestDayCommand, cancellationToken);
+                            bool status = await _mediator.Send(addLeaveRequestDayCommand, cancellationToken);
+                            if (status)
+                            {
+                                return new ResponseDto
+                                {
+                                    SuccessStatus = true,
+
+                                };
+                            }
+                            else
+                            {
+                                return new ResponseDto
+                                {
+                                    SuccessStatus = false,
+                                    Message = "failed"
+                                };
+                            }
                         }
                         else
                         {
@@ -271,13 +384,18 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                     }
                     else
                     {
-                        throw new Exception("Total Leaves Are 0");
+                        return new ResponseDto
+                        {
+                            SuccessStatus = false,
+                            Message = "Total Leaves Are 0"
+                        };
+                        
                     }
 
 
                 }
 
-                async Task<bool> CheckOne()
+                async Task<ResponseDto> CheckOne()
                 {
                     if (leaveType.DutyDaysRequired.HasValue)
                     {
@@ -294,7 +412,12 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                                     }
                                     else
                                     {
-                                        throw new InvalidOperationException($"Selected Day Do not Contain Restricted Holiday");
+                                        return new ResponseDto
+                                        {
+                                            SuccessStatus = false,
+                                            Message = $"Selected Day Do not Contain Restricted Holiday"
+                                        };
+                                        
                                     }
                                 }
                                 else
@@ -304,12 +427,22 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                             }
                             else
                             {
-                                throw new InvalidOperationException($"Minimum Duty Days of {leaveType.DutyDaysRequired} is Required for {leaveType.TypeName} .");
+                                return new ResponseDto
+                                {
+                                    SuccessStatus = false,
+                                    Message = $"Minimum Duty Days of {leaveType.DutyDaysRequired} is Required for {leaveType.TypeName} ."
+                                };
+                                
                             }
                         }
                         else
                         {
-                            throw new InvalidOperationException($"Joining date Not assinged by HR.");
+                            return new ResponseDto
+                            {
+                                SuccessStatus = false,
+                                Message = $"Joining date Not assinged by HR."
+                            };
+                            
                         }
                     }
                     else
@@ -323,7 +456,12 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                             }
                             else
                             {
-                                throw new InvalidOperationException($"Selected Day Do not Contain Restricted Holiday");
+                                return new ResponseDto
+                                {
+                                    SuccessStatus = false,
+                                    Message = $"Selected Day Do not Contain Restricted Holiday"
+                                };
+                                
                             }
                         }
                         else
@@ -334,36 +472,59 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                 }
 
 
-                async Task<bool> WorkFromHomeCheck()
+                async Task<ResponseDto> WorkFromHomeCheck()
                 {
-                    if (leaveType.DutyDaysRequired.HasValue)
+                    if(!!request.HalfDay.HasValue || request.HalfDay == false)
                     {
-                        if (employee.JoiningDate.HasValue)
+                        if (leaveType.DutyDaysRequired.HasValue)
                         {
-                            if ((request.FromDate.DayNumber - employee.JoiningDate.Value.DayNumber >= leaveType.DutyDaysRequired))
+                            if (employee.JoiningDate.HasValue)
                             {
-                                return await EditLeaveRequest();
+                                if ((request.FromDate.DayNumber - employee.JoiningDate.Value.DayNumber >= leaveType.DutyDaysRequired))
+                                {
+                                    return await EditLeaveRequest();
+                                }
+                                else
+                                {
+                                    return new ResponseDto
+                                    {
+                                        SuccessStatus = false,
+                                        Message = $"Minimum Duty Days of {leaveType.DutyDaysRequired} is Required for {leaveType.TypeName} ."
+                                    };
+                                    
+                                }
+
                             }
                             else
                             {
-                                throw new InvalidOperationException($"Minimum Duty Days of {leaveType.DutyDaysRequired} is Required for {leaveType.TypeName} .");
+                                return new ResponseDto
+                                {
+                                    SuccessStatus = false,
+                                    Message = $"Joining date Not assinged by HR."
+                                };
+                               
                             }
-
                         }
                         else
                         {
-                            throw new InvalidOperationException($"Joining date Not assinged by HR.");
+                            return await EditLeaveRequest();
                         }
                     }
                     else
                     {
-                        return await EditLeaveRequest();
+                        return new ResponseDto
+                        {
+                            SuccessStatus = false,
+                            Message = "Work From Home Cannot be Applied For Half Day"
+                        };
+                        
                     }
+                   
                 }
 
 
 
-                async Task<bool> PreviousDayLeaves()
+                async Task<ResponseDto> PreviousDayLeaves()
                 {
                     if (leaveType.LeaveCategoryId == LeaveCategory.BereavementLeave)
                     {
@@ -382,31 +543,51 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveRequests.Ed
                         }
                         else
                         {
-                            return await Balance(leaveBalance2.Balance, EmergencyLeave.TypeName);
+                            return await Balance(leaveBalance2.Balance, EmergencyLeave.TypeName,EmergencyVirtualBalance);
                         }
 
                     }
                     else
                     {
-                        throw new InvalidOperationException($"Applying Leave For Previous Day is only Possible for Emergency  And .Bereavement Leave . And Half Day is not Applicable ");
+                        return new ResponseDto
+                        {
+                            SuccessStatus = false,
+                            Message = $"Applying Leave For Previous Day is only Possible for Emergency  And .Bereavement Leave . And Half Day is not Applicable "
+                        };
+                        
                     }
                 }
 
-                async Task<bool> Balance(decimal balance, string name)
+                async Task<ResponseDto> Balance(decimal balance, string name, decimal virtualBalance)
                 {
                     if (balance < days)
                     {
-                        throw new InvalidOperationException($"No Sufficient Leave for type {name}");
+                        return new ResponseDto
+                        {
+                            SuccessStatus = false,
+                            Message = $"No Sufficient Leave for type {name}. Remaining Balance : {balance}"
+                        };
+                        
                     }
                     else
                     {
-                        throw new InvalidOperationException($"Revoke or edit existing {name}. All Balances are taken by applied leaves");
+                        return new ResponseDto
+                        {
+                            SuccessStatus = false,
+                            Message = $"Revoke or edit existing {name}. All Balances are taken by applied leaves. Remaining Virtual Balance : {virtualBalance}"
+                        };
+                        
                     }
                 }
             }
             else
             {
-                throw new Exception($"You cannot Edit This Leave");
+                return new ResponseDto
+                {
+                    SuccessStatus = false,
+                    Message = $"You cannot Edit This Leave"
+                };
+                
             }
         }
     }

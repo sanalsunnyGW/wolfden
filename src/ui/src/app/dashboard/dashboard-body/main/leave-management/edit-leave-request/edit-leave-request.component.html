@@ -1,64 +1,74 @@
-<div>
-    <form [formGroup]="editLeave" (ngSubmit)="onSubmit()">
-        <div class="form-group mb-3">
-            <label  class="form-label">Select Leave Type</label>
-            <ng-select 
-                [items]="leaveType" 
-                bindLabel="name" 
-                bindValue="id" 
-                placeholder="Select Leave Type" 
-                formControlName="typeId" 
-                id="typeId">
-            </ng-select>
-            <div class="error">@if(editLeave.get('typeId')?.invalid && editLeave.get('typeId')?.touched )
-                {
-                    Leave type is required.
-                }
-
-            </div>
-        </div>
-  
-        <div class="form-group mb-3">
-            <label for="halfDay" class="form-label">Select if Half Day</label>
-            <div class="form-check form-switch">
-                <input class="form-check-input" 
-                       type="checkbox" 
-                       id="halfDay" 
-                       [value]="true" 
-                       formControlName="halfDay">
-                <label class="form-check-label" for="halfDay">Half Day</label>
-            </div>
-        </div>
-  
-        <div class="form-group mb-3">
-            <label for="fromDate" class="form-label">From Date</label>
-            <input type="date" class="form-control" id="fromDate" formControlName="fromDate">
-            <div class="error"> @if(editLeave.get('fromDate')?.invalid && editLeave.get('fromDate')?.touched){
-                From date is required.
-                }
-                
-            </div>
-        </div>
-  
-        <div class="form-group mb-3">
-            <label for="toDate" class="form-label">To Date</label>
-            <input type="date" class="form-control" id="toDate" formControlName="toDate">
-            <div class="error" > @if(editLeave.get('toDate')?.invalid && editLeave.get('toDate')?.touched){
-                To date is required.
-                }
-            </div>
-        </div>
-  
-        <div class="form-group mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" id="description" rows="5" formControlName="description"></textarea>
-            <div class="error" > @if(editLeave.get('fromDate')?.invalid && editLeave.get('fromDate')?.touched){
-                Description is required.
-                }
-            </div>
-        </div>
-  
-        <button class="btn btn-primary" type="submit" [disabled]="editLeave.invalid">Submit</button>
-    </form>
+<div class="mb-3">
+    <h1 >Edit Leave Request</h1>
   </div>
+
+<div class="d-flex justify-content-center pt-5">
+<div class="container size fw-bold">
+    <div>
+        <form [formGroup]="editLeave" (ngSubmit)="onSubmit()" class="form-container p-4 rounded shadow-sm color was-validated">
+            <div class="form-group mb-3">
+                <label  class="form-label">Select Leave Type</label>
+                <ng-select 
+                    [items]="leaveType" 
+                    bindLabel="name" 
+                    bindValue="id" 
+                    placeholder="Select Leave Type" 
+                    formControlName="typeId" 
+                    id="typeId">
+                </ng-select>
+                <div class="error text-danger fw-lighter fst-italic">@if(editLeave.get('typeId')?.invalid && editLeave.get('typeId')?.touched )
+                    {
+                        Leave type is required.
+                    }
+    
+                </div>
+            </div>
+      
+            <div class="form-group mb-3">
+                <label for="halfDay" class="form-label">Select If Half Day</label>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" 
+                           type="checkbox" 
+                           id="halfDay" 
+                           [value]="true" 
+                           formControlName="halfDay">
+                    <label class="form-check-label" for="halfDay">Half Day</label>
+                </div>
+            </div>
+      
+            <div class="form-group mb-3">
+                <label for="fromDate" class="form-label">From Date</label>
+                <input type="date" class="form-control" id="fromDate" formControlName="fromDate" required>
+                <div class="error text-danger fw-lighter fst-italic"> @if(editLeave.get('fromDate')?.invalid && editLeave.get('fromDate')?.touched){
+                    From date is required.
+                    }
+                    
+                </div>
+            </div>
+      
+            <div class="form-group mb-3">
+                <label for="toDate" class="form-label">To Date</label>
+                <input type="date" class="form-control" id="toDate" formControlName="toDate" required>
+                <div class="error text-danger fw-lighter fst-italic" > @if(editLeave.get('toDate')?.invalid && editLeave.get('toDate')?.touched){
+                    To date is required.
+                    }
+                </div>
+            </div>
+      
+            <div class="form-group mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" rows="5" formControlName="description" required></textarea>
+                <div class="error text-danger fw-lighter fst-italic" > @if(editLeave.get('fromDate')?.invalid && editLeave.get('fromDate')?.touched){
+                    Description is required.
+                    }
+                </div>
+            </div>
+      
+            <button class="btn btn-primary" type="submit" [disabled]="editLeave.invalid">Submit</button>
+        </form>
+      </div>
+</div>
+</div>
+
+
   

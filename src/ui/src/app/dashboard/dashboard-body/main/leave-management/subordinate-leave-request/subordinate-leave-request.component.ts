@@ -7,6 +7,7 @@ import { ISubordinateLeavePaginationReceive } from '../../../../../interface/sub
 import { ISubordinateLeaveRequest } from '../../../../../interface/subordinate-leave-request';
 import { LeaveManagementService } from '../../../../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-subordinate-leave-request',
@@ -35,6 +36,7 @@ export class SubordinateLeaveRequestComponent implements OnInit{
 
   leaveManagementService = inject(LeaveManagementService);
   destroyRef= inject(DestroyRef);
+  toastr = inject(ToastrService);
 
 
   loadLeaveRequests(filterStatus : LeaveRequestStatus, pageNumber : number, pageSize : number): void {
@@ -82,13 +84,13 @@ export class SubordinateLeaveRequestComponent implements OnInit{
     .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (response: boolean) => {
         if(response){
-          alert("Leave Approved");
+          this.toastr.success("Leave Approved");
           this.loadLeaveRequests(this.leavestatus,this.pageNumber,this.pageSize);
         }
        
         },
         error: (error) => {
-          alert(error);
+          this.toastr.error(error);
 
       }
     });
@@ -102,13 +104,13 @@ export class SubordinateLeaveRequestComponent implements OnInit{
     .pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (response: boolean) => {
         if(response){
-          alert("Leave rejected");
+          this.toastr.success("Leave rejected");
           this.loadLeaveRequests(this.leavestatus,this.pageNumber,this.pageSize);
         }
        
         },
         error: (error) => {
-          alert(error);
+          this.toastr.error(error);
 
       }
     });

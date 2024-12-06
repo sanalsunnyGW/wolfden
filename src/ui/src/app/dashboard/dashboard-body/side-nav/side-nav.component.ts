@@ -56,6 +56,8 @@ export class SideNavComponent {
     subordinates: []
   }];
 
+
+
   expandedSections: { [key: string]: boolean } = {
     leave: true,
     attendance: true

@@ -115,7 +115,6 @@ namespace WolfDen.API.Controllers.Employee
             return await _mediator.Send(query, cancellationToken);
 
         }
-
         [AllowAnonymous]
         [HttpPatch("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)

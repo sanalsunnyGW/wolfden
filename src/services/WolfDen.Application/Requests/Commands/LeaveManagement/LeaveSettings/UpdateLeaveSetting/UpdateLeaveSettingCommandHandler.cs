@@ -19,10 +19,10 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveSettings.Up
         public async Task<bool> Handle(UpdateLeaveSettingCommand request, CancellationToken cancellationToken)
         {
 
-            var result = await _validator.ValidateAsync(request, cancellationToken);
-            if (!result.IsValid)
+            var validatorResult = await _validator.ValidateAsync(request, cancellationToken);
+            if (!validatorResult.IsValid)
             {
-                var errors = string.Join(", ", result.Errors.Select(e => e.ErrorMessage));
+                var errors = string.Join(", ", validatorResult.Errors.Select(e => e.ErrorMessage));
                 throw new ValidationException($"Validation failed: {errors}");
             }
 
