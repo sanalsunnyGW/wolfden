@@ -15,6 +15,7 @@ export class NotificationModalComponent {
   @Input() onClose: () => void = () => {};
   userService=inject(WolfDenService);
 
+
   markNotificationAsRead(notificationId: number): void {
     this.userService.markAsRead(notificationId).subscribe({
       next: (response) => {

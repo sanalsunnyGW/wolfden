@@ -44,11 +44,11 @@ export class CheckPasswordComponent {
   onSubmit() {
     this.isSubmitted = true;
     if (this.userForm.valid) {
-      this.userService.resetPassword(this.userService.userId, this.userForm.value.password).subscribe({
+      this.userService.checkPassword(this.userService.userId, this.userForm.value.password).subscribe({
         next: (response: boolean) => {
           if (response===true) {
-            this.toastr.success('password Changed')
-            this.router.navigate(['/portal/dashboard']);        
+            this.toastr.success('Sucess')
+            this.router.navigate(['/user/reset-password']);        
             }
             else{              
               this.toastr.error('Invalid')

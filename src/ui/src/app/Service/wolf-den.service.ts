@@ -9,6 +9,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from '../../enviornments/environment';
 import { Iholiday } from '../interface/iholiday';
+import { IaddHoliday } from '../interface/iadd-holiday';
+import { IaddHolidayService } from '../interface/iadd-holiday-service';
 @Injectable({
   providedIn: 'root'
 })
@@ -39,7 +41,6 @@ export class WolfDenService {
       }
     }
     else{
-      this.toastr.error('login');
       this.router.navigate(['/user/login']); 
     }
   }
@@ -126,6 +127,10 @@ export class WolfDenService {
       `${this.baseUrl}/api/Notification/employee`,
       { headers: this.getHeaders(), params }
     );
+  }
+  
+  addHoliday(data: IaddHolidayService): Observable<number> {
+    return this.http.post<number>(`${this.baseUrl}/api/Holiday/holiday`, data, { headers: this.getHeaders() });
   }
   getHoliday(): Observable<Iholiday[]>{
     const params=this.createHttpParams({});

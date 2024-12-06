@@ -175,25 +175,7 @@ export class AdminDashboardComponent {
       });
     }
   }
-  sync(){
-    this.employeeService.syncEmployee().subscribe({
-      next: (response: any) => {
-        if(response){
-          this.toastr.success('Employee Sync Success');
-        }
-        else{
-          this.toastr.info('Employees are already up to date')
-        }
-        
-      },
-      error: (err) => {
-        this.toastr.error('Error fetching managers');
-      }
-    });
-
-
-  }
-
+  
   onSubmit() {
     if (this.userForm.valid) {
       const formData = this.userForm.value;

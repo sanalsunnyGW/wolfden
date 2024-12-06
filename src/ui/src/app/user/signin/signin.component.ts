@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ISignupForm } from './iSignup-form';
 import { Router, RouterLink } from '@angular/router';
-import { MatNativeDateModule } from '@angular/material/core'; // For native date adapter
+import { MatNativeDateModule } from '@angular/material/core'; 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select'; // Import MatSelectModule
+import { MatSelectModule } from '@angular/material/select';
 import { formatDate } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { WolfDenService } from '../../service/wolf-den.service'
@@ -49,6 +49,7 @@ export class SigninComponent {
     }
   }
 
+
   constructor(private fb: FormBuilder,
     private userService: WolfDenService,
     private router: Router,
@@ -60,7 +61,8 @@ export class SigninComponent {
     this.userForm = this.fb.group({
       firstName: new FormControl('', Validators.required),
       lastName: new FormControl('', Validators.required),
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [Validators.required, Validators.email,  
+                                  Validators.pattern(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)]),
       dateofBirth: new FormControl(isdate, Validators.required),
       gender: new FormControl<number | null>(null, Validators.required),
       phoneNumber: new FormControl<string | null>(null, Validators.required),
@@ -76,14 +78,11 @@ export class SigninComponent {
 
 
 
-  isFormDetails: boolean = false;
   isSubmitted: boolean = false;
 
 
   onSubmit() {
     this.isSubmitted = true;
-    console.log('form', this.userForm.value);
-
     const dateOfBirth = this.userForm.value.dateofBirth;
     const formattedDate = dateOfBirth ? formatDate(dateOfBirth, 'yyyy-MM-dd', 'en-US') : '';
     if (this.userForm.valid) {

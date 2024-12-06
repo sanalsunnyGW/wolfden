@@ -15,7 +15,7 @@
         <div  class="notification-item">
           <div class="notification-content" (click)="markNotificationAsRead(notification.notificationId)" title="click to mark as read">
             <p [class.unread]="!notification">{{ notification.message }}</p>
-            <span class="timestamp">{{ notification.createdAt | date:'short' }}</span>
+            <span class="timestamp">{{ notification.createdAt | date:'short':'+05:30' }}</span>
           </div>
           @if(!notifications[notifications.length-1]){
             <div class="divider"></div>

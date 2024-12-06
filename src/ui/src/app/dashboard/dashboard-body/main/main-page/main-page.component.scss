@@ -54,17 +54,18 @@
     .absence-item {
       padding: 10px;
       border-radius: 4px;
-      background: #8398ad;
+      background: #92a8bc;
       margin-bottom: 8px;
 
       .absence-name {
         font-weight: 500;
         font-size: 14px;
+        color: #090000;
       }
 
-      .absence-details {
+      .absence-description {
         font-size: 12px;
-        color: #e6dddd;
+        color: #3f3434;
         margin-top: 4px;
       }
     }
@@ -88,6 +89,7 @@
 }
 .margin10 {
   margin: 10px;
+  overflow-y: auto;
 }
 .card-content.absences-list {
   max-height:fit-content;
