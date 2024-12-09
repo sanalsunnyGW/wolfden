@@ -89,15 +89,11 @@ export class EditRoleComponent {
       ).subscribe({
         next: (data) => {
           this.managerDataWithPage=data;
-          console.log(data);
           this.managerDataWithPage.employeeNames=data.employeeNames;
           this.managerDataWithPage.totalRecords=data.totalRecords;
           this.totalRecords = data.totalRecords;
           this.managerData = data.employeeNames;
           this.isDataLoaded = true;
-          console.log("hmmm");
-          console.log(this.managerData);
-
           if (this.managerData.length === 0) {
             this.toastr.info('No employees found for the given search.');
             }
