@@ -99,6 +99,7 @@
   padding: 12px 15px;
   transition: background-color 0.2s;
   font-weight: 500;
+ 
 
 
   &:hover {
@@ -112,7 +113,8 @@
 
 .nav-items{
   margin-top: 10px;
-  margin-bottom: 20px;
   height: 100vh;
   overflow-y: auto;
+  overflow-x: hidden;
+
 }

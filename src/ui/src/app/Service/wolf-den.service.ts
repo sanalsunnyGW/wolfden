@@ -9,6 +9,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from '../../enviornments/environment';
 import { Iholiday } from '../interface/iholiday';
+import { IaddHoliday } from '../interface/iadd-holiday';
+import { IaddHolidayService } from '../interface/iadd-holiday-service';
 @Injectable({
   providedIn: 'root'
 })
@@ -39,7 +41,6 @@ export class WolfDenService {
       }
     }
     else{
-      this.toastr.error('login');
       this.router.navigate(['/user/login']); 
     }
   }
@@ -117,6 +118,19 @@ export class WolfDenService {
       { headers: this.getHeaders(), params }
     );
   }
+
+  getAllEmployeesByName(pageNumber: number, pageSize: number, firstName?: string, lastName?: string): Observable<any> {
+    const params = this.createHttpParams({
+      PageNumber: pageNumber,
+      PageSize: pageSize,
+      FirstName: firstName,
+      LastName: lastName,
+    });
+    return this.http.get<any>(
+      `${this.baseUrl}/api/employee/get-all-by-name-paginated`,
+      { headers: this.getHeaders(), params }
+    );
+  }
 //notification
   getNotification(employeeId: number): Observable<INotificationForm[]> {
     const params = this.createHttpParams({
@@ -126,6 +140,10 @@ export class WolfDenService {
       `${this.baseUrl}/api/Notification/employee`,
       { headers: this.getHeaders(), params }
     );
+  }
+  
+  addHoliday(data: IaddHolidayService): Observable<number> {
+    return this.http.post<number>(`${this.baseUrl}/api/Holiday/holiday`, data, { headers: this.getHeaders() });
   }
   getHoliday(): Observable<Iholiday[]>{
     const params=this.createHttpParams({});
@@ -149,6 +167,13 @@ export class WolfDenService {
         'Content-Type': 'application/json',
       }),
     });
+  }
+  markAllAsRead(employeeId:number):Observable<boolean>{
+    return this.http.patch<boolean>(`${this.baseUrl}/api/Notification/read-all`,{employeeId},{
+      headers: new HttpHeaders({
+        'content-Type': 'application/json',
+      })
+    })
   }
   checkPassword(id: number, password: string): Observable<boolean> {
     const params = this.createHttpParams({

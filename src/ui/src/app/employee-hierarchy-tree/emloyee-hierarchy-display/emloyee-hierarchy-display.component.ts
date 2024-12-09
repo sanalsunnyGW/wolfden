@@ -55,7 +55,8 @@ export class EmloyeeHierarchyDisplayComponent {
     id: 0,
     firstName: '',
     lastName: '',
-    role: ''
+    role: '',
+    employeeCode: 0,
   }]
 
   loginRole: string = '';

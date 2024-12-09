@@ -49,7 +49,7 @@ export class ResetPasswordComponent {
         next: (response: boolean) => {
           if (response===true) {
             this.toastr.success('password Changed')
-            this.router.navigate(['/portal/dashboard']);        
+            this.router.navigate(['/user/login']);        
             }
             else{              
               this.toastr.error('Invalid')
