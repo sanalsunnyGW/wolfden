@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Gender } from '../enum/gender-enum';
@@ -15,6 +15,10 @@ import { IadminForm } from '../interface/iadmin-form';
 import { ImanagerForm } from '../interface/imanager-form';
 import { ImanagerData } from '../interface/imanager-data';
 import { IadminUpdate } from '../interface/iadmin-update';
+import { IEmployeeData } from '../interface/employee-data';
+import { Modal } from 'bootstrap';
+import { IteamManager, IteamManagerData } from '../interface/iteam-manager';
+
 
 @Component({
   selector: 'app-profile',
@@ -25,10 +29,12 @@ import { IadminUpdate } from '../interface/iadmin-update';
 })
 export class ProfileComponent {
   userForm!: FormGroup<IProfileForm>;
+  teamForm!: FormGroup<IteamManager>;
   adminForm!: FormGroup<IadminForm>;
+  isTeamClicked:boolean=false;
+  teamId:number=0;
   employeeUpdate: IEmployeeUpdate = {} as IEmployeeUpdate;
   inDate = new Date();
-  wolfdenService=inject(WolfDenService)
   employeeData: Employee = {
     id: 0,
     rfId: '',
@@ -68,12 +74,14 @@ export class ProfileComponent {
     lastName: '',
     role: ''
   }]
+  myTeam: IEmployeeData[] = {} as IEmployeeData[];
+  displayMyteam: boolean = false;
 
+  wolfDenService=inject(WolfDenService)
   isDataLoaded: boolean = false;
   isDataClicked: boolean = false;
   employeeIdClicked: number = 0;
-  constructor(private fb: FormBuilder, private employeeService: EmployeeService, private toastr: ToastrService
-  ) {
+  constructor(private fb: FormBuilder, private employeeService: EmployeeService, private toastr: ToastrService, private cdr: ChangeDetectorRef) {
     this.buildForm();
   }
   private buildForm() {
@@ -95,13 +103,14 @@ export class ProfileComponent {
       isActive: new FormControl<boolean | null>(null),
       joiningDate: new FormControl(this.inDate, Validators.required),
       employmentType: new FormControl<number | null>(null, Validators.required),
-
     }),
-    this.managerForm = this.fb.group({
-      firstName: new FormControl('', Validators.required),
-      lastName: new FormControl(''),
+      this.managerForm = this.fb.group({
+        firstName: new FormControl('', Validators.required),
+        lastName: new FormControl(''),
 
-    })
+      }), this.teamForm = this.fb.group({
+        managerId: new FormControl<number | null>(null,Validators.required),  
+      })
   }
   selectEmployee(employeeId: number): void {
     this.employeeIdClicked = employeeId;
@@ -191,7 +200,6 @@ export class ProfileComponent {
       isActive: this.employeeData.isActive,
       joiningDate: this.employeeData.joiningDate,
       employmentType: this.employeeData.employmentType,
-
     }),
       this.employeeService.getAllDepartment().subscribe({
         next: (response: IDepartment[]) => {
@@ -217,8 +225,7 @@ export class ProfileComponent {
       })
   }
   loadEmployeeData() {
-    const employee = this.employeeService.decodeToken();
-    this.employeeService.getEmployeeProfile(employee.EmployeeId).subscribe({
+    this.employeeService.getEmployeeProfile(this.wolfDenService.userId).subscribe({
       next: (response: Employee) => {
         if (response) {
           this.employeeData = response;
@@ -251,7 +258,7 @@ export class ProfileComponent {
     if (this.userForm.valid) {
       const employee = this.employeeService.decodeToken();
       const updateDetails: IEmployeeUpdate = {
-        id : employee.EmployeeId,
+        id: employee.EmployeeId,
         firstName: this.userForm.value.firstName ?? '',
         lastName: this.userForm.value.lastName ?? '',
         email: this.userForm.value.email ?? '',
@@ -259,7 +266,7 @@ export class ProfileComponent {
         gender: Number(this.userForm.value.gender),
         address: this.userForm.value.address ?? '',
         country: this.userForm.value.country ?? '',
-        state : this.userForm.value.state ?? '',
+        state: this.userForm.value.state ?? '',
         photo: this.userForm.value.photo ?? '',
         dateofBirth: this.userForm.value.dateofBirth ?? this.inDate,
       }
@@ -277,17 +284,16 @@ export class ProfileComponent {
     }
   }
   adminSubmit() {
-    console.log(this.adminForm)
     if (this.adminForm.valid) {
       const formData = this.adminForm.value;
-      const params : IadminUpdate = {
-        id: this.wolfdenService.userId,
+      const params: IadminUpdate = {
+        id: this.wolfDenService.userId,
         designationId: formData.designationId ?? 0,
         departmentId: Number(formData.departmentId) ?? 0,
         managerId: formData.managerId ?? null,
-        isActive: formData.isActive ?? false,
+        isActive: formData.isActive ?? null,
         joiningDate: formData.joiningDate ?? this.inDate,
-        employmentType: Number(formData.employmentType)
+        employmentType: Number(formData.employmentType),
 
       }
       this.employeeService.adminUpdateEmployee(params).subscribe({
@@ -306,5 +312,80 @@ export class ProfileComponent {
       })
     }
   }
-}
+  displayTeam() {
+    this.displayMyteam = false;
+  }
+  myTeamMembers() {
+    if (this.adminForm.value.isActive == false) {
+      const employee = this.employeeService.decodeToken();
+      this.employeeService.getSubordinates(employee.EmployeeId).subscribe({
+        next: (response: IEmployeeData[]) => {
+          if (response.length>0) {
+            this.myTeam = response;
+            this.displayMyteam = true;
+            this.cdr.detectChanges();
+            const myTeamElement = document.getElementById('myTeam');
+            if (myTeamElement) {
+              const myTeamModal = new Modal(myTeamElement);
+              myTeamModal.show();
+            } else {
+              console.error('Modal element not found');
+            }
+          }
+          else {
+            this.adminSubmit()
+          }
+        },
+        error: (error) => {
+          this.toastr.error('An error occurred while displaying My Team')
+        },
+      });
+    }
+    else {
+      this.adminSubmit()
+    }
+  }
 
+teamManagerUpdate(){
+  if(this.teamForm.valid){
+ const formData = this.teamForm.value;
+      const params: IteamManagerData = {
+        id: this.teamId,
+        managerId: formData.managerId ?? null,
+      }
+      this.employeeService.updateTeamManager(params).subscribe({
+        next: (response) => {
+          console.log("res",response)
+          if (response == true) {
+            this.toastr.success('Profile Updated Successfully')
+            this.loadEmployeeData();
+            this.teamForm.reset();
+            this.isTeamClicked=false;
+            this.myTeam.splice(0,1);
+            this.managerForm.get('firstName')?.setValue('');
+            this.managerForm.get('lastName')?.setValue('');
+            this.isDataLoaded = false;
+            this.isDataClicked=false;
+          }
+          else {
+            this.toastr.error('Profile Update Failed')
+          }
+        },
+        error: (error) => {
+          this.toastr.error('An error occurred while  Updating Profile')
+        }
+      })
+    }
+  }
+  selectManager(employeeId: number): void {
+    this.employeeIdClicked = employeeId;
+    this.teamForm.patchValue({
+      managerId: employeeId
+    });
+    this.isDataClicked = true;
+  }
+  selectTeam(employee: number): void {
+    this.teamId=employee;
+    this.isTeamClicked = true;   
+  }
+}

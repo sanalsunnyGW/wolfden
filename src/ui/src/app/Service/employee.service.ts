@@ -13,6 +13,7 @@ import { IRole } from '../interface/irole-form';
 import { IadminUpdate } from '../interface/iadmin-update';
 import { IDepartmentData } from '../interface/idepartment-form';
 import { IDesignationData } from '../interface/idesignation-form';
+import { IteamManagerData } from '../interface/iteam-manager';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,6 @@ export class EmployeeService {
 
   decodeToken() {
     const token = localStorage.getItem('token');
-
     if (!token) {
       return null;
     }
@@ -63,11 +63,9 @@ export class EmployeeService {
   }
   getAllDesignation() {
     return this.http.get<IDesignation[]>(`${this.baseUrl}/designation`);
-
   }
   getAllDepartment() {
     return this.http.get<IDepartment[]>(`${this.baseUrl}/department`);
-
   }
   getEmployeeByName(firstName: string, lastName?: string) {
     return this.http.get<ImanagerData[]>(`${this.baseUrl}/employee/get-all-by-name?FirstName=${firstName}&LastName=${lastName}`)
@@ -86,5 +84,11 @@ export class EmployeeService {
   }
   myTeamLeave(employeeId: number) {
     return this.http.get<IteamLeave[]>(`${this.baseUrl}/leave-request/next-week/approved?EmployeeId=${employeeId}`)
+  }
+  getSubordinates(employeeId: number){
+    return this.http.get<IEmployeeData[]>(`${this.baseUrl}/employee/my-team?Id=${employeeId}`)
+  }
+  updateTeamManager(manager:IteamManagerData){
+    return this.http.patch<boolean>(`${this.baseUrl}/employee/team-manager-update`,manager)
   }
 }

@@ -210,7 +210,7 @@ export class AdminDashboardComponent {
         managerId: formData.managerId ?? 0,
         isActive: formData.isActive ?? false,
         joiningDate: formData.joiningDate ?? this.inDate,
-        employmentType: Number(formData.employmentType)
+        employmentType: Number(formData.employmentType),
       }
       this.employeeService.adminUpdateEmployee(params).subscribe({
         next: (response: boolean) => {

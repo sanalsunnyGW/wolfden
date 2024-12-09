@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Employee } from '../../interface/iemployee';
@@ -13,6 +13,9 @@ import { ImanagerForm } from '../../interface/imanager-form';
 import { IDepartment } from '../../interface/idepartment';
 import { IDesignation } from '../../interface/idesignation';
 import { IadminUpdate } from '../../interface/iadmin-update';
+import { IEmployeeData } from '../../interface/employee-data';
+import { Modal } from 'bootstrap';
+import { IteamManager, IteamManagerData } from '../../interface/iteam-manager';
 
 @Component({
   selector: 'app-emloyee-hierarchy-display',
@@ -27,31 +30,12 @@ export class EmloyeeHierarchyDisplayComponent {
   managerForm!: FormGroup<ImanagerForm>;
   isDataLoaded: boolean = false;
   isDataClicked: boolean = false;
+  displayMyteam: boolean = false;
   employeeIdClicked: number = 0;
-  employeeData: Employee = {
-    id: 0,
-    rfId: '',
-    employeeCode: 0,
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    dateofBirth: this.inDate,
-    joiningDate: this.inDate,
-    gender: 0,
-    designationId: 0,
-    designationName: '',
-    departmentId: 0,
-    departmentName: '',
-    managerId: null,
-    managerName: null,
-    isActive: false,
-    address: '',
-    country: '',
-    state: '',
-    employmentType: 0,
-    photo: ''
-  };
+  employeeData: Employee = {} as Employee;
+  myTeam: IEmployeeData[] = {} as IEmployeeData[];
+  isTeamClicked: boolean = false;
+  teamId: number = 0;
   managerData: ImanagerData[] = [{
     id: 0,
     firstName: '',
@@ -68,8 +52,7 @@ export class EmloyeeHierarchyDisplayComponent {
     id: 0,
     designationName: ''
   }];
-  constructor(private route: ActivatedRoute, private employeeService: EmployeeService, private fb: FormBuilder, private toastr: ToastrService
-  ) {
+  constructor(private route: ActivatedRoute, private employeeService: EmployeeService, private fb: FormBuilder, private toastr: ToastrService, private cdr: ChangeDetectorRef) {
     this.buildForm();
   }
   employeeId: number = 0;
@@ -87,6 +70,8 @@ export class EmloyeeHierarchyDisplayComponent {
         firstName: new FormControl('', Validators.required),
         lastName: new FormControl(''),
 
+      }), this.teamForm = this.fb.group({
+        managerId: new FormControl<number | null>(null,Validators.required),  
       })
   }
   profileImage() {
@@ -151,7 +136,6 @@ export class EmloyeeHierarchyDisplayComponent {
       },
       error: (error) => {
         this.toastr.error('An error occurred while  Displaying Profile')
-
       }
     })
   }
@@ -213,21 +197,85 @@ export class EmloyeeHierarchyDisplayComponent {
   onSubmit() {
     if (this.userForm.valid) {
       const formData = this.userForm.value;
-      const params : IadminUpdate = {
+      const params: IadminUpdate = {
         id: this.employeeId,
         designationId: formData.designationId ?? 0,
         departmentId: Number(formData.departmentId) ?? 0,
         managerId: formData.managerId ?? null,
         isActive: formData.isActive ?? false,
         joiningDate: formData.joiningDate ?? this.inDate,
-        employmentType: Number(formData.employmentType)
-
+        employmentType: Number(formData.employmentType),
       }
       this.employeeService.adminUpdateEmployee(params).subscribe({
         next: (response) => {
           if (response == true) {
             this.toastr.success('Profile Updated Successfully')
             this.loadEmployeeData();
+            this.isDataLoaded = false;
+            this.isDataClicked=false;
+            this.managerForm.get('firstName')?.setValue('');
+            this.managerForm.get('lastName')?.setValue('');          }
+          else {
+            this.toastr.error('Profile Update Failed')
+          }
+        },
+        error: (error) => {
+          this.toastr.error('An error occurred while  Updating Profile')
+        }
+      })
+    }
+  }
+  displayTeam() {
+    this.displayMyteam = false;
+  }
+
+  myTeamMembers() {
+    if (this.userForm.value.isActive == false) {
+      this.employeeService.getMyTeamHierarchy(false, this.employeeData.id).subscribe({
+        next: (response: IEmployeeData[]) => {
+          if (response) {
+            this.myTeam = response;
+            this.displayMyteam = true;
+            this.cdr.detectChanges();
+            const myTeamElement = document.getElementById('myTeam');
+            if (myTeamElement) {
+              const myTeamModal = new Modal(myTeamElement);
+              myTeamModal.show();
+            } else {
+              console.error('Modal element not found');
+            }
+          }
+        },
+        error: (error) => {
+          this.toastr.error('An error occurred while displaying My Team')
+        },
+      });
+    }
+    else {
+      this.onSubmit()
+    }
+  }
+  teamForm!: FormGroup<IteamManager>;
+  teamManagerUpdate() {
+    if (this.teamForm.valid) {
+      const formData = this.teamForm.value;
+      const params: IteamManagerData = {
+        id: this.teamId,
+        managerId: formData.managerId ?? null,
+      }
+      this.employeeService.updateTeamManager(params).subscribe({
+        next: (response) => {
+          console.log("res", response)
+          if (response == true) {
+            this.toastr.success('Profile Updated Successfully')
+            this.loadEmployeeData();
+            this.teamForm.reset();
+            this.isTeamClicked = false;
+            this.myTeam.splice(0, 1);
+            this.managerForm.get('firstName')?.setValue('');
+            this.managerForm.get('lastName')?.setValue('');
+            this.isDataLoaded = false;
+            this.isDataClicked=false;
           }
           else {
             this.toastr.error('Profile Update Failed')
@@ -239,7 +287,21 @@ export class EmloyeeHierarchyDisplayComponent {
       })
     }
   }
+  selectManager(employeeId: number): void {
+    this.employeeIdClicked = employeeId;
+    this.teamForm.patchValue({
+      managerId: employeeId
+    });
+    this.isDataClicked = true;
+  }
+  selectTeam(employee: number): void {
+    this.teamId = employee;
+    this.isTeamClicked = true;
+  }
 }
+
+
+
 
 
 

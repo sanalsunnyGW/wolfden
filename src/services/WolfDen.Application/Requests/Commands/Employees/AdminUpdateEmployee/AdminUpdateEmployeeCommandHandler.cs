@@ -27,6 +27,19 @@ namespace WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee
             }
             employee.AdminUpdateEmployee(request.DesignationId, request.DepartmentId, request.ManagerId, request.IsActive, request.JoiningDate, request.EmploymentType);
             _context.Employees.Update(employee);
+            if (request.IsActive is false) 
+            {
+                List<Employee> myTeam=_context.Employees.Where(x=>x.ManagerId==request.Id).ToList();
+                if (myTeam.Any())
+                {
+                    foreach (var team in myTeam) 
+                    { 
+                        team.UpdateManager(employee.ManagerId);
+                    }
+
+                }
+            }
+
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }

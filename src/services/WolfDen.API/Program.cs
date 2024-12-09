@@ -95,9 +95,12 @@ builder.Services.AddAuthentication(x =>
         RequireExpirationTime = true,
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!)),
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        RoleClaimType = ClaimTypes.Role
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        RoleClaimType = ClaimTypes.Role,
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidAudience = builder.Configuration["JWT:Audience"]
+
     };
 });
 
