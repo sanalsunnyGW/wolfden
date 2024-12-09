@@ -32,7 +32,8 @@ export class AdminDashboardComponent {
     id: 0,
     firstName: '',
     lastName: '',
-    role: ''
+    role: '',
+    employeeCode: 0,
   }]
 
   departmentData: IDepartment[] = [{
@@ -173,6 +174,7 @@ export class AdminDashboardComponent {
           this.toastr.error('Error fetching managers');
         }
       });
+      
     }
   }
   

@@ -3,5 +3,6 @@ export interface ImanagerData {
     firstName: string;
     lastName: string;
     role: string;
+    employeeCode: number;
 
 }

@@ -41,7 +41,6 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName
                 EmployeeNameDTO employeeNameDTO = new EmployeeNameDTO()
                 {
                     Id = employee.Id,
-                    EmployeeCode = employee.EmployeeCode,
                     FirstName = employee.FirstName,
                     LastName = employee.LastName,
                     Role = string.Join(", ", userRole)

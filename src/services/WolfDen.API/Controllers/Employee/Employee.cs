@@ -16,6 +16,7 @@ using WolfDen.Application.Requests.Commands.Employees.SuperAdminUpdateEmployee;
 using WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName;
 using WolfDen.Application.Requests.Queries.Employees.EmployeePasswordCheck;
 using WolfDen.Application.Requests.Commands.Employees.ResetPassword;
+using WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesByNameWithPagination;
 
 namespace WolfDen.API.Controllers.Employee
 {
@@ -92,14 +93,20 @@ namespace WolfDen.API.Controllers.Employee
             return await _mediator.Send(query, cancellationToken);
 
         }
-
         [HttpGet("get-all-by-name")]
         public async Task<ActionResult<List<EmployeeNameDTO>>> GetAllEmployees([FromQuery] GetAllEmployeesByNameQuery query, CancellationToken cancellationToken)
         {
             return await _mediator.Send(query, cancellationToken);
 
+        }
+
+        [HttpGet("get-all-by-name-paginated")]
+        public async Task<ActionResult<GetAllEmployeePaginationResponseDTO>> GetAllEmployees([FromQuery] GetAllEmployeesByNamePaginatedQuery query, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(query, cancellationToken);
 
         }
+
         [HttpGet("check-password")]
         public async Task<ActionResult<bool>> CheckPassword([FromQuery] CheckEmployeePasswordQuery query, CancellationToken cancellationToken)
         {

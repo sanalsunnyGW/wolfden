@@ -118,6 +118,19 @@ export class WolfDenService {
       { headers: this.getHeaders(), params }
     );
   }
+
+  getAllEmployeesByName(pageNumber: number, pageSize: number, firstName?: string, lastName?: string): Observable<any> {
+    const params = this.createHttpParams({
+      PageNumber: pageNumber,
+      PageSize: pageSize,
+      FirstName: firstName,
+      LastName: lastName,
+    });
+    return this.http.get<any>(
+      `${this.baseUrl}/api/employee/get-all-by-name-paginated`,
+      { headers: this.getHeaders(), params }
+    );
+  }
 //notification
   getNotification(employeeId: number): Observable<INotificationForm[]> {
     const params = this.createHttpParams({
