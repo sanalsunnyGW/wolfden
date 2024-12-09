@@ -52,6 +52,7 @@ export class EmployeeDirectoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadEmployees();
+    this.loadDepartment();
   }
   onPageChange(event: PageEvent): void {
     this.pageNumber = event.pageIndex;

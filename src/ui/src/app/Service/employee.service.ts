@@ -58,7 +58,7 @@ export class EmployeeService {
     return this.http.get(`${this.baseUrl}/department`);
 
   }
-  getEmployeeByName(firstName: any, lastName?: any) {
+  getEmployeeByName(firstName?: any, lastName?: any) {
     return this.http.get(`${this.baseUrl}/employee/get-all-by-name?FirstName=${firstName}&LastName=${lastName}`)
   }
   adminUpdateEmployee(userForm: any) {

@@ -19,7 +19,7 @@
           </button>
         </div>
         <div class="col-1 w-100">
-          <select [ngModel]="selectedDepartment" (change)="onDepartmentChange($event)" (click)="loadDepartment()" class="p-2 border rounded"
+          <select [ngModel]="selectedDepartment" (change)="onDepartmentChange($event)" class="p-2 border rounded"
             name="All Departments" [value]="'0'">
             <option [value]="'0'">All Departments</option>
             @for(item of departmentData;track item){
