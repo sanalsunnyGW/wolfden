@@ -14,13 +14,11 @@ using WolfDen.Application.Helpers;
 using WolfDen.Application.Requests.Commands.Attendence.Service;
 using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
+using WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail;
 using WolfDen.Application.Services;
 using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
-using WolfDen.Application.Requests.Commands.Attendence.Email;
-using WolfDen.Application.Helper.LeaveManagement;
-using WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail;
 
 
 var builder = WebApplication.CreateBuilder(args);
