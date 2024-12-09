@@ -24,5 +24,12 @@ export class NotificationModalComponent {
       },
     });
   }
+  markAllAsRead(employeeId: number): void{
+    this.userService.markAllAsRead(employeeId).subscribe({
+      next: (response) => {
+        this.notifications = this.notifications.filter(notification => notification !== notification);
+      }
+    })
+  }
 }
 

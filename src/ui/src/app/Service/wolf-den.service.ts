@@ -155,6 +155,13 @@ export class WolfDenService {
       }),
     });
   }
+  markAllAsRead(employeeId:number):Observable<boolean>{
+    return this.http.patch<boolean>(`${this.baseUrl}/api/Notification/read-all`,{employeeId},{
+      headers: new HttpHeaders({
+        'content-Type': 'application/json',
+      })
+    })
+  }
   checkPassword(id: number, password: string): Observable<boolean> {
     const params = this.createHttpParams({
       Id: id,
