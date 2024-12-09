@@ -30,10 +30,10 @@ namespace WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam
                 return teamList;
             }
 
-            List<Employee> myTeam = await _context.Employees.Where(x => x.ManagerId == request.Id && x.IsActive == true).ToListAsync();
+            List<Employee> myTeam = await _context.Employees.Where(x => x.ManagerId == request.Id && x.IsActive == true).Include(e => e.Designation).Include(e => e.Department).ToListAsync();
             if (myTeam.Count == 0)
             {
-                if (employee.ManagerId is null) 
+                if (employee.ManagerId is null)
                 {
                     teamList.Add(await service.GetEmployee(employee, false, cancellationToken));
                     return teamList;

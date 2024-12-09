@@ -11,13 +11,13 @@ namespace WolfDen.API.Controllers.Designation
     [ApiController]
     public class Designation(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator= mediator;
+        private readonly IMediator _mediator = mediator;
 
-        //[Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Admin, SuperAdmin")]
         [HttpPost]
-        public async Task<int> AddDesignation([FromBody] AddDesignationCommand command,CancellationToken cancellationToken)
+        public async Task<int> AddDesignation([FromBody] AddDesignationCommand command, CancellationToken cancellationToken)
         {
-            return await _mediator.Send(command,cancellationToken);
+            return await _mediator.Send(command, cancellationToken);
         }
 
         [HttpGet]

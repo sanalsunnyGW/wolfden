@@ -1,12 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../enviornments/environment';
-import { WolfDenService } from './wolf-den.service';
-import { LoginComponent } from '../user/login/login.component';
+import { IEmployeeData } from '../interface/employee-data';
+import { Employee } from '../interface/iemployee';
+import { IDesignation } from '../interface/idesignation';
+import { IDepartment } from '../interface/idepartment';
+import { ImanagerData } from '../interface/imanager-data';
+import { IteamLeave } from '../interface/iteam-leave';
+import { IaddEmployee } from '../interface/iadd-employee';
+import { IEmployeeUpdate } from '../interface/iemployee-update';
+import { IRole } from '../interface/irole-form';
+import { IadminUpdate } from '../interface/iadmin-update';
+import { IDepartmentData } from '../interface/idepartment-form';
+import { IDesignationData } from '../interface/idesignation-form';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class EmployeeService {
 
   constructor(private http: HttpClient) { }
@@ -33,47 +44,47 @@ export class EmployeeService {
   }
 
   getHierarchy() {
-    return this.http.get(`${this.baseUrl}/employee/hierarchy`);
+    return this.http.get<IEmployeeData>(`${this.baseUrl}/employee/hierarchy`);
   }
   getEmployeeProfile(employeeId: number) {
-    return this.http.get(`${this.baseUrl}/employee/by-Id?EmployeeId=${employeeId}`);
+    return this.http.get<Employee>(`${this.baseUrl}/employee/by-Id?EmployeeId=${employeeId}`);
   }
-  employeeUpdateEmployee(userForm: any) {
-    return this.http.put(`${this.baseUrl}/employee/employee-update-employee`, userForm);
+  employeeUpdateEmployee(userForm: IEmployeeUpdate) {
+    return this.http.put<boolean>(`${this.baseUrl}/employee/employee-update-employee`, userForm);
   }
   getMyTeamHierarchy(getFullHierarchy: boolean, employeeId: number) {
-    return this.http.get(`${this.baseUrl}/employee/team?Id=${employeeId}&Hierarchy=${getFullHierarchy}`);
+    return this.http.get<IEmployeeData[]>(`${this.baseUrl}/employee/team?Id=${employeeId}&Hierarchy=${getFullHierarchy}`);
   }
-  addDepartment(departmentForm: any) {
-    return this.http.post(`${this.baseUrl}/department`, departmentForm);
+  addDepartment(departmentForm: IDepartmentData) {
+    return this.http.post<number>(`${this.baseUrl}/department`, departmentForm);
   }
-  addDesignation(designationForm: any) {
-    return this.http.post(`${this.baseUrl}/designation`, designationForm);
+  addDesignation(designationForm: IDesignationData) {
+    return this.http.post<number>(`${this.baseUrl}/designation`, designationForm);
   }
   getAllDesignation() {
-    return this.http.get(`${this.baseUrl}/designation`);
+    return this.http.get<IDesignation[]>(`${this.baseUrl}/designation`);
 
   }
   getAllDepartment() {
-    return this.http.get(`${this.baseUrl}/department`);
+    return this.http.get<IDepartment[]>(`${this.baseUrl}/department`);
 
   }
-  getEmployeeByName(firstName: any, lastName?: any) {
-    return this.http.get(`${this.baseUrl}/employee/get-all-by-name?FirstName=${firstName}&LastName=${lastName}`)
+  getEmployeeByName(firstName: string, lastName?: string) {
+    return this.http.get<ImanagerData[]>(`${this.baseUrl}/employee/get-all-by-name?FirstName=${firstName}&LastName=${lastName}`)
   }
-  adminUpdateEmployee(userForm: any) {
-    return this.http.put(`${this.baseUrl}/employee/admin`, userForm)
+  adminUpdateEmployee(user: IadminUpdate) {
+    return this.http.put<boolean>(`${this.baseUrl}/employee/admin`, user)
   }
-  roleChange(roleForm: any) {
-    return this.http.put(`${this.baseUrl}/employee/role`, roleForm)
+  roleChange(role: IRole) {
+    return this.http.put<boolean>(`${this.baseUrl}/employee/role`, role)
   }
-  addEmployee(employeeForm:any){
-    return this .http.post(`${this.baseUrl}/employee`,employeeForm)
+  addEmployee(employee: IaddEmployee) {
+    return this.http.post<number>(`${this.baseUrl}/employee`, employee)
   }
-  syncEmployee(){
-    return this.http.patch(`${this.baseUrl}/employee/employee-sync`,null)
+  syncEmployee() {
+    return this.http.patch<boolean>(`${this.baseUrl}/employee/employee-sync`, null)
   }
-  myTeamLeave(employeeId:number){
-    return this.http.get(`${this.baseUrl}/leave-request/next-week/approved?EmployeeId=${employeeId}`)
+  myTeamLeave(employeeId: number) {
+    return this.http.get<IteamLeave[]>(`${this.baseUrl}/leave-request/next-week/approved?EmployeeId=${employeeId}`)
   }
 }

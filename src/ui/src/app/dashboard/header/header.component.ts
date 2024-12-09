@@ -6,8 +6,8 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { NotificationModalComponent } from '../../notification-modal/notification-modal.component';
 import { INotificationForm } from '../../interface/i-notification-form';
-import { LeaveManagementService } from '../../service/leave-management.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { LeaveManagementService } from '../../service/leave-management.service';
 
 
 @Component({

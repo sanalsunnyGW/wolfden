@@ -4,7 +4,7 @@ import { ImanagerForm } from '../interface/imanager-form';
 import { ImanagerData } from '../interface/imanager-data';
 import { ToastrService } from 'ngx-toastr';
 import { EmployeeService } from '../service/employee.service';
-import { IroleForm } from '../interface/irole-form';
+import { IRole, IroleForm } from '../interface/irole-form';
 
 @Component({
   selector: 'app-edit-role',
@@ -53,11 +53,11 @@ export class EditRoleComponent {
     if (this.managerForm.valid) {
       const formData = this.managerForm.value;
       const params = {
-        firstName: formData.firstName,
-        lastName: formData.lastName
-      };
+        firstName: formData.firstName ?? '',
+        lastName: formData.lastName ?? ''
+      }
       this.employeeService.getEmployeeByName(params.firstName, params.lastName).subscribe({
-        next: (response: any) => {
+        next: (response: ImanagerData[]) => {
           this.managerData = response;
           this.isDataLoaded = true;
           if (this.managerData.length === 0) {
@@ -75,13 +75,12 @@ export class EditRoleComponent {
   }
   roleChange() {
     if (this.roleForm.valid) {
-      const formData = this.roleForm.value;
-      const params = {
-        id: formData.id,
-        role: formData.role
-      };
-      this.employeeService.roleChange(params).subscribe({
-        next: (response: any) => {
+      const roleData : IRole = {
+        id :  this.roleForm.value.id!,
+        role : this.roleForm.value.role!,
+      }
+      this.employeeService.roleChange(roleData).subscribe({
+        next: (response: boolean) => {
           this.toastr.success('Role Changed Successfully');
           this.isDataLoaded=false;
           this.isDataClicked = false;
@@ -94,7 +93,7 @@ export class EditRoleComponent {
     }
   }
 
-  selectEmployee(employee: any): void {
+  selectEmployee(employee: ImanagerData): void {
     this.roleForm.patchValue({
       id: employee.id,
       role: employee.role

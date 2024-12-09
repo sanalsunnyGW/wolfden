@@ -81,7 +81,7 @@ export class EmployeeHierarchyTreeComponent implements OnInit {
 
   loadEmployeeHierarchy() {
     this.employeeService.getHierarchy().subscribe({
-      next: (response: any) => {
+      next: (response: IEmployeeData) => {
         if (response) {
           this.employeeData = response;
           this.isDataLoaded = true;
