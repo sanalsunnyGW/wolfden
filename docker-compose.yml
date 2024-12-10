@@ -14,3 +14,6 @@ services:
         target: '/var/opt/mssql/data'
         source: './docker/sqldata/data'
   
+  wolfden: 
+    image: wolfii:latest
+    
