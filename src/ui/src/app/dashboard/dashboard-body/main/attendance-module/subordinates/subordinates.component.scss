@@ -1,10 +1,18 @@
 
-.mat-tree-node,
-.mat-nested-tree-node {
-  list-style: none;
-  margin-left: 10px;
+.vertical-menu {
+  display: block; /* Ensure the items are stacked vertically */
+  min-width: 200px; /* Set a minimum width */
+  max-height: 400px; /* Set the maximum height for scrolling */
+  overflow-y: auto; /* Enable vertical scrolling when the menu height exceeds the maximum */
 }
 
-.mat-tree-node button {
-  margin-right: 10px;
+/* Optional: Styling for the submenus to maintain a consistent look */
+mat-menu {
+  min-width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+mat-menu .mat-menu-item {
+  white-space: nowrap; /* Prevent text from wrapping */
 }

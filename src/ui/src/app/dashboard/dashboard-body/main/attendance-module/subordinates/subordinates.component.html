@@ -1,12 +1,13 @@
-<ul>
-    @if(!employeeData){
-        <div class="d-flex justify-content-center mt-5">
-            <div class="spinner-border" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
-    }  
-  <ng-container *ngFor="let node of employeeData">
-    <app-tree-node [item]="node"></app-tree-node>
-  </ng-container>
-</ul>
+<ng-container *ngFor="let item of subordinates">
+  <button mat-menu-item [matMenuTriggerFor]="subMenu">
+    {{ item.name }}
+  </button>
+  <mat-menu #subMenu="matMenu" class="vertical-menu">
+    <app-subordinates [subordinates]="item.subOrdinates"></app-subordinates>
+  </mat-menu>
+</ng-container>
+
+<ng-container *ngIf="!subordinates || subordinates.length === 0">
+  <button mat-menu-item>No subordinates</button>
+</ng-container>
+

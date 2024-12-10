@@ -42,7 +42,22 @@
             </ng-select>
           </div>
         </div>
-  
+        
+        
+     <div class="col-md-3 mb-3">
+      
+        <p-treeSelect 
+        class="sizes"
+        name="status"
+        [(ngModel)]="selectedSubordinate" 
+        [options]="currentSubordinates" 
+        placeholder="Select Subordinate"
+        [filter]="true" 
+        [filterInputAutoFocus]="true" />
+      
+    </div>
+     
+
         <div class="col-md-3 mb-3">
           <button type="submit" class="btn btn-primary w-50">Submit</button>
         </div>
