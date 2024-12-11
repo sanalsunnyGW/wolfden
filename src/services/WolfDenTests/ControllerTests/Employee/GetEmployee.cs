@@ -100,14 +100,14 @@ namespace WolfDenTests.ControllerTests.Employee
             var query = new GetEmployeeQuery { EmployeeId = employeeId };
 
             _mediatorMock
-                .Setup(m => m.Send(It.Is<GetEmployeeQuery>(q => q.EmployeeId == employeeId), It.IsAny<CancellationToken>()))
+                .Setup(m => m.Send(It.Is<GetEmployeeQuery>(q => q.EmployeeId == employeeId),  It.IsAny<CancellationToken>()))
                 .ReturnsAsync((EmployeeDTO)null);
 
             // Act
             var result = await _controller.GetEmployee(query, CancellationToken.None);
 
             // Assert
-            Assert.Null(result); // If no employee is found, the result should be null
+            Assert.Null(result); 
             _mediatorMock.Verify(m => m.Send(It.Is<GetEmployeeQuery>(q => q.EmployeeId == employeeId), It.IsAny<CancellationToken>()), Times.Once);
         }
     }
