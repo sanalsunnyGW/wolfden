@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static WolfDen.Domain.Enums.EmployeeEnum;
-using WolfDen.Domain.Entity;
+﻿using static WolfDen.Domain.Enums.EmployeeEnum;
 
 namespace WolfDen.Application.DTOs.Employees
 {
     public class EmployeeDirectoryDTO
     {
-        public int Id { get;  set; }
+        public int Id { get; set; }
         public int EmployeeCode { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
@@ -27,7 +21,7 @@ namespace WolfDen.Application.DTOs.Employees
         public int? ManagerId { get; set; }
         public string ManagerName { get; set; }
         public bool? IsActive { get; set; }
-        public string? Address {  get; set; }
+        public string? Address { get; set; }
         public string? Country { get; set; }
         public string? State { get; set; }
         public string? Photo { get; set; }

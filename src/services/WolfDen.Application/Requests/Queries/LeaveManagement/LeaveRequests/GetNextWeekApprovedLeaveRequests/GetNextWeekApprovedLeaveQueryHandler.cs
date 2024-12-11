@@ -111,8 +111,9 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
                     }
                     else
                     {
-                        List<int> childIds = await GetAllEmployeeIds(employee);
+                        List<int> childIds= await GetAllEmployeeIds(employee);
                     }
+                    
                 }
                 return result;
             }
@@ -129,6 +130,8 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
                         result.AddRange(childIds);
                     }
                 }
+
+
                 return result;
             }
 
