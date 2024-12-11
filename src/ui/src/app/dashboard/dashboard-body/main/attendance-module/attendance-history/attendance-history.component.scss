@@ -34,11 +34,11 @@ td{
   }
   
   .status-restricted {
-    color: #ff9800;
+    color: #a7895c;
   }
   
   .status-normal-holiday {
-    color: #4caf50;
+    color: #21c5ca;
   }
   
   .status-wfh {
@@ -46,7 +46,7 @@ td{
   }
   
   .status-leave {
-    color: purple;
+    color: rgb(214, 21, 214);
   }
   
   .status-weekend {
@@ -54,7 +54,7 @@ td{
   }
   
   .status-unknown {
-    color: grey;
+    color: rgb(0, 0, 0);
   }
   .bold-status {
     font-weight: 500;
