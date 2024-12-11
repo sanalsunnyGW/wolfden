@@ -6,14 +6,10 @@ using WolfDen.Infrastructure.Data;
 
 namespace WolfDen.Application.Requests.Queries.Employees.ViewEmployee
 {
-    public class GetEmployeeQueryHandler : IRequestHandler<GetEmployeeQuery, EmployeeDTO>
+    public class GetEmployeeQueryHandler(WolfDenContext context) : IRequestHandler<GetEmployeeQuery, EmployeeDTO>
     {
-        private readonly WolfDenContext _context;
+        private readonly WolfDenContext _context = context;
 
-        public GetEmployeeQueryHandler(WolfDenContext context)
-        {
-            _context = context;
-        }
         public async Task<EmployeeDTO> Handle(GetEmployeeQuery request, CancellationToken cancellationToken)
         {
             Employee employee = await _context.Employees

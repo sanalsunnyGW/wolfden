@@ -5,6 +5,7 @@ using WolfDen.Application.DTOs.Employees;
 using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
 using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
+using WolfDen.Application.Requests.Commands.Employees.ResetPassword;
 using WolfDen.Application.Requests.Commands.Employees.SuperAdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.SyncEmployee;
 using WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory;
@@ -15,13 +16,6 @@ using WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeIdSignUp;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam;
 using WolfDen.Application.Requests.Queries.Employees.ViewEmployee;
-using Microsoft.AspNetCore.Authorization;
-using WolfDen.Infrastructure.Data;
-using WolfDen.Application.Requests.Commands.Employees.SuperAdminUpdateEmployee;
-using WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName;
-using WolfDen.Application.Requests.Commands.Employees.SyncEmployee;
-using WolfDen.Application.Requests.Queries.Employees.EmployeePasswordCheck;
-using WolfDen.Application.Requests.Commands.Employees.ResetPassword;
 
 namespace WolfDen.API.Controllers.Employee
 {
@@ -32,12 +26,12 @@ namespace WolfDen.API.Controllers.Employee
     {
         private readonly IMediator _mediator = mediator;
 
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPatch("employee-sync")]
         public async Task<bool> SyncEmployee()
         {
             return await _mediator.Send(new SyncEmployeeCommand());
         }
-
         [HttpPost]
         public async Task<int> AddEmployee([FromBody] AddEmployeecommand command, CancellationToken cancellationToken)
         {
@@ -114,7 +108,6 @@ namespace WolfDen.API.Controllers.Employee
 
         }
 
-        [AllowAnonymous]
         [HttpPatch("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
         {
