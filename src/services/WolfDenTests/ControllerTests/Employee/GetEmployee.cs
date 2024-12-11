@@ -45,7 +45,7 @@ namespace WolfDenTests.ControllerTests.Employee
                 DesignationId = 101,
                 DesignationName = "Software Engineer",
                 DepartmentId = 10,
-                DepartmentName = "Engineering",
+                DepartmentName = "Dev",
                 ManagerId = 2,
                 ManagerName = "Sanal Sunny",
                 IsActive = true,
