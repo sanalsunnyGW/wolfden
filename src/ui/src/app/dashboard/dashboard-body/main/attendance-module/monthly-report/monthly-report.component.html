@@ -1,20 +1,26 @@
-<div>
-<label for="formGroupExampleInput" class="badge badcolr">Select a Month</label>
-    <div class="d-flex gap-3">
-        <div>
-        <input type="month"  id="week" name="week" class="form-control" [(ngModel)]="selectedMonth" (change)="getMonth(selectedMonth)"> 
-        </div>
-    <div>
-        <button type="button" class="btn btn-danger" *ngIf="checkClosedStatus" (click)="closeAttendance(selectedMonth)">Close Attendance</button>
+<div class="row d-flex justify-content-between mb-3">
+  <div class="col-md-6 d-flex gap-4">
+    <div class="form-group c-style">
+      <ng-select
+        id="range"
+        name="range"
+        [items]="concatenatedDates"
+        placeholder="Choose Range"
+        [(ngModel)]="selectedRange">
+      </ng-select>
     </div>
-    <div>
-        <button type="button" class="btn btn-success" *ngIf="checkStatus" (click)="getMonthlyReport(selectedMonth,pageNumber,pageSize)">View report</button>
-    </div>
+    <button class="btn btn-primary" (click)="getMonthlyReport(pageNumber, pageSize)">View Report</button>
+  </div>
+
+  <div class="col-md-6 d-flex justify-content-end gap-3">
+    <button class="btn btn-primary" *ngIf="checkStatus" (click)="getPreviewReport(pageNumber, pageSize)">Preview Report</button>
+    <button class="btn btn-primary" *ngIf="checkStatus" (click)="closeAttendance()">Attendance Close</button>
+    <button class="btn btn-primary" (click)="getPreviewReport(pageNumber, pageSize)">Download</button>
+  </div>
 </div>
+
 <div class="d-flex flex-column page">
 <div class="container mt-3"> 
-    <h2 *ngIf="monthIsSelected">{{monthNames[monthNumber-1]}} {{yearNumber}}</h2>   
-    <br>    
     <table class="table table-light table-striped table-bordered">
       <thead>
         <tr>
@@ -28,7 +34,7 @@
           <th>Half Day Leaves</th>
         </tr>
       </thead>
-      <tbody *ngIf="display">
+      <tbody >
         <tr *ngFor="let data of employeeReport; let i = index">
             <td>{{i + 1}}</td> 
             <td>{{data.employeeName}}</td> 

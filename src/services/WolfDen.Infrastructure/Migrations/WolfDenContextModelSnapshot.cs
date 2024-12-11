@@ -297,10 +297,6 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<bool>("IsClosed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Month")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("PeriodEnd")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
@@ -311,8 +307,8 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("PeriodStart");
 
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
+                    b.Property<DateOnly>("PreviousAttendanceClosed")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WolfDen.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class LatestchangesofattendanceTeamdb : Migration
+    public partial class set : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,13 +26,7 @@ namespace WolfDen.Infrastructure.Migrations
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    Month = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                        .Annotation("SqlServer:IsTemporal", true)
-                        .Annotation("SqlServer:TemporalHistoryTableName", "AttendenceClose")
-                        .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
-                        .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
-                        .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    Year = table.Column<int>(type: "int", nullable: false)
+                    PreviousAttendanceClosed = table.Column<DateOnly>(type: "date", nullable: false)
                         .Annotation("SqlServer:IsTemporal", true)
                         .Annotation("SqlServer:TemporalHistoryTableName", "AttendenceClose")
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")

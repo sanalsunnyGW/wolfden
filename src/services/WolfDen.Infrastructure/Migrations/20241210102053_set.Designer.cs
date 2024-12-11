@@ -12,8 +12,8 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241205105230_Latest-changes-of-attendanceTeam-db")]
-    partial class LatestchangesofattendanceTeamdb
+    [Migration("20241210102053_set")]
+    partial class set
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -300,10 +300,6 @@ namespace WolfDen.Infrastructure.Migrations
                     b.Property<bool>("IsClosed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Month")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("PeriodEnd")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
@@ -314,8 +310,8 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("PeriodStart");
 
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
+                    b.Property<DateOnly>("PreviousAttendanceClosed")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 

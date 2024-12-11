@@ -9,6 +9,7 @@ import { SubordinatesDetails } from '../interface/subordinates-details';
 import { IAttendanceData } from '../interface/attendance-data';
 import { AttendanceHistory } from '../interface/attendance-history';
 import { MonthlyReports } from '../interface/monthly-report';
+import { GetRange } from '../interface/get-range';
 
 @Injectable({
   providedIn: 'root'
@@ -28,19 +29,19 @@ export class AttendanceService {
     const url = `${this.baseUrl}/api/attendance/daily-attendance-pdf?EmployeeId=${employeeId}&Date=${date}`;
     return this.http.get(url,{observe:'response',responseType:'blob'}); 
   }
-  getMonthlyReport(month:number,year:number,pageNumber:number,pageSize:number)
+  getMonthlyReport(previousClosedDate:string,closedDate:string,pageNumber:number,pageSize:number)
   {
-    const url = `${this.baseUrl}/api/attendance/all-employees-monthly-report?Month=${month}&Year=${year}&PageNumber=${pageNumber}&PageSize=${pageSize}`;
+    const url = `${this.baseUrl}/api/attendance/all-employees-monthly-report?PreviousClosedDate=${previousClosedDate}&ClosedDate=${closedDate}&PageNumber=${pageNumber}&PageSize=${pageSize}`;
     return this.http.get<MonthlyReports>(url); 
   }
-  checkAttendanceClose(month:number,year:number)
+  checkAttendanceClose(currentDate:string)
   {
-    const url = `${this.baseUrl}/api/attendance/check-attendance-close?Month=${month}&Year=${year}`;
+    const url = `${this.baseUrl}/api/attendance/check-attendance-close?AttendanceClose=${currentDate}`;
     return this.http.get<ICheckAttencdanceClose>(url); 
   }
-  closeAttendance(month: number, year: number)
+  closeAttendance()
   {
-    const url = `${this.baseUrl}/api/attendance/close-attendance?Month=${month}&Year=${year}&IsClosed=${true}`;
+    const url = `${this.baseUrl}/api/attendance/close-attendance?IsClosed=true`;
     return this.http.post(url,null); 
   }
   getAttendanceSummary(employeeId: number, year: number, month: number) {
@@ -68,6 +69,10 @@ export class AttendanceService {
       url += `&AttendanceStatusId=${attendanceStatusId}`;
   }
     return this.http.get<AttendanceHistory>(url);
+  }
+  getRange()
+  {
+    return this.http.get<GetRange>(`${this.baseUrl}/api/attendance/get-range`)
   }
 }
 

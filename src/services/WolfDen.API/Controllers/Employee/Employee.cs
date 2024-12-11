@@ -32,6 +32,7 @@ namespace WolfDen.API.Controllers.Employee
     {
         private readonly IMediator _mediator = mediator;
 
+        [AllowAnonymous]
         [HttpPatch("employee-sync")]
         public async Task<bool> SyncEmployee()
         {
@@ -57,6 +58,7 @@ namespace WolfDen.API.Controllers.Employee
         {
             return await _mediator.Send(command, cancellationToken);
         }
+        [AllowAnonymous]
         [Authorize(Roles = "SuperAdmin")]
         [HttpPut("role")]
         public async Task<bool> SuperAdminUpdateEmployee([FromBody] SuperAdminUpdateEmployeeCommand command, CancellationToken cancellationToken)

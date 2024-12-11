@@ -12,8 +12,6 @@ import { SplitCommaPipe } from "../../../../../pipe/split-comma.pipe";
 import { SubordinatesDetails } from '../../../../../interface/subordinates-details';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
-import { TreeNodeComponent } from "../tree-node/tree-node.component";
-import { SubordinatesComponent } from "../subordinates/subordinates.component";
 import { TreeSelectModule } from 'primeng/treeselect';
 import { TreeNode } from '../../../../../interface/tree-node';
 
@@ -121,9 +119,18 @@ export class AttendanceHistoryComponent implements OnInit {
           this.attendanceData = response.attendanceHistory;
           this.totalPages = response.totalPages;
           this.noRecordFound = false;
+         // this.selectedSubordinate=null;
         }
+        
       }
+      
     );
+  }
+
+  myattendance()
+  {
+    this.selectedSubordinate=null;
+    this.fetchHistory();
   }
 
   getStatusName(statusId: number): string {
@@ -152,7 +159,9 @@ export class AttendanceHistoryComponent implements OnInit {
   }
 
   onSubmit(): void {
+    
     this.selectedPageNumber = 0;
     this.fetchHistory();
+    
   }
 }

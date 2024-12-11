@@ -43,6 +43,13 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
 
                 _logger.LogInformation("Background service is running at: {time}", DateTimeOffset.Now);
 
+                Holiday? holidays = await _context.Holiday
+                    .Where(x=>x.Date == today && x.Type==AttendanceStatus.NormalHoliday)
+                    .FirstOrDefaultAsync();
+
+                if (holidays is not null)
+                    return;
+
                 List<Employee> allEmployees = await _context.Employees
                     .Where(x=>x.IsActive==true)
                     .ToListAsync();
@@ -58,11 +65,11 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
 
                 List<DailyAttendence> attendanceRecords = await _context.DailyAttendence
                     .Include(x => x.Employee)
-                    .Where(a => a.Date == today && a.EmailSent == false && a.EmployeeId==19)
+                    .Where(a => a.Date == today && a.EmailSent == false)
                     .ToListAsync();
 
                 List<LeaveRequest> leaveRequests = await _context.LeaveRequests
-                    .Where(x => x.LeaveRequestStatusId == LeaveRequestStatus.Approved && x.HalfDay == true && x.FromDate == today)
+                    .Where(x =>( x.LeaveRequestStatusId == LeaveRequestStatus.Approved || x.LeaveRequestStatusId == LeaveRequestStatus.Open) && x.HalfDay == true && x.FromDate == today)
                     .ToListAsync();
 
                 Dictionary<int, LeaveRequest> leaveDictionary = leaveRequests.ToDictionary(x => x.EmployeeId);

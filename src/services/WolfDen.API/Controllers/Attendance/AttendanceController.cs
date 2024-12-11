@@ -11,6 +11,7 @@ using WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary;
 using WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose;
 using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
 using WolfDen.Application.Requests.Queries.Attendence.DailyStatus;
+using WolfDen.Application.Requests.Queries.Attendence.GetRange;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceReport;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
 using WolfDen.Application.Requests.Queries.Attendence.SubOrdinates;
@@ -38,6 +39,13 @@ namespace WolfDen.API.Controllers.Attendence
         {
             DailyAttendanceDTO attendance = await _mediator.Send(DailyDetails, cancellationToken);
             return Ok(attendance);
+        }
+
+        [HttpGet("get-range")]
+        public async Task<IActionResult> GetRange([FromQuery] GetRangeQuery getRange, CancellationToken cancellationToken)
+        {
+            RangeDTO range = await _mediator.Send(getRange, cancellationToken);
+            return Ok(range);
         }
 
         [HttpGet("daily-attendance-pdf")]

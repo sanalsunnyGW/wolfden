@@ -16,15 +16,12 @@
 }
 
 ::ng-deep .fc .fc-daygrid-day-number {
-
-
   color: black;
   text-decoration: none;
   font-size: 1.3rem;
 }
 
 ::ng-deep .fc .fc-daygrid-day-frame {
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,51 +36,82 @@
 
 
 ::ng-deep.fc .weekend-day {
-  background-color: #c6c8c9 !important;
+  background-color: #c6c8c9;
   color: #000000;
-
 }
-
 
 ::ng-deep.fc .present {
   background-color: #4caf50;
-  color: white;
+  cursor: pointer;
+}
+
+::ng-deep.fc .present:hover {
+  background-color: #358d38 ;
+  cursor: pointer;
 }
 
 ::ng-deep.fc .absent {
   background-color: #f44336;
-  color: white;
+  cursor: pointer;
+}
+
+::ng-deep.fc .absent:hover {
+  background-color: #be342a ;
+  cursor: pointer;
 }
 
 ::ng-deep.fc .incompleteShift {
   background-color: #284bbe;
-  color: white;
+  cursor: pointer;
+}
+
+::ng-deep.fc .incompleteShift:hover {
+  background-color: #27439d;
+  cursor: pointer;
 }
 
 ::ng-deep.fc .wfh {
   background-color: #ff9800;
-  color: black;
+  cursor: pointer;
+}
+
+::ng-deep.fc .wfh:hover {
+  background-color: #eb9516;
+  cursor: pointer;
 }
 
 ::ng-deep.fc .leave {
   background-color: #d7e121;
-  color: black;
+  cursor: pointer;
 }
 
+::ng-deep.fc .leave:hover {
+  background-color: #c2ca29 ;
+  cursor: pointer;
+}
 
 ::ng-deep.fc .halfDay {
   background-color: #b3ff00;
-  color: black;
+  cursor: pointer;
+}
+
+::ng-deep.fc .halfDay:hover {
+  background-color: #91c123 ;
+  cursor: pointer;
 }
 
 ::ng-deep.fc .holiday {
   background-color: #62d4ed;
-  color: black;
+  cursor: pointer;
 }
 
+::ng-deep.fc .holiday:hover {
+  background-color: #29adcb ;
+  cursor: pointer;
+}
 
 ::ng-deep.fc .weekend-day:hover {
-  background-color: #90949b !important;
+  background-color: #90949b ;
   cursor: pointer;
 }
 
