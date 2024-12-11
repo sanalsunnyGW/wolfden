@@ -15,5 +15,13 @@ services:
         source: './docker/sqldata/data'
   
   wolfden: 
-    image: wolfii:latest
-    
+    image: wolfden
+    environment:
+        - ASPNETCORE_ENVIORNMENT=Development
+        - ConnectionStrings__DatabaseConnection=Server=mssql;Database=WolfDen;User Id=sa;Password=pass@123;TrustServerCertificate=true
+        - ConnectionStrings__BioMetricDatabase=Server=192.168.100.125;Database=etimetracklite1;User Id=essl;Password=essl;TrustServerCertificate=true
+    ports:
+      - "5200:8080"
+      - "5201:8081"
+
+ 

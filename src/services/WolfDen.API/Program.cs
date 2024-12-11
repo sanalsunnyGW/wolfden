@@ -1,28 +1,26 @@
-using System.Reflection;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using QuestPDF.Infrastructure;
+using System.Reflection;
+using System.Security.Claims;
+using System.Text;
 using WolfDen.Application.Helper.LeaveManagement;
 using WolfDen.Application.Helpers;
 using WolfDen.Application.Requests.Commands.Attendence.Service;
+using WolfDen.Application.Requests.Commands.Employees.Service;
 using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
+using WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail;
 using WolfDen.Application.Services;
 using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
-using WolfDen.Application.Requests.Commands.Attendence.Email;
-using WolfDen.Application.Helper.LeaveManagement;
-using WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail;
-using QuestPDF.Infrastructure;
-using System.Security.Claims;
-using System.Text;
-using FluentValidation.AspNetCore;
-using WolfDen.Application.Requests.Commands.Employees.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -123,10 +121,15 @@ builder.Services.AddMediatR(x =>
 });
 
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("WolfDen.Application"));
+
+Console.WriteLine("Started Succesfully");
+
 builder.Services.AddHangfire(configuration => configuration
         .UseSimpleAssemblyNameTypeSerializer()
         .UseRecommendedSerializerSettings()
         .UseInMemoryStorage());
+Console.WriteLine("Added Succesfully");
+
 builder.Services.AddHangfireServer();
 builder.Services.AddScoped(sp =>
             new QueryBasedSyncService(
@@ -162,18 +165,21 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.Run();
+
+
 using (var scope = app.Services.CreateScope())
 {
     var syncService = scope.ServiceProvider.GetRequiredService<QueryBasedSyncService>();
     var combineService = scope.ServiceProvider.GetRequiredService<DailyAttendancePollerService>();
     var weeklyService = scope.ServiceProvider.GetRequiredService<WeeklyAttendancePollerService>();
-    var syncEmployee= scope.ServiceProvider.GetRequiredService<SyncEmployeeService>();
+    var syncEmployee = scope.ServiceProvider.GetRequiredService<SyncEmployeeService>();
     RecurringJob.AddOrUpdate(
         "sync-tables-job",
         () => syncService.SyncTablesAsync(),
         "*/5 * * * *"  // Cron expression for every 5 minutes
     );
-    
+
 
     RecurringJob.AddOrUpdate(
         "send-attendance-notifications-job",
@@ -193,9 +199,6 @@ using (var scope = app.Services.CreateScope())
         "*/5 * * * *"
         );
 }
-
-app.Run();
-
 
 // Custom middleware to handle FluentValidation exceptions
 public class ValidationExceptionHandlingMiddleware

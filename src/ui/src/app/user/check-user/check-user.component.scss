@@ -1,0 +1,8 @@
+.loginButton {
+    background-color: #101d31;
+    color: #eaecef;
+    
+    &:hover {
+        background-color: darken(#101d31, 10%);
+    }
+}
