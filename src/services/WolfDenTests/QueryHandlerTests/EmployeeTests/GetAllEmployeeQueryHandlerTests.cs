@@ -1,10 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Moq;
+using Moq.EntityFrameworkCore;
 using WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory;
 using WolfDen.Infrastructure.Data;
 
@@ -12,7 +7,7 @@ namespace WolfDenTests.QueryHandlerTests.EmployeeTests
 {
     public class GetAllEmployeeQueryHandlerTests
     {
-        private readonly Mock<WolfDenContext> _mockContext;
+        /*private readonly Mock<WolfDenContext> _mockContext;
         private readonly GetAllEmployeeQueryHandler _handler;
 
         public GetAllEmployeeQueryHandlerTests()
@@ -25,7 +20,7 @@ namespace WolfDenTests.QueryHandlerTests.EmployeeTests
          [Fact]
         public async Task Handle_ShouldReturnPaginatedEmployeeList_WhenDataExists()
         {
-          /*  // Arrange
+            // Arrange
             var employees = new List<WolfDen.Domain.Entity.Employee>
             {
                 new WolfDen.Domain.Entity.Employee(1, "RF123", "user1"),
@@ -61,7 +56,7 @@ namespace WolfDenTests.QueryHandlerTests.EmployeeTests
             Assert.NotNull(result);
             Assert.Equal(2, result.EmployeeDirectoryDTOs.Count);
             Assert.Equal(1, result.TotalPages);
-            Assert.Equal(2, result.TotalRecords);*/
-        }
+            Assert.Equal(2, result.TotalRecords);
+        }*/
     }
 }

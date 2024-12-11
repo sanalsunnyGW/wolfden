@@ -87,6 +87,7 @@ namespace WolfDen.API.Controllers.Employee
 
         }
 
+
         [HttpGet("all")]
         public async Task<ActionResult<PaginationResponse>> GetAllEmployees([FromQuery] GetAllEmployeeQuery query, CancellationToken cancellationToken)
         {
