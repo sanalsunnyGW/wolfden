@@ -1,30 +1,30 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
 
-namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.UpdateLeaveBalance
+namespace WolfDen.Application.Requests.Commands.LeaveManagement.Service
 {
-    public class UpdateLeaveBalanceCommandHandler(WolfDenContext context) : IRequestHandler<UpdateLeaveBalanceCommand, bool>
+    public class UpdateLeaveBalanceService(WolfDenContext context)
     {
-        private readonly WolfDenContext _context = context;
+        private readonly WolfDenContext _context=context ;
         private DateOnly lastCreditedMonth;
         private int incrementValue;
         private DateOnly leaveUpdateLog;
         private DateOnly FirstMonthDate = new DateOnly(DateTime.Now.Year, 1, 1);
         private int count = 0;
         private int balance;
-        public async Task<bool> Handle(UpdateLeaveBalanceCommand request, CancellationToken cancellationToken)
+        private int value;
+        public async Task BalanceUpdate()
         {
-            LeaveSetting leaveSetting = await _context.LeaveSettings.FirstOrDefaultAsync(cancellationToken);
-            List<Employee> employees = await _context.Employees.ToListAsync(cancellationToken);
-            List<LeaveType> leaveTypes = await _context.LeaveTypes.ToListAsync(cancellationToken);
-            List<LeaveIncrementLog> leaveIncrementLog = await _context.LeaveIncrementLogs.ToListAsync(cancellationToken);
+            LeaveSetting leaveSetting = await _context.LeaveSettings.FirstOrDefaultAsync();
+            List<Employee> employees = await _context.Employees.ToListAsync();
+            List<LeaveType> leaveTypes = await _context.LeaveTypes.ToListAsync();
+            List<LeaveIncrementLog> leaveIncrementLog = await _context.LeaveIncrementLogs.ToListAsync();
             List<LeaveBalance> leaveBalanceList = await _context.LeaveBalances
-                .Include(x => x.LeaveType)
+            .Include(x => x.LeaveType)
                 .Include(x => x.Employee)
-                .ToListAsync(cancellationToken);
+                .ToListAsync();
 
             foreach (Employee emp in employees)
             {
@@ -45,26 +45,139 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
 
                                     //UPDATE the Existing LeaveBalance Row values
 
-                                    LeaveIncrementLog log = leaveIncrementLog
+                                    LeaveIncrementLog log = leaveIncrementLog                                  //check whether same user is passed of details ALSO last log date is to be got not the first
                                             .Where(x => x.LeaveBalanceId == leaveBalance.Id)
                                             .OrderByDescending(x => x.Id)
                                             .First();
 
-                                    //check whether same user is passed of details ALSO last log date is to be got not the first
-
                                     if (leaveBalance.Employee.JoiningDate?.Month == DateTime.Now.Month && leaveBalance.Employee.JoiningDate?.Year == DateTime.Now.Year)        //for same month yr newly joined employee 
                                     {
-                                        if (leaveBalance.Employee.JoiningDate?.Day < leaveSetting.MinDaysForLeaveCreditJoining)    //if joined  before 15th(maxcredit..)
+                                        if (emp.JoiningDate?.Day < leaveSetting.MinDaysForLeaveCreditJoining)        //if joined  before 15th(maxcredit..)
                                         {
-                                            leaveBalance.Balance = 1;             //bcoz initially balance is 1  //leaves is credited on same month
-                                        }
-                                        else //for new joinees other type leaves 
-                                        {
-                                            leaveBalance.Balance = 0;
-                                        }
+                                            if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Month)
+                                            {
+                                                balance = 1;                  //bcoz initially balance is 1  
+                                                lastCreditedMonth = DateOnly.FromDateTime(DateTime.Now);
+                                            }
+                                            else if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Quarter)
+                                            {
+                                                if (DateTime.Now.Month == 1 || DateTime.Now.Month == 4 || DateTime.Now.Month == 7 || DateTime.Now.Month == 10)
+                                                {
+                                                    balance = 1;
+                                                    lastCreditedMonth = DateOnly.FromDateTime(DateTime.Now);
+                                                }
 
+                                                else
+                                                {
+                                                    balance = 0;
+                                                    if (DateTime.Now.Month > 1 && DateTime.Now.Month < 4)
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate;
+                                                    }
+                                                    else if (DateTime.Now.Month > 4 && DateTime.Now.Month < 7)
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate.AddMonths(3);
+                                                    }
+                                                    else if (DateTime.Now.Month > 7 && DateTime.Now.Month < 10)
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate.AddMonths(6);
+                                                    }
+                                                    else
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate.AddMonths(9);
+                                                    }
+                                                }
+                                            }
+
+                                            else if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Half)
+                                            {
+                                                if (DateTime.Now.Month == 1 || DateTime.Now.Month == 7)
+                                                {
+                                                    balance = 1;
+                                                    if (DateTime.Now.Month == 1)
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate;
+                                                    }
+                                                    else  //if month is July
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate.AddMonths(6);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    balance = 0;
+                                                    if (DateTime.Now.Month > 1 && DateTime.Now.Month < 7)
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate;
+                                                    }
+                                                    else   //if month is aftr july
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate.AddMonths(6);
+                                                    }
+                                                }
+                                            }
+                                            else //yeraly increment and a new initialisation
+                                            {
+                                                balance = 1;
+                                                lastCreditedMonth = FirstMonthDate;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            balance = 0;
+                                            if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Month)
+                                            { lastCreditedMonth = FirstMonthDate; }
+                                            else if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Quarter)
+                                            {
+                                                if (DateTime.Now.Month == 1 || DateTime.Now.Month == 4 || DateTime.Now.Month == 7 || DateTime.Now.Month == 10)
+                                                {
+
+                                                }
+                                                else
+                                                {
+                                                    if (DateTime.Now.Month > 1 && DateTime.Now.Month < 4)
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate;
+                                                    }
+                                                    else if (DateTime.Now.Month > 4 && DateTime.Now.Month < 7)
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate.AddMonths(3);
+                                                    }
+                                                    else if (DateTime.Now.Month > 7 && DateTime.Now.Month < 10)
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate.AddMonths(6);
+                                                    }
+                                                    else
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate.AddMonths(9);
+                                                    }
+                                                }
+                                            }
+                                            else if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Half)
+                                            {
+                                                if (DateTime.Now.Month == 1 || DateTime.Now.Month == 7)
+                                                {
+                                                    lastCreditedMonth = FirstMonthDate;
+                                                }
+                                                else
+                                                {
+                                                    if (DateTime.Now.Month > 1 && DateTime.Now.Month < 6)
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate;
+                                                    }
+                                                    else
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate.AddMonths(6);
+                                                    }
+                                                }
+
+                                            }
+                                            else  //yearly type and initialising where no no. of days met with joining date
+                                            {
+                                                lastCreditedMonth = FirstMonthDate;
+                                            }
+                                        }
                                         leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                        lastCreditedMonth = leaveBalance.Employee.JoiningDate.Value;
                                         incrementValue = 0;
                                     }
                                     else //not a newly joined employees
@@ -76,15 +189,15 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
 
                                             if (LeaveIncrementGapMonth.Month == leaveBalance.LeaveType.IncrementGapId)   //monthly increment
                                             {
-                                                int value = (int)Math.Floor(UpdateReq / 1);
+                                                 value = (int)Math.Floor(UpdateReq / 1);
                                                 if (leaveBalance.LeaveType.CarryForward == true)
                                                 {
                                                     if ((leaveBalance.Balance + (leaveBalance.LeaveType.IncrementCount * value)) > leaveBalance.LeaveType.CarryForwardLimit)          //if new balance exceeds carrylimit
                                                     {
+                                                        incrementValue = (int)(leaveType.CarryForwardLimit-leaveBalance.Balance);
                                                         leaveBalance.Balance = (decimal)leaveBalance.LeaveType.CarryForwardLimit;       //set carryforward limit itself as balance
                                                         lastCreditedMonth = log.LastCreditedMonth.AddMonths(value * 1);
                                                         leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                                        incrementValue = 0;
                                                     }
                                                     else
                                                     {
@@ -116,15 +229,15 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
 
                                             else if (LeaveIncrementGapMonth.Quarter == leaveBalance.LeaveType.IncrementGapId)    //quarterly increment
                                             {
-                                                int value = (int)Math.Floor(UpdateReq / 3);
+                                                 value = (int)Math.Floor(UpdateReq / 3);
                                                 if (leaveBalance.LeaveType.CarryForward == true)
                                                 {
                                                     if ((leaveBalance.Balance + (leaveBalance.LeaveType.IncrementCount * value)) > leaveBalance.LeaveType.CarryForwardLimit)          //if new balance exceeds carrylimit
                                                     {
+                                                        incrementValue = (int)(leaveType.CarryForwardLimit-leaveBalance.Balance);
                                                         leaveBalance.Balance = (decimal)leaveBalance.LeaveType.CarryForwardLimit;       //set carryforward limit itself as balance
                                                         lastCreditedMonth = log.LastCreditedMonth.AddMonths(value * 3);
                                                         leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                                        incrementValue = 0;
                                                     }
                                                     else
                                                     {
@@ -172,15 +285,15 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
 
                                             else if (LeaveIncrementGapMonth.Half == leaveBalance.LeaveType.IncrementGapId)  //half yearly increment
                                             {
-                                                int value = (int)Math.Floor(UpdateReq / 6);
+                                                 value = (int)Math.Floor(UpdateReq / 6);
                                                 if (leaveBalance.LeaveType.CarryForward == true)
                                                 {
                                                     if ((leaveBalance.Balance + (leaveBalance.LeaveType.IncrementCount * value)) > leaveBalance.LeaveType.CarryForwardLimit)          //if new balance exceeds carrylimit
                                                     {
+                                                        incrementValue = (int)(leaveType.CarryForwardLimit-leaveBalance.Balance);
                                                         leaveBalance.Balance = (decimal)leaveBalance.LeaveType.CarryForwardLimit;       //set carryforward limit itself as balance
                                                         lastCreditedMonth = log.LastCreditedMonth.AddMonths(value * 2);
                                                         leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                                        incrementValue = 0;
                                                     }
                                                     else
                                                     {
@@ -211,8 +324,6 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                             }
                                             else      //which does not have increment like the privelege leave thats got in a go   //updatd in a year
                                             {
-                                              //  int value =(int)Math.Floor((decimal)(FirstMonthDate.Month - DateTime.Now.Month) / 12);
-
                                                 if (DateTime.Now.Year == log.LastCreditedMonth.Year)   //updated tried in same yr
                                                 {
                                                     leaveBalance.Balance = leaveBalance.Balance;       //set carryforward limit itself as balance
@@ -222,14 +333,14 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                                 }
                                                 else //new yr & carry frwd allowed
                                                 {
-                                                    if(leaveType.CarryForward==true)
+                                                    if (leaveType.CarryForward == true)
                                                     {
                                                         if (leaveBalance.Balance + leaveType.MaxDays >= leaveType.CarryForwardLimit)
                                                         {
+                                                            incrementValue = (int)(leaveType.CarryForwardLimit-leaveBalance.Balance);
                                                             leaveBalance.Balance = (decimal)leaveType.CarryForwardLimit;
                                                             lastCreditedMonth = FirstMonthDate;
                                                             leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                                            incrementValue = (int)leaveType.CarryForwardLimit;
                                                         }
                                                         else
                                                         {
@@ -241,15 +352,13 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                                     }
                                                     else  //NO carry frwd  & new yr
                                                     {
-                                                        leaveBalance.Balance=(decimal)leaveType.MaxDays;
+                                                        leaveBalance.Balance = (decimal)leaveType.MaxDays;
                                                         lastCreditedMonth = FirstMonthDate;
                                                         leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
                                                         incrementValue = (int)leaveType.MaxDays;
                                                     }
                                                 }
                                             }
-                                       
-                                         
                                         }
                                         else
                                         {
@@ -264,7 +373,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                 else
                                 {
                                     continue;
-                                    throw new Exception("employee Or type id doesnt match with leavebalance");
+                                  //  throw new Exception("employee Or type id doesnt match with leavebalance");
                                 }
                             }
                         }
@@ -280,51 +389,171 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                     {
                                         if (emp.JoiningDate?.Day < leaveSetting.MinDaysForLeaveCreditJoining)        //if joined  before 15th(maxcredit..)
                                         {
-                                            balance = 1;             //bcoz initially balance is 1  //only casual leave is credited on same month
+                                            if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Month)
+                                            {
+                                                balance = 1;  //bcoz initially balance is 1  //only casual leave is credited on same month
+                                                lastCreditedMonth=DateOnly.FromDateTime(DateTime.Now);
+                                            }
+                                            else if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Quarter)
+                                            {
+                                                if (DateTime.Now.Month == 1 || DateTime.Now.Month == 4 || DateTime.Now.Month == 7 || DateTime.Now.Month == 10)
+                                                {
+                                                    balance = 1;
+                                                    lastCreditedMonth = DateOnly.FromDateTime(DateTime.Now);
+                                                }
+
+                                                else
+                                                {
+                                                    balance = 0;
+                                                    if (DateTime.Now.Month > 1 && DateTime.Now.Month < 4)
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate;
+                                                    }
+                                                    else if (DateTime.Now.Month > 4 && DateTime.Now.Month < 7)
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate.AddMonths(3);
+                                                    }
+                                                    else if (DateTime.Now.Month > 7 && DateTime.Now.Month < 10)
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate.AddMonths(6);
+                                                    }
+                                                    else
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate.AddMonths(9);
+                                                    }
+                                                }
+                                            }
+
+                                            else if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Half)
+                                            {
+                                                if (DateTime.Now.Month == 1 || DateTime.Now.Month == 7)
+                                                {
+                                                    balance = 1;
+                                                    if (DateTime.Now.Month == 1)
+                                                    {
+                                                      lastCreditedMonth = FirstMonthDate;
+                                                    }
+                                                    else  //if month is July
+                                                    {
+                                                      lastCreditedMonth = FirstMonthDate.AddMonths(6);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    balance = 0;
+                                                    if (DateTime.Now.Month > 1 && DateTime.Now.Month < 7)
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate;
+                                                    }
+                                                    else   //if month is aftr july
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate.AddMonths(6);
+                                                    }
+                                                }
+                                            }
+                                            else //yeraly increment and a new initialisation
+                                            {
+                                                balance = 1;
+                                                lastCreditedMonth = FirstMonthDate;
+                                            }
                                         }
                                         else
                                         {
                                             balance = 0;
+                                            if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Month)
+                                            { lastCreditedMonth = FirstMonthDate; }
+                                            else if(leaveType.IncrementGapId==LeaveIncrementGapMonth.Quarter)
+                                            {
+                                                if(DateTime.Now.Month==1|| DateTime.Now.Month == 4|| DateTime.Now.Month == 7|| DateTime.Now.Month == 10)
+                                                {
+
+                                                }
+                                                else
+                                                {
+                                                    if(DateTime.Now.Month>1 && DateTime.Now.Month<4)
+                                                    {
+                                                        lastCreditedMonth=FirstMonthDate;
+                                                    }
+                                                    else if(DateTime.Now.Month>4 && DateTime.Now.Month<7)
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate.AddMonths(3);
+                                                    }
+                                                    else if(DateTime.Now.Month>7 && DateTime.Now.Month<10)
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate.AddMonths(6);
+                                                    }
+                                                    else 
+                                                    {
+                                                       lastCreditedMonth=FirstMonthDate.AddMonths(9);   
+                                                    }
+                                                }
+                                            }
+                                            else if(leaveType.IncrementGapId==LeaveIncrementGapMonth.Half)
+                                            {
+                                               if(DateTime.Now.Month==1 ||DateTime.Now.Month==7)
+                                                {
+                                                    lastCreditedMonth = FirstMonthDate;
+                                                }
+                                               else
+                                                {
+                                                   if(DateTime.Now.Month>1 && DateTime.Now.Month<6)
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate;
+                                                    }
+                                                   else
+                                                    {
+                                                        lastCreditedMonth = FirstMonthDate.AddMonths(6);
+                                                    }
+                                                }
+
+                                            }
+                                            else  //yearly type and initialising where no no. of days met with joining date
+                                            {
+                                                lastCreditedMonth = FirstMonthDate;
+                                            }
                                         }
                                         leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                        lastCreditedMonth = DateOnly.FromDateTime(DateTime.Now);
                                         incrementValue = 0;
                                     }
+                                    
                                     else
                                     {
                                         if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Month)
                                         {
-                                            incrementValue = DateTime.Now.Month / 1;
+                                            value = DateTime.Now.Month / 1;
+                                            incrementValue =(int)leaveType.IncrementCount*value;
                                             lastCreditedMonth = DateOnly.FromDateTime(DateTime.Now);
                                             leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
                                             balance = (int)(DateTime.Now.Month * leaveType.IncrementCount);
                                         }
                                         else if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Quarter)
                                         {
-                                            incrementValue = (int)Math.Floor(UpdateReq / 3);
-                                            lastCreditedMonth = FirstMonthDate.AddMonths(incrementValue * 3);
+                                            value = (int)Math.Floor(UpdateReq / 3);
+                                            incrementValue=(int)leaveType.IncrementCount*(value+1);
+                                            lastCreditedMonth = FirstMonthDate.AddMonths(value * 3);
                                             leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                            if ((decimal)leaveType.IncrementCount * (incrementValue + 1) >= (decimal)leaveType.MaxDays)
+                                            if (leaveType.IncrementCount * (value + 1) >= leaveType.MaxDays)
                                             {
                                                 balance = (int)leaveType.MaxDays;
                                             }
                                             else
                                             {
-                                                balance = (int)leaveType.IncrementCount * (incrementValue + 1);
+                                                balance = (int)leaveType.IncrementCount * (value + 1);
                                             }
                                         }
                                         else if (leaveType.IncrementGapId == LeaveIncrementGapMonth.Half)
                                         {
-                                            incrementValue = (int)Math.Floor(UpdateReq / 6);
-                                            lastCreditedMonth = FirstMonthDate.AddMonths(incrementValue * 6);
+                                            value = (int)Math.Floor(UpdateReq / 6);
+                                            incrementValue = (int)leaveType.IncrementCount * (value+1);
+                                            lastCreditedMonth = FirstMonthDate.AddMonths(value * 6);
                                             leaveUpdateLog = DateOnly.FromDateTime(DateTime.Now);
-                                            if ((decimal)leaveType.IncrementCount * (incrementValue + 1) >= (decimal)leaveType.MaxDays)
+                                            if (leaveType.IncrementCount * (value + 1) >= leaveType.MaxDays)
                                             {
                                                 balance = (int)leaveType.MaxDays;
                                             }
                                             else
                                             {
-                                                balance = (int)leaveType.IncrementCount * (incrementValue + 1);
+                                                balance = (int)leaveType.IncrementCount * (value + 1);
                                             }
                                         }
                                         else
@@ -337,7 +566,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                                     }
                                     LeaveBalance leaveBalance1 = new LeaveBalance(emp.Id, leaveType.Id, balance);
                                     _context.LeaveBalances.Add(leaveBalance1);
-                                    await _context.SaveChangesAsync(cancellationToken);
+                                    await _context.SaveChangesAsync();
                                     LeaveIncrementLog leaveIncrement = new LeaveIncrementLog(leaveBalance1.Id, leaveUpdateLog, balance, incrementValue, lastCreditedMonth);
                                     _context.LeaveIncrementLogs.Add(leaveIncrement);
                                 }
@@ -359,17 +588,7 @@ namespace WolfDen.Application.Requests.Commands.LeaveManagement.LeaveBalances.Up
                     //throw new Exception("employee joining date OR/AND gender is null");
                 }
             }
-            int result = await _context.SaveChangesAsync(cancellationToken);
-            return result > 0;
+            int result = await _context.SaveChangesAsync();
         }
     }
 }
-
-
-
-
-
-
-
-
-

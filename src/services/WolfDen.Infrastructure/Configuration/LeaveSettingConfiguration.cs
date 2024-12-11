@@ -9,6 +9,13 @@ namespace WolfDen.Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<LeaveSetting> builder)
         {
             builder.Property(x => x.Id).HasColumnName("LeaveSettingId");
+            builder.HasData(
+                new
+                {
+                 Id=1,
+                 MinDaysForLeaveCreditJoining = 15,
+                 MaxNegativeBalanceLimit = 2
+        });
         }
     }
 }
