@@ -23,7 +23,6 @@ export class EditLeaveTypeComponent implements OnInit {
   selectedType: number | null = null;
   destroyRef = inject(DestroyRef);
   toastr=inject(ToastrService);
-  editType: IEditLeaveType|null=null;
 
   constructor() {
 
@@ -62,7 +61,6 @@ export class EditLeaveTypeComponent implements OnInit {
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe((response:IEditLeaveType) => {
       if (response) {
-        this.editType=response;
         this.editLeaveTypeForm.patchValue({
           maxDays: response.maxDays,
           isHalfDayAllowed: response.isHalfDayAllowed,

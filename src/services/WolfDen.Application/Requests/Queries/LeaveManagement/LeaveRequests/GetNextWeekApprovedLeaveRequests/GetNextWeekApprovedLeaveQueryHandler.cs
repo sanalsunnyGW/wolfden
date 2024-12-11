@@ -115,7 +115,6 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
                     }
                     
                 }
-
                 return result;
             }
 
@@ -140,6 +139,5 @@ namespace WolfDen.Application.Requests.Queries.LeaveManagement.LeaveRequests.Get
         }
     }
 }
-
 
 
