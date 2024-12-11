@@ -1,6 +1,8 @@
 ﻿using LanguageExt;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Domain.Enums;
 using WolfDen.Infrastructure.Data;
@@ -11,15 +13,20 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
     public class CloseAttendanceCommandHandler : IRequestHandler<CloseAttendanceCommand, int>
     {
         private readonly WolfDenContext _context;
-        public CloseAttendanceCommandHandler(WolfDenContext context)
+        private readonly IOptions<OfficeDurationSettings> _officeDurationSettings;
+
+        public CloseAttendanceCommandHandler(WolfDenContext context, IOptions<OfficeDurationSettings> officeDurationSettings)
         {
             _context = context;
+            _officeDurationSettings = officeDurationSettings;
         }
         public async Task<int> Handle(CloseAttendanceCommand request, CancellationToken cancellationToken)
         {
-            int minWorkDuration = 360;
+            int minWorkDuration = _officeDurationSettings.Value.MinWorkDuration;
             List<Employee> employees = await _context.Employees.ToListAsync(cancellationToken);
-            DateOnly monthStart = new DateOnly(request.Year, request.Month, 1);
+            DateOnly lastClosedDate = await _context.LOP.MaxAsync(x => x.AttendanceClosedDate);
+            DateOnly monthStart = await _context.AttendenceClose.MaxAsync(x => x.AttendanceClosedDate);
+            DateOnly startDate = monthStart.AddDays(1);
             DateTime currentDat = DateTime.Now;
             int year = currentDat.Year;
             int month = currentDat.Month;
@@ -37,6 +44,17 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                   .Where(x => x.FromDate <= attendanceClosingDate && x.ToDate >= monthStart &&
                               x.LeaveRequestStatusId == LeaveRequestStatus.Approved)
                   .ToListAsync(cancellationToken);
+            if (startDate > attendanceClosingDate)
+            {
+                return 0;
+            }
+
+            if(lastClosedDate>monthStart)
+            {
+                List<LOP> lops = await _context.LOP.Where(x => x.AttendanceClosedDate>monthStart).ToListAsync(cancellationToken);
+                 _context.LOP.RemoveRange(lops);
+            }
+           
             foreach (Employee employee in employees)
             {
                 int lopCount = 0;
@@ -45,7 +63,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                 string incompleteShiftDays = "";
                 int halfDay = 0;
                 string halfDayleaves = " ";
-                for (DateOnly currentDate = monthStart; currentDate <= attendanceClosingDate; currentDate = currentDate.AddDays(1))
+                for (DateOnly currentDate = startDate; currentDate <= attendanceClosingDate; currentDate = currentDate.AddDays(1))
                 {
                     if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
                     {
@@ -67,9 +85,9 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                         {
                             incompleteShiftDays += currentDate.ToString("yyyy-MM-dd") + ",";
                             incompleteShiftCount++;
-                        } 
+                        }
                     }
-                    else 
+                    else
                     {
                         Holiday? holiday = holidays.FirstOrDefault(x => x.Date == currentDate);
                         LeaveRequest? leaveRequest = leaveRequests
@@ -84,25 +102,27 @@ namespace WolfDen.Application.Requests.Commands.Attendence.CloseAttendance
                 lopDays = UpdateListOfDays(lopDays);
                 incompleteShiftDays = UpdateListOfDays(incompleteShiftDays);
                 halfDayleaves = UpdateListOfDays(halfDayleaves);
-
+                
                 LOP lop = new LOP(attendanceClosingDate, employee.Id, lopCount, incompleteShiftCount, lopDays,
-                    incompleteShiftDays,halfDay,halfDayleaves);
+                incompleteShiftDays, halfDay, halfDayleaves);
                 await _context.AddAsync(lop);
+                
             }
             List<LeaveRequest> openLeaveRequests = await _context.LeaveRequests
                  .Where(x => x.FromDate <= attendanceClosingDate && x.ToDate >= monthStart &&
                              x.LeaveRequestStatusId == LeaveRequestStatus.Open)
                  .ToListAsync(cancellationToken);
-            foreach (var leaveRequest in openLeaveRequests)
+            if(request.IsClosed)
             {
-                leaveRequest.Reject(1);
-                _context.Update(leaveRequest);
+                AttendenceClose attendenceClose = new AttendenceClose(attendanceClosingDate, true,startDate);
+                await _context.AddAsync(attendenceClose);
+                foreach (var leaveRequest in openLeaveRequests)
+                {
+                    leaveRequest.Reject(1);
+                    _context.Update(leaveRequest);
+                }
             }
-            DateTime date = new DateTime(request.Year, request.Month, 1);
-            AttendenceClose attendenceClose = new AttendenceClose(attendanceClosingDate, true, date.ToString("MMMM"), request.Year);
-            await _context.AddAsync(attendenceClose);
             return await _context.SaveChangesAsync(cancellationToken);
-
         }
         private string UpdateListOfDays(string days)
         {

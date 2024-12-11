@@ -17,8 +17,13 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyRep
         {
             MonthlyReportAndPageCountDTO monthlyReportAndPageCountDTO = new MonthlyReportAndPageCountDTO();
             List<AllEmployeesMonthlyReportDTO> allEmployeesReport = new List<AllEmployeesMonthlyReportDTO>();
+
+            DateTime startDate = DateTime.Parse(request.PreviousClosedDate);
+            DateTime endDate = DateTime.Parse(request.ClosedDate);
+            DateOnly rangeStart = DateOnly.FromDateTime(startDate);
+            DateOnly rangeEnd = DateOnly.FromDateTime(endDate);
             List<LOP> LOPReport = await _context.LOP.
-                Where(x => x.AttendanceClosedDate.Month == request.Month)
+                Where(x => rangeStart <= x.AttendanceClosedDate && x.AttendanceClosedDate <rangeEnd)
                 .Include(x=>x.Employee).ToListAsync(cancellationToken);
             foreach(LOP lop in LOPReport)
             {
@@ -31,15 +36,28 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyRep
                 report.NoOfAbsentDays = lop.LOPDaysCount;
                 report.HalfDays = lop.HalfDays; 
                 report.HalfDayLeaves = lop.HalfDayLeaves;
+                report.RangeStart = request.PreviousClosedDate;
+                report.RangeEnd = request.ClosedDate;
                 allEmployeesReport.Add(report);
             }
-            int totalPage = allEmployeesReport.Count();
-            List<AllEmployeesMonthlyReportDTO> allEmployeesReports=allEmployeesReport.
-                Skip((request.PageNumber)*request.PageSize).
-                Take(request.PageSize).ToList();
-            monthlyReportAndPageCountDTO.AllEmployeesMonthlyReports = allEmployeesReports;
-            monthlyReportAndPageCountDTO.PageCount = totalPage;
-            return monthlyReportAndPageCountDTO;
+            if(request.PageNumber is null && request.PageSize is null)
+            {
+                monthlyReportAndPageCountDTO.AllEmployeesMonthlyReports = allEmployeesReport;
+                Console.WriteLine("count"+monthlyReportAndPageCountDTO.AllEmployeesMonthlyReports.Count);
+                return monthlyReportAndPageCountDTO;
+            }
+            else
+            {
+                int pageNumber = request.PageNumber ?? 0;
+                int pageSize = request.PageSize ?? 10;
+                int totalPage = allEmployeesReport.Count();
+                List<AllEmployeesMonthlyReportDTO> allEmployeesReports = allEmployeesReport.
+                    Skip((pageNumber) * pageSize).
+                    Take(pageSize).ToList();
+                monthlyReportAndPageCountDTO.AllEmployeesMonthlyReports = allEmployeesReports;
+                monthlyReportAndPageCountDTO.PageCount = totalPage;
+                return monthlyReportAndPageCountDTO;
+            }
         }
     }
 }

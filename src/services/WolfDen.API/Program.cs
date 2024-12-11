@@ -18,9 +18,6 @@ using WolfDen.Application.Services;
 using WolfDen.Domain.ConfigurationModel;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
-using WolfDen.Application.Requests.Commands.Attendence.Email;
-using WolfDen.Application.Helper.LeaveManagement;
-using WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -108,6 +105,7 @@ builder.Services.AddScoped<ManagerIdFinder>();
 builder.Services.AddScoped<MonthlyPdf>();
 builder.Services.AddScoped<Email>();
 builder.Services.AddSingleton<WeeklyPdfService>();
+builder.Services.AddScoped<AttendanceClosedReportPdfService>();
 
 
 QuestPDF.Settings.License = LicenseType.Community;

@@ -36,7 +36,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
         public async Task ExecuteJobAsync()
         {
             int minWorkDuration = _officeDurationSettings.Value.MinWorkDuration;
-            DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1);
+            DateOnly yesterday = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1);
 
             using (IServiceScope scope = _serviceScopeFactory.CreateScope())
             {
@@ -49,7 +49,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                     .ToListAsync();
 
                 List<int> employeesWithAttendance = await _context.DailyAttendence
-                   .Where(a => a.Date == today)
+                   .Where(a => a.Date == yesterday)
                    .Select(a => a.EmployeeId)
                    .ToListAsync();
 
@@ -59,11 +59,11 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
 
                 List<DailyAttendence> attendanceRecords = await _context.DailyAttendence
                     .Include(x => x.Employee)
-                    .Where(a => a.Date == today && a.EmailSent == false && a.EmployeeId==3)
+                    .Where(a => a.Date == yesterday && a.EmailSent == false)
                     .ToListAsync();
 
                 List<LeaveRequest> leaveRequests = await _context.LeaveRequests
-                    .Where(x => x.LeaveRequestStatusId == LeaveRequestStatus.Approved && x.HalfDay == true && x.FromDate == today)
+                    .Where(x => x.LeaveRequestStatusId == LeaveRequestStatus.Approved && x.HalfDay == true && x.FromDate == yesterday)
                     .ToListAsync();
 
 
@@ -75,14 +75,14 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
 
                     if (approvedLeave is null)
                     {
-                        string absenceMessage = $"Dear {employee.FirstName}, you were marked as absent on ({today}). Please make sure to apply for leave.";
+                        string absenceMessage = $"Dear {employee.FirstName}, you were marked as absent on ({yesterday}). Please make sure to apply for leave.";
 
                         SendAbsenceEmailCommand sendAbsenceEmail = new SendAbsenceEmailCommand
                         {
                             EmployeeId = employee.Id,
                             Name = employee.FirstName + " " + employee.LastName,
                             Email = employee.Email,
-                            Date = today,
+                            Date = yesterday,
                             Message = absenceMessage,
                             Subject = "Absence Notification"
                         };
@@ -107,7 +107,7 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                         minWorkDuration = minWorkDuration / 2;
                     }
 
-                    string employeeMessage = $"Your working duration for {today} is {record.InsideDuration / 60} hours and {record.InsideDuration % 60} minutes.";
+                    string employeeMessage = $"Your working duration for {yesterday} is {record.InsideDuration / 60} hours and {record.InsideDuration % 60} minutes.";
                     string employeeIncompleteMessage = $"Incomplete Shift !!! Your working duration today is {record.InsideDuration / 60} hours and {record.InsideDuration % 60} minutes.";
 
                     SendEmailCommand sendEmailCommand = new SendEmailCommand
@@ -120,8 +120,8 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                         DepartureTime = record.DepartureTime,
                         Date = record.Date,
                         Message = record.InsideDuration < minWorkDuration
-                            ? $"{record.Employee.FirstName}'s shift on {today} is marked as incomplete due to insufficient hours; please review and address the issue."
-                            : $"Great job {record.Employee.FirstName}! Your extra hours on {today} are appreciated",
+                            ? $"{record.Employee.FirstName}'s shift on {yesterday} is marked as incomplete due to insufficient hours; please review and address the issue."
+                            : $"Great job {record.Employee.FirstName}! Your extra hours on {yesterday} are appreciated",
                         Subject = record.InsideDuration < minWorkDuration ? "Incomplete Shift" : "Attendance Summary",
                         Status = record.InsideDuration < minWorkDuration ? "Incomplete Shift" : "Shift Complete",
                         MissedPunch = record.MissedPunch != null ? record.MissedPunch : "-"

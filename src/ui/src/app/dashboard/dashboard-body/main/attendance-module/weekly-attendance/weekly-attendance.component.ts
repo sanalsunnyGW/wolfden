@@ -22,6 +22,7 @@ export class WeeklyAttendanceComponent {
   constructor(private router: Router) {
     this.currentRoute = this.router.url;
   }
+  weeklyData:WeeklyAttendance[]=[]
   createChart() {
     {
       if (this.barChart) {
@@ -88,11 +89,11 @@ export class WeeklyAttendanceComponent {
             tooltip: {
               callbacks: {
                 label: (context: any) => {
-                  if(context.raw==1)
-                  {
-                    return `0 minutes`;
-                  }
-                  return `${context.label}: ${context.raw} minutes`;
+                  const originalMinutes = this.weeklyData[context.dataIndex]?.insideDuration;
+                  const displayValue = originalMinutes === null 
+                    ? 0 
+                    : (originalMinutes / 60).toFixed(2);
+                  return `${context.label}: ${displayValue} hours`;
                 }
               }
             }
@@ -106,13 +107,14 @@ export class WeeklyAttendanceComponent {
       }); 
     }
   }
+
  service=inject(AttendanceService)
  baseService=inject(WolfDenService)
  selectedWeek!:string;
  offset=0;
  employeeId=this.baseService.userId;
  
- weeklyData:WeeklyAttendance[]=[]
+ 
  barChart!:Chart;
  status:number[]=[]
  statusColor=["#72BF78","#AE445A","#FCF596","#AB886D","#536493","#9B7EBD","#FEF3E2","#E195AB"]
@@ -147,7 +149,7 @@ getStartOfWeek(selectedWeek:string){
           console.log(response)
           this.weeklyData = response.map((item) => {
             const convertedDate = new Date(item.date);
-            return { ...item, date: convertedDate };
+            return { ...item, date: convertedDate};
           });
           this.barChart.data.labels=this.weeklyData.map((x:WeeklyAttendance)=>x.date.toLocaleDateString())
           const maxValue = Math.max(...this.weeklyData.map((x: WeeklyAttendance) => x.insideDuration || 1));

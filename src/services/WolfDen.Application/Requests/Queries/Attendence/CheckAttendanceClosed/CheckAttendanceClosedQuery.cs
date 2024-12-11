@@ -5,7 +5,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.CheckAttendanceClose
 {
     public class CheckAttendanceClosedQuery:IRequest<CheckAttendanceClosedDTO>
     {
-        public int Month { get; set; }
-        public int Year { get; set; }
+        public string AttendanceClose { get; set; }
+        
     }
 }

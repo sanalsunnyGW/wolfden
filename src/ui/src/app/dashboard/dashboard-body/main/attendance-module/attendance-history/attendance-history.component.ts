@@ -33,7 +33,7 @@ export class AttendanceHistoryComponent implements OnInit {
   years: number[] = [];
   pageSizes = [5, 10, 20, 30, 40];
   totalPages!: number;
-Math: any;
+  noRecordFound!: boolean;
 
 constructor(private route:ActivatedRoute) 
 {
@@ -71,7 +71,8 @@ status = [
   { id: 6, name: "WFH" },
   { id: 7, name: 'Leave' },
   { id: 9, name:'Half Day'},
-  { id: 10, name:'Weekend'}
+  { id: 10, name:'Weekend'},
+  { id:11, name:'All'}
 ];
 
 fetchHistory(){
@@ -83,9 +84,16 @@ fetchHistory(){
     this.selectedPageNumber,
     this.selectedPageSize).subscribe(
     (response:AttendanceHistory)=>{
-      this.attendanceData=response.attendanceHistory;
-      this.totalPages=response.totalPages;
-    }
+      if (response.attendanceHistory && response.attendanceHistory.length === 0) {
+        this.attendanceData = [];
+        this.noRecordFound = true;  
+      } else {
+        this.attendanceData = response.attendanceHistory;
+        this.totalPages = response.totalPages;
+        this.noRecordFound = false; 
+      }
+    },
+    
   )
 }
 

@@ -1,13 +1,10 @@
-﻿using System;
-using Azure.Core.Serialization;
-using LanguageExt;
+﻿using LanguageExt;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using sib_api_v3_sdk.Api;
 using sib_api_v3_sdk.Client;
 using sib_api_v3_sdk.Model;
-using WolfDen.Application.DTOs.Attendence;
 using WolfDen.Application.Helpers;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
@@ -43,8 +40,8 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Email
         {
             { "name", request.Name },
             {"date",request.Date },  
-            { "arrivalTime",request.ArrivalTime.ToString("HH:mm:ss") },
-            { "departureTime", request.DepartureTime.ToString("HH:mm:ss") },
+            { "arrivalTime",request.ArrivalTime.ToString("HH:mm:ss tt") },
+            { "departureTime", request.DepartureTime.ToString("HH:mm:ss tt") },
             { "status", request.Status },
             { "duration", duration},
             { "message",request.Message},

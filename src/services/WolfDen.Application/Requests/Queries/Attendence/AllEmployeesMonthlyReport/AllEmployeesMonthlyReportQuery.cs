@@ -5,9 +5,9 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AllEmployeesMonthlyRep
 {
     public class AllEmployeesMonthlyReportQuery:IRequest<MonthlyReportAndPageCountDTO>
     {
-        public int Month {  get; set; }
-        public int Year { get; set; }
-        public int PageNumber { get; set; } 
-        public int PageSize { get; set; } 
+        public string PreviousClosedDate { get; set; }
+        public string ClosedDate { get; set; }
+        public int? PageNumber { get; set; } 
+        public int? PageSize { get; set; } 
     }
 }

@@ -32,14 +32,13 @@ namespace WolfDen.API.Controllers.Employee
     {
         private readonly IMediator _mediator = mediator;
 
+        [AllowAnonymous]
 
         [HttpPatch("employee-sync")]
         public async Task<bool> SyncEmployee()
         {
             return await _mediator.Send(new SyncEmployeeCommand());
         }
-
-
 
         [HttpPost]
         public async Task<int> AddEmployee([FromBody] AddEmployeecommand command, CancellationToken cancellationToken)

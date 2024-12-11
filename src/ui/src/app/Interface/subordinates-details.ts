@@ -7,5 +7,6 @@ export interface SubordinatesDetails {
     department: string,
     designation: string,
     manager:string,
-    subOrdinates?:SubordinatesDetails[]
+    ManagerId:number,
+    subOrdinates?:SubordinatesDetails[],
 }

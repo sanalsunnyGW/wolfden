@@ -143,8 +143,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceHistory
                 attendanceHistory.Add(new WeeklySummaryDTO
                 {
                     Date = currentDate,
-                    ArrivalTime = attendanceRecord?.ArrivalTime,
-                    DepartureTime = attendanceRecord?.DepartureTime,
+                    ArrivalTime = attendanceRecord.ArrivalTime,
+                    DepartureTime = attendanceRecord.DepartureTime,
                     InsideDuration = attendanceRecord?.InsideDuration,
                     OutsideDuration = attendanceRecord?.OutsideDuration,
                     MissedPunch = attendanceRecord?.MissedPunch,

@@ -10,7 +10,6 @@ using sib_api_v3_sdk.Client;
 using sib_api_v3_sdk.Model;
 using WolfDen.Application.DTOs.Attendence;
 using WolfDen.Application.Helpers;
-using WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail;
 using WolfDen.Application.Requests.Queries.Attendence.WeeklySummary;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
@@ -48,10 +47,24 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
             {
                 WolfDenContext _context = scope.ServiceProvider.GetRequiredService<WolfDenContext>();
                 DateTime now = DateTime.Now;
-                DateOnly weekEnd = DateOnly.FromDateTime(now).AddDays(-1); 
-                DateOnly weekStart = DateOnly.FromDateTime(now).AddDays(-5); 
-                string monday = weekStart.ToString("yyyy-MM-dd");
-                string friday = weekEnd.ToString("yyyy-MM-dd");
+                int currentDayOfWeek = (int)now.DayOfWeek;
+                DateTime weekStart = now.AddDays(-currentDayOfWeek + (int)DayOfWeek.Monday);
+                DateOnly weekStartDateOnly = DateOnly.FromDateTime(weekStart);
+                string friday = "";
+                if (now.Day != 6)
+                {
+                    DateOnly weekEndDateOnly = DateOnly.FromDateTime(now);
+                    friday = weekEndDateOnly.ToString("yyyy-MM-dd");
+                }
+                else
+                {
+                    DateOnly weekEndDateOnly = DateOnly.FromDateTime(now).AddDays(-1);
+                    friday = weekEndDateOnly.ToString("yyyy-MM-dd");
+
+                }
+
+                string monday = weekStartDateOnly.ToString("yyyy-MM-dd");
+                
 
                 string subject = "Weekly Attendance Report";
 
