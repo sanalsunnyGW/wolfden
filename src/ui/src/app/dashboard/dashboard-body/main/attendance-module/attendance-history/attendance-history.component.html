@@ -1,6 +1,10 @@
 <div class="container">
-    <h3 class="text-center mb-4">Attendance History</h3>
-    <form (ngSubmit)="onSubmit()">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Attendance History</h3> 
+    <button class="btn btn-primary btn-md" *ngIf="selectedSubordinate" (click)="myattendance()">My Attendance</button> 
+  </div>
+
+    <form #form="ngForm"  (ngSubmit)="onSubmit()">
       <div class="row justify-content-center">
         <div class="col-md-3 mb-3">
           <div class="form-group">
@@ -10,8 +14,14 @@
               [items]="years"
               bindLabel="year"
               placeholder="Select year"
-              [(ngModel)]="selectedYear">
+              [(ngModel)]="selectedYear"
+              #year="ngModel"
+              required
+              [ngClass]="{'is-invalid': year?.invalid && year?.touched}">
             </ng-select>
+            <div *ngIf="year?.invalid && year?.touched" class="invalid-feedback">
+              <small class="text-danger">Year is required</small>
+            </div>
           </div>
         </div>
   
@@ -24,8 +34,14 @@
               bindLabel="name"
               bindValue="id"
               placeholder="Select month"
-              [(ngModel)]="selectedMonth">
+              [(ngModel)]="selectedMonth"
+              #month="ngModel"
+              required
+              [ngClass]="{'is-invalid': month?.invalid || month?.touched}">
             </ng-select>
+            <div *ngIf="month?.invalid && month?.touched" class="invalid-feedback">
+              <div class="text-danger">Month is required</div>
+            </div>
           </div>
         </div>
   
@@ -42,9 +58,19 @@
             </ng-select>
           </div>
         </div>
-  
+      
+     <div class="col-md-3 mb-3">
+        <p-treeSelect 
+        class="sizes"
+        name="status"
+        [(ngModel)]="selectedSubordinate" 
+        [options]="currentSubordinates" 
+        placeholder="Select Subordinate"
+        [filter]="true" 
+        [filterInputAutoFocus]="true" />
+    </div>
         <div class="col-md-3 mb-3">
-          <button type="submit" class="btn btn-primary w-50">Submit</button>
+          <button type="submit" class="btn btn-primary w-50" [disabled]="form.invalid">Submit</button>
         </div>
       </div>
     </form>
@@ -62,6 +88,11 @@
         </tr>
       </thead>
       <tbody>
+        <tr *ngIf="noRecordFound">
+          <td colspan="7" style="text-align: center; color: #888; font-weight: bold;">
+            No record found
+          </td>
+        </tr>
         <tr *ngFor="let element of attendanceData">
           <td>{{ element.date }}</td>
           <td>{{element.arrivalTime | date: 'HH:mm ':'UTC'}}</td>

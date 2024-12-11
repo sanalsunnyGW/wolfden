@@ -16,5 +16,5 @@ export const appConfig: ApplicationConfig = {
   provideHttpClient(),
   provideAnimationsAsync(),
   provideToastr(), provideAnimationsAsync(), provideCharts(withDefaultRegisterables()),
-  provideCharts(withDefaultRegisterables()), provideAnimations(), provideHttpClient(withInterceptors([userInterceptor]))]
+  provideCharts(withDefaultRegisterables()), provideAnimations(), provideHttpClient(withInterceptors([userInterceptor])), provideAnimationsAsync()]
 };

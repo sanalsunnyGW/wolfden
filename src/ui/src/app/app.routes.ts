@@ -17,7 +17,6 @@ import { authGuard } from './authGuard';
 import { WeeklyAttendanceComponent } from './dashboard/dashboard-body/main/attendance-module/weekly-attendance/weekly-attendance.component';
 import { DailyAttendenceComponent } from './dashboard/dashboard-body/main/attendance-module/daily-attendence/daily-attendence.component';
 import { MonthlyReportComponent } from './dashboard/dashboard-body/main/attendance-module/monthly-report/monthly-report.component';
-import { SubordinatesComponent } from './dashboard/dashboard-body/main/attendance-module/subordinates/subordinates.component';
 import { EditLeaveTypeComponent } from './dashboard/dashboard-body/main/leave-management/edit-leave-type/edit-leave-type.component';
 import { UpdateLeaveBalanceComponent } from './dashboard/dashboard-body/main/leave-management/update-leave-balance/update-leave-balance.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -64,7 +63,6 @@ export const routes: Routes = [
             { path: 'attendance/daily/:attendanceDate', component: DailyAttendenceComponent },
             { path: 'attendance/weekly', component: WeeklyAttendanceComponent },
             { path: 'attendance/monthly', component: MonthlyReportComponent },
-            { path: 'attendance/subordinates', component: SubordinatesComponent },
             { path: 'edit-leave-type', component: EditLeaveTypeComponent },
             { path: 'update-leave-balance', component: UpdateLeaveBalanceComponent },
             {path:'attendance/history/:id',component:AttendanceHistoryComponent},

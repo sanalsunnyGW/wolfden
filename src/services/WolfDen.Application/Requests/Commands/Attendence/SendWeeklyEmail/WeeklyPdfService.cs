@@ -82,15 +82,15 @@ namespace WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail
                                         foreach (var weeklySummary in employee.WeeklySummary)
                                         {
                                             table.Cell().Border(1).Padding(3)
-                                                .Text(weeklySummary.Date).FontSize(12);
+                                                .Text(weeklySummary.Date.ToString()).FontSize(12);
                                             table.Cell().Border(1).Padding(3)
-                                                .Text(weeklySummary.ArrivalTime).FontSize(12);
+                                                .Text(weeklySummary.ArrivalTime.ToString()).FontSize(12);
                                             table.Cell().Border(1).Padding(3)
-                                                .Text(weeklySummary.DepartureTime).FontSize(12);
+                                                .Text(weeklySummary.DepartureTime.ToString()).FontSize(12);
                                             table.Cell().Border(1).Padding(3)
-                                                .Text(weeklySummary.MissedPunch).FontSize(12);
+                                                .Text(weeklySummary.MissedPunch.ToString()).FontSize(12);
                                             table.Cell().Border(1).Padding(3)
-                                                .Text(weeklySummary.AttendanceStatusId).FontSize(12);
+                                                .Text(weeklySummary.AttendanceStatusId.ToString()).FontSize(12);
                                             if(weeklySummary.InsideDuration!=null)
                                             {
                                                 int? hours = weeklySummary.InsideDuration / 60;

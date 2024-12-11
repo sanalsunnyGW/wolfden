@@ -59,4 +59,8 @@ td{
   .bold-status {
     font-weight: 500;
   }
-  
+
+
+::ng-deep .p-treeselect .p-treeselect-label{
+  width: 250px;
+}
