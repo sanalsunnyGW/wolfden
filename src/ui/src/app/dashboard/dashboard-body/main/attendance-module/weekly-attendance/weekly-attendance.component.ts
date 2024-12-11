@@ -22,6 +22,7 @@ export class WeeklyAttendanceComponent {
   constructor(private router: Router) {
     this.currentRoute = this.router.url;
   }
+  weeklyData:WeeklyAttendance[]=[]
   createChart() {
     {
       if (this.barChart) {
@@ -88,13 +89,11 @@ export class WeeklyAttendanceComponent {
             tooltip: {
               callbacks: {
                 label: (context: any) => {
-                  if(context.raw==1)
-                  {
-                    return `0 minutes`;
-                  }
-                  return `${context.label}: ${context.raw} minutes`;
-
-                 
+                  const originalMinutes = this.weeklyData[context.dataIndex]?.insideDuration;
+                  const displayValue = originalMinutes === null 
+                    ? 0 
+                    : (originalMinutes / 60).toFixed(2);
+                  return `${context.label}: ${displayValue} hours`;
                 }
               }
             }
@@ -108,12 +107,14 @@ export class WeeklyAttendanceComponent {
       }); 
     }
   }
+
  service=inject(AttendanceService)
  baseService=inject(WolfDenService)
  selectedWeek!:string;
  offset=0;
  employeeId=this.baseService.userId;
- weeklyData:WeeklyAttendance[]=[]
+ 
+ 
  barChart!:Chart;
  status:number[]=[]
  statusColor=["#72BF78","#AE445A","#FCF596","#AB886D","#536493","#9B7EBD","#FEF3E2","#E195AB"]
@@ -126,6 +127,7 @@ export class WeeklyAttendanceComponent {
  }
 getStartOfWeek(selectedWeek:string){
   if (selectedWeek) {
+    console.log(this.employeeId)
     this.createChart();
     const year = parseInt(this.selectedWeek.split('-W')[0], 10);
     const week = parseInt(this.selectedWeek.split('-W')[1], 10);
@@ -147,7 +149,7 @@ getStartOfWeek(selectedWeek:string){
           console.log(response)
           this.weeklyData = response.map((item) => {
             const convertedDate = new Date(item.date);
-            return { ...item, date: convertedDate };
+            return { ...item, date: convertedDate};
           });
           this.barChart.data.labels=this.weeklyData.map((x:WeeklyAttendance)=>x.date.toLocaleDateString())
           const maxValue = Math.max(...this.weeklyData.map((x: WeeklyAttendance) => x.insideDuration || 1));
@@ -172,23 +174,19 @@ getStartOfWeek(selectedWeek:string){
               {
                 return this.statusColor[3];
               }
-              else if((x.attendanceStatusId===6))
-                {
-                  return this.statusColor[4];
-                }
-              else if((x.attendanceStatusId===7))
+            else if((x.attendanceStatusId===7))
+            {
+              return this.statusColor[5];
+            }
+            else if((x.attendanceStatusId===8))
               {
-                return this.statusColor[5];
+                return this.statusColor[6];
               }
-              else if((x.attendanceStatusId===8))
-                {
-                  return this.statusColor[6];
-                }
-              else{
-                return this.statusColor[7];
-              }
-            })
-            this.barChart.update();
+            else{
+              return this.statusColor[7];
+            }
+          })
+          this.barChart.update();
        }
         else {alert('Error fetching attendance:') }    
     });

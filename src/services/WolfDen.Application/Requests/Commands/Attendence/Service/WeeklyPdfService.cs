@@ -1,9 +1,10 @@
-﻿using QuestPDF.Fluent;
+﻿using System.Web;
+using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using WolfDen.Application.DTOs.Attendence;
 
-namespace WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail
+namespace WolfDen.Application.Requests.Commands.Attendence.Service
 {
     public class WeeklyPdfService
     {
@@ -14,7 +15,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail
                 container.Page(page =>
                 {
                     page.Size(PageSizes.A4);
-                    page.Margin(2, Unit.Centimetre);
+                    page.Margin(1, Unit.Centimetre);
                     page.PageColor(Colors.White);
                     page.DefaultTextStyle(x => x.FontSize(12));
                     page.Header()
@@ -28,27 +29,27 @@ namespace WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail
                         {
                             foreach (var employee in managerWeeklyAttendanceDTOs)
                             {
-                                column.Item().PaddingLeft(2, Unit.Centimetre).Column(col =>
+                                column.Item().PaddingLeft(1, Unit.Centimetre).Column(col =>
                                 {
-                                    
+
                                     col.Item().Row(row =>
                                     {
-                                        row.RelativeItem().Padding(5).AlignLeft()
+                                        row.RelativeItem().Padding(1).AlignLeft()
                                         .Text($"Name: {employee.EmployeeName}")
                                         .SemiBold().FontSize(14).FontColor(Colors.Black);
                                     });
 
-                                  
+
                                     col.Item().PaddingVertical(1, Unit.Centimetre).Table(table =>
                                     {
                                         table.ColumnsDefinition(columns =>
                                         {
+                                            columns.ConstantColumn(70);
+                                            columns.ConstantColumn(70);
+                                            columns.ConstantColumn(70);
                                             columns.RelativeColumn();
-                                            columns.RelativeColumn();
-                                            columns.RelativeColumn();
-                                            columns.RelativeColumn();
-                                            columns.RelativeColumn();
-                                            columns.RelativeColumn();
+                                            columns.ConstantColumn(75);
+                                            columns.ConstantColumn(50);
                                         });
 
                                         table.Header(header =>
@@ -81,8 +82,9 @@ namespace WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail
 
                                         foreach (var weeklySummary in employee.WeeklySummary)
                                         {
+                                            
                                             table.Cell().Border(1).Padding(3)
-                                                .Text(weeklySummary.Date).FontSize(12);
+                                                .Text(weeklySummary.Date.ToString()).FontSize(12);
                                             table.Cell().Border(1).Padding(3)
                                                 .Text(weeklySummary.ArrivalTime).FontSize(12);
                                             table.Cell().Border(1).Padding(3)
@@ -90,8 +92,8 @@ namespace WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail
                                             table.Cell().Border(1).Padding(3)
                                                 .Text(weeklySummary.MissedPunch).FontSize(12);
                                             table.Cell().Border(1).Padding(3)
-                                                .Text(weeklySummary.AttendanceStatusId).FontSize(12);
-                                            if(weeklySummary.InsideDuration!=null)
+                                                .Text(weeklySummary.AttendanceStatusId.ToString()).FontSize(12);
+                                            if (weeklySummary.InsideDuration != null)
                                             {
                                                 int? hours = weeklySummary.InsideDuration / 60;
                                                 int? minutes = weeklySummary.InsideDuration % 60;
@@ -104,7 +106,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail
                                                 table.Cell().Border(1).Padding(3)
                                                    .Text($"-").FontSize(12);
                                             }
-                                           
+
                                         }
                                     });
                                     col.Item().PageBreak();

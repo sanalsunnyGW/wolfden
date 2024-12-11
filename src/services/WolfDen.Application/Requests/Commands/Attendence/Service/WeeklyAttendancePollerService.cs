@@ -10,7 +10,6 @@ using sib_api_v3_sdk.Client;
 using sib_api_v3_sdk.Model;
 using WolfDen.Application.DTOs.Attendence;
 using WolfDen.Application.Helpers;
-using WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail;
 using WolfDen.Application.Requests.Queries.Attendence.WeeklySummary;
 using WolfDen.Domain.Entity;
 using WolfDen.Infrastructure.Data;
@@ -48,45 +47,88 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
             {
                 WolfDenContext _context = scope.ServiceProvider.GetRequiredService<WolfDenContext>();
                 DateTime now = DateTime.Now;
-                DateOnly weekEnd = DateOnly.FromDateTime(now).AddDays(-1);
-                DateOnly weekStart = DateOnly.FromDateTime(now).AddDays(-5);
-                string monday = weekStart.ToString();
-                string friday = weekEnd.ToString();
-                List<Employee>? managers = await _context.Employees
-                    .Where(x => _context.Employees.Any(e => e.ManagerId == x.Id)) 
-                    .ToListAsync();
-
-                string subject = "Weekly Report";
-                foreach (Employee employee in managers)
+                int currentDayOfWeek = (int)now.DayOfWeek;
+                DateTime weekStart = now.AddDays(-currentDayOfWeek + (int)DayOfWeek.Monday);
+                DateOnly weekStartDateOnly = DateOnly.FromDateTime(weekStart);
+                string friday = "";
+                if (now.Day != 6)
                 {
-                    List<ManagerWeeklyAttendanceDTO> managerWeeklyAttendanceDTOs = new List<ManagerWeeklyAttendanceDTO>();
-                    List<Employee>? subOrdinates = await _context.Employees
-                        .Where(e => e.ManagerId == employee.Id).ToListAsync();
-                        foreach (Employee subEmployee in subOrdinates)
+                    DateOnly weekEndDateOnly = DateOnly.FromDateTime(now);
+                    friday = weekEndDateOnly.ToString("yyyy-MM-dd");
+                }
+                else
+                {
+                    DateOnly weekEndDateOnly = DateOnly.FromDateTime(now).AddDays(-1);
+                    friday = weekEndDateOnly.ToString("yyyy-MM-dd");
+
+                }
+
+                string monday = weekStartDateOnly.ToString("yyyy-MM-dd");
+                
+
+                string subject = "Weekly Attendance Report";
+
+                
+                var managerData = await _context.Employees
+                    .Where(m => _context.Employees.Any(e => e.ManagerId == m.Id))
+                    .Select(m => new
+                    {
+                        Manager = m,
+                        Subordinates = _context.Employees.Where(e => e.ManagerId == m.Id)
+                            .Select(e => new
+                            {
+                                e.Id,
+                                e.FirstName,
+                                e.LastName
+                            }).ToList()
+                    }).ToListAsync();
+
+                foreach (var data in managerData)
+                {
+                    try
+                    {
+                        Employee manager = data.Manager;
+                        var subordinates = data.Subordinates;
+
+                        List<ManagerWeeklyAttendanceDTO> managerWeeklyAttendanceDTOs = new List<ManagerWeeklyAttendanceDTO>();
+
+                        foreach (var sub in subordinates)
                         {
+                            WeeklySummaryQuery weeklySummaryQuery = new WeeklySummaryQuery
+                            {
+                                WeekStart = monday,
+                                WeekEnd = friday,
+                                EmployeeId = sub.Id
+                            };
 
-                            ManagerWeeklyAttendanceDTO managerWeeklyAttendanceDTO = new ManagerWeeklyAttendanceDTO();
-                            WeeklySummaryQuery weeklySummary = new WeeklySummaryQuery();
-                            weeklySummary.WeekStart = monday;
-                            weeklySummary.WeekEnd = friday;
-                            weeklySummary.EmployeeId = subEmployee.Id;
-                            List<WeeklySummaryDTO> summary = await _mediator.Send(weeklySummary);
-                            managerWeeklyAttendanceDTO.EmployeeName = subEmployee.FirstName + " " + subEmployee.LastName;
-                            managerWeeklyAttendanceDTO.WeeklySummary = summary;
-                            managerWeeklyAttendanceDTOs.Add(managerWeeklyAttendanceDTO);
+                            List<WeeklySummaryDTO> summary = await _mediator.Send(weeklySummaryQuery);
 
+                            managerWeeklyAttendanceDTOs.Add(new ManagerWeeklyAttendanceDTO
+                            {
+                                EmployeeName = $"{sub.FirstName} {sub.LastName}",
+                                WeeklySummary = summary
+                            });
                         }
+
                         IDocument document = _weeklyPdfService.CreateDocument(managerWeeklyAttendanceDTOs);
                         byte[] pdf = document.GeneratePdf();
-                        string[] receiverEmails = { employee.Email };
-                        List<string> managerEmails = await _emailFinder.FindManagerEmailsAsync(employee.ManagerId);
-                        SendWeeklyMail(_senderEmail, _senderName, receiverEmails, pdf, subject, managerEmails.ToArray());  
+
+                       
+                        string?[] receiverEmails = [manager.Email];
+                        List<string> managerEmails = await _emailFinder.FindManagerEmailsAsync(manager.ManagerId);
+
+                       
+                        SendWeeklyMail(_senderEmail, _senderName, receiverEmails, pdf, subject, managerEmails.ToArray());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error processing manager {data.Manager.Id}: {ex.Message}");
+                    }
                 }
             }
-
         }
-        private bool SendWeeklyMail(string senderEmail, string senderName, string[] receiverEmails, byte[] pdfAttachment, string subject, string[] ccEmails = null)
-        {
+            private bool SendWeeklyMail(string senderEmail, string senderName, string[] receiverEmails, byte[] pdfAttachment, string subject, string[] ccEmails = null)
+             {
 
             try
             {
@@ -99,25 +141,31 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                     Email = senderEmail,
                     Name = senderName
                 };
-                string pdfBase64 = Convert.ToBase64String(pdfAttachment);
-
+               
                 string htmlContent = "<h1>Weekly Attendance Report</h1><p>Please find the attached weekly attendance report in PDF format.</p>";
 
-                var attachment = new SendSmtpEmailAttachment
+                SendSmtpEmailAttachment attachment = new SendSmtpEmailAttachment
                 {
                     Name = "weeklyReport.pdf",
                     Content = pdfAttachment
                 };
                 List<SendSmtpEmailTo> toList = receiverEmails.Select(email => new SendSmtpEmailTo(email)).ToList();
-                List<SendSmtpEmailCc> ccList = ccEmails?.Select(email => new SendSmtpEmailCc(email)).ToList() ?? new List<SendSmtpEmailCc>();
-                var sendSmtpEmail = new SendSmtpEmail
+                List<SendSmtpEmailCc>? ccList = ccEmails != null && ccEmails.Length > 0
+                            ? ccEmails.Select(email => new SendSmtpEmailCc(email)).ToList()
+                            : null;
+
+                SendSmtpEmail sendSmtpEmail = new SendSmtpEmail
                 {
                     Sender = sender,
                     To = toList,
-                    Cc = ccList,
                     HtmlContent=htmlContent,
                     Subject = subject
-                }; sendSmtpEmail.Attachment = new List<SendSmtpEmailAttachment> { attachment };
+                }; 
+                sendSmtpEmail.Attachment = new List<SendSmtpEmailAttachment> { attachment };
+                if (ccList != null && ccList.Any())
+                {
+                    sendSmtpEmail.Cc = ccList;
+                }
                 CreateSmtpEmail result = apiInstance.SendTransacEmail(sendSmtpEmail);
                 return true;
             }

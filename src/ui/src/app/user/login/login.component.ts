@@ -6,7 +6,6 @@ import { ILoginForm } from './ilogin-form';
 import { ToastrService } from 'ngx-toastr';
 import { EmployeeService } from '../../service/employee.service';
 
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -39,6 +38,7 @@ export class LoginComponent {
     if (this.userForm.valid) {
       this.userService.getEmployeeLogin(this.userForm.value.email, this.userForm.value.password).subscribe({
         next: (response: any) => {
+          console.log(this.userForm.value.password);
           if (response.token) {
             localStorage.setItem('token', response.token);
             const employee = this.employeeService.decodeToken();

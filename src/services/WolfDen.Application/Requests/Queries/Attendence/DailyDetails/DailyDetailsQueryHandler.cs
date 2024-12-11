@@ -41,10 +41,18 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
                 }).FirstOrDefaultAsync(cancellationToken);
             if (currentDate == today)
             {
-               attendence.AttendanceStatusId = AttendanceStatus.OngoingShift;
-                return attendence;
+                if(attendence is not null)
+                {
+                    attendence.AttendanceStatusId = AttendanceStatus.OngoingShift;
+                    return attendence;
+                }
+                else
+                {
+                    DailyAttendanceDTO notPresentDay = new DailyAttendanceDTO();
+                    notPresentDay.AttendanceStatusId = AttendanceStatus.Absent;
+                    return notPresentDay;
+                }
             }
-
             if (attendence is null)
             {
                 DailyAttendanceDTO notPresentDay = new DailyAttendanceDTO();

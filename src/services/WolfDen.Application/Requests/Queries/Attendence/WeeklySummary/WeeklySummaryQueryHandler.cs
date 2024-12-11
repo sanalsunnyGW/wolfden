@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using WolfDen.Application.DTOs.Attendence;
@@ -37,7 +37,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
                             x.LeaveRequestStatusId == LeaveRequestStatus.Approved)
                 .ToListAsync(cancellationToken);
 
-            List<LeaveType> leaveTypes = await _context.LeaveTypes.ToListAsync(cancellationToken);
+            List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
 
             List<LeaveRequest> leave = leaveRequests
                .Where(x => x.HalfDay == true)
@@ -60,18 +60,18 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
                     minWorkDuration = minWorkDuration / 2;
                 }
 
+
+                DailyAttendence attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (currentDate == today)
                 {
-                    statusId = AttendanceStatus.OngoingShift;
                     weeklySummary.Add(new WeeklySummaryDTO
                     {
-                        Date = currentDate,
-                        AttendanceStatusId = statusId
+                        Date=currentDate,
+                        AttendanceStatusId = AttendanceStatus.OngoingShift,
+                        InsideDuration = attendanceRecord?.InsideDuration
                     });
                     return weeklySummary;
                 }
-
-                DailyAttendence attendanceRecord = attendanceRecords.FirstOrDefault(x => x.Date == currentDate);
                 if (attendanceRecord is not null)
                 {
                     if (attendanceRecord.InsideDuration >= minWorkDuration)
@@ -134,11 +134,12 @@ namespace WolfDen.Application.Requests.Queries.Attendence.WeeklySummary
                         }
                     }
                 }
+                
                 weeklySummary.Add(new WeeklySummaryDTO
                 {
                     Date = currentDate,
-                    ArrivalTime = attendanceRecord?.ArrivalTime,
-                    DepartureTime = attendanceRecord?.DepartureTime,
+                    ArrivalTime = attendanceRecord.ArrivalTime,
+                    DepartureTime = attendanceRecord.DepartureTime,
                     InsideDuration = attendanceRecord?.InsideDuration,
                     OutsideDuration = attendanceRecord?.OutsideDuration,
                     MissedPunch = attendanceRecord?.MissedPunch,

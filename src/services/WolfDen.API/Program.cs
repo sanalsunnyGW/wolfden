@@ -106,6 +106,7 @@ builder.Services.AddScoped<ManagerIdFinder>();
 builder.Services.AddScoped<MonthlyPdf>();
 builder.Services.AddScoped<Email>();
 builder.Services.AddSingleton<WeeklyPdfService>();
+builder.Services.AddScoped<AttendanceClosedReportPdfService>();
 
 
 QuestPDF.Settings.License = LicenseType.Community;

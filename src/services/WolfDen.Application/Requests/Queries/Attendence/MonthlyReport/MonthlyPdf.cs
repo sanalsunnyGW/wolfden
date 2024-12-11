@@ -54,7 +54,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyReport
                                 {
                                     row.RelativeItem().Padding(5).AlignLeft().Text($"Half Days: {monthlyReportDTO.HalfDays}")
                                         .SemiBold().FontSize(14).FontColor(Colors.Black);
-                                    
+                                   
                                 });
                             });
 

@@ -23,8 +23,8 @@ export class MonthlyReportComponent {
   monthIsSelected=false
   display=false
   pageNumber=-1;
-  pageSize=1;
-  pageSizes=[5,10,30,50];
+  pageSize=10;
+  pageSizes=[5,10,30,50]
   totalPages=0;
   constructor() {}
   monthlyData!:MonthlyReports
@@ -49,7 +49,12 @@ export class MonthlyReportComponent {
           this.checkStatus=true;
       }
       else{
+        const currentDate=new Date()
+        const month=currentDate.getMonth();
+        if(month+1==this.monthNumber)
         this.checkClosedStatus=true;
+        else
+        alert(`Sorry,you cant close the attendance of ${this.monthNames[this.monthNumber-1]} on ${this.monthNames[month]}`)
       }
   });  
   }
