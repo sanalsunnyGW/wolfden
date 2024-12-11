@@ -48,7 +48,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.AttendanceSummary
                             x.LeaveRequestStatusId == LeaveRequestStatus.Approved)
                 .ToListAsync(cancellationToken);
 
-            List<LeaveType> leaveTypes = await _context.LeaveType.ToListAsync(cancellationToken);
+            List<LeaveType> leaveTypes = await _context.LeaveTypes.ToListAsync(cancellationToken);
 
             List<LeaveRequest> leave = leaveRequests
                 .Where(x => x.HalfDay == true)

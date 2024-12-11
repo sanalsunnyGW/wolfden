@@ -66,7 +66,10 @@ export class AttendanceService {
 
     if (attendanceStatusId!==11 && attendanceStatusId !== 0 ) {
       url += `&AttendanceStatusId=${attendanceStatusId}`;
-    }
+  }
+
+    
+
     return this.http.get<AttendanceHistory>(url);
   }
 }

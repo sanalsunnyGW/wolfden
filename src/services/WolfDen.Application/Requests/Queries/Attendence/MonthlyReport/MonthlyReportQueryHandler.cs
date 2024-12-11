@@ -123,7 +123,7 @@ namespace WolfDen.Application.Requests.Queries.Attendence.MonthlyAttendanceRepor
                             summaryDto.WFH++;
                             summaryDto.WFHDays += currentDate.ToString("yyyy-MM-dd") + ", ";
                         }
-                        else if(leaveRequest is not null)
+                        else if (leaveRequest is not null)
                         {
                             summaryDto.Leave++;
                             summaryDto.LeaveDays += currentDate.ToString("yyyy-MM-dd") + ", ";

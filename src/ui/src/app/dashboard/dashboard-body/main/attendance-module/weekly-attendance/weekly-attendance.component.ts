@@ -83,7 +83,7 @@ export class WeeklyAttendanceComponent {
                     }
                   ];
                 },
-                usePointStyle: true, 
+                usePointStyle: true,
               }
             },
             tooltip: {
@@ -171,12 +171,8 @@ getStartOfWeek(selectedWeek:string){
               return this.statusColor[2];
             }
             else if((x.attendanceStatusId===4)||(x.attendanceStatusId===5))
-            {
-              return this.statusColor[3];
-            }
-            else if((x.attendanceStatusId===6))
               {
-                return this.statusColor[4];
+                return this.statusColor[3];
               }
             else if((x.attendanceStatusId===7))
             {

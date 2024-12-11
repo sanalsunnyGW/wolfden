@@ -22,7 +22,6 @@ namespace WolfDen.Application.Requests.Queries.Attendence.DailyStatus
         {
             DateOnly currentDate = request.Date;
             DateOnly today = DateOnly.FromDateTime(DateTime.UtcNow);
-           
             if (currentDate.DayOfWeek == DayOfWeek.Saturday || currentDate.DayOfWeek == DayOfWeek.Sunday)
             {
                 DailyAttendanceDTO holiday = new DailyAttendanceDTO();

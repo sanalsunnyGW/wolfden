@@ -31,13 +31,11 @@
       </div>
       @if(employeeHierarchyList[0].subordinates!=null)
       {
-        <div class="nav-item sub-item" routerLink="/portal/subordinate-leave-request" routerLinkActive="active">
-          <span>Subordinate Leaves</span>
-        </div>      }
-      @if(userService.role=='Admin'||userService.role=='SuperAdmin') {
-      <div class="nav-item sub-item" routerLink="/portal/update-leave-balance" routerLinkActive="active">
-        <span>Update Leave Balance</span>
+      <div class="nav-item sub-item" routerLink="/portal/subordinate-leave-request" routerLinkActive="active">
+        <span>Subordinate Leaves</span>
       </div>
+      }
+      @if(userService.role=='Admin'||userService.role=='SuperAdmin') {
       <div class="nav-item sub-item" routerLink="/portal/add-leave-by-admin-for-employees" routerLinkActive="active">
         <span>Apply Leave For Employee</span>
       </div>

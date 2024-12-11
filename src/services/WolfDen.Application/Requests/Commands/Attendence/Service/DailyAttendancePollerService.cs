@@ -1,4 +1,4 @@
-using LanguageExt;
+﻿using LanguageExt;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -65,7 +65,6 @@ namespace WolfDen.Application.Requests.Commands.Attendence.Service
                 List<LeaveRequest> leaveRequests = await _context.LeaveRequests
                     .Where(x => x.LeaveRequestStatusId == LeaveRequestStatus.Approved && x.HalfDay == true && x.FromDate == yesterday)
                     .ToListAsync();
-
 
                 Dictionary<int, LeaveRequest> leaveDictionary = leaveRequests.ToDictionary(x => x.EmployeeId);
 
