@@ -89,7 +89,6 @@ namespace WolfDenTests.ControllerTests.Employee
             Assert.Equal(expectedEmployee.Photo, result.Photo);
             Assert.Equal(expectedEmployee.EmploymentType, result.EmploymentType);
 
-            // Verify that Send method is called with the correct parameters
             _mediatorMock.Verify(m => m.Send(It.Is<GetEmployeeQuery>(q => q.EmployeeId == employeeId), It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -97,10 +96,9 @@ namespace WolfDenTests.ControllerTests.Employee
         public async Task GetEmployee_ReturnsNotFound_WhenEmployeeDoesNotExist()
         {
             // Arrange
-            var employeeId = 999; // Assume this ID doesn't exist in the system
+            var employeeId = 999; 
             var query = new GetEmployeeQuery { EmployeeId = employeeId };
 
-            // Simulate that the query returns null, indicating the employee does not exist
             _mediatorMock
                 .Setup(m => m.Send(It.Is<GetEmployeeQuery>(q => q.EmployeeId == employeeId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync((EmployeeDTO)null);
