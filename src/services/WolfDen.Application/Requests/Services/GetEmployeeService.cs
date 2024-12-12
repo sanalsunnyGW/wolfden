@@ -29,7 +29,7 @@ namespace WolfDen.Application.Requests.Services
                     DepartmentId = employee.DepartmentId,
                     DepartmentName = employee.Department != null ? employee.Department.Name : null,
                     DesignationId = employee.DesignationId,
-                    DesignationName = employee.Designation != null ? employee.Designation.Name : null,
+                    DesignationName = employee.Designation.Name,
                     ManagerId = employee.ManagerId,
                     ManagerName = employee.Manager != null
                        ? $"{employee.Manager.FirstName}{(string.IsNullOrWhiteSpace(employee.Manager.LastName) ? "" : " " + employee.Manager.LastName)}"

@@ -14,7 +14,7 @@
 </div>
 
 <div class="row row-cols-1 row-cols-md-4 g-4">
-    @for(employee of employeeData; track employee){
+    @for(employee of employeeData; track i;let i=$index){
     <div class="col">
         <div class="card h-100 " (click)="viewProfile(employee.id)">
             <div>
@@ -77,7 +77,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for(item of teamLeave;track item){
+                        @for(item of teamLeave;track i;let i=$index){
                         <tr>
                             <th scope="row">{{item.name}}</th>
                             <td>{{item.fromDate}}</td>
