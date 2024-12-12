@@ -57,8 +57,8 @@ export class SideNavComponent {
   }];
 
   expandedSections: { [key: string]: boolean } = {
-    leave: true,
-    attendance: true
+    leave: false,
+    attendance: false
   };
 
   toggleSection(section: string): void {
@@ -70,7 +70,6 @@ export class SideNavComponent {
   }
 
   ngOnInit() {
-    this.userService;
     this.employeeService.getMyTeamHierarchy(true, this.userService.userId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((data: any) => {

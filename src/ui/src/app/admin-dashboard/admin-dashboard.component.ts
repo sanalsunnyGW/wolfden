@@ -35,7 +35,8 @@ export class AdminDashboardComponent {
     id: 0,
     firstName: '',
     lastName: '',
-    role: ''
+    role: '',
+    employeeCode: 0,
   }]
 
   departmentData: IDepartment[] = [{
@@ -179,27 +180,10 @@ export class AdminDashboardComponent {
           this.toastr.error('Error fetching managers');
         }
       });
+      
     }
   }
-  sync() {
-    this.employeeService.syncEmployee().subscribe({
-      next: (response: boolean) => {
-        if (response) {
-          this.toastr.success('Employee Sync Success');
-        }
-        else {
-          this.toastr.info('Employees are already up to date')
-        }
-
-      },
-      error: (err) => {
-        this.toastr.error('Error fetching managers');
-      }
-    });
-
-
-  }
-
+  
   onSubmit() {
     if (this.userForm.valid) {
       const formData = this.userForm.value;

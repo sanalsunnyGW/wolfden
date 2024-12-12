@@ -56,7 +56,6 @@ export class LoginComponent {
         },
         error: (error) => {
           this.toastr.error('Invalid Login Details')
-        
         }
         })
         }

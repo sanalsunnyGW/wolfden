@@ -22,9 +22,9 @@
           <select [ngModel]="selectedDepartment" (change)="onDepartmentChange($event)" class="p-2 border rounded"
             name="All Departments" [value]="'0'">
             <option [value]="'0'">All Departments</option>
-            <option [value]="'1'">Developer</option>
-            <option [value]="'2'">QA</option>
-            <option [value]="'3'">Finance</option>
+            @for(item of departmentData;track item){
+              <option [value]="item.id">{{item.departmentName}}</option>
+            }
           </select>
         </div>
       </div>

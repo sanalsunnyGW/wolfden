@@ -72,7 +72,8 @@ export class ProfileComponent {
     id: 0,
     firstName: '',
     lastName: '',
-    role: ''
+    role: '',
+    employeeCode: 0,
   }]
   myTeam: IEmployeeData[] = {} as IEmployeeData[];
   displayMyteam: boolean = false;

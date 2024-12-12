@@ -29,20 +29,7 @@ interface CalendarDay {
   styleUrls: ['./main-page.component.scss']
 })
 export class MainPageComponent implements OnInit {
-  leavesRemaining = 10;
-  hoursRemaining = 6.5;
-  currentDate = new Date();
-  weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  calendarDays: CalendarDay[] = [];
-  day = this.calendarDays;
-  holidays: Holiday[] = [
-    { date: '2024-01-26', name: 'Republic Day' },
-    { date: '2024-08-15', name: 'Independence Day' },
-    { date: '2024-10-02', name: 'Gandhi Jayanti' },
-    { date: '2024-11-15', name: 'National Holiday' },
-  ];
-
-  //leave balance 
+ //leave balance 
   leaveManagementService = inject(LeaveManagementService)
   userService = inject(WolfDenService)
   destroyRef = inject(DestroyRef)
@@ -50,13 +37,11 @@ export class MainPageComponent implements OnInit {
   todaysAbsences: ItodaysAbsence[]=[];
   holidayList:Iholiday[]=[];
   leaveType1: string = '';
-leaveBalance1: number = 0;
-
-leaveType2: string = '';
-leaveBalance2: number = 0;
-
-leaveType3: string = '';
-leaveBalance3: number = 0;
+  leaveBalance1: number = 0;
+  leaveType2: string = '';
+  leaveBalance2: number = 0;
+  leaveType3: string = '';
+  leaveBalance3: number = 0;
   ngOnInit() {
     //todays absence
     this.userService.getTodaysAbsence().subscribe((data)=>{

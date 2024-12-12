@@ -1,0 +1,56 @@
+<div class="container mt-5">
+    <h2>Add Holiday</h2>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="mb-3">
+        <label for="date" class="form-label">Holiday Date</label>
+        <input 
+          id="date"
+          formControlName="date" 
+          type="date" 
+          class="form-control" 
+           />
+           @if(isSubmitted && userForm.controls['date'].invalid){
+            <div class="invalid-feedback">
+              Please select a valid date.
+            </div>
+           }
+
+      </div>
+  
+      <div class="mb-3">
+        <label for="type" class="form-label">Holiday Type</label>
+        <select 
+          id="type" 
+          formControlName="type" 
+          class="form-select">
+          <option value="" disabled selected>Select a type</option>
+          <option value=5>Normal Holiday</option>
+          <option value=4>Restricted Holiday</option>
+        </select>
+        @if(isSubmitted && userForm.controls['type'].invalid){
+          <div  class="invalid-feedback">
+            Please select a holiday type.
+          </div>
+        }
+
+      </div>
+  
+      <div class="mb-3">
+        <label for="description" class="form-label">Holiday Description</label>
+        <textarea 
+          id="description" 
+          formControlName="description" 
+          class="form-control" 
+          rows="3"></textarea>
+          @if(isSubmitted && userForm.controls['description'].invalid){
+            <div  class="invalid-feedback">
+              Description is required.
+            </div>
+          }
+
+      </div>
+  
+      <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">Add Holiday</button>
+    </form>
+  </div>
+  

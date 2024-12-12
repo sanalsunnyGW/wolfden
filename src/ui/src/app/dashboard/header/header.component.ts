@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { NotificationModalComponent } from '../../notification-modal/notification-modal.component';
 import { INotificationForm } from '../../interface/i-notification-form';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { error } from 'jquery';
 import { LeaveManagementService } from '../../service/leave-management.service';
 
 
@@ -45,13 +46,16 @@ export class HeaderComponent {
     this.leaveManagementService.updateLeaveBalance()
     .pipe(takeUntilDestroyed(this.destroyRef))
     .subscribe((data: boolean) => {
+      next: (response: any) => {
         if (data) {
           this.toastr.success('Leave Balance of All employees Updated !!');
         }
         else {
           this.toastr.error(' Sorry ! We have Encountered some issues while Updating employees leave balance !')
         }
-      });
+      }
+    }
+      );
   }
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
@@ -64,7 +68,7 @@ export class HeaderComponent {
     this.showNotifications = false;
   
     //to update the count
-    this.userService.getNotification(1).subscribe({
+    this.userService.getNotification(this.userService.userId).subscribe({
       next: (data) => {
         this.notifications = data.filter(notification => notification); 
       },

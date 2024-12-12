@@ -37,7 +37,16 @@
             }
         </tbody>
     </table>
+    <div>
+        <mat-paginator [length]="totalRecords" 
+        [pageSize]="pageSize" 
+        [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="pageNumber" (page)="onPageChange($event)" aria-label="Select page">
+        </mat-paginator>
+    </div>
+
 </div>
+
 }
 
 @if(isDataLoaded && managerData.length===0){

@@ -30,12 +30,11 @@ import { EditLeaveRequestComponent } from './dashboard/dashboard-body/main/leave
 import { AddLeaveByAdminForEmployeesComponent } from './dashboard/dashboard-body/main/leave-management/add-leave-by-admin-for-employees/add-leave-by-admin-for-employees.component';
 import { AttendanceHistoryComponent } from './dashboard/dashboard-body/main/attendance-module/attendance-history/attendance-history.component';
 import { ResetPasswordComponent } from './user/reset-password/reset-password.component';
+import { CheckPasswordComponent } from './user/check-password/check-password.component';
+import { AdminAddHolidayComponent } from './admin-add-holiday/admin-add-holiday.component';
 
 export const routes: Routes = [
     {
-        path: 'profile',
-        component: ProfileComponent
-    }, {
         path: 'user',
         component: UserComponent,
         children: [
@@ -43,125 +42,46 @@ export const routes: Routes = [
             { path: 'check-user', component: CheckUserComponent },
             { path: 'sign-in', component: SigninComponent },
             { path: 'login', component: LoginComponent },
-            {path:'reset-password',component:ResetPasswordComponent}
+            { path:'reset-password',component:ResetPasswordComponent},
+            { path:'check-password', component:CheckPasswordComponent}
         ]
     },
-
-
-
     {
         path: 'portal',
         component: DashboardComponent,
         children: [
             { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-             {path:'dashboard',component:MainPageComponent,canActivate: [authGuard]},
-             {path:'employee-directory',component: EmployeeDirectoryComponent,canActivate: [authGuard]},
-             {path:'leave-dashboard',component:LeaveDashboardComponent,canActivate: [authGuard]},
-            {path:'leave-request-history',component:LeaveHistoryComponent,canActivate: [authGuard]},
-            { path: 'employee-directory', component: EmployeeDirectoryComponent },
-            { path: 'leave-dashboard', component: LeaveDashboardComponent },
-            { path: 'leave-request-history', component: LeaveHistoryComponent },
-            { path: 'attendance/daily/:attendanceDate', component: DailyAttendenceComponent },
-            { path: 'attendance/weekly', component: WeeklyAttendanceComponent },
-            { path: 'attendance/monthly', component: MonthlyReportComponent },
-            { path: 'attendance/subordinates', component: SubordinatesComponent },
-            { path: 'edit-leave-type', component: EditLeaveTypeComponent },
-            { path: 'update-leave-balance', component: UpdateLeaveBalanceComponent },
-            {path:'attendance/history/:id',component:AttendanceHistoryComponent},
-            
-
-            {
-                path: 'company-hierarchy',
-                component: EmployeeHierarchyTreeComponent,
-                canActivate: [authGuard]
-            },
-            {
-                path: 'employee-display',
-                component: EmloyeeHierarchyDisplayComponent,
-                canActivate: [authGuard]
-            },
-            {
-                path: 'my-team',
-                component: MyTeamComponent,
-                canActivate: [authGuard]
-            },
-            {
-                path: 'attendance/calendar',
-                component: CalendarViewComponent,
-                canActivate: [authGuard]
-            },
-            {
-                path: 'leave-dashboard',
-                component: LeaveDashboardComponent,
-                canActivate: [authGuard]
-            },
-            {
-                path: 'leave-request-history',
-                component: LeaveHistoryComponent,
-    
-            },
-            {
-                path: '',
-                component: UserComponent,
-                canActivate: 
-                [authGuard]
-            },
-            {
-                path: 'profile',
-                component: ProfileComponent,
-                canActivate: [authGuard]
-            },
-            {
-                path: 'admin-dashboard',
-                component: AdminDashboardComponent,
-                canActivate: [authGuard]
-
-            },
-            {
-                path: 'employee-role',
-                component: EditRoleComponent,
-                canActivate: [authGuard]
-
-            },
-            {
-
-                path: 'add-new-leave-type',
-                component: AddNewLeaveTypeComponent
-            },
-            {
-                path: 'leave-application',
-                component: LeaveApplicationComponent
-            },
-            {
-                path: 'update-leave-settings',
-                component: UpdateLeaveSettingsComponent
-            },
-            {
-                path: 'subordinate-leave-request',
-                component: SubordinateLeaveRequestComponent
-            },
-            {
-                path: 'edit-leave-request/:leaveRequestId',
-                component: EditLeaveRequestComponent
-            },
-            {
-                path: 'add-leave-by-admin-for-employees',
-                component: AddLeaveByAdminForEmployeesComponent
-            },
-            {
-                path: 'edit-leave-type',
-                component: EditLeaveTypeComponent
-            },
-            {
-                path: 'update-leave-balance',
-                component: UpdateLeaveBalanceComponent
-            }
-
-            
+            { path:'dashboard',component:MainPageComponent, canActivate: [authGuard]},
+            { path:'employee-directory',component: EmployeeDirectoryComponent, canActivate: [authGuard]},
+            { path:'leave-dashboard',component:LeaveDashboardComponent, canActivate: [authGuard]},
+            { path:'leave-request-history',component:LeaveHistoryComponent, canActivate: [authGuard]},
+            { path: 'employee-directory', component: EmployeeDirectoryComponent, canActivate: [authGuard] },
+            { path: 'leave-dashboard', component: LeaveDashboardComponent, canActivate: [authGuard] },
+            { path: 'leave-request-history', component: LeaveHistoryComponent, canActivate: [authGuard] },
+            { path: 'attendance/daily/:attendanceDate', component: DailyAttendenceComponent, canActivate: [authGuard] },
+            { path: 'attendance/weekly', component: WeeklyAttendanceComponent, canActivate: [authGuard] },
+            { path: 'attendance/monthly', component: MonthlyReportComponent, canActivate: [authGuard] },
+            { path: 'attendance/subordinates', component: SubordinatesComponent, canActivate: [authGuard] },
+            { path: 'edit-leave-type', component: EditLeaveTypeComponent, canActivate: [authGuard] },
+            { path: 'update-leave-balance', component: UpdateLeaveBalanceComponent, canActivate: [authGuard] },
+            { path:'attendance/attendance-history',component:AttendanceHistoryComponent, canActivate: [authGuard]},
+            { path: 'company-hierarchy',component: EmployeeHierarchyTreeComponent, canActivate: [authGuard]},                                          
+            { path: 'employee-display', component: EmloyeeHierarchyDisplayComponent, canActivate: [authGuard]},
+            { path: 'my-team', component: MyTeamComponent, canActivate: [authGuard] },
+            { path: 'attendance/calendar',  component: CalendarViewComponent, canActivate: [authGuard] },
+            { path: 'leave-dashboard', component: LeaveDashboardComponent, canActivate: [authGuard] },
+            { path: 'leave-request-history', component: LeaveHistoryComponent,  },        
+            { path: 'profile', component: ProfileComponent, canActivate: [authGuard]  },
+            { path: 'admin-dashboard',component: AdminDashboardComponent,canActivate: [authGuard] },
+            { path: 'employee-role', component: EditRoleComponent,canActivate: [authGuard] },
+            { path: 'add-new-leave-type', component: AddNewLeaveTypeComponent, canActivate: [authGuard]},
+            { path: 'leave-application', component: LeaveApplicationComponent, canActivate: [authGuard]},
+            { path: 'update-leave-settings', component: UpdateLeaveSettingsComponent, canActivate: [authGuard]}, 
+            { path: 'subordinate-leave-request',component: SubordinateLeaveRequestComponent, canActivate: [authGuard]},   
+            { path: 'edit-leave-request/:leaveRequestId', component: EditLeaveRequestComponent, canActivate: [authGuard]},   
+            { path: 'add-leave-by-admin-for-employees', component: AddLeaveByAdminForEmployeesComponent, canActivate: [authGuard]},
+            { path:'admin-add-holiday',component:AdminAddHolidayComponent, canActivate: [authGuard]}         
         ]
     },
-
     { path: '', redirectTo: '/portal/dashboard', pathMatch: 'full' },
-
-
 ];
