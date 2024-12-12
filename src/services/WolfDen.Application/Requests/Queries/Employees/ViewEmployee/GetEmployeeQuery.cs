@@ -8,7 +8,7 @@ using WolfDen.Application.DTOs.Employees;
 
 namespace WolfDen.Application.Requests.Queries.Employees.ViewEmployee
 {
-    public  class GetEmployeeQuery : IRequest<EmployeeDTO>
+    public class GetEmployeeQuery : IRequest<EmployeeDTO>
     {
         public int EmployeeId { get; set; }
 

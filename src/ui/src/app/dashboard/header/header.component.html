@@ -22,7 +22,9 @@
       </span>
       <ul class="dropdown-menu" [class.show]="isDropdownOpen" style="cursor: pointer;">
         <li><a routerLink="/portal/profile" (click)="toggleDropdown()">Profile</a></li>
-        @if(userService.role == "SuperAdmin"||userService.role=="Admin")
+        <li><a (click)="onLogout()">LogOut</a></li>
+        <li><a routerLink="/user/check-password">Reset Password</a></li>
+        @if(userService.role == "SuperAdmin" || userService.role == "Admin"  )
         {
         <li><a routerLink="/portal/admin-dashboard" (click)="toggleDropdown()">Settings</a></li>
         }

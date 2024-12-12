@@ -13,6 +13,8 @@ using System.Text;
 using WolfDen.Application.Helper.LeaveManagement;
 using WolfDen.Application.Helpers;
 using WolfDen.Application.Requests.Commands.Attendence.Service;
+using WolfDen.Application.Requests.Commands.Employees.Service;
+using WolfDen.Application.Requests.Commands.LeaveManagement.Service;
 using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
 using WolfDen.Application.Requests.Queries.Attendence.SendWeeklyEmail;
@@ -141,6 +143,8 @@ builder.Services.AddScoped(sp =>
             ));
 builder.Services.AddScoped<DailyAttendancePollerService>();
 builder.Services.AddScoped<WeeklyAttendancePollerService>();
+builder.Services.AddScoped<SyncEmployeeService>();
+builder.Services.AddScoped<UpdateLeaveBalanceService>();
 
 builder.Services.AddControllers();
 
@@ -173,7 +177,9 @@ using (var scope = app.Services.CreateScope())
 {
     var syncService = scope.ServiceProvider.GetRequiredService<QueryBasedSyncService>();
     var combineService = scope.ServiceProvider.GetRequiredService<DailyAttendancePollerService>();
-    var weeklyService= scope.ServiceProvider.GetRequiredService<WeeklyAttendancePollerService>();
+    var weeklyService = scope.ServiceProvider.GetRequiredService<WeeklyAttendancePollerService>();
+    var syncEmployee = scope.ServiceProvider.GetRequiredService<SyncEmployeeService>();
+    var balanceUpdateService = scope.ServiceProvider.GetRequiredService<UpdateLeaveBalanceService>();
 
     RecurringJob.AddOrUpdate(
         "sync-tables-job",
@@ -187,13 +193,18 @@ using (var scope = app.Services.CreateScope())
         () => combineService.ExecuteJobAsync(),
         "0 0 * * 2-6"
     );
-    
-    RecurringJob.AddOrUpdate(
-     "send-weeklyemails-job",
-     () => weeklyService.WeeklyEmail(),
-     "0 0 * * 6"
 
- );
+    RecurringJob.AddOrUpdate(
+        "send-weeklyemails-job",
+        () => weeklyService.WeeklyEmail(),
+        "0 0 * * 6"
+    );
+
+    RecurringJob.AddOrUpdate(
+        "sync-employee-user-job",
+        () => syncEmployee.SyncEmployeeUser(),
+        "*/5 * * * *"
+        );
 }
 
 // Custom middleware to handle FluentValidation exceptions

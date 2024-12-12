@@ -4,7 +4,10 @@ import { ImanagerForm } from '../interface/imanager-form';
 import { ImanagerData } from '../interface/imanager-data';
 import { ToastrService } from 'ngx-toastr';
 import { EmployeeService } from '../service/employee.service';
-import { IroleForm } from '../interface/irole-form';
+import { ImanagerDataWithPage } from '../interface/imanager-data-with-page';
+import { WolfDenService } from '../service/wolf-den.service';
+import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
+import { IRole, IroleForm } from '../interface/irole-form';
 
 @Component({
   selector: 'app-edit-role',
@@ -76,9 +79,20 @@ export class EditRoleComponent {
         firstName: formData.firstName,
         lastName: formData.lastName
       };
-      this.employeeService.getEmployeeByName(params.firstName, params.lastName).subscribe({
-        next: (response: any) => {
-          this.managerData = response;
+
+      
+      this.userService.getAllEmployeesByName(
+        this.pageNumber,
+        this.pageSize,
+        params.firstName || undefined,
+        params.lastName || undefined
+      ).subscribe({
+        next: (data) => {
+          this.managerDataWithPage=data;
+          this.managerDataWithPage.employeeNames=data.employeeNames;
+          this.managerDataWithPage.totalRecords=data.totalRecords;
+          this.totalRecords = data.totalRecords;
+          this.managerData = data.employeeNames;
           this.isDataLoaded = true;
           if (this.managerData.length === 0) {
             this.toastr.info('No employees found for the given search.');
