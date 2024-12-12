@@ -4,7 +4,6 @@ using WolfDen.Application.DTOs.Employees;
 using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
 using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
-using WolfDen.Application.Requests.Commands.Employees.SyncEmployee;
 using WolfDen.Application.Requests.Commands.Employees.TeamManagerUpdate;
 using WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy;
