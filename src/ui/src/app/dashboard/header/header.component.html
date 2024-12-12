@@ -3,8 +3,9 @@
     <img src="geekywolf-white-logo.svg">
   </div>
   <div class="user">
-    @if(userService.role == "Admin"||userService.role=='SuperAdmin'){
-      <div><button type="button" class="btn btn-outline-secondary" (click)="updateLeaveBalance()">Update Leave Balance</button></div>
+    @if(userService.role == "Admin"||userService.role=="SuperAdmin"){
+    <div><button type="button" class="btn btn-outline-secondary" (click)="updateLeaveBalance()">Update Leave
+        Balance</button></div>
 
     }
     <div class="notification">
@@ -14,7 +15,7 @@
       </span>
     </div>
     <div class="user-name">{{userService.firstName}}</div>
-    
+
     <div class="user-menu-container">
       <span class="user-image" (click)="toggleDropdown()">
         {{ userService.firstName ? userService.firstName[0].toUpperCase() : 'NA' }}
@@ -27,14 +28,12 @@
         {
         <li><a routerLink="/portal/admin-dashboard" (click)="toggleDropdown()">Settings</a></li>
         }
+        <li><a routerLink="/user/reset-password">Reset Password</a></li>
+        <li><a (click)="onLogout()">LogOut</a></li>
       </ul>
     </div>
   </div>
 </div>
 
-<app-notification-modal
-  *ngIf="showNotifications"
-  [notifications]="notifications"
-  [onClose]="closeNotifications"
-></app-notification-modal>
-
+<app-notification-modal *ngIf="showNotifications" [notifications]="notifications"
+  [onClose]="closeNotifications"></app-notification-modal>

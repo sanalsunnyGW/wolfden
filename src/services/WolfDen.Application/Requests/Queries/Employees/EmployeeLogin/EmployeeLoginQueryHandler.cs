@@ -42,7 +42,9 @@ namespace WolfDen.Application.Requests.Queries.Employees.EmployeeLogin
 
                     }),
                     Expires = DateTime.UtcNow.AddMinutes(60),
-                    SigningCredentials = new SigningCredentials(signInKey, SecurityAlgorithms.HmacSha256)
+                    SigningCredentials = new SigningCredentials(signInKey, SecurityAlgorithms.HmacSha256),
+                    Issuer=_optionsMonitor.CurrentValue.Issuer,
+                    Audience=_optionsMonitor.CurrentValue.Audience,
                 };
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);

@@ -12,8 +12,8 @@ using WolfDen.Infrastructure.Data;
 namespace WolfDen.Infrastructure.Migrations
 {
     [DbContext(typeof(WolfDenContext))]
-    [Migration("20241205105230_Latest-changes-of-attendanceTeam-db")]
-    partial class LatestchangesofattendanceTeamdb
+    [Migration("20241209073427_defaultDataInLeaveTypeAdded")]
+    partial class defaultDataInLeaveTypeAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1103,7 +1103,9 @@ namespace WolfDen.Infrastructure.Migrations
                         .HasDefaultValue(0);
 
                     b.Property<int?>("IncrementCount")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<int?>("IncrementGapId")
                         .HasColumnType("int");
@@ -1157,6 +1159,132 @@ namespace WolfDen.Infrastructure.Migrations
                                     .HasPeriodEnd("PeriodEnd")
                                     .HasColumnName("PeriodEnd");
                             }));
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CarryForward = false,
+                            CarryForwardLimit = 0,
+                            DaysCheck = 2,
+                            DaysCheckEqualOrLess = 2,
+                            DaysCheckMore = 7,
+                            DutyDaysRequired = 0,
+                            IncrementCount = 1,
+                            IncrementGapId = 1,
+                            IsHalfDayAllowed = true,
+                            LeaveCategoryId = 1,
+                            MaxDays = 12,
+                            Sandwich = false,
+                            TypeName = "Casual Leave"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CarryForward = true,
+                            CarryForwardLimit = 24,
+                            DaysCheck = 3,
+                            DaysCheckEqualOrLess = 7,
+                            DaysCheckMore = 21,
+                            DutyDaysRequired = 365,
+                            IncrementCount = 0,
+                            IsHalfDayAllowed = false,
+                            LeaveCategoryId = 2,
+                            MaxDays = 12,
+                            Sandwich = true,
+                            TypeName = "Priveleged Leave"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CarryForward = false,
+                            CarryForwardLimit = 0,
+                            DutyDaysRequired = 0,
+                            IncrementCount = 0,
+                            IsHalfDayAllowed = false,
+                            LeaveCategoryId = 3,
+                            MaxDays = 1,
+                            Sandwich = false,
+                            TypeName = "Bereavement Leave"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CarryForward = false,
+                            CarryForwardLimit = 0,
+                            DutyDaysRequired = 0,
+                            IncrementCount = 2,
+                            IncrementGapId = 2,
+                            IsHalfDayAllowed = false,
+                            LeaveCategoryId = 4,
+                            MaxDays = 2,
+                            Sandwich = false,
+                            TypeName = "Emergency Leave"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CarryForward = false,
+                            CarryForwardLimit = 0,
+                            DaysCheck = 1,
+                            DaysCheckEqualOrLess = 2,
+                            DaysCheckMore = 2,
+                            DutyDaysRequired = 0,
+                            IncrementCount = 0,
+                            IsHalfDayAllowed = false,
+                            LeaveCategoryId = 5,
+                            MaxDays = 2,
+                            Sandwich = false,
+                            TypeName = "Restricted Leave"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CarryForward = false,
+                            CarryForwardLimit = 0,
+                            DaysCheck = 1,
+                            DaysCheckEqualOrLess = 1,
+                            DaysCheckMore = 1,
+                            DutyDaysRequired = 0,
+                            IncrementCount = 0,
+                            IsHalfDayAllowed = false,
+                            LeaveCategoryId = 6,
+                            MaxDays = 0,
+                            Sandwich = false,
+                            TypeName = "WorK From Home"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CarryForward = false,
+                            CarryForwardLimit = 0,
+                            DaysCheck = 1,
+                            DaysCheckEqualOrLess = 1,
+                            DaysCheckMore = 1,
+                            DutyDaysRequired = 80,
+                            IncrementCount = 0,
+                            IsHalfDayAllowed = false,
+                            LeaveCategoryId = 8,
+                            MaxDays = 184,
+                            Sandwich = true,
+                            TypeName = "Maternity Leave"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CarryForward = false,
+                            CarryForwardLimit = 0,
+                            DaysCheck = 1,
+                            DaysCheckEqualOrLess = 1,
+                            DaysCheckMore = 1,
+                            DutyDaysRequired = 0,
+                            IncrementCount = 0,
+                            IsHalfDayAllowed = false,
+                            LeaveCategoryId = 9,
+                            MaxDays = 2,
+                            Sandwich = false,
+                            TypeName = "Paternity Leave"
+                        });
                 });
 
             modelBuilder.Entity("WolfDen.Domain.Entity.Notification", b =>

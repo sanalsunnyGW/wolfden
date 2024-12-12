@@ -17,6 +17,7 @@ using WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName;
 using WolfDen.Application.Requests.Queries.Employees.EmployeePasswordCheck;
 using WolfDen.Application.Requests.Commands.Employees.ResetPassword;
 using WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesByNameWithPagination;
+using WolfDen.Application.Requests.Queries.Employees.GetMyTeam;
 
 namespace WolfDen.API.Controllers.Employee
 {
@@ -27,7 +28,6 @@ namespace WolfDen.API.Controllers.Employee
     {
         private readonly IMediator _mediator = mediator;
 
-        [AllowAnonymous]
 
         [HttpPost]
         public async Task<int> AddEmployee([FromBody] AddEmployeecommand command, CancellationToken cancellationToken)
@@ -112,11 +112,21 @@ namespace WolfDen.API.Controllers.Employee
 
         }
 
-        [AllowAnonymous]
         [HttpPatch("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
         {
             return Ok(await _mediator.Send(command));
+        }
+        [HttpGet("my-team")]
+        public async Task<List<EmployeeHierarchyDto>> GetMyTeamMembers([FromQuery] GetMyTeamQuery query, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(query, cancellationToken);
+        }
+
+        [HttpPatch("team-manager-update")]
+        public async Task<bool> TeamManagerUpdate([FromBody] TeamManagerUpdateCommand command)
+        {
+            return await _mediator.Send(command);
         }
     }
 }

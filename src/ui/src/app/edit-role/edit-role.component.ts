@@ -4,10 +4,10 @@ import { ImanagerForm } from '../interface/imanager-form';
 import { ImanagerData } from '../interface/imanager-data';
 import { ToastrService } from 'ngx-toastr';
 import { EmployeeService } from '../service/employee.service';
-import { IroleForm } from '../interface/irole-form';
 import { ImanagerDataWithPage } from '../interface/imanager-data-with-page';
 import { WolfDenService } from '../service/wolf-den.service';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
+import { IRole, IroleForm } from '../interface/irole-form';
 
 @Component({
   selector: 'app-edit-role',
@@ -107,13 +107,12 @@ export class EditRoleComponent {
   }
   roleChange() {
     if (this.roleForm.valid) {
-      const formData = this.roleForm.value;
-      const params = {
-        id: formData.id,
-        role: formData.role
-      };
-      this.employeeService.roleChange(params).subscribe({
-        next: (response: any) => {
+      const roleData : IRole = {
+        id :  this.roleForm.value.id!,
+        role : this.roleForm.value.role!,
+      }
+      this.employeeService.roleChange(roleData).subscribe({
+        next: (response: boolean) => {
           this.toastr.success('Role Changed Successfully');
           this.isDataLoaded=false;
           this.isDataClicked = false;
@@ -126,7 +125,7 @@ export class EditRoleComponent {
     }
   }
 
-  selectEmployee(employee: any): void {
+  selectEmployee(employee: ImanagerData): void {
     this.roleForm.patchValue({
       id: employee.id,
       role: employee.role
