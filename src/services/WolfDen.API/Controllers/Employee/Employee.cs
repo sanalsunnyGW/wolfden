@@ -27,9 +27,6 @@ namespace WolfDen.API.Controllers.Employee
     {
         private readonly IMediator _mediator = mediator;
 
-  
-
-
         [AllowAnonymous]
 
         [HttpPost]
