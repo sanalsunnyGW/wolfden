@@ -27,7 +27,7 @@
             </tr>
         </thead>
         <tbody>
-            @for(manager of managerData;track manager){
+            @for(manager of managerData;track i;let i=$index){
             <tr (click)="selectEmployee(manager)" data-bs-toggle="modal" data-bs-target="#editrole">
                 <th scope="row">{{manager.id}}</th>
                 <td>{{manager.firstName}} {{manager.lastName}}</td>

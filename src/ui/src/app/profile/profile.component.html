@@ -6,7 +6,7 @@
             (click)="loadForm(employeeData)">
         }
         @if(!employeeData.photo){
-            
+
         @if(!employeeData.photo){
         <img src="{{profileImage()}}" class="rounded-circle profile-img" alt="Profile Image" data-bs-toggle="modal"
             data-bs-target="#photo" data-toggle="tooltip" data-placement="top" title="Click to Update Profile Photo"
@@ -117,15 +117,15 @@
             <tr>
                 <th scope="col" colspan="2">
                     <div class="d-flex justify-content-between align-items-center">
-                    Employment Details
-                    @if(wolfdenService.role=="SuperAdmin"||wolfdenService.role=="Admin"){
-                    <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal"
-                        data-bs-target="#employment" data-toggle="tooltip" data-placement="top"
-                        title="Click to Update Employment Details" (click)="adminLoadForm(employeeData)">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                    }
-                </div>
+                        Employment Details
+                        @if(wolfDenService.role=="SuperAdmin"||wolfDenService.role=="Admin"){
+                        <button type="button" class="btn btn-primary custom-btn" data-bs-toggle="modal"
+                            data-bs-target="#employment" data-toggle="tooltip" data-placement="top"
+                            title="Click to Update Employment Details" (click)="adminLoadForm(employeeData)">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        }
+                    </div>
                 </th>
             </tr>
         </thead>
@@ -344,13 +344,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form [formGroup]="adminForm" (ngSubmit)="adminSubmit()">
+                <form [formGroup]="adminForm" (ngSubmit)="myTeamMembers()">
                     <div class="mb-3">
                         <label for="designationName" class="form-label">Designation</label>
                         <div>
-                            <select id="designationName" formControlName="designationId">
-                                <option value="" disabled selected>Select Designation</option>
-                                @for(item of designationData;track item){
+                            <select class="form-select form-select-sm" aria-label="Small select example"
+                                formControlName="designationId">
+                                <option selected>Select Designation</option>
+                                @for(item of designationData;track i;let i=$index){
                                 <option value={{item.id}}>{{item.designationName}}</option>
                                 }
                             </select>
@@ -365,9 +366,10 @@
                     <div class="mb-3">
                         <label for="departmentName" class="form-label">Department</label>
                         <div>
-                            <select id="departmentName" formControlName="departmentId">
-                                <option value="" disabled selected>Select Department</option>
-                                @for(item of departmentData;track item){
+                            <select class="form-select form-select-sm" aria-label="Small select department"
+                                id="departmentName" formControlName="departmentId">
+                                <option selected>Select Department</option>
+                                @for(item of departmentData;track i;let i=$index){
                                 <option value={{item.id}}>{{item.departmentName}}</option>
                                 }
                             </select>
@@ -405,7 +407,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @for(manager of managerData;track manager){
+                                @for(manager of managerData;track i;let i=$index){
                                 <tr (click)="selectEmployee(manager.id)">
                                     <th scope="row">{{manager.id}}</th>
                                     <td>{{manager.firstName}} {{manager.lastName}}</td>
@@ -419,14 +421,9 @@
                     @if(isDataLoaded && managerData.length===0){
                     <p>No manager data available.</p>
                     }
-                    @if(userForm.get('managerName')?.invalid ) {
-                    <div class="text-danger">
-                        Manager Name is required.
-                    </div>
-                    }
                     @if(isDataClicked){
                     <div class="mb-3 mt-3">
-                        <label for="designationName" class="form-label">Selected EmployeeID</label>
+                        <label for="employeeId" class="form-label">Selected EmployeeID</label>
                         <div>
                             <input class="form-control" type="text" value="{{employeeIdClicked}}"
                                 aria-label="readonly input example" readonly>
@@ -442,11 +439,12 @@
                     <div class="mb-3">
                         <label for="employmentType" class="form-label">Employment Type</label>
                         <div>
-                            <select id="employmentType" formControlName="employmentType">
-                                <option value="" disabled selected>Select Employment Type</option>
-                                <option value=1>Contract</option>
-                                <option value=2>Permanent</option>
-                                <option value=3>Other</option>
+                            <select class="form-select form-select-sm" aria-label="Small select employmentType"
+                                id="employmenttype" formControlName="employmentType">
+                                <option disabled selected>Select Employment Type</option>
+                                <option value="1">Contract</option>
+                                <option value="2">Permanent</option>
+                                <option value="3">Other</option>
                             </select>
                         </div>
                         @if(userForm.get('employmentType')?.invalid ) {
@@ -472,3 +470,116 @@
         </div>
     </div>
 </div>
+
+
+
+@if(displayMyteam){
+<div class="modal fade" id="myTeam" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class=" modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">{{wolfDenService.firstName}} has Subordinates
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-container">
+                    <table class="table table-hover table-container">
+                        <thead>
+                            <tr>
+                                <th scope="col">Employee Id</th>
+                                <th scope="col">Employee Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for(member of myTeam;track i;let i=$index){
+                            <tr (click)="selectTeam(member.id)">
+                                <th scope="row">{{member.id}}</th>
+                                <td>{{member.firstName}} {{member.lastName}}</td>
+
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                @if(isTeamClicked){
+
+                <div class="mb-3 mt-3">
+                    <label for="employeeId" class="form-label">Selected Employee</label>
+                    <div>
+                        <input class="form-control" type="text" value="{{teamId}}" aria-label="readonly input example"
+                            readonly>
+                    </div>
+                </div>
+
+                <form [formGroup]="teamForm" (ngSubmit)="teamManagerUpdate()">
+                    <div>
+                        <form [formGroup]="managerForm" (ngSubmit)="onSubmitManager()">
+                            <label for="managerName" class="form-label">Manager Name</label>
+                            <div class="input-group mb-3 ">
+                                <input type="text" aria-label="First name" class="form-control"
+                                    placeholder="First Name " formControlName="firstName">
+                                <input type="text" aria-label="Last name" class="form-control" placeholder="Last Name "
+                                    formControlName="lastName">
+                                <button type="submit" class="btn btn-primary custom-btn" data-toggle="tooltip"
+                                    data-placement="top" title="Click to Search Employees">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    @if(isDataLoaded && managerData.length>0)
+                    {
+                    <div class="table-container">
+                        <table class="table table-hover table-container">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Employee Id</th>
+                                    <th scope="col">Employee Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for(manager of managerData;track i;let i=$index){
+                                <tr (click)="selectManager(manager.id)">
+                                    <th scope="row">{{manager.id}}</th>
+                                    <td>{{manager.firstName}} {{manager.lastName}}</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    }
+
+                    @if(isDataLoaded && managerData.length===0){
+                    <p>No manager data available.</p>
+                    }
+                    @if(teamForm.get('managerId')?.invalid ) {
+                    <div class="text-danger">
+                        Manager is required.
+                    </div>
+                    }
+                    @if(isDataClicked){
+                    <div class="mb-3 mt-3">
+                        <label for="employeeId" class="form-label">Selected EmployeeID</label>
+                        <div>
+                            <input class="form-control" type="text" value="{{employeeIdClicked}}"
+                                aria-label="readonly input example" readonly>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    }
+                </form>
+                }
+                <div style="color: red;" class="mt-3">
+                    <h6>*Done will assign {{wolfDenService.firstName}}'s manager to all his subordinates</h6>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-bs-toggle="modal"
+                    data-bs-target="#managerUpdate" (click)="adminSubmit()">Done</button>
+            </div>
+        </div>
+    </div>
+</div>
+}

@@ -41,7 +41,7 @@
                 </tr>
             </thead>
             <tbody class="table-group-divider">
-                @for(item of departmentData;track item)
+                @for(item of departmentData;track i;let i=$index)
                 {
                 <tr>
                     <td>{{item.departmentName}}</td>
@@ -70,7 +70,7 @@
                 </tr>
             </thead>
             <tbody class="table-group-divider">
-                @for(item of designationData ;track item)
+                @for(item of designationData ;track i;let i=$index)
                 {
                 <tr>
                     <td>{{item.designationName}}</td>
@@ -231,7 +231,7 @@
                         <select class="form-select form-select-sm" aria-label="Small select example"
                             formControlName="designationId">
                             <option selected>Select Designation</option>
-                            @for(item of designationData;track item){
+                            @for(item of designationData;track i;let i=$index){
                             <option value={{item.id}}>{{item.designationName}}</option>
                             }
                         </select>
@@ -242,7 +242,7 @@
                             <select class="form-select form-select-sm" aria-label="Small select department"
                                 id="departmentName" formControlName="departmentId">
                                 <option selected>Select Department</option>
-                                @for(item of departmentData;track item){
+                                @for(item of departmentData;track i;let i=$index){
                                 <option value={{item.id}}>{{item.departmentName}}</option>
                                 }
                             </select>
@@ -280,7 +280,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @for(manager of managerData;track manager){
+                                @for(manager of managerData;track i;let i=$index){
                                 <tr (click)="selectEmployee(manager.id)">
                                     <th scope="row">{{manager.id}}</th>
                                     <td>{{manager.firstName}} {{manager.lastName}}</td>
@@ -346,7 +346,6 @@
                     </div>
                 </form>
             </div>
-
         </div>
     </div>
 </div>

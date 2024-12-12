@@ -41,7 +41,15 @@
 
 
 
-.hierarchy{
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  color: #333;       
-}
+  .table-container {
+    max-height: 300px; 
+    overflow-y: auto; 
+    overflow-x: hidden; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+  }
+  
+  .table {
+    margin-bottom: 0; 
+  }
+  

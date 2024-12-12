@@ -166,7 +166,7 @@ viewProfile(id:number){
   loadEmployeeHierarchy() {
     const employee = this.employeeService.decodeToken();
     this.employeeService.getMyTeamHierarchy(false,employee.EmployeeId).subscribe({
-      next: (response: any) => {
+      next: (response: IEmployeeData[]) => {
         if (response) {
           console.log(response)
           this.employeeData = response;
