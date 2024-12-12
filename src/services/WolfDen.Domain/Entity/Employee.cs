@@ -74,6 +74,10 @@ namespace WolfDen.Domain.Entity
             EmploymentType = employmentType;
 
         }
+        public void UpdateManager(int? managerId)
+        {
+            ManagerId = managerId;
+        }
 
     }
 }

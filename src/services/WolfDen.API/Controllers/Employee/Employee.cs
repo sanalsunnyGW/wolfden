@@ -4,19 +4,20 @@ using WolfDen.Application.DTOs.Employees;
 using WolfDen.Application.Requests.Commands.Employees.AddEmployee;
 using WolfDen.Application.Requests.Commands.Employees.AdminUpdateEmployee;
 using WolfDen.Application.Requests.Commands.Employees.EmployeeUpdateEmployee;
+using WolfDen.Application.Requests.Commands.Employees.SuperAdminUpdateEmployee;
+using WolfDen.Application.Requests.Commands.Employees.SyncEmployee;
 using WolfDen.Application.Requests.Queries.Employees.EmployeeDirectory;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeHierarchy;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeIdSignUp;
 using WolfDen.Application.Requests.Queries.Employees.GetEmployeeTeam;
-using WolfDen.Application.Requests.Queries.Employees.EmployeeLogin;
 using WolfDen.Application.Requests.Queries.Employees.ViewEmployee;
 using Microsoft.AspNetCore.Authorization;
 using WolfDen.Infrastructure.Data;
 using WolfDen.Application.Requests.Commands.Employees.SuperAdminUpdateEmployee;
 using WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesName;
+using WolfDen.Application.Requests.Commands.Employees.SyncEmployee;
 using WolfDen.Application.Requests.Queries.Employees.EmployeePasswordCheck;
 using WolfDen.Application.Requests.Commands.Employees.ResetPassword;
-using WolfDen.Application.Requests.Queries.Employees.GetAllEmployeesByNameWithPagination;
 
 namespace WolfDen.API.Controllers.Employee
 {
@@ -27,10 +28,13 @@ namespace WolfDen.API.Controllers.Employee
     {
         private readonly IMediator _mediator = mediator;
 
-  
+        [HttpPatch("employee-sync")]
+        public async Task<bool> SyncEmployee()
+        {
+            return await _mediator.Send(new SyncEmployeeCommand());
+        }
 
 
-        [AllowAnonymous]
 
         [HttpPost]
         public async Task<int> AddEmployee([FromBody] AddEmployeecommand command, CancellationToken cancellationToken)
@@ -114,11 +118,21 @@ namespace WolfDen.API.Controllers.Employee
 
         }
 
-        [AllowAnonymous]
         [HttpPatch("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
         {
             return Ok(await _mediator.Send(command));
+        }
+        [HttpGet("my-team")]
+        public async Task<List<EmployeeHierarchyDto>> GetMyTeamMembers([FromQuery] GetMyTeamQuery query, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(query, cancellationToken);
+        }
+
+        [HttpPatch("team-manager-update")]
+        public async Task<bool> TeamManagerUpdate([FromBody] TeamManagerUpdateCommand command)
+        {
+            return await _mediator.Send(command);
         }
     }
 }

@@ -39,7 +39,7 @@
       <!-- Employee List -->
       @if(!isLoading){
       <div class="grid flex gap-4">
-        @for(employee of employeesPagecount.employeeDirectoryDTOs; track employee){
+        @for(employee of employeesPagecount.employeeDirectoryDTOs; track i;let i=$index){
         <div class="card border-dark mb-3" style="max-width: 40rem;">
           <div class="card-header ">
             <div class="row">

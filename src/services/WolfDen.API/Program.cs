@@ -6,9 +6,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using QuestPDF.Infrastructure;
+using System.Reflection;
+using System.Security.Claims;
+using System.Text;
 using WolfDen.Application.Helper.LeaveManagement;
 using WolfDen.Application.Helpers;
 using WolfDen.Application.Requests.Commands.Attendence.Service;
+using WolfDen.Application.Requests.Commands.LeaveManagement.Service;
 using WolfDen.Application.Requests.Queries.Attendence.DailyDetails;
 using WolfDen.Application.Requests.Queries.Attendence.MonthlyReport;
 using WolfDen.Application.Services;
@@ -101,9 +106,12 @@ builder.Services.AddAuthentication(x =>
         RequireExpirationTime = true,
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!)),
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        RoleClaimType = ClaimTypes.Role
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        RoleClaimType = ClaimTypes.Role,
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidAudience = builder.Configuration["JWT:Audience"]
+
     };
 });
 
@@ -137,6 +145,7 @@ builder.Services.AddScoped(sp =>
 builder.Services.AddScoped<DailyAttendancePollerService>();
 builder.Services.AddScoped<WeeklyAttendancePollerService>();
 builder.Services.AddScoped<SyncEmployeeService>();
+builder.Services.AddScoped<UpdateLeaveBalanceService>();
 
 builder.Services.AddControllers();
 
@@ -168,6 +177,8 @@ using (var scope = app.Services.CreateScope())
     var combineService = scope.ServiceProvider.GetRequiredService<DailyAttendancePollerService>();
     var weeklyService = scope.ServiceProvider.GetRequiredService<WeeklyAttendancePollerService>();
     var syncEmployee= scope.ServiceProvider.GetRequiredService<SyncEmployeeService>();
+    var balanceUpdateService = scope.ServiceProvider.GetRequiredService<UpdateLeaveBalanceService>();
+
     RecurringJob.AddOrUpdate(
         "sync-tables-job",
         () => syncService.SyncTablesAsync(),
@@ -192,6 +203,15 @@ using (var scope = app.Services.CreateScope())
         () => syncEmployee.SyncEmployeeUser(),
         "*/5 * * * *"
         );
+   
+
+    RecurringJob.AddOrUpdate(
+        "update-leave-balance-job",
+        () => balanceUpdateService.BalanceUpdate(),
+        "0 0 1 * *"  //Cron expression for 1st day of every month 0min 0hr 1stday *everymnth *no conditions for weekday
+    );
+
+
 }
 
 app.Run();

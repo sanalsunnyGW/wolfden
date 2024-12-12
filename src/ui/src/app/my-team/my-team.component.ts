@@ -128,7 +128,7 @@ viewProfile(id:number){
     const employee = this.employeeService.decodeToken();
 
     this.employeeService.myTeamLeave(employee.EmployeeId).subscribe({
-      next: (response: any) => {
+      next: (response: IteamLeave[]) => {
         if (response) {
           this.teamLeave = response;
         } 
@@ -146,7 +146,7 @@ viewProfile(id:number){
   viewTeamHierarchy() {
     const employee = this.employeeService.decodeToken();
     this.employeeService.getMyTeamHierarchy(true,employee.EmployeeId).subscribe({
-      next: (response: any) => {
+      next: (response: IEmployeeData[]) => {
         if (response) {
           this.employeeDataModal = response;
           this.isDataLoaded = true;
@@ -166,7 +166,7 @@ viewProfile(id:number){
   loadEmployeeHierarchy() {
     const employee = this.employeeService.decodeToken();
     this.employeeService.getMyTeamHierarchy(false,employee.EmployeeId).subscribe({
-      next: (response: any) => {
+      next: (response: IEmployeeData[]) => {
         if (response) {
           console.log(response)
           this.employeeData = response;

@@ -5,9 +5,6 @@ import { ImanagerData } from '../interface/imanager-data';
 import { ToastrService } from 'ngx-toastr';
 import { EmployeeService } from '../service/employee.service';
 import { IroleForm } from '../interface/irole-form';
-import { ImanagerDataWithPage } from '../interface/imanager-data-with-page';
-import { WolfDenService } from '../service/wolf-den.service';
-import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-edit-role',
@@ -79,20 +76,9 @@ export class EditRoleComponent {
         firstName: formData.firstName,
         lastName: formData.lastName
       };
-
-      
-      this.userService.getAllEmployeesByName(
-        this.pageNumber,
-        this.pageSize,
-        params.firstName || undefined,
-        params.lastName || undefined
-      ).subscribe({
-        next: (data) => {
-          this.managerDataWithPage=data;
-          this.managerDataWithPage.employeeNames=data.employeeNames;
-          this.managerDataWithPage.totalRecords=data.totalRecords;
-          this.totalRecords = data.totalRecords;
-          this.managerData = data.employeeNames;
+      this.employeeService.getEmployeeByName(params.firstName, params.lastName).subscribe({
+        next: (response: any) => {
+          this.managerData = response;
           this.isDataLoaded = true;
           if (this.managerData.length === 0) {
             this.toastr.info('No employees found for the given search.');
@@ -107,13 +93,12 @@ export class EditRoleComponent {
   }
   roleChange() {
     if (this.roleForm.valid) {
-      const formData = this.roleForm.value;
-      const params = {
-        id: formData.id,
-        role: formData.role
-      };
-      this.employeeService.roleChange(params).subscribe({
-        next: (response: any) => {
+      const roleData : IRole = {
+        id :  this.roleForm.value.id!,
+        role : this.roleForm.value.role!,
+      }
+      this.employeeService.roleChange(roleData).subscribe({
+        next: (response: boolean) => {
           this.toastr.success('Role Changed Successfully');
           this.isDataLoaded=false;
           this.isDataClicked = false;
@@ -126,7 +111,7 @@ export class EditRoleComponent {
     }
   }
 
-  selectEmployee(employee: any): void {
+  selectEmployee(employee: ImanagerData): void {
     this.roleForm.patchValue({
       id: employee.id,
       role: employee.role
