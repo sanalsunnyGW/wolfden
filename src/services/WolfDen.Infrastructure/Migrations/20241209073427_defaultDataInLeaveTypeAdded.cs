@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace WolfDen.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class LatestchangesofattendanceTeamdb : Migration
+    public partial class defaultDataInLeaveTypeAdded : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -378,7 +380,7 @@ namespace WolfDen.Infrastructure.Migrations
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                         .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                         .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart"),
-                    IncrementCount = table.Column<int>(type: "int", nullable: true)
+                    IncrementCount = table.Column<int>(type: "int", nullable: true, defaultValue: 0)
                         .Annotation("SqlServer:IsTemporal", true)
                         .Annotation("SqlServer:TemporalHistoryTableName", "LeaveType")
                         .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
@@ -1680,6 +1682,38 @@ namespace WolfDen.Infrastructure.Migrations
                 .Annotation("SqlServer:TemporalHistoryTableSchema", "wolfdenHT")
                 .Annotation("SqlServer:TemporalPeriodEndColumnName", "PeriodEnd")
                 .Annotation("SqlServer:TemporalPeriodStartColumnName", "PeriodStart");
+
+            migrationBuilder.InsertData(
+                schema: "wolfden",
+                table: "LeaveType",
+                columns: new[] { "LeaveTypeId", "CarryForward", "CarryForwardLimit", "DaysCheck", "DaysCheckEqualOrLess", "DaysCheckMore", "DutyDaysRequired", "IncrementCount", "IncrementGapId", "IsHalfDayAllowed", "LeaveCategoryId", "MaxDays", "Sandwich", "TypeName" },
+                values: new object[,]
+                {
+                    { 1, false, 0, 2, 2, 7, 0, 1, 1, true, 1, 12, false, "Casual Leave" },
+                    { 2, true, 24, 3, 7, 21, 365, 0, null, false, 2, 12, true, "Priveleged Leave" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "wolfden",
+                table: "LeaveType",
+                columns: new[] { "LeaveTypeId", "CarryForward", "CarryForwardLimit", "DutyDaysRequired", "IncrementCount", "IncrementGapId", "IsHalfDayAllowed", "LeaveCategoryId", "MaxDays", "Sandwich", "TypeName" },
+                values: new object[,]
+                {
+                    { 3, false, 0, 0, 0, null, false, 3, 1, false, "Bereavement Leave" },
+                    { 4, false, 0, 0, 2, 2, false, 4, 2, false, "Emergency Leave" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "wolfden",
+                table: "LeaveType",
+                columns: new[] { "LeaveTypeId", "CarryForward", "CarryForwardLimit", "DaysCheck", "DaysCheckEqualOrLess", "DaysCheckMore", "DutyDaysRequired", "IncrementCount", "IncrementGapId", "IsHalfDayAllowed", "LeaveCategoryId", "MaxDays", "Sandwich", "TypeName" },
+                values: new object[,]
+                {
+                    { 5, false, 0, 1, 2, 2, 0, 0, null, false, 5, 2, false, "Restricted Leave" },
+                    { 6, false, 0, 1, 1, 1, 0, 0, null, false, 6, 0, false, "WorK From Home" },
+                    { 7, false, 0, 1, 1, 1, 80, 0, null, false, 8, 184, true, "Maternity Leave" },
+                    { 8, false, 0, 1, 1, 1, 0, 0, null, false, 9, 2, false, "Paternity Leave" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AttendenceLog_DeviceId",
